@@ -53,7 +53,7 @@ class ChooseOption {
  * 显示选择枝
  * @param sentence
  */
-export const choose = (sentence: ISentence): IPerform => {
+export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
@@ -69,6 +69,7 @@ export const choose = (sentence: ISentence): IPerform => {
         const onClick = enable
           ? () => {
               playSeClick();
+              chooseCallback?.();
               if (e.jumpToScene) {
                 changeScene(e.jump, e.text);
               } else {

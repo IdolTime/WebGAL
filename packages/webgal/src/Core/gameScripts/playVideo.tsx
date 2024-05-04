@@ -1,4 +1,4 @@
-import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,6 +8,8 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
+import { choose } from './choose';
+import { sceneParser } from '../parser/sceneParser';
 /**
  * 播放一段视频 * @param sentence
  */
@@ -17,10 +19,23 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
   const performInitName: string = getRandomPerformName();
+  let chooseContent = '';
+  let loopValue = false;
+
+  console.log(9999, sentence);
+
+  sentence.args.forEach((e) => {
+    if (e.key === 'choose') {
+      chooseContent = 'choose:' + (e.value as string);
+    }
+    if (e.key === 'loop') {
+      loopValue = e.value === true;
+    }
+  });
 
   let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
   let blockingNextFlag = false;
-  if (blockingNext) {
+  if (blockingNext || loopValue || chooseContent !== '') {
     blockingNextFlag = true;
   }
 
@@ -41,6 +56,17 @@ export const playVideo = (sentence: ISentence): IPerform => {
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     arrangePerformPromise: new Promise<IPerform>((resolve) => {
+      const endCallback = (e: IPerform) => {
+        isOver = true;
+        e.stopFunction();
+        WebGAL.gameplay.performController.unmountPerform(e.performName);
+      };
+
+      // if (chooseContent && loopValue) {
+      //   const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+      //   console.log(9999, parsedResult);
+      //   choose(parsedResult.sentenceList[0]);
+      // }
       /**
        * 启动视频播放
        */
@@ -49,17 +75,28 @@ export const playVideo = (sentence: ISentence): IPerform => {
         if (VocalControl !== null) {
           VocalControl.currentTime = 0;
           VocalControl.volume = bgmVol;
+          VocalControl.loop = loopValue;
+
           const endPerform = () => {
             for (const e of WebGAL.gameplay.performController.performList) {
               if (e.performName === performInitName) {
-                isOver = true;
-                e.stopFunction();
-                WebGAL.gameplay.performController.unmountPerform(e.performName);
-                nextSentence();
+                if (chooseContent !== '' && !loopValue) {
+                  const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+                  const duration = VocalControl.duration;
+                  VocalControl.currentTime = duration;
+                  VocalControl.pause();
+                  choose(parsedResult.sentenceList[0], () => {
+                    endCallback(e);
+                  });
+                } else {
+                  endCallback(e);
+                  nextSentence();
+                }
               }
             }
           };
           const skipVideo = () => {
+            console.log('skip');
             endPerform();
           };
           // 双击可跳过视频
@@ -109,6 +146,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
           }
 
           VocalControl?.play();
+
+          if (chooseContent && loopValue) {
+            const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+            choose(parsedResult.sentenceList[0], endPerform);
+          }
 
           VocalControl.onended = () => {
             endPerform();
