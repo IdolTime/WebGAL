@@ -13,24 +13,6 @@ export default function About(props: { onClose: () => void }) {
       <div className={s.title}>{t('subTitle')}</div>
       <div className={s.title}>{t('version')}</div>
       <div className={s.text}>{__INFO.version}</div>
-      <div className={s.title}>{t('source')}</div>
-      <div className={s.text}>
-        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL">
-          https://github.com/OpenWebGAL/WebGAL
-        </a>
-      </div>
-      <div className={s.title}>{t('contributors')}</div>
-      <div className={s.text}>
-        <a target="_blank" href="https://github.com/OpenWebGAL/WebGAL/graphs/contributors">
-          https://github.com/OpenWebGAL/WebGAL/graphs/contributors
-        </a>
-      </div>
-      <div className={s.title}>{t('website')}</div>
-      <div className={s.text}>
-        <a target="_blank" href="https://openwebgal.com/">
-          https://openwebgal.com/
-        </a>
-      </div>
     </div>
   );
 }

@@ -194,9 +194,6 @@ export function System() {
               currentChecked={2}
             />
           </NormalOption>
-          <div className={styles.About_title_text} onClick={toggleAbout}>
-            <span className={styles.About_text}>{t('about.title')}</span>
-          </div>
         </>
       )}
     </div>
