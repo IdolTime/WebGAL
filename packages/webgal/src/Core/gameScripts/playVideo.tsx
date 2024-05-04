@@ -22,8 +22,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let chooseContent = '';
   let loopValue = false;
 
-  console.log(9999, sentence);
-
   sentence.args.forEach((e) => {
     if (e.key === 'choose') {
       chooseContent = 'choose:' + (e.value as string);
@@ -47,7 +45,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     document.getElementById('videoContainer'),
   );
   let isOver = false;
-  return {
+  const performObject = {
     performName: 'none',
     duration: 0,
     isHoldOn: false,
@@ -62,11 +60,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
         WebGAL.gameplay.performController.unmountPerform(e.performName);
       };
 
-      // if (chooseContent && loopValue) {
-      //   const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
-      //   console.log(9999, parsedResult);
-      //   choose(parsedResult.sentenceList[0]);
-      // }
       /**
        * 启动视频播放
        */
@@ -83,11 +76,13 @@ export const playVideo = (sentence: ISentence): IPerform => {
                 if (chooseContent !== '' && !loopValue) {
                   const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
                   const duration = VocalControl.duration;
-                  VocalControl.currentTime = duration;
+                  VocalControl.currentTime = duration - 0.03;
                   VocalControl.pause();
-                  choose(parsedResult.sentenceList[0], () => {
+                  const script = parsedResult.sentenceList[0];
+                  const perform = choose(script, () => {
                     endCallback(e);
                   });
+                  WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
                 } else {
                   endCallback(e);
                   nextSentence();
@@ -149,7 +144,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
           if (chooseContent && loopValue) {
             const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
-            choose(parsedResult.sentenceList[0], endPerform);
+            const script = parsedResult.sentenceList[0];
+            const perform = choose(script, endPerform);
+            WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
           }
 
           VocalControl.onended = () => {
@@ -159,4 +156,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
       }, 1);
     }),
   };
+
+  return performObject;
 };

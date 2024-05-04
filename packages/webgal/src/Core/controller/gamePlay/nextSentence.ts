@@ -27,9 +27,10 @@ export const nextSentence = () => {
   // 第一步，检查是否存在 blockNext 的演出
   let isBlockingNext = false;
   WebGAL.gameplay.performController.performList.forEach((e) => {
-    if (e.blockingNext())
+    if (e.blockingNext()) {
       // 阻塞且没有结束的演出
       isBlockingNext = true;
+    }
   });
   if (isBlockingNext) {
     // 有阻塞，提前结束
