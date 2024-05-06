@@ -144,7 +144,7 @@ const zhCn = {
 
   title: {
     start: {
-      title: '开始游戏',
+      title: '开始',
       subtitle: 'START',
     },
     continue: {
@@ -152,16 +152,20 @@ const zhCn = {
       subtitle: 'CONTINUE',
     },
     options: {
-      title: '游戏选项',
+      title: '设置',
       subtitle: 'OPTIONS',
     },
     load: {
-      title: '读取存档',
+      title: '读取',
       subtitle: 'LOAD',
     },
     extra: {
-      title: '鉴赏模式',
+      title: '画廊',
       subtitle: 'EXTRA',
+    },
+    quit: {
+      title: '退出',
+      subtitle: 'QUIT',
     },
   },
 
