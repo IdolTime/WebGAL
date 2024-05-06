@@ -11,6 +11,7 @@
 }
 
 .Choose_item {
+  position: relative;
   font-family: "WebgalUI", serif;
   cursor: pointer;
   min-width: 50%;
@@ -24,6 +25,22 @@
   background: rgba(255, 255, 255, 0.65);
   margin: 0.25em 0 0.25em 0;
   transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
+}
+
+.Choose_item_image {
+  font-family: "WebgalUI", serif;
+  cursor: pointer;
+  margin: 0.25em 0 0.25em 0;
+  position: relative;
+  font-size: 265%;
+  color: #8E354A;
+
+  span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .Choose_item_disabled {

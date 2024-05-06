@@ -11,11 +11,12 @@ import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 class ChooseOption {
   /**
    * 格式：
-   * (showConditionVar>1)[enableConditionVar>2]->text:jump
+   * (showConditionVar>1)[enableConditionVar>2]->${x=1,y=1,scale=1,image=./assets/baidu.png,fontSize:24,fontColor:#fff}text:jump
    */
   public static parse(script: string): ChooseOption {
     const parts = script.split('->');
@@ -23,7 +24,31 @@ class ChooseOption {
     const mainPart = parts.length > 1 ? parts[1] : parts[0];
     const mainPartNodes = mainPart.split(':');
 
-    const option = new ChooseOption(mainPartNodes[0], mainPartNodes[1]);
+    const mainPartRegex = /(?:[>}])([^:]+)/;
+    const mainPartMatch = mainPart.match(mainPartRegex);
+    let text = mainPartMatch ? mainPartMatch[1] : '';
+
+    const option = new ChooseOption(text, mainPartNodes[1]);
+
+    // Extract style information
+    const styleRegex = /\$\{(.*?)\}/;
+    const styleMatch = mainPart.match(styleRegex);
+    if (styleMatch) {
+      const styleStr = styleMatch[1];
+      const styleProps = styleStr.split(',');
+      const style: any = {}; // Change to specific type if possible
+
+      // Parse each style property
+      styleProps.forEach((prop) => {
+        const [key, value] = prop.split('=');
+        if (key && value) {
+          style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
+        }
+      });
+
+      option.style = style;
+    }
+
     if (conditonPart !== null) {
       const showConditionPart = conditonPart.match(/\((.*)\)/);
       if (showConditionPart) {
@@ -36,11 +61,20 @@ class ChooseOption {
     }
     return option;
   }
+
   public text: string;
   public jump: string;
   public jumpToScene: boolean;
   public showCondition?: string;
   public enableCondition?: string;
+  public style?: {
+    x?: number;
+    y?: number;
+    scale?: number;
+    image?: string;
+    fontSize?: number;
+    fontColor?: string;
+  };
 
   public constructor(text: string, jump: string) {
     this.text = text;
@@ -65,7 +99,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        const className = enable ? styles.Choose_item : styles.Choose_item_disabled;
+        let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
         const onClick = enable
           ? () => {
               playSeClick();
@@ -78,14 +112,44 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               WebGAL.gameplay.performController.unmountPerform('choose');
             }
           : () => {};
+        const styleObj: Record<string, number | string> = {
+          fontFamily: font,
+        };
+
+        if (e.style) {
+          if (typeof e.style.x === 'number') {
+            styleObj.position = 'absolute';
+            styleObj['left'] = e.style.x + 'px';
+          }
+          if (typeof e.style.y === 'number') {
+            styleObj.position = 'absolute';
+            styleObj['top'] = e.style.y + 'px';
+          }
+          if (typeof e.style.scale === 'number') {
+            styleObj['transform'] = 'scale(' + e.style.scale + ')';
+          }
+          if (typeof e.style.fontSize === 'number') {
+            styleObj['fontSize'] = e.style.fontSize + 'px';
+          }
+          if (typeof e.style.fontColor === 'string' && e.style.fontColor[0] === '#') {
+            styleObj['color'] = e.style.fontColor;
+          }
+        }
+
+        if (e.style?.image) {
+          className = styles.Choose_item_image;
+          const imgUrl = assetSetter(e.style.image, fileType.ui);
+
+          return (
+            <div className={className} style={styleObj} key={e.jump + i} onClick={onClick} onMouseEnter={playSeEnter}>
+              <img src={imgUrl} alt={e.text} />
+              <span>{e.text}</span>
+            </div>
+          );
+        }
+
         return (
-          <div
-            className={className}
-            style={{ fontFamily: font }}
-            key={e.jump + i}
-            onClick={onClick}
-            onMouseEnter={playSeEnter}
-          >
+          <div className={className} style={styleObj} key={e.jump + i} onClick={onClick} onMouseEnter={playSeEnter}>
             {e.text}
           </div>
         );
