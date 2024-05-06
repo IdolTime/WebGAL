@@ -1,0 +1,18 @@
+.gameMenuPanel {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    z-index: 9;
+
+    .menuButton {
+        width: 75px;
+        height: 70px;
+        background-image: url('../../assets/images/menu-icon.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

@@ -70,8 +70,37 @@
   position: relative;
 }
 
-.singleButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+// .singleButton:hover {
+//   background-color: rgba(255, 255, 255, 0.3);
+// }
+
+.autoButton {
+  width: 48px;
+  height: 41px;
+  background-image: url('../../assets/images/autoplay-icon.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.fastForwardButton {
+  width: 31px;
+  height: 36px;
+  background-image: url('../../assets/images/fast-forward-icon.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 80px;
+}
+
+.flashbackButton {
+  width: 46px;
+  height: 46px;
+  background-image: url('../../assets/images/flashback-icon.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 80px;
 }
 
 .fastSlPreview {
