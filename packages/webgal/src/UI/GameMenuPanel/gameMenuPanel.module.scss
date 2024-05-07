@@ -1,3 +1,8 @@
+.gameMenuPanelWrapper {
+    width: 100%;
+    height: 100%;
+}
+
 .gameMenuPanel {
     position: absolute;
     top: 20px;
@@ -13,6 +18,71 @@
         background-position: center;
         &:hover {
             cursor: pointer;
+        }
+    }
+}
+
+.gameMenuPanelContentWrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 20;
+
+    .mask {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 21;
+    }
+
+    .gameMenuPanelContent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 22;
+        width: 566px;
+        height: 100%;
+        background-image: url('../../assets/images/menu_bg.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    
+        .buttonswrapper {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            z-index: 99;
+    
+            .button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 237px;
+                height: 76px;
+                background-image: url('../../assets/images/menu_button_default.png');
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                color: #4E4B6C;
+                font-size: 35px;
+                margin-bottom: 45px;
+    
+                &:hover {
+                    cursor: pointer;
+                    background-image: url('../../assets/images/menu_button_active.png');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    color: #fff;
+                }
+            }
         }
     }
 }

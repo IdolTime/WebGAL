@@ -3,6 +3,8 @@ const zhCn = {
   common: {
     yes: '是',
     no: '否',
+    confirm: '确认',
+    cancel: '取消',
   },
 
   menu: {
@@ -185,6 +187,12 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确认返回到标题界面吗',
+      quitTips: '确认退出游戏吗',
+      backToGame: '返回游戏',
+      preserve: '保存',
+      read: '读取',
+      setting: '设置',
+      backToTitle: '返回标题'      
     },
   },
 

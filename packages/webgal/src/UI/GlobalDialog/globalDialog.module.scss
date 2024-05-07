@@ -10,7 +10,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  //font-family: "WebgalUI", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   font-family: "思源宋体", serif;
 }
 
@@ -21,34 +20,22 @@
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  background: linear-gradient(to right,
-    rgba(0, 92, 175, 0) 0%,
-    rgba(0, 92, 175, 0.5) 33%,
-    rgba(0, 92, 175, 0.85) 50%,
-    rgba(0, 92, 175, 0.5) 66%,
-    rgba(0, 92, 175, 0) 100%
-  );
-  padding: 1em 5em 1.5em 5em;
 }
 
 .glabalDialog_container {
-  height: 20%;
-  width: 100%;
-  border-top: 4px solid;
-  border-bottom: 4px solid;
-  border-image: linear-gradient(to right,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.85) 33%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(255, 255, 255, 0.85) 66%,
-    rgba(255, 255, 255, 0.05) 100%
-  ) 1;
-  //padding: 1px 1px 1px 1px;
+  width: 906px;
+  height: 519px;
+  padding: 120px 0 76px 0;
+  background-image: url('../../assets/images/dialog_bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .title {
-  font-size: 300%;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  font-size: 40px;
+  color: #5A536E;
+  font-weight: 400;
 }
 
 .button_list {
@@ -57,23 +44,41 @@
 }
 
 .button {
-  font-size: 200%;
-  padding: 0.15em 1em 0.15em 1em;
-  margin: 0.2em 1em 0.2em 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 237px;
+  height: 76px;
+  font-size: 35px;
+  font-weight: 400;
   cursor: pointer;
   transition: background-color 0.33s, color 0.33s, font-weight 0.33s, transform 0.33s;
   text-shadow: 0 0 10px rgba(255, 255, 255, 1);
   border-radius: 5px;
-  //background: rgba(0, 0, 0, 0.05);
 }
 
 .button:hover {
-  font-weight: bold;
-  color: #005caf;
   transform: scale(1.1, 1.1);
-  text-shadow: 0 0 15px rgba(0, 0, 0, 0);
-  background: rgba(255, 255, 255, 0.85);
 }
+
+.confirm {
+  color: #fff;
+  background-image: url('../../assets/images/menu_button_active.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.cancel {
+  color: #4E4B6C;
+  background-image: url('../../assets/images/menu_button_default.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 110px;
+}
+
+
 
 @keyframes showGlobalDialog {
   0% {
