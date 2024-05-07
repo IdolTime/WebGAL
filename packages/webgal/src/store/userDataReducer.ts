@@ -24,7 +24,7 @@ import { ISetGameVar } from './stageInterface';
 const initialOptionSet: IOptionData = {
   slPage: 1,
   volumeMain: 100, // 主音量
-  textSpeed: playSpeed.normal, // 文字速度
+  textSpeed: 50, // 文字速度  [0, 100] =>[3, 80]
   autoSpeed: playSpeed.normal, // 自动播放速度
   textSize: textSize.medium,
   vocalVolume: 100, // 语音音量

@@ -102,7 +102,7 @@ export const BottomControlPanelFilm = () => {
                 onClick={() => {
                   showPanel.set(!showPanel.value);
                   setMenuPanel(MenuPanelTag.Option);
-                  setComponentVisibility('showMenuPanel', true);
+                  // setComponentVisibility('showMenuPanel', true);
                 }}
               >
                 <span className={styles.button_text}>选项 / OPTIONS</span>
