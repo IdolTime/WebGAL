@@ -1,3 +1,5 @@
+@import 'src/assets/style/px2.scss';
+
 .extra {
   width: 100%;
   height: 100%;
@@ -5,27 +7,15 @@
   top: 0;
   left: 0;
   z-index: 14;
-  background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);;
-  padding: 2em 2em 2em 2em;
+  background: url("./assets/background.png") no-repeat center center;
+  background-size: cover;
+  padding: px2(38px) px2(48px);
   box-sizing: border-box;
 }
 
 .extra_top {
-  padding: 0 0 0 0;
-  display: flex;
-  height: 10%;
-}
-
-.extra_top_icon {
-  padding: 0.6em 0.6em 0 0.6em;
-  border-radius: 1000px;
-  transform: translate(0, -13px);
+  width: px2(539px);
   cursor: pointer;
-}
-
-.extra_top_icon:hover {
-  background: rgba(255, 255, 255, 0.25);
-  animation: extra_icon_softin 0.25s ease-out forwards;
 }
 
 @keyframes extra_icon_softin {
@@ -37,24 +27,61 @@
   }
 }
 
-
-.extra_title {
-  font-family: "思源宋体", serif;
-  height: 100%;
-  line-height: 100%;
-  font-size: 325%;
-  font-weight: bold;
-  color: transparent;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 75%, #51A8DD 100%);
-  -webkit-background-clip: text;
-}
-
 .mainContainer {
   box-sizing: border-box;
-  padding: 0 2em 0 2em;
   display: flex;
-  height: 92%;
   flex-flow: column;
+}
+.mainTab {
+  width: px2(1468px);
+  margin: 0 auto;
+  margin-top: px2(12px);
+  position: relative;
+  aspect-ratio: 1468/74;
+  display: flex;
+  align-items: center;
+}
+.mainTab_bg {
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.mainTab_item1 {
+  flex: 1;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  position: relative;
+}
+.mainTab_item2 {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.mainTab_bgmunselect {
+  margin-right: px2(152px);
+}
+
+.mainTab_unselect {
+  height: px2(30px);
+  cursor: pointer;
+}
+.mainTab_choose {
+  width: px2(401px);
+  position: absolute;
+}
+.mainTab_choose_bgm {
+  position: absolute;
+  right: px2(146px);
+  height: px2(30px);
+}
+.mainTab_choose_cg {
+  position: absolute;
+  height: px2(30px);
 }
 
 .bgmContainer {

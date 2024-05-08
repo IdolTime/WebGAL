@@ -15,6 +15,7 @@ export function ExtraCg() {
   const currentPage = useValue(1);
   const { playSeEnter, playSeClick } = useSoundEffect();
 
+  console.log(extraState.cg, 'extraState.cg');
   // 开始生成立绘鉴赏的图片
   const showCgList = [];
   const len = extraState.cg.length;
@@ -62,9 +63,6 @@ export function ExtraCg() {
 
   return (
     <div className={styles.cgMain}>
-      <div className={styles.cgShowDiv}>
-        <div className={styles.cgShowDivWarpper}>{showNav}</div>
-      </div>
       <div className={styles.cgContainer}>{showCgList}</div>
     </div>
   );
