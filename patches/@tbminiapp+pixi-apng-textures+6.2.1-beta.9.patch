@@ -1,0 +1,82 @@
+diff --git a/node_modules/@tbminiapp/pixi-apng-textures/dist/cjs/apng-textures.js b/node_modules/@tbminiapp/pixi-apng-textures/dist/cjs/apng-textures.js
+index b2e88ad..385c36f 100644
+--- a/node_modules/@tbminiapp/pixi-apng-textures/dist/cjs/apng-textures.js
++++ b/node_modules/@tbminiapp/pixi-apng-textures/dist/cjs/apng-textures.js
+@@ -164,7 +164,8 @@ var APNGLoader = /** @class */ (function () {
+      * @param next - callback Function to call when done
+      */
+     APNGLoader.use = function (resource, next) {
+-        if (resource.extension === 'apng' && resource.data) {
++        console.log('APNGLoader.use', resource);
++        if (resource.extension === 'png' && resource.data) {
+             try {
+                 var url = resource.name || resource.url;
+                 Object.assign(resource, registerAPNGTextures(url, APNGLoader.parse(url, resource.data), resource.metadata));
+diff --git a/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js b/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
+index d130534..86f0389 100644
+--- a/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
++++ b/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
+@@ -5,9 +5,9 @@
+  * @tbminiapp/pixi-apng-textures is licensed under the MIT License.
+  * http://www.opensource.org/licenses/mit-license
+  */
+-import { ViewableBuffer, BufferResource, Texture, BaseTexture } from '@tbminiapp/pixi-core';
+-import { LoaderResource } from '@tbminiapp/pixi-loaders';
+-import { MIPMAP_MODES, ALPHA_MODES } from '@tbminiapp/pixi-constants';
++import { ViewableBuffer, BufferResource, Texture, BaseTexture } from '@pixi/core';
++import { LoaderResource } from '@pixi/loaders';
++import { MIPMAP_MODES, ALPHA_MODES } from '@pixi/constants';
+ import UPNG from 'upng-js';
+ 
+ /*! *****************************************************************************
+@@ -124,6 +124,7 @@ function registerAPNGTextures(url, resources, metadata) {
+         result.frameDelay.push(baseTexture.resource.delay);
+         result.textures[cacheID] = texture;
+     });
++    PIXI.utils.TextureCache.abcd = 'efg'
+     result.frameCount = textures.length;
+     return result;
+ }
+@@ -158,10 +159,21 @@ var APNGLoader = /** @class */ (function () {
+      * @param next - callback Function to call when done
+      */
+     APNGLoader.use = function (resource, next) {
+-        if (resource.extension === 'apng' && resource.data) {
++        if (resource.extension === 'png' && resource.data && resource.extraInfo?.isApng) {
+             try {
+-                var url = resource.name || resource.url;
+-                Object.assign(resource, registerAPNGTextures(url, APNGLoader.parse(url, resource.data), resource.metadata));
++                var url = resource.url
++                var name = resource.name || url;
++                async function fetchFileAsArrayBuffer(url) {
++                    const response = await fetch(url);
++                    if (!response.ok) {
++                      throw new Error(`Failed to fetch file: ${response.status} ${response.statusText}`);
++                    }
++                    const arrayBuffer = await response.arrayBuffer();
++                    return arrayBuffer;
++                }
++                fetchFileAsArrayBuffer(url).then((arrayBuffer) => {
++                    Object.assign(resource, registerAPNGTextures(name, APNGLoader.parse(name, arrayBuffer), resource.metadata));
++                });
+             }
+             catch (err) {
+                 next(err);
+diff --git a/node_modules/@tbminiapp/pixi-apng-textures/package.json b/node_modules/@tbminiapp/pixi-apng-textures/package.json
+index 994b945..a1c8b49 100755
+--- a/node_modules/@tbminiapp/pixi-apng-textures/package.json
++++ b/node_modules/@tbminiapp/pixi-apng-textures/package.json
+@@ -33,13 +33,6 @@
+   "bugs": {
+     "url": ""
+   },
+-  "peerDependencies": {
+-    "@tbminiapp/pixi-constants": "6.2.1-beta.9",
+-    "@tbminiapp/pixi-core": "6.2.1-beta.9",
+-    "@tbminiapp/pixi-loaders": "6.2.1-beta.9",
+-    "@tbminiapp/pixi-miniprogram-adapter": "^1.0.22",
+-    "@tbminiapp/pixi-utils": "6.2.1-beta.9"
+-  },
+   "dependencies": {
+     "upng-js": "^2.1.0"
+   },
