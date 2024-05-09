@@ -532,7 +532,7 @@ export default class PixiStage {
             }
             if (isApng) {
               const sprite = figureSprite as PIXI.AnimatedSprite;
-              sprite.animationSpeed = 0.5;
+              sprite.animationSpeed = 0.25;
               sprite.play();
               sprite.loop = false;
               sprite.onFrameChange = (frame: any) => {
