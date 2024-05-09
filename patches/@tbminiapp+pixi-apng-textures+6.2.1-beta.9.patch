@@ -13,7 +13,7 @@ index b2e88ad..385c36f 100644
                  var url = resource.name || resource.url;
                  Object.assign(resource, registerAPNGTextures(url, APNGLoader.parse(url, resource.data), resource.metadata));
 diff --git a/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js b/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
-index d130534..86f0389 100644
+index d130534..bc1ef86 100644
 --- a/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
 +++ b/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
 @@ -5,9 +5,9 @@
@@ -37,12 +37,23 @@ index d130534..86f0389 100644
      result.frameCount = textures.length;
      return result;
  }
-@@ -158,10 +159,21 @@ var APNGLoader = /** @class */ (function () {
+@@ -135,7 +136,7 @@ LoaderResource.setExtensionXhrType('apng', LoaderResource.XHR_RESPONSE_TYPE.BUFF
+  *
+  * @ignore
+  */
+-var FILE_IDENTIFIER = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
++var FILE_IDENTIFIER = [97, 99, 84, 76];
+ /**
+  * Loader plugin for handling apng texture container files.
+  *
+@@ -157,11 +158,27 @@ var APNGLoader = /** @class */ (function () {
+      * @param resource - loader resource that is checked to see if it is a apng file
       * @param next - callback Function to call when done
       */
-     APNGLoader.use = function (resource, next) {
+-    APNGLoader.use = function (resource, next) {
 -        if (resource.extension === 'apng' && resource.data) {
-+        if (resource.extension === 'png' && resource.data && resource.extraInfo?.isApng) {
++    APNGLoader.use = async function (resource, next) {
++        if (resource.extension === 'png' && resource.data) {
              try {
 -                var url = resource.name || resource.url;
 -                Object.assign(resource, registerAPNGTextures(url, APNGLoader.parse(url, resource.data), resource.metadata));
@@ -54,14 +65,44 @@ index d130534..86f0389 100644
 +                      throw new Error(`Failed to fetch file: ${response.status} ${response.statusText}`);
 +                    }
 +                    const arrayBuffer = await response.arrayBuffer();
-+                    return arrayBuffer;
++                    const buffer = new Uint8Array(arrayBuffer);
++
++                    if (APNGLoader.validate(url, buffer)) {
++                        Object.assign(resource, registerAPNGTextures(name, APNGLoader.parse(name, buffer), resource.metadata));
++                    } else {
++                        next();
++                        return;
++                    }
 +                }
-+                fetchFileAsArrayBuffer(url).then((arrayBuffer) => {
-+                    Object.assign(resource, registerAPNGTextures(name, APNGLoader.parse(name, arrayBuffer), resource.metadata));
-+                });
++                await fetchFileAsArrayBuffer(url);
              }
              catch (err) {
                  next(err);
+@@ -174,11 +191,7 @@ var APNGLoader = /** @class */ (function () {
+       *  parse apng arraybuffer to APNGTextureResource
+       *
+       */
+-    APNGLoader.parse = function (url, arrayBuffer) {
+-        var buffer = new Uint8Array(arrayBuffer);
+-        if (!APNGLoader.validate(url, buffer)) {
+-            return null;
+-        }
++    APNGLoader.parse = function (url, buffer) {
+         var upngObj = UPNG.decode(buffer);
+         var width = upngObj.width, height = upngObj.height, frames = upngObj.frames;
+         var rgba = UPNG.toRGBA8(upngObj);
+@@ -200,9 +213,9 @@ var APNGLoader = /** @class */ (function () {
+     };
+     /** Checks whether the arrayBuffer contains a valid *.apng file. */
+     APNGLoader.validate = function (url, buffer) {
++        const actLBuffer = buffer.slice(37, 41);
+         for (var i = 0; i < FILE_IDENTIFIER.length; i++) {
+-            if (buffer[i] !== FILE_IDENTIFIER[i]) {
+-                console.error(url + " is not a valid *.apng file!");
++            if (actLBuffer[i] !== FILE_IDENTIFIER[i]) {
+                 return false;
+             }
+         }
 diff --git a/node_modules/@tbminiapp/pixi-apng-textures/package.json b/node_modules/@tbminiapp/pixi-apng-textures/package.json
 index 994b945..a1c8b49 100755
 --- a/node_modules/@tbminiapp/pixi-apng-textures/package.json
