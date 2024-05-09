@@ -147,6 +147,7 @@ export const BottomControlPanel = () => {
             id="Button_ControlPanel_auto"
             className={`${styles.singleButton} ${styles.autoButton}`}
             style={{ fontSize }}
+            title={'自动'}
             onClick={() => {
               switchAuto();
               playSeClick();
@@ -157,6 +158,7 @@ export const BottomControlPanel = () => {
             id="Button_ControlPanel_fast"
             className={`${styles.singleButton} ${styles.fastForwardButton}`}
             style={{ fontSize }}
+            title={'快进'}
             onClick={() => {
               switchFast();
               playSeClick();
@@ -166,6 +168,7 @@ export const BottomControlPanel = () => {
           <span
             className={`${styles.singleButton} ${styles.flashbackButton}`}
             style={{ fontSize }}
+            title={'剧情回顾'}
             onClick={() => {
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
