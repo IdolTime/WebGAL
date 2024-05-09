@@ -81,6 +81,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         return (
           <div
             className={className}
+            data-type='123'
             style={{ fontFamily: font }}
             key={e.jump + i}
             onClick={onClick}
