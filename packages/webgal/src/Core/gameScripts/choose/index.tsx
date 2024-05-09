@@ -24,10 +24,7 @@ class ChooseOption {
     const mainPart = parts.length > 1 ? parts[1] : parts[0];
     const mainPartNodes = mainPart.split(':');
 
-    const mainPartRegex = /(?:[>}])([^:]+)/;
-    const mainPartMatch = mainPart.match(mainPartRegex);
-    let text = mainPartMatch ? mainPartMatch[1] : '';
-
+    const text = mainPartNodes[0].replace(/\${[^{}]*}/, '');
     const option = new ChooseOption(text, mainPartNodes[1]);
 
     // Extract style information
