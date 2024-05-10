@@ -7,6 +7,7 @@ import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pi
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { fetchFileAsArrayBuffer } from '@/Core/util/fetchFileAsArrayBuffer';
 
 export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
@@ -211,6 +212,11 @@ function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
   } else if (url.endsWith('.skel')) {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addSpineFigure(...args);
+  } else if (url.endsWith('.png')) {
+    fetchFileAsArrayBuffer(url).then((arrayBuffer) => {
+      // @ts-ignore
+      return WebGAL.gameplay.pixiStage?.addFigure(...args, isAnimatedPNG(arrayBuffer));
+    });
   } else {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addFigure(...args);
@@ -224,4 +230,21 @@ function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
 function addLive2dFigure(...args: any[]) {
   // @ts-ignore
   // return WebGAL.gameplay.pixiStage?.addLive2dFigure(...args);
+}
+
+function isAnimatedPNG(bytes: Uint8Array) {
+  // Check if the file header matches the APNG signature
+  const magic = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
+  if (!bytes.slice(0, 8).every((v, i) => v === magic[i])) {
+    return false;
+  }
+  const apngSignature = new Uint8Array([97, 99, 84, 76]);
+  const apngSignatureOffset = 37;
+
+  // Check if the file contains the APNG signature
+  if (!bytes.slice(apngSignatureOffset, apngSignatureOffset + 4).every((v, i) => v === apngSignature[i])) {
+    return false;
+  }
+
+  return true;
 }

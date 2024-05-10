@@ -10,6 +10,7 @@ import { WebGALPixiContainer } from '@/Core/controller/stage/pixi/WebGALPixiCont
 import { WebGAL } from '@/Core/WebGAL';
 import 'pixi-spine'; // Do this once at the very start of your code. This registers the loader!
 import { Spine } from 'pixi-spine';
+import { APNGLoader } from '@tbminiapp/pixi-apng-textures';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
@@ -58,6 +59,8 @@ export interface ILive2DRecord {
 
 // @ts-ignore
 window.PIXI = PIXI;
+// @ts-ignore
+PIXI.Loader.registerPlugin(APNGLoader);
 
 export default class PixiStage {
   /**
@@ -75,7 +78,7 @@ export default class PixiStage {
   // 注册到 Ticker 上的函数
   private stageAnimations: Array<IStageAnimationObject> = [];
   private assetLoader = new PIXI.Loader();
-  private loadQueue: { url: string; callback: () => void; name?: string }[] = [];
+  private loadQueue: { url: string; callback: () => void; name?: string; extraInfo?: any }[] = [];
   private live2dFigureRecorder: Array<ILive2DRecord> = [];
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
@@ -452,8 +455,10 @@ export default class PixiStage {
    * @param key 立绘的标识，一般和立绘位置有关
    * @param url 立绘图片url
    * @param presetPosition
+   * @param isApng
    */
-  public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
+  // eslint-disable-next-line max-params
+  public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center', isApng = false) {
     const loader = this.assetLoader;
     // 准备用于存放这个立绘的 Container
     const thisFigureContainer = new WebGALPixiContainer();
@@ -485,38 +490,66 @@ export default class PixiStage {
       setTimeout(() => {
         const texture = loader.resources?.[url]?.texture;
         if (texture && this.getStageObjByUuid(figureUuid)) {
+          const resource = loader.resources[url];
+          const explosionTextures: any[] = [];
+
+          if (isApng) {
+            // @ts-ignore
+            const { frameDelay, frameTextureKeys, frameCount } = resource;
+            frameTextureKeys.forEach((item: any, index: number) => {
+              explosionTextures.push(PIXI.Texture.from(item));
+            });
+          }
+
           /**
            * 重设大小
            */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.min(scaleX, scaleY);
-          const figureSprite = new PIXI.Sprite(texture);
-          figureSprite.scale.x = targetScale;
-          figureSprite.scale.y = targetScale;
-          figureSprite.anchor.set(0.5);
-          figureSprite.position.y = this.stageHeight / 2;
-          const targetWidth = originalWidth * targetScale;
-          const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-          }
-          if (presetPosition === 'center') {
-            thisFigureContainer.setBaseX(this.stageWidth / 2);
-          }
-          if (presetPosition === 'left') {
-            thisFigureContainer.setBaseX(targetWidth / 2);
-          }
-          if (presetPosition === 'right') {
-            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-          }
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-          thisFigureContainer.addChild(figureSprite);
+          const showAndPlay = (textures: any[]) => {
+            const originalWidth = texture.width;
+            const originalHeight = texture.height;
+            const scaleX = this.stageWidth / originalWidth;
+            const scaleY = this.stageHeight / originalHeight;
+            const targetScale = Math.min(scaleX, scaleY);
+            const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
+            figureSprite.scale.x = targetScale;
+            figureSprite.scale.y = targetScale;
+            figureSprite.anchor.set(0.5);
+            figureSprite.position.y = this.stageHeight / 2;
+            const targetWidth = originalWidth * targetScale;
+            const targetHeight = originalHeight * targetScale;
+            thisFigureContainer.setBaseY(this.stageHeight / 2);
+            if (targetHeight < this.stageHeight) {
+              thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+            }
+            if (presetPosition === 'center') {
+              thisFigureContainer.setBaseX(this.stageWidth / 2);
+            }
+            if (presetPosition === 'left') {
+              thisFigureContainer.setBaseX(targetWidth / 2);
+            }
+            if (presetPosition === 'right') {
+              thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+            }
+            if (isApng) {
+              const sprite = figureSprite as PIXI.AnimatedSprite;
+              sprite.animationSpeed = 0.25;
+              sprite.play();
+              sprite.loop = false;
+              sprite.onFrameChange = (frame: any) => {
+                if (frame === sprite.totalFrames - 1) {
+                  sprite.destroy();
+                  const newTextures = [...textures].reverse();
+                  showAndPlay(newTextures);
+                }
+              };
+            }
+            thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+            thisFigureContainer.addChild(figureSprite);
+          };
+
+          showAndPlay(explosionTextures);
         }
-      }, 0);
+      }, 32);
     };
 
     /**
@@ -524,7 +557,7 @@ export default class PixiStage {
      */
     this.cacheGC();
     if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup);
+      this.loadAsset(url, setup, '', isApng);
     } else {
       // 复用
       setup();
@@ -867,11 +900,12 @@ export default class PixiStage {
     }
   }
 
-  private loadAsset(url: string, callback: () => void, name?: string) {
+  // eslint-disable-next-line max-params
+  private loadAsset(url: string, callback: () => void, name?: string, isApng?: boolean) {
     /**
      * Loader 复用疑似有问题，转而采用先前的单独方式
      */
-    this.loadQueue.unshift({ url, callback, name });
+    this.loadQueue.unshift({ url, callback, name, extraInfo: { isApng: isApng ?? false } });
     /**
      * 尝试启动加载
      */
