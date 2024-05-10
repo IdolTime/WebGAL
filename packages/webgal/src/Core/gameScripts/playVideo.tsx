@@ -10,6 +10,8 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
+import FlvJs from 'flv.js';
+
 /**
  * 播放一段视频 * @param sentence
  */
@@ -37,13 +39,30 @@ export const playVideo = (sentence: ISentence): IPerform => {
     blockingNextFlag = true;
   }
 
+  let videoElement: HTMLVideoElement | null = null;
+  let flvPlayer: FlvJs.Player | null = null;
+
   // eslint-disable-next-line react/no-deprecated
   ReactDOM.render(
     <div className={styles.videoContainer}>
-      <video className={styles.fullScreen_video} id="playVideoElement" src={sentence.content} autoPlay={true} />
+      <video className={styles.fullScreen_video} id="playVideoElement" />
     </div>,
     document.getElementById('videoContainer'),
   );
+
+  setTimeout(() => {
+    videoElement = document.getElementById('playVideoElement') as HTMLVideoElement;
+
+    if (FlvJs.isSupported() && videoElement) {
+      flvPlayer = FlvJs.createPlayer({
+        type: sentence.content.endsWith('.mp4') ? 'mp4' : 'flv',
+        url: sentence.content,
+      });
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.load();
+    }
+  }, 1);
+
   let isOver = false;
   const performObject = {
     performName: 'none',
@@ -64,20 +83,23 @@ export const playVideo = (sentence: ISentence): IPerform => {
        * 启动视频播放
        */
       setTimeout(() => {
-        let VocalControl: any = document.getElementById('playVideoElement');
-        if (VocalControl !== null) {
-          VocalControl.currentTime = 0;
-          VocalControl.volume = bgmVol;
-          VocalControl.loop = loopValue;
+        if (flvPlayer !== null && videoElement !== null) {
+          flvPlayer.currentTime = 0;
+          flvPlayer.volume = bgmVol;
+          videoElement.loop = loopValue;
 
           const endPerform = () => {
             for (const e of WebGAL.gameplay.performController.performList) {
               if (e.performName === performInitName) {
                 if (chooseContent !== '' && !loopValue) {
                   const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
-                  const duration = VocalControl.duration;
-                  VocalControl.currentTime = duration - 0.03;
-                  VocalControl.pause();
+
+                  if (flvPlayer) {
+                    const duration = flvPlayer.duration || 0;
+                    flvPlayer.currentTime = duration - 0.03;
+                    flvPlayer.pause();
+                  }
+
                   const script = parsedResult.sentenceList[0];
                   const perform = choose(script, () => {
                     endCallback(e);
@@ -115,6 +137,15 @@ export const playVideo = (sentence: ISentence): IPerform => {
               if (bgmElement) {
                 vocalElement.volume = vocalVol.toString();
               }
+
+              if (flvPlayer) {
+                flvPlayer.pause();
+                flvPlayer.unload();
+                flvPlayer.detachMediaElement();
+                flvPlayer.destroy();
+                flvPlayer = null;
+              }
+
               // eslint-disable-next-line react/no-deprecated
               ReactDOM.render(<div />, document.getElementById('videoContainer'));
             },
@@ -140,7 +171,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             vocalElement.volume = vocalVol2.toString();
           }
 
-          VocalControl?.play();
+          flvPlayer.play();
 
           if (chooseContent && loopValue) {
             const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
@@ -149,11 +180,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
             WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
           }
 
-          VocalControl.onended = () => {
+          videoElement.onended = () => {
             endPerform();
           };
         }
-      }, 1);
+      }, 100);
     }),
   };
 

@@ -77,7 +77,7 @@
 .autoButton {
   width: 48px;
   height: 41px;
-  background-image: url('../../assets/images/autoplay-icon.png');
+  background-image: url('@/assets/imgs/autoplay-icon.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -86,7 +86,7 @@
 .fastForwardButton {
   width: 31px;
   height: 36px;
-  background-image: url('../../assets/images/fast-forward-icon.png');
+  background-image: url('@/assets/imgs/fast-forward-icon.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -96,7 +96,7 @@
 .flashbackButton {
   width: 46px;
   height: 46px;
-  background-image: url('../../assets/images/flashback-icon.png');
+  background-image: url('@/assets/imgs/flashback-icon.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

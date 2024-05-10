@@ -19,7 +19,7 @@
   margin: 0.25em 0 0.25em 0;
   transition: background-color 0.5s, border 0.5s, font-weight 0.5s, box-shadow 0.5s;
 
-  background-image: url('../../../assets/images/choose_item_default.png');
+  background-image: url('@/assets/imgs/choose-item-default.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
@@ -32,7 +32,7 @@
   color: #8A799E;
 
   &:hover {
-    background-image: url('../../../assets/images/choose_item_active.png') !important;
+    background-image: url('@/assets/imgs/choose-item-active.png') !important;;
     color: #FFF;
   }
 }

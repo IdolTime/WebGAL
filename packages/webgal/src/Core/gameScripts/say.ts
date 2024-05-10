@@ -87,7 +87,7 @@ export const say = (sentence: ISentence): IPerform => {
   }
 
   const performInitName: string = getRandomPerformName();
-  let endDelay = 750 - userDataState.optionData.textSpeed * 250;
+  let endDelay = 750 - (userDataState.optionData.textSpeed / 100) * 2 * 250;
   // 如果有 notend 参数，那么就不需要等待
   if (isNotend) {
     endDelay = 0;

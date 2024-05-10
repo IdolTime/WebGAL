@@ -32,7 +32,7 @@
   border-radius: 4px;
   transform: skewX(-10deg);
   background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
-  background-image: url('../../assets/images/game_menu_button_bg.png') !important;
+  background-image: url('@/assets/imgs/game-menu-button-bg.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
   background-position: center !important;
@@ -43,7 +43,7 @@
 
 .Title_button:hover {
   text-shadow: 0 0 10px rgba(255, 255, 255, 1);
-  background-image: url('../../assets/images/game_menu_button_bg_active.png') !important;
+  background-image: url('@/assets/imgs/game-menu-button-bg-active.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
   background-position: center !important;

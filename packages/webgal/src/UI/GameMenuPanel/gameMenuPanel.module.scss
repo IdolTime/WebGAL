@@ -12,7 +12,7 @@
     .menuButton {
         width: 75px;
         height: 70px;
-        background-image: url('../../assets/images/menu-icon.png');
+        background-image: url('@/assets/imgs/menu-icon.png');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
@@ -45,7 +45,7 @@
         z-index: 22;
         width: 566px;
         height: 100%;
-        background-image: url('../../assets/images/menu_bg.png');
+        background-image: url('@/assets/imgs/menu-bg.png');
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
@@ -66,7 +66,7 @@
                 align-items: center;
                 width: 237px;
                 height: 76px;
-                background-image: url('../../assets/images/menu_button_default.png');
+                background-image: url('@/assets/imgs/menu-button-default.png');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
@@ -76,7 +76,7 @@
     
                 &:hover {
                     cursor: pointer;
-                    background-image: url('../../assets/images/menu_button_active.png');
+                    background-image: url('@/assets/imgs/menu-button-active.png');
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;

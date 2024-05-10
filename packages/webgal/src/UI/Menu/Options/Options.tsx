@@ -1,76 +1,140 @@
 import { FC, useEffect } from 'react';
 import styles from './options.module.scss';
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { useValue } from '@/hooks/useValue';
-import { System } from '@/UI/Menu/Options/System/System';
-import { Display } from '@/UI/Menu/Options/Display/Display';
-import { Sound } from '@/UI/Menu/Options/Sound/Sound';
-import useTrans from '@/hooks/useTrans';
-import useSoundEffect from '@/hooks/useSoundEffect';
-
-enum optionPage {
-  'System',
-  'Display',
-  'Sound',
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { setOptionData } from '@/store/userDataReducer';
+import { RootState } from '@/store/store';
+import { setStorage } from '@/Core/controller/storage/storageController';
+import { fullScreenOption } from '@/store/userDataInterface';
+import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
+// import { TextPreview } from '@/UI/Menu/Options/TextPreview/TextPreview';
+import { setVisibility } from '@/store/GUIReducer';
 
 export const Options: FC = () => {
-  const { playSeEnter, playSeSwitch } = useSoundEffect();
-  const currentOptionPage = useValue(optionPage.System);
   useEffect(getStorage, []);
-
-  function getClassName(page: optionPage) {
-    if (page === currentOptionPage.value) {
-      return styles.Options_page_button + ' ' + styles.Options_page_button_active;
-    } else return styles.Options_page_button;
-  }
-
-  const t = useTrans('menu.options.');
+  const userDataState = useSelector((state: RootState) => state.userData);
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.Options_main}>
-      <div className={styles.Options_top}>
-        <div className={styles.Options_title}>
-          <div className={styles.Option_title_text}>{t('title')}</div>
-        </div>
-      </div>
+      <div
+        className={styles.Options_top}
+        onClick={() => {
+          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+        }}
+      />
       <div className={styles.Options_page_container}>
-        <div className={styles.Options_button_list}>
-          <div
-            onClick={() => {
-              currentOptionPage.set(optionPage.System);
-              playSeSwitch();
-            }}
-            className={getClassName(optionPage.System)}
-            onMouseEnter={playSeEnter}
-          >
-            {t('pages.system.title')}
+        {/* 基础设置 */}
+        <div className={styles.Options_left}>
+          <div className={styles.title_base} />
+          <div className={styles.Line}>
+            <div className={styles.Label}>画面模式</div>
+            <div className={styles.Check_line}>
+              <div className={styles.Check_item}>
+                <div className={styles.Check_name}>全屏</div>
+                <div
+                  className={styles.Check_box}
+                  onClick={() => {
+                    dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
+                    setStorage();
+                  }}
+                >
+                  {!userDataState.optionData.fullScreen ? <div className={styles.Checked_box} /> : null}
+                </div>
+              </div>
+              <div className={styles.Check_item}>
+                <div className={styles.Check_name}>窗口</div>
+                <div
+                  className={styles.Check_box}
+                  onClick={() => {
+                    dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
+                    setStorage();
+                  }}
+                >
+                  {userDataState.optionData.fullScreen ? <div className={styles.Checked_box} /> : null}
+                </div>
+              </div>
+            </div>
           </div>
-          <div
-            onClick={() => {
-              currentOptionPage.set(optionPage.Display);
-              playSeSwitch();
-            }}
-            className={getClassName(optionPage.Display)}
-            onMouseEnter={playSeEnter}
-          >
-            {t('pages.display.title')}
-          </div>
-          <div
-            onClick={() => {
-              currentOptionPage.set(optionPage.Sound);
-              playSeSwitch();
-            }}
-            className={getClassName(optionPage.Sound)}
-            onMouseEnter={playSeEnter}
-          >
-            {t('pages.sound.title')}
+          {/* <div className={styles.Line}>
+            <div className={styles.Label}>快进模式</div>
+            <div className={styles.Check_line}>
+              <div className={styles.Check_item}>
+                <div className={styles.Check_name} />
+                <div className={styles.Check_box} />
+              </div>
+              <div className={styles.Check_item}>
+                <div className={styles.Check_name} />
+                <div className={styles.Check_box} />
+              </div>
+            </div>
+          </div> */}
+          {/* <TextPreview /> */}
+          <div className={styles.Bar_line}>
+            <div className={styles.Label_text_speed}>文本播放速度</div>
+            <OptionSlider
+              initValue={userDataState.optionData.textSpeed}
+              uniqueID="文本播放速度"
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
+                setStorage();
+              }}
+            />
           </div>
         </div>
-        <div className={styles.Options_main_content}>
-          {currentOptionPage.value === optionPage.Display && <Display />}
-          {currentOptionPage.value === optionPage.System && <System />}
-          {currentOptionPage.value === optionPage.Sound && <Sound />}
+        {/* 音效设置 */}
+        <div className={styles.Options_right}>
+          <div className={styles.title_voice} />
+          <div className={styles.Bar_line}>
+            <div className={styles.Label}>全局音量</div>
+            <OptionSlider
+              initValue={userDataState.optionData.volumeMain}
+              uniqueID="全局音量"
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
+                setStorage();
+              }}
+            />
+          </div>
+          <div className={styles.Bar_line}>
+            <div className={styles.Label}>背景音量</div>
+            <OptionSlider
+              initValue={userDataState.optionData.bgmVolume}
+              uniqueID="背景音量"
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
+                setStorage();
+              }}
+            />
+          </div>
+          <div className={styles.Bar_line}>
+            <div className={styles.Label}>音效</div>
+            <OptionSlider
+              initValue={userDataState.optionData.seVolume}
+              uniqueID="音效"
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'seVolume', value: Number(newValue) }));
+                dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
+                setStorage();
+              }}
+            />
+          </div>
+          <div className={styles.Bar_line}>
+            <div className={styles.Label}>角色语音</div>
+            <OptionSlider
+              initValue={userDataState.optionData.vocalVolume}
+              uniqueID="角色语音"
+              onChange={(event) => {
+                const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
+                setStorage();
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
