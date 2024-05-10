@@ -5,11 +5,11 @@ import { RootState } from '@/store/store';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import footerLeft from '@/assets/cg/cgBottomLeft.png';
-import footerRight from '@/assets/cg/cgBottomRight.png';
-import footerChecked from '@/assets/cg/cgBottomChecked.png';
-import footerUncheck from '@/assets/cg/cgBottomUncheck.png';
-import cgLock from '@/assets/cg/cgLock.png';
+import footerLeft from '@/assets/images/cg/cg-bottom-left.png';
+import footerRight from '@/assets/images/cg/cg-bottom-right.png';
+import footerChecked from '@/assets/images/cg/cg-bottom-checked.png';
+import footerUncheck from '@/assets/images/cg/cg-bottom-uncheck.png';
+import cgLock from '@/assets/images/cg/cg-lock.png';
 
 export function ExtraCg() {
   const extraState = useSelector((state: RootState) => state.userData.appreciationData);
@@ -17,12 +17,10 @@ export function ExtraCg() {
   const [page, setPage] = useState(1);
   const [list, setList] = useState<any[]>([])
 
-  console.log(extraState.cg, 'extraState.cg');
   const cgLen = extraState.cg.length;
 
   useEffect(() => {
     setList(extraState.cg.slice((page - 1) * 6, page * 6)|| [])
-    console.log(page, 'page')
   }, [extraState.cg, page])
 
   return (

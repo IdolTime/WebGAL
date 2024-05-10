@@ -5,14 +5,14 @@ import { setVisibility } from '@/store/GUIReducer';
 // import { CloseSmall } from '@icon-park/react';
 import { ExtraBgm } from '@/UI/Extra/ExtraBgm';
 import { ExtraCg } from './ExtraCg';
-import useTrans from '@/hooks/useTrans';
-import backTitle from '@/assets/cg/backTitle.png';
-import cgbgmBg from '@/assets/cg/cgbgmBg.png';
-import cgunselect from '@/assets/cg/cgunselect.png';
-import bgmunselect from '@/assets/cg/bgmunselect.png';
-import tabchoose from '@/assets/cg/tabchoose.png';
-import cgchoose from '@/assets/cg/cgchoose.png';
-import bgmchoose from '@/assets/cg/bgmchoose.png';
+import background from '@/assets/images/cg/background.png';
+import backTitle from '@/assets/images/cg/back-title.png';
+import cgbgmBg from '@/assets/images/cg/cg-bgm-bg.png';
+import cgunselect from '@/assets/images/cg/cg-unselect.png';
+import bgmunselect from '@/assets/images/cg/bgm-unselect.png';
+import tabchoose from '@/assets/images/cg/tab-choose.png';
+import cgchoose from '@/assets/images/cg/cg-choose.png';
+import bgmchoose from '@/assets/images/cg/bgm-choose.png';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +22,6 @@ export function Extra() {
   const dispatch = useDispatch();
   const [checked, setCheked] = useState('bgm')
   useEffect(() => {
-    console.log('2222')
     const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
     bgmControl.pause();
   }, [])
@@ -31,7 +30,12 @@ export function Extra() {
   return (
     <>
       {showExtra && (
-        <div className={styles.extra}>
+        <div className={styles.extra}
+          style={{
+            background: `url(${background}) no-repeat center center`,
+            backgroundSize: 'cover',
+          }}
+        >
           <div 
             className={styles.extra_top}
             onClick={() => {

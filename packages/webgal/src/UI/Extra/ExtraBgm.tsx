@@ -5,14 +5,14 @@ import styles from '@/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
-import bgmstar from '@/assets/cg/bgmstar.png';
-import soundunselect from '@/assets/cg/soundunselect.png';
-import soundChoose from '@/assets/cg/soundChoose.png';
-import unlockBgm from '@/assets/cg/unlockBgm.png';
-import footerLeft from '@/assets/cg/cgBottomLeft.png';
-import footerRight from '@/assets/cg/cgBottomRight.png';
-import footerChecked from '@/assets/cg/cgBottomChecked.png';
-import footerUncheck from '@/assets/cg/cgBottomUncheck.png';
+import bgmstar from '@/assets/images/cg/bgm-star.png';
+import soundunselect from '@/assets/images/cg/sound-unselect.png';
+import soundChoose from '@/assets/images/cg/sound-choose.png';
+import unlockBgm from '@/assets/images/cg/unlock-bgm.png';
+import footerLeft from '@/assets/images/cg/cg-bottom-left.png';
+import footerRight from '@/assets/images/cg/cg-bottom-right.png';
+import footerChecked from '@/assets/images/cg/cg-bottom-checked.png';
+import footerUncheck from '@/assets/images/cg/cg-bottom-uncheck.png';
 
 
 export function ExtraBgm() {
@@ -39,7 +39,6 @@ export function ExtraBgm() {
 
   useEffect(() => {
     setList(extraState.bgm.slice((page - 1) * 8, page * 8)|| [])
-    console.log(page, 'page')
   }, [extraState.bgm, page])
 
   return (
