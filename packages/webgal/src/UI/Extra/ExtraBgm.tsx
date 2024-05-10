@@ -5,14 +5,14 @@ import styles from '@/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
-import bgmstar from '@/assets/images/cg/bgm-star.png';
-import soundunselect from '@/assets/images/cg/sound-unselect.png';
-import soundChoose from '@/assets/images/cg/sound-choose.png';
-import unlockBgm from '@/assets/images/cg/unlock-bgm.png';
-import footerLeft from '@/assets/images/cg/cg-bottom-left.png';
-import footerRight from '@/assets/images/cg/cg-bottom-right.png';
-import footerChecked from '@/assets/images/cg/cg-bottom-checked.png';
-import footerUncheck from '@/assets/images/cg/cg-bottom-uncheck.png';
+import bgmstar from '@/assets/imgs//bgm-star.png';
+import soundunselect from '@/assets/imgs//sound-unselect.png';
+import soundChoose from '@/assets/imgs//sound-choose.png';
+import unlockBgm from '@/assets/imgs//unlock-bgm.png';
+import footerLeft from '@/assets/imgs//cg-bottom-left.png';
+import footerRight from '@/assets/imgs//cg-bottom-right.png';
+import footerChecked from '@/assets/imgs//cg-bottom-checked.png';
+import footerUncheck from '@/assets/imgs//cg-bottom-uncheck.png';
 
 
 export function ExtraBgm() {

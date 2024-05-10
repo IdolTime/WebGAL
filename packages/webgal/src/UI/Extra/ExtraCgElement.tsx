@@ -2,7 +2,7 @@ import { useValue } from '@/hooks/useValue';
 import styles from '@/UI/Extra/extra.module.scss';
 import React from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import cgUnLock from '@/assets/images/cg/cg-unLock.png';
+import cgUnLock from '@/assets/imgs//cg-unLock.png';
 
 interface IProps {
   name: string;
