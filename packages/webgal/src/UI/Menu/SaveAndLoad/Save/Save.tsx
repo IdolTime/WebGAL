@@ -129,13 +129,13 @@ export const Save: FC = () => {
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
-        <div className={styles.Save_back} />
         <div
-          className={styles.Save_title}
+          className={styles.Save_back}
           onClick={() => {
             dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
           }}
         />
+        <div className={styles.Save_title}/>
       </div>
       <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
