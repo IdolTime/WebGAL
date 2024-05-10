@@ -50,8 +50,8 @@ export const Backlog = () => {
         >
           <div className={styles.backlog_func_area}>
             <div className={styles.backlog_item_button_list}>
-              <div
-                onClick={(e) => {
+              {/* <div
+                onClick={(e) => {c
                   playSeClick();
                   jumpFromBacklog(i);
                   e.preventDefault();
@@ -61,6 +61,9 @@ export const Backlog = () => {
                 className={styles.backlog_item_button_element}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
+              </div> */}
+              <div className={styles.backlog_item_content_name}>
+                {(backlogItem.currentStageState.showName && `【${backlogItem.currentStageState.showName}】`) || ''}
               </div>
               {backlogItem.currentStageState.vocal ? (
                 <div
@@ -79,11 +82,10 @@ export const Backlog = () => {
                   onMouseEnter={playSeEnter}
                   className={styles.backlog_item_button_element}
                 >
-                  <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
+                  <span className={styles.sound_icon}></span>
                 </div>
               ) : null}
             </div>
-            <div className={styles.backlog_item_content_name}>{backlogItem.currentStageState.showName}</div>
           </div>
           <div className={styles.backlog_item_content}>
             <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
@@ -139,7 +141,7 @@ export const Backlog = () => {
           `}
         >
           <div className={styles.backlog_top}>
-            <CloseSmall
+            <span
               className={styles.backlog_top_icon}
               onClick={() => {
                 playSeClick();
@@ -147,18 +149,18 @@ export const Backlog = () => {
                 dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
               }}
               onMouseEnter={playSeEnter}
-              theme="outline"
-              size="4em"
-              fill="#ffffff"
-              strokeWidth={3}
-            />
+              // theme="outline"
+              // size="4em"
+              // fill="#ffffff"
+              // strokeWidth={3}
+            ></span>
             <div
               className={styles.backlog_title}
               onClick={() => {
                 logger.info('Rua! Testing');
               }}
             >
-              {t('buttons.backlog')}
+              {/* {t('buttons.backlog')} */}
             </div>
           </div>
           {GUIStore.showBacklog && (

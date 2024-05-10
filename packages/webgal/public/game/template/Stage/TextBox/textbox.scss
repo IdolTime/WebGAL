@@ -1,3 +1,4 @@
+@import 'src/assets/style/px2.scss';
 .TextBox_main {
   z-index: 3;
   position: absolute;
@@ -7,10 +8,10 @@
   background-blend-mode: darken;
   border-radius: 165px 20px 20px 165px;
   bottom: 20px;
-  left: 275px;
+  left: 92px;
   font-weight: bold;
   color: white;
-  padding: 1em 50px 70px 200px;
+  // padding: 1em 50px 70px 200px;
   box-sizing: border-box;
   display: flex;
   flex-flow: column;

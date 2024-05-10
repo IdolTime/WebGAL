@@ -3,6 +3,8 @@ const zhCn = {
   common: {
     yes: '是',
     no: '否',
+    confirm: '确认',
+    cancel: '取消',
   },
 
   menu: {
@@ -144,7 +146,7 @@ const zhCn = {
 
   title: {
     start: {
-      title: '开始游戏',
+      title: '开始',
       subtitle: 'START',
     },
     continue: {
@@ -152,16 +154,20 @@ const zhCn = {
       subtitle: 'CONTINUE',
     },
     options: {
-      title: '游戏选项',
+      title: '设置',
       subtitle: 'OPTIONS',
     },
     load: {
-      title: '读取存档',
+      title: '读取',
       subtitle: 'LOAD',
     },
     extra: {
-      title: '鉴赏模式',
+      title: '画廊',
       subtitle: 'EXTRA',
+    },
+    quit: {
+      title: '退出',
+      subtitle: 'QUIT',
     },
   },
 
@@ -181,6 +187,12 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确认返回到标题界面吗',
+      quitTips: '确认退出游戏吗',
+      backToGame: '返回游戏',
+      preserve: '保存',
+      read: '读取',
+      setting: '设置',
+      backToTitle: '返回标题'      
     },
   },
 

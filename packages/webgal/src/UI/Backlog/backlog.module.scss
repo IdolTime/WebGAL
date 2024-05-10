@@ -1,3 +1,5 @@
+@import 'src/assets/style/px2.scss';
+
 .Backlog_main {
   font-family: "思源宋体", serif;
   position: absolute;
@@ -5,10 +7,15 @@
   width: 100%;
   height: 100%;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 2em 0 2em 0;
+  // background: rgba(0, 0, 0, 0.7);
+  // padding: 2em 0 2em 0;
   animation: backlog_soft_in 0.7s ease-out forwards;
   box-sizing: border-box;
+  padding: px2(35px) px2(77px) px2(25px) px2(46px);
+  background-image: url('@/assets/imgs/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .Backlog_main_out {
@@ -42,16 +49,22 @@
 }
 
 .backlog_top_icon {
-  padding: 0.6em 0.6em 0 0.6em;
-  border-radius: 1000px;
-  transform: translate(0, -13px);
+  // padding: 0.6em 0.6em 0 0.6em;
+  // border-radius: 1000px;
+  // transform: translate(0, -13px);
   cursor: pointer;
+  width: px2(140px);
+  height: px2(57px);
+  background-image: url('@/assets/imgs/review-close-icon.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
-.backlog_top_icon:hover {
-  background: rgba(255, 255, 255, 0.25);
-  animation: backlog_icon_softin 0.25s ease-out forwards;
-}
+// .backlog_top_icon:hover {
+//   background: rgba(255, 255, 255, 0.25);
+//   animation: backlog_icon_softin 0.25s ease-out forwards;
+// }
 
 @keyframes backlog_icon_softin {
   0% {
@@ -64,36 +77,84 @@
 
 
 .backlog_title {
-  height: 100%;
-  line-height: 100%;
-  font-size: 360%;
-  font-weight: bold;
-  color: transparent;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
-  -webkit-background-clip: text;
+  // height: 100%;
+  // line-height: 100%;
+  // font-size: 360%;
+  // font-weight: bold;
+  // color: transparent;
+  // background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
+  // -webkit-background-clip: text;
+  width: px2(513px);
+  height: px2(126px);
+  background-image: url('@/assets/imgs/review-text.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .backlog_content {
   position: absolute;
-  height: 80%;
-  padding: 1em 10em 1em 10em;
-  overflow: auto;
+  height: 85%;
+  margin-left: px2(80px);
+  margin-right: px2(77px);
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-flow: column-reverse;
   font-weight: normal;
   width: 100%;
   box-sizing: border-box;
+  background-image: url('@/assets/imgs/review-content-box-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100% 0%;
 }
 
 
 .backlog_item {
   display: flex;
+  flex-direction: column;
   color: white;
   font-size: 165%;
   opacity: 0;
   animation: backlog_item_in 0.5s ease-out forwards;
-  margin: 1.25em 0 0 0;
+  // margin: 1.25em 0 0 0;
   width: 100%;
+  height: px2(170px);
+  // border-bottom: 1px solid red;
+  padding: px2(16px) px2(57px) px2(20px) px2(100px);
+
+  &:hover {
+    background-image: url('@/assets/imgs/review-item-bg-hover.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &:hover .backlog_item_content_name {
+    color: #C6BAD9;
+  }
+
+  &:hover .backlog_item_content {
+    color: #CCC092;
+  }
+
+  &:hover .backlog_item_button_element {
+    opacity: 1;
+  }
+
+  &::after {  
+    content: "";  
+    position: absolute;  
+    bottom: 0;  
+    left: 0;  
+    width: 100%;  
+    height: 1px;
+    background-image: url('@/assets/imgs/review-line.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 }
 
 .backlog_item_out {
@@ -102,7 +163,7 @@
   font-size: 165%;
   opacity: 0;
   animation: backlog_item_out 0.5s ease-out forwards;
-  margin: 1.25em 0 0 0;
+  // margin: 1.25em 0 0 0;
   width: 100%;
 }
 
@@ -116,23 +177,26 @@
 }
 
 .backlog_item_content_name {
-  font-weight: bold;
-  color: transparent;
+  // color: transparent;
+  color: red;
   //background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 55%, rgb(210, 243, 255) 100%);
-  background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
-  -webkit-background-clip: text;
+  // background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
+  // -webkit-background-clip: text;
   //width: 20%;
-  margin: 0 0 0 auto;
+  // margin: 0 0 0 auto;
   overflow-wrap: break-word;
   box-sizing: border-box;
   //background: rgba(255, 255, 255, 0.175);
-  border-radius: 7px;
-  padding: 0.2em 0.5em 0.2em 0.5em;
-  font-size: 115%;
-  width: 50%;
+  // border-radius: 7px;
+  // padding: 0.2em 0.5em 0.2em 0.5em;
+  // width: 50%;
   text-align: left;
   //font-family: WebgalUI, serif;
   letter-spacing: 0.1em;
+  color: #A3A0A0;
+  font-size: px2(28px);
+  font-weight: 400;
+  line-height: px2(55px);
 }
 
 .backlog_item_content {
@@ -140,9 +204,14 @@
   font-size: 115%;
   width: 82.5%;
   box-sizing: border-box;
-  padding: 0.2em 0 0 1em;
+  padding-top: 0.2em;
   //font-family: WebgalUI, serif;
   letter-spacing: 0.05em;
+
+  color: #9F94A5;
+  font-size: px2(28px);
+  font-weight: 400;
+  line-height: px2(34px);
 }
 
 .backlog_item_button_list {
@@ -156,12 +225,31 @@
 .backlog_item_button_element {
   cursor: pointer;
   padding: 0.01em 0.75em 0 0.75em;
-  margin: 0 0 0 0.5em;
-  background: rgba(255, 255, 255, 0.075);
+  // margin: 0 0 0 0.5em;
+  // background: rgba(255, 255, 255, 0.075);
   border-radius: 7px;
   display: flex;
+  opacity: 0;
+  position: absolute;
+  right: 30%;
+  top: 50%;
+  transform: translateY(-50%);
   //border: 1px solid rgba(255, 255, 255, 0.15);
   //box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.075);
+  }
+
+  .sound_icon {
+    display: block;
+    width: px2(75px);
+    height: px2(69px);
+    background-image: url('@/assets/imgs/sound-icon.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
 }
 
 .backlog_item_button_element:hover {

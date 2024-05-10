@@ -13,6 +13,7 @@ import DevPanel from '@/UI/DevPanel/DevPanel';
 import Translation from '@/UI/Translation/Translation';
 import { PanicOverlay } from '@/UI/PanicOverlay/PanicOverlay';
 import { useFullScreen } from './hooks/useFullScreen';
+import { GameMenuPanel } from './UI/GameMenuPanel/GameMenuPanel';
 
 function App() {
   useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
     <div className="App">
       <Translation />
       <Stage />
+      <GameMenuPanel />
       <BottomControlPanel />
       <BottomControlPanelFilm />
       <Backlog />

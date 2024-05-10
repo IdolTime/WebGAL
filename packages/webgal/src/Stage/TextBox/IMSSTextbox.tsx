@@ -104,11 +104,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
       {isText && (
         <div className={styles.TextBox_Container}>
           <div
-            className={
-              applyStyle('TextBox_main', styles.TextBox_main) +
-              ' ' +
-              applyStyle('TextBox_Background', styles.TextBox_Background)
-            }
+            className={applyStyle('TextBox_main', styles.TextBox_main)}
             style={{
               opacity: `${textboxOpacity / 100}`,
               left: miniAvatar === '' ? 25 : undefined,
@@ -116,10 +112,11 @@ export default function IMSSTextbox(props: ITextboxProps) {
           />
           <div
             id="textBoxMain"
-            className={applyStyle('TextBox_main', styles.TextBox_main)}
+            className={
+              `${styles.TextBox_main } ${miniAvatar !== '' ? styles.TextBox_avatarDialogue_bg : styles.TextBox_dialogue_bg} `}
             style={{
               fontFamily: font,
-              left: miniAvatar === '' ? 25 : undefined,
+              left: miniAvatar === '' ? 25 : undefined
             }}
           >
             <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
@@ -130,11 +127,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             {showName !== '' && (
               <>
                 <div
-                  className={
-                    applyStyle('TextBox_showName', styles.TextBox_showName) +
-                    ' ' +
-                    applyStyle('TextBox_ShowName_Background', styles.TextBox_ShowName_Background)
-                  }
+                  className={applyStyle('TextBox_showName', styles.TextBox_showName)}
                   style={{
                     opacity: `${textboxOpacity / 100}`,
                     fontSize: '200%',
@@ -157,9 +150,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 <div
                   key={showName}
                   className={applyStyle('TextBox_showName', styles.TextBox_showName)}
-                  style={{
-                    fontSize: '200%',
-                  }}
                 >
                   {showName.split('').map((e, i) => {
                     return (
@@ -178,7 +168,6 @@ export default function IMSSTextbox(props: ITextboxProps) {
             <div
               className={applyStyle('text', styles.text)}
               style={{
-                fontSize,
                 flexFlow: 'column',
                 overflow: 'hidden',
                 paddingLeft: '0.1em',
