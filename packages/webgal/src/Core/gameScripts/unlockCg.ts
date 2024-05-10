@@ -15,6 +15,7 @@ export const unlockCg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   let name = sentence.content;
   let series = 'default';
+  console.log(sentence, 'cg-sentence')
   sentence.args.forEach((e) => {
     if (e.key === 'name') {
       name = e.value.toString();

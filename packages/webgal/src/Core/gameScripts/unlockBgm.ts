@@ -15,6 +15,7 @@ export const unlockBgm = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   let name = sentence.content;
   let series = 'default';
+  console.log(sentence, 'bgm-sentence')
   sentence.args.forEach((e) => {
     if (e.key === 'name') {
       name = e.value.toString();
