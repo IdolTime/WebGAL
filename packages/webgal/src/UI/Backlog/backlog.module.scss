@@ -92,11 +92,11 @@
 
 .backlog_content {
   position: absolute;
-  height: 80%;
-  margin-left: 93px;
+  height: 85%;
+  margin-left: 80px;
   margin-right: 77px;
-  // padding: 1em 10em 1em 10em;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-flow: column-reverse;
   font-weight: normal;
@@ -105,7 +105,7 @@
   background-image: url('../../assets/images/review_contentBox_bg.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: 100% 0%;
 }
 
 
