@@ -2,12 +2,11 @@ import { useValue } from '@/hooks/useValue';
 import styles from '@/UI/Extra/extra.module.scss';
 import React from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import cgUnLock from '@/assets/cg/cgUnLock.png';
 
 interface IProps {
   name: string;
   imgUrl: string;
-  transformDeg: number;
-  index: number;
 }
 
 export function ExtraCgElement(props: IProps) {
@@ -43,21 +42,16 @@ export function ExtraCgElement(props: IProps) {
           playSeClick();
         }}
         onMouseEnter={playSeEnter}
-        style={{
-          // transform: `rotate(${deg}deg)`,
-          animation: `cg_softIn_${props.transformDeg} 1.5s ease-out ${100 + props.index * 100}ms forwards `,
-        }}
         key={props.name}
         className={styles.cgElement}
       >
+        <img src={cgUnLock} alt="" style={{width: '100%'}} />
         <div
           style={{
-            backgroundImage: `url('${props.imgUrl}')`,
+            background: `url('${props.imgUrl}') no-repeat center center`,
             backgroundSize: `cover`,
-            backgroundPosition: 'center',
-            width: '100%',
-            height: '100%',
           }}
+          className={styles.cgUnLock}
         />
       </div>
     </>

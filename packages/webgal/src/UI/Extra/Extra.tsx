@@ -14,15 +14,20 @@ import tabchoose from '@/assets/cg/tabchoose.png';
 import cgchoose from '@/assets/cg/cgchoose.png';
 import bgmchoose from '@/assets/cg/bgmchoose.png';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function Extra() {
   const { playSeClick, playSeEnter } = useSoundEffect();
   const showExtra = useSelector((state: RootState) => state.GUI.showExtra);
   const dispatch = useDispatch();
   const [checked, setCheked] = useState('bgm')
-
-  const t = useTrans('extra.');
+  useEffect(() => {
+    console.log('2222')
+    const bgmControl: HTMLAudioElement = document.getElementById('currentBgm') as HTMLAudioElement;
+    bgmControl.pause();
+  }, [])
+ 
+  // const t = useTrans('extra.');
   return (
     <>
       {showExtra && (
