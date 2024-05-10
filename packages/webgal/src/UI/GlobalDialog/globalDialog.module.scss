@@ -25,7 +25,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/dialog-bg.svg');
+  background-image: url('@/assets/imgs/dialog-bg.png');
 }
 
 .glabalDialog_container {
@@ -59,7 +59,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/dialog-confirm.svg');
+  background-image: url('@/assets/imgs/dialog-confirm.png');
   margin-right: px2(110px);
   cursor: pointer;
 }
@@ -71,7 +71,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/dialog-cancel.svg');
+  background-image: url('@/assets/imgs/dialog-cancel.png');
   cursor: pointer;
 }
 

@@ -12,7 +12,7 @@ import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 
 export const Save: FC = () => {
-  const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
+  const { playSeClick, playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const savesDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
@@ -129,13 +129,15 @@ export const Save: FC = () => {
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
-        <div className={styles.Save_back} />
         <div
-          className={styles.Save_title}
+          className={styles.Save_back}
           onClick={() => {
+            playSeClick();
             dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
           }}
+          onMouseEnter={playSeEnter}
         />
+        <div className={styles.Save_title} />
       </div>
       <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
         {showSaves}

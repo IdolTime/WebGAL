@@ -7,22 +7,26 @@ import { RootState } from '@/store/store';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
-// import { TextPreview } from '@/UI/Menu/Options/TextPreview/TextPreview';
+import useSoundEffect from '@/hooks/useSoundEffect';
 import { setVisibility } from '@/store/GUIReducer';
 
 export const Options: FC = () => {
   useEffect(getStorage, []);
+  const { playSeClick, playSeEnter } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
 
   return (
     <div className={styles.Options_main}>
       <div
-        className={styles.Options_top}
+        className={styles.Save_back}
         onClick={() => {
+          playSeClick();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
+        onMouseEnter={playSeEnter}
       />
+      <div className={styles.Options_top} />
       <div className={styles.Options_page_container}>
         {/* 基础设置 */}
         <div className={styles.Options_left}>
