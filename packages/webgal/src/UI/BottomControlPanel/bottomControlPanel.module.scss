@@ -1,12 +1,4 @@
-//.ToCenter {
-//  display: flex;
-//  justify-content: center;
-//  position: absolute;
-//  bottom: 0;
-//  left: 0;
-//  width: 100%;
-//  z-index: 9;
-//}
+@import 'src/assets/style/px2.scss';
 
 .main {
   //border-bottom: 2px solid rgba(255,255,255,0.25);
@@ -75,8 +67,8 @@
 // }
 
 .autoButton {
-  width: 48px;
-  height: 41px;
+  width: px2(36px);
+  height: px2(31px);
   background-image: url('@/assets/imgs/autoplay-icon.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -84,8 +76,8 @@
 }
 
 .fastForwardButton {
-  width: 31px;
-  height: 36px;
+  width: px2(36px);
+  height: px2(31px);
   background-image: url('@/assets/imgs/fast-forward-icon.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -94,8 +86,8 @@
 }
 
 .flashbackButton {
-  width: 46px;
-  height: 46px;
+  width: px2(56px);
+  height: px2(56px);
   background-image: url('@/assets/imgs/flashback-icon.png');
   background-repeat: no-repeat;
   background-size: cover;
