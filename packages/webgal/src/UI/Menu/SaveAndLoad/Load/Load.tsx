@@ -119,6 +119,7 @@ export const Load: FC = () => {
         <div
           className={styles.Save_back}
           onClick={() => {
+            playSeClick();
             dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
           }}
         />

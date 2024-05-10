@@ -12,7 +12,7 @@ import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 
 export const Save: FC = () => {
-  const { playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
+  const { playSeClick, playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const savesDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
@@ -132,6 +132,7 @@ export const Save: FC = () => {
         <div
           className={styles.Save_back}
           onClick={() => {
+            playSeClick();
             dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
           }}
         />
