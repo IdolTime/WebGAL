@@ -7,7 +7,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/bg.svg');
+  background-image: url('@/assets/imgs/bg.svg');
 }
 
 .Save_Load_top {
@@ -28,7 +28,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/save-title.svg');
+  background-image: url('@/assets/imgs/save-title.svg');
 }
 
 .Save_back {
@@ -41,7 +41,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/back.svg');
+  background-image: url('@/assets/imgs/back.svg');
 }
 
 .Save_title {
@@ -54,7 +54,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/save-title.svg');
+  background-image: url('@/assets/imgs/save-title.svg');
 }
 
 .Load_title {
@@ -67,7 +67,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/load-title.svg');
+  background-image: url('@/assets/imgs/load-title.svg');
 }
 
 .Save_Load_title {
@@ -108,7 +108,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/point-default.svg');
+  background-image: url('@/assets/imgs/point-default.svg');
   cursor: pointer;
 }
 
@@ -123,7 +123,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/point-active.svg')!important;
+  background-image: url('@/assets/imgs/point-active.svg')!important;
 }
 
 .Save_Load_top_button:hover {
@@ -180,14 +180,14 @@
     height: px2(348px);
     top: px2(-48px);
     left: px2(-48px);
-    background-image: url('src/assets/imgs/border-active.svg');
+    background-image: url('@/assets/imgs/border-active.svg');
     z-index: -1;
   }
   .Save_Load_info_box {
     display: block;
   }
   .Save_Load_content_miniRen {
-    background-image: url('src/assets/imgs/bg-active.svg');
+    background-image: url('@/assets/imgs/bg-active.svg');
   }
 }
 
@@ -292,7 +292,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/save-load-bg.svg');
+  background-image: url('@/assets/imgs/save-load-bg.svg');
   transition: all ease 0.3s;
 }
 
@@ -304,7 +304,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/save-load-bg.svg');
+  background-image: url('@/assets/imgs/save-load-bg.svg');
 }
 
 .Save_Load_content_miniRen_bg {
@@ -341,7 +341,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/border-bg.svg');
+  background-image: url('@/assets/imgs/border-bg.svg');
   z-index: 2;
   transition: all ease 0.3s;
 }
@@ -352,7 +352,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/back.svg');
+  background-image: url('@/assets/imgs/back.svg');
   cursor: pointer;
 }
 
@@ -362,7 +362,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/back-r.svg');
+  background-image: url('@/assets/imgs/back-r.svg');
   cursor: pointer;
 }
 

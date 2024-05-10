@@ -33,7 +33,7 @@ input[type=range]::-webkit-slider-thumb {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/bar-thumb.svg');
+  background-image: url('@/assets/imgs/bar-thumb.svg');
   z-index: 3;
   position: relative;
 }
@@ -47,7 +47,7 @@ input[type=range]::-moz-range-thumb {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('src/assets/imgs/bar-thumb.svg');
+  background-image: url('@/assets/imgs/bar-thumb.svg');
   z-index: 3;
   position: relative;
 }
@@ -64,7 +64,7 @@ input[type=range]::-moz-range-thumb {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url('src/assets/imgs/bar-checked.svg');
+    background-image: url('@/assets/imgs/bar-checked.svg');
     z-index: 2;
   }
   .Slider_bg_under {
@@ -74,7 +74,7 @@ input[type=range]::-moz-range-thumb {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url('src/assets/imgs/bar-bg.svg');
+    background-image: url('@/assets/imgs/bar-bg.svg');
     z-index: 1;
   }
 }
