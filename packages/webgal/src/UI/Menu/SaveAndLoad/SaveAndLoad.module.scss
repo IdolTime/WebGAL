@@ -7,7 +7,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/bg.svg');
+  background-image: url('@/assets/imgs/bg.png');
 }
 
 .Save_Load_top {
@@ -28,7 +28,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/save-title.svg');
+  background-image: url('@/assets/imgs/save-title.png');
 }
 
 .Save_back {
@@ -41,34 +41,34 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back.svg');
+  background-image: url('@/assets/imgs/back.png');
   z-index: 2;
 }
 
 .Save_title {
   position: absolute;
   top: px2(37px);
-  left: px2(43px);
+  left: px2(70px);
   cursor: pointer;
   width: px2(539px);
   height: px2(120px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/save-title.svg');
+  background-image: url('@/assets/imgs/save-title.png');
 }
 
 .Load_title {
   position: absolute;
   top: px2(37px);
-  left: px2(43px);
+  left: px2(70px);
   cursor: pointer;
   width: px2(539px);
   height: px2(120px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/load-title.svg');
+  background-image: url('@/assets/imgs/load-title.png');
 }
 
 .Save_Load_title {
@@ -109,7 +109,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/point-default.svg');
+  background-image: url('@/assets/imgs/point-default.png');
   cursor: pointer;
 }
 
@@ -124,7 +124,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/point-active.svg')!important;
+  background-image: url('@/assets/imgs/point-active.png')!important;
 }
 
 .Save_Load_top_button:hover {
@@ -181,14 +181,14 @@
     height: px2(348px);
     top: px2(-48px);
     left: px2(-48px);
-    background-image: url('@/assets/imgs/border-active.svg');
+    background-image: url('@/assets/imgs/border-active.png');
     z-index: -1;
   }
   .Save_Load_info_box {
     display: block;
   }
   .Save_Load_content_miniRen {
-    background-image: url('@/assets/imgs/bg-active.svg');
+    background-image: url('@/assets/imgs/bg-active.png');
   }
 }
 
@@ -293,7 +293,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/save-load-bg.svg');
+  background-image: url('@/assets/imgs/save-load-bg.png');
   transition: all ease 0.3s;
 }
 
@@ -305,7 +305,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/save-load-bg.svg');
+  background-image: url('@/assets/imgs/save-load-bg.png');
 }
 
 .Save_Load_content_miniRen_bg {
@@ -342,7 +342,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/border-bg.svg');
+  background-image: url('@/assets/imgs/border-bg.png');
   z-index: 2;
   transition: all ease 0.3s;
 }
@@ -353,7 +353,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back.svg');
+  background-image: url('@/assets/imgs/back.png');
   cursor: pointer;
 }
 
@@ -363,7 +363,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back-r.svg');
+  background-image: url('@/assets/imgs/back-r.png');
   cursor: pointer;
 }
 

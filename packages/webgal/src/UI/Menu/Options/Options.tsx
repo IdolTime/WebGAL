@@ -18,11 +18,12 @@ export const Options: FC = () => {
   return (
     <div className={styles.Options_main}>
       <div
-        className={styles.Options_top}
+        className={styles.Save_back}
         onClick={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
       />
+      <div className={styles.Options_top} />
       <div className={styles.Options_page_container}>
         {/* 基础设置 */}
         <div className={styles.Options_left}>

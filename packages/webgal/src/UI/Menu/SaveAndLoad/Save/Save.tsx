@@ -135,7 +135,7 @@ export const Save: FC = () => {
             dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
           }}
         />
-        <div className={styles.Save_title}/>
+        <div className={styles.Save_title} />
       </div>
       <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
