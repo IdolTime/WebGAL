@@ -8,9 +8,10 @@
   flex-flow: row;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   z-index: 13;
   background: rgba(0, 0, 0, 0.05);
+  padding-bottom: px2(300px);
 }
 
 .Choose_item {
