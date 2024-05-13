@@ -20,6 +20,11 @@ $height: 330px;
   bottom: 0;
   width: 100%;
   animation: showSoftly 0.7s ease-out forwards;
+  height: px2(520px);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-image: url('@/assets/imgs/text-dialog-bg.png');
 }
 
 .TextBox_main {
@@ -34,7 +39,8 @@ $height: 330px;
   left: px2(92px);
   font-weight: bold;
   color: white;
-  padding: px2(100px) px2(50px) px2(60px) px2(400px);
+  font-size: 40px;
+  padding: px2(100px) px2(50px) px2(50px) px2(400px);
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -90,14 +96,15 @@ $height: 330px;
   left: 0;
   top: 0;
   //background-image: linear-gradient(rgba(255, 255, 255, 1) 0%, rgb(225, 237, 255) 100%);
-  background-image: linear-gradient(#0B346E 0%,
-    //#f5f7fa 45%,
-    #141423 100%);
+  // background-image: linear-gradient(#0B346E 0%,
+  //   //#f5f7fa 45%,
+  //   #141423 100%);
   //background: rgba(255, 255, 255, 1);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  // background-clip: text;
+  // -webkit-background-clip: text;
+  // color: transparent;
   z-index: 2;
+  color: #fff;
 }
 
 .inner {
@@ -105,8 +112,9 @@ $height: 330px;
   position: absolute;
   left: 0;
   top: 0;
-  -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
+  // -webkit-text-stroke: 0.1em rgba(255, 255, 255, 1);
   z-index: 1;
+  color: #fff
   //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
 }
 
@@ -234,5 +242,5 @@ $height: 330px;
   color: #FFF;
   font-size: 40px;
   font-weight: 400;
-  line-height: 55px; 
+  line-height: 55px !important; 
 }
