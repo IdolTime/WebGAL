@@ -34,7 +34,8 @@ export const playVideo = (sentence: ISentence): IPerform => {
   });
 
   let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
-  let blockingNextFlag = false;
+  // 影游编辑器不允许跳过
+  let blockingNextFlag = true;
   if (blockingNext || loopValue || chooseContent !== '') {
     blockingNextFlag = true;
   }
@@ -117,7 +118,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             endPerform();
           };
           // 双击可跳过视频
-          WebGAL.events.fullscreenDbClick.on(skipVideo);
+          // WebGAL.events.fullscreenDbClick.on(skipVideo);
           // 播放并作为一个特别演出加入
           const perform = {
             performName: performInitName,
