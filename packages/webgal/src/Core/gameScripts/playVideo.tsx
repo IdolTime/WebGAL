@@ -84,7 +84,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
        */
       setTimeout(() => {
         if (flvPlayer !== null && videoElement !== null) {
-          flvPlayer.currentTime = 0;
+          flvPlayer.currentTime = 0.03;
           flvPlayer.volume = bgmVol;
           videoElement.loop = loopValue;
 
