@@ -117,13 +117,23 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           if (typeof e.style.x === 'number') {
             styleObj.position = 'absolute';
             styleObj['left'] = e.style.x * 1.33333 + 'px';
+            styleObj['transform'] = 'translateX(-50%)';
           }
           if (typeof e.style.y === 'number') {
             styleObj.position = 'absolute';
             styleObj['top'] = e.style.y * 1.33333 + 'px';
+            if (styleObj['transform']) {
+              styleObj['transform'] += ' translateY(-50%)';
+            } else {
+              styleObj['transform'] = 'translateY(-50%)';
+            }
           }
           if (typeof e.style.scale === 'number') {
-            styleObj['transform'] = 'scale(' + e.style.scale + ')';
+            if (styleObj['transform']) {
+              styleObj['transform'] += ' scale(' + e.style.scale + ')';
+            } else {
+              styleObj['transform'] = 'scale(' + e.style.scale + ')';
+            }
           }
           if (typeof e.style.fontSize === 'number') {
             styleObj['fontSize'] = e.style.fontSize + 'px';
