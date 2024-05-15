@@ -549,7 +549,7 @@ export default class PixiStage {
                   }
                   currentFrame += direction;
                   updateFrame();
-                }, delays[currentFrame] / 2); // 设置下一个帧的显示时长
+                }, delays[currentFrame]); // 设置下一个帧的显示时长
               };
 
               // 开始播放动画
