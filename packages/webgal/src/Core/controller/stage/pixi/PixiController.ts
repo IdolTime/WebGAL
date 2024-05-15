@@ -489,6 +489,8 @@ export default class PixiStage {
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
       setTimeout(() => {
         const texture = loader.resources?.[url]?.texture;
+        let delays: number[] = [];
+
         if (texture && this.getStageObjByUuid(figureUuid)) {
           const resource = loader.resources[url];
           const explosionTextures: any[] = [];
@@ -496,6 +498,7 @@ export default class PixiStage {
           if (isApng) {
             // @ts-ignore
             const { frameDelay, frameTextureKeys, frameCount } = resource;
+            delays = frameDelay;
             frameTextureKeys.forEach((item: any, index: number) => {
               explosionTextures.push(PIXI.Texture.from(item));
             });
@@ -532,16 +535,25 @@ export default class PixiStage {
             }
             if (isApng) {
               const sprite = figureSprite as PIXI.AnimatedSprite;
-              sprite.animationSpeed = 0.25;
-              sprite.play();
-              sprite.loop = false;
-              sprite.onFrameChange = (frame: any) => {
-                if (frame === sprite.totalFrames - 1) {
-                  sprite.destroy();
-                  const newTextures = [...textures].reverse();
-                  showAndPlay(newTextures);
-                }
+              // 自定义播放速度的函数
+              let currentFrame = 0;
+              let direction = 1;
+              const updateFrame = () => {
+                sprite.gotoAndStop(currentFrame);
+                setTimeout(() => {
+                  if (currentFrame === textures.length - 1) {
+                    direction = -1;
+                  }
+                  if (currentFrame === 0) {
+                    direction = 1;
+                  }
+                  currentFrame += direction;
+                  updateFrame();
+                }, delays[currentFrame] / 2); // 设置下一个帧的显示时长
               };
+
+              // 开始播放动画
+              updateFrame();
             }
             thisFigureContainer.pivot.set(0, this.stageHeight / 2);
             thisFigureContainer.addChild(figureSprite);
