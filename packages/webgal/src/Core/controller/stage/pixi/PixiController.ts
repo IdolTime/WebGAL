@@ -497,10 +497,10 @@ export default class PixiStage {
 
           if (isApng) {
             // @ts-ignore
-            const { frameDelay, frameTextureKeys, frameCount } = resource;
+            const { frameDelay, textures, frameCount } = resource;
             delays = frameDelay;
-            frameTextureKeys.forEach((item: any, index: number) => {
-              explosionTextures.push(PIXI.Texture.from(item));
+            Object.values(textures || []).forEach((v) => {
+              explosionTextures.push(v);
             });
           }
 
