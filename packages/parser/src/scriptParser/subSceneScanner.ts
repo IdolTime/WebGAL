@@ -16,7 +16,7 @@ export const subSceneScanner = (
   ) {
     subSceneList.push(content);
   }
-  if (command === commandType.choose) {
+  if (command === commandType.choose || command === commandType.video) {
     const chooseList = content.split('|');
     const chooseValue = chooseList.map((e) => e.split(':')[1] ?? '');
     chooseValue.forEach((e) => {
@@ -25,5 +25,6 @@ export const subSceneScanner = (
       }
     });
   }
+
   return subSceneList;
 };

@@ -20,14 +20,18 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
     if (!isInsert) {
       logger.warn('该资源已在预加载列表中，无需重复加载');
     } else {
-      const newLink = document.createElement('link');
-      newLink.setAttribute('rel', 'prefetch');
-      newLink.setAttribute('href', asset.url);
-      const head = document.getElementsByTagName('head');
-      if (head.length) {
-        head[0].appendChild(newLink);
+      if (asset.url.endsWith('.mp4') || asset.url.endsWith('.flv')) {
+        WebGAL.videoManager.preloadVideo(asset.url);
+      } else {
+        const newLink = document.createElement('link');
+        newLink.setAttribute('rel', 'prefetch');
+        newLink.setAttribute('href', asset.url);
+        const head = document.getElementsByTagName('head');
+        if (head.length) {
+          head[0].appendChild(newLink);
+        }
+        WebGAL.sceneManager.settledAssets.push(asset.url);
       }
-      WebGAL.sceneManager.settledAssets.push(asset.url);
     }
   }
 };

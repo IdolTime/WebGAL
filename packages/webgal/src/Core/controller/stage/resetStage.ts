@@ -10,6 +10,10 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   if (resetBacklog) {
     WebGAL.backlogManager.makeBacklogEmpty();
   }
+  /**
+   * 清空视频
+   */
+  WebGAL.videoManager.destoryAll();
   // 清空sceneData，并重新获取
   if (resetSceneAndVar) {
     WebGAL.sceneManager.resetScene();
