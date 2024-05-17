@@ -102,7 +102,7 @@
   display: flex;
   flex-flow: column-reverse;
   font-weight: normal;
-  width: 100%;
+  width: 90%;
   box-sizing: border-box;
   background-image: url('@/assets/imgs/review-content-box-bg.png');
   background-repeat: no-repeat;
@@ -110,6 +110,10 @@
   background-position: 100% 0%;
 }
 
+.backlog_content::-webkit-scrollbar {
+  width: 25px !important;  /* 滚动条宽度 */
+  background-color: rgb(118, 108, 86);
+}
 
 .backlog_item {
   display: flex;
