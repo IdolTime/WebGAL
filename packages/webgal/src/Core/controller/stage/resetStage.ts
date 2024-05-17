@@ -3,7 +3,7 @@ import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
 
-export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
+export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true, resetVideo = true) => {
   /**
    * 清空运行时
    */
@@ -13,7 +13,9 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true) => {
   /**
    * 清空视频
    */
-  WebGAL.videoManager.destoryAll();
+  if (resetVideo) {
+    WebGAL.videoManager.destoryAll();
+  }
   // 清空sceneData，并重新获取
   if (resetSceneAndVar) {
     WebGAL.sceneManager.resetScene();
