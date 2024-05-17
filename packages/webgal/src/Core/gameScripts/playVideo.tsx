@@ -10,7 +10,7 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
-import FlvJs from 'flv.js';
+import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 /**
  * 播放一段视频 * @param sentence
@@ -39,29 +39,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     blockingNextFlag = true;
   }
 
-  let videoElement: HTMLVideoElement | null = null;
-  let flvPlayer: FlvJs.Player | null = null;
-
-  // eslint-disable-next-line react/no-deprecated
-  ReactDOM.render(
-    <div className={styles.videoContainer}>
-      <video className={styles.fullScreen_video} id="playVideoElement" />
-    </div>,
-    document.getElementById('videoContainer'),
-  );
-
-  setTimeout(() => {
-    videoElement = document.getElementById('playVideoElement') as HTMLVideoElement;
-
-    if (FlvJs.isSupported() && videoElement) {
-      flvPlayer = FlvJs.createPlayer({
-        type: sentence.content.endsWith('.mp4') ? 'mp4' : 'flv',
-        url: sentence.content,
-      });
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.load();
-    }
-  }, 1);
+  WebGAL.videoManager.showVideo(sentence.content);
 
   let isOver = false;
   const performObject = {
@@ -83,107 +61,110 @@ export const playVideo = (sentence: ISentence): IPerform => {
        * 启动视频播放
        */
       setTimeout(() => {
-        if (flvPlayer !== null && videoElement !== null) {
-          flvPlayer.currentTime = 0.03;
-          flvPlayer.volume = bgmVol;
-          videoElement.loop = loopValue;
+        const url = sentence.content;
+        WebGAL.videoManager.seek(url, 0.03);
+        WebGAL.videoManager.setVolume(url, bgmVol);
+        WebGAL.videoManager.setLoop(url, loopValue);
+        const sceneList = chooseContent
+          ? chooseContent
+              .slice(7)
+              .split('|')
+              .map((x) => 'game/scene/' + x.split(':')[1])
+          : [];
 
-          const endPerform = () => {
-            for (const e of WebGAL.gameplay.performController.performList) {
-              if (e.performName === performInitName) {
-                if (chooseContent !== '' && !loopValue) {
-                  const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+        if (sceneList.length) {
+          scenePrefetcher(sceneList);
+        }
 
-                  if (flvPlayer) {
-                    const duration = flvPlayer.duration || 0;
-                    flvPlayer.currentTime = duration - 0.03;
-                    flvPlayer.pause();
-                  }
+        const endPerform = () => {
+          for (const e of WebGAL.gameplay.performController.performList) {
+            if (e.performName === performInitName) {
+              if (chooseContent !== '' && !loopValue) {
+                const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
 
-                  const script = parsedResult.sentenceList[0];
-                  const perform = choose(script, () => {
-                    endCallback(e);
-                  });
-                  WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
-                } else {
+                const duration = WebGAL.videoManager.getDuration(url);
+                WebGAL.videoManager.seek(url, (duration || 0) - 0.03);
+                WebGAL.videoManager.pauseVideo(url);
+
+                const script = parsedResult.sentenceList[0];
+                const perform = choose(script, () => {
                   endCallback(e);
-                  nextSentence();
-                }
+                });
+                WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
+              } else {
+                endCallback(e);
+                nextSentence();
               }
             }
-          };
-          const skipVideo = () => {
-            console.log('skip');
-            endPerform();
-          };
-          // 双击可跳过视频
-          WebGAL.events.fullscreenDbClick.on(skipVideo);
-          // 播放并作为一个特别演出加入
-          const perform = {
-            performName: performInitName,
-            duration: 1000 * 60 * 60,
-            isOver: false,
-            isHoldOn: false,
-            stopFunction: () => {
-              WebGAL.events.fullscreenDbClick.off(skipVideo);
-              /**
-               * 恢复音量
-               */
-              const bgmElement: any = document.getElementById('currentBgm');
-              if (bgmElement) {
-                bgmElement.volume = bgmVol.toString();
-              }
-              const vocalElement: any = document.getElementById('currentVocal');
-              if (bgmElement) {
-                vocalElement.volume = vocalVol.toString();
-              }
-
-              if (flvPlayer) {
-                flvPlayer.pause();
-                flvPlayer.unload();
-                flvPlayer.detachMediaElement();
-                flvPlayer.destroy();
-                flvPlayer = null;
-              }
-
-              // eslint-disable-next-line react/no-deprecated
-              ReactDOM.render(<div />, document.getElementById('videoContainer'));
-            },
-            blockingNext: () => blockingNextFlag,
-            blockingAuto: () => {
-              return !isOver;
-            },
-            stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-            goNextWhenOver: true,
-          };
-          resolve(perform);
-          /**
-           * 把bgm和语音的音量设为0
-           */
-          const vocalVol2 = 0;
-          const bgmVol2 = 0;
-          const bgmElement: any = document.getElementById('currentBgm');
-          if (bgmElement) {
-            bgmElement.volume = bgmVol2.toString();
           }
-          const vocalElement: any = document.getElementById('currentVocal');
-          if (bgmElement) {
-            vocalElement.volume = vocalVol2.toString();
-          }
+        };
+        const skipVideo = () => {
+          console.log('skip');
+          endPerform();
+        };
+        // 双击可跳过视频
+        WebGAL.events.fullscreenDbClick.on(skipVideo);
+        // 播放并作为一个特别演出加入
+        const perform = {
+          performName: performInitName,
+          duration: 1000 * 60 * 60,
+          isOver: false,
+          isHoldOn: false,
+          stopFunction: () => {
+            WebGAL.events.fullscreenDbClick.off(skipVideo);
+            /**
+             * 恢复音量
+             */
+            const bgmElement: any = document.getElementById('currentBgm');
+            if (bgmElement) {
+              bgmElement.volume = bgmVol.toString();
+            }
+            const vocalElement: any = document.getElementById('currentVocal');
+            if (bgmElement) {
+              vocalElement.volume = vocalVol.toString();
+            }
 
-          flvPlayer.play();
-
-          if (chooseContent && loopValue) {
-            const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
-            const script = parsedResult.sentenceList[0];
-            const perform = choose(script, endPerform);
-            WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
-          }
-
-          videoElement.onended = () => {
-            endPerform();
-          };
+            WebGAL.videoManager.destory(url);
+          },
+          blockingNext: () => blockingNextFlag,
+          blockingAuto: () => {
+            return !isOver;
+          },
+          stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+          goNextWhenOver: true,
+        };
+        resolve(perform);
+        /**
+         * 把bgm和语音的音量设为0
+         */
+        const vocalVol2 = 0;
+        const bgmVol2 = 0;
+        const bgmElement: any = document.getElementById('currentBgm');
+        if (bgmElement) {
+          bgmElement.volume = bgmVol2.toString();
         }
+        const vocalElement: any = document.getElementById('currentVocal');
+        if (bgmElement) {
+          vocalElement.volume = vocalVol2.toString();
+        }
+
+        WebGAL.videoManager.playVideo(url);
+
+        if (chooseContent && loopValue) {
+          const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+          const script = parsedResult.sentenceList[0];
+          const perform = choose(script, endPerform);
+          WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
+        }
+
+        WebGAL.videoManager.onEnded(url, () => {
+          if (loopValue) {
+            WebGAL.videoManager.seek(url, 0.03);
+            WebGAL.videoManager.playVideo(url);
+          } else {
+            endPerform();
+          }
+        });
       }, 100);
     }),
   };

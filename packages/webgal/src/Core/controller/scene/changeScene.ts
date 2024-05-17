@@ -17,6 +17,15 @@ export const changeScene = (sceneUrl: string, sceneName: string) => {
   sceneFetcher(sceneUrl).then((rawScene) => {
     WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
     WebGAL.sceneManager.sceneData.currentSentenceId = 0;
+    const currentSceneVideos: string[] = [];
+
+    WebGAL.sceneManager.sceneData.currentScene.assetsList.forEach((x) => {
+      if (x.url.endsWith('.mp4') || x.url.endsWith('.flv')) {
+        currentSceneVideos.push(x.url);
+      }
+    });
+    WebGAL.videoManager.destoryExcept(currentSceneVideos);
+
     // 开始场景的预加载
     const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
     WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
