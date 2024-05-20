@@ -3,15 +3,16 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
-import { PerformController } from '@/Core/Modules/perform/performController';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
+import ProgressBar from '@/assets/imgs/progress-bar.png';
 
 class ChooseOption {
   /**
@@ -71,6 +72,7 @@ class ChooseOption {
     image?: string;
     fontSize?: number;
     fontColor?: string;
+    countdown?: number;
   };
 
   public constructor(text: string, jump: string) {
@@ -90,6 +92,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  let timer = {
+    current: null as ReturnType<typeof setTimeout> | null,
+  };
+
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
     return chooseListFull
@@ -101,6 +107,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           ? () => {
               playSeClick();
               chooseCallback?.();
+
+              if (timer.current) {
+                clearTimeout(timer.current);
+                timer.current = null;
+              }
+
               if (e.jumpToScene) {
                 changeScene(e.jump, e.text);
               } else {
@@ -141,6 +153,47 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           if (typeof e.style.fontColor === 'string' && e.style.fontColor[0] === '#') {
             styleObj['color'] = e.style.fontColor;
           }
+        }
+
+        if (typeof e.style?.countdown === 'number') {
+          className = styles.Choose_item_countdown;
+          let time = e.style.countdown;
+          let width = 1082;
+          let unit = 1082 / ((time * 1000) / 16);
+
+          const countdown = () => {
+            if (time <= 0 && timer.current) {
+              clearTimeout(timer as any);
+              timer.current = null;
+              onClick();
+            } else {
+              timer.current = setTimeout(() => {
+                time -= 0.016;
+                width -= unit;
+                let rect = document.getElementById('rect');
+                rect?.setAttribute('width', Math.max(0, width).toString());
+                countdown();
+              }, 16);
+            }
+          };
+
+          countdown();
+
+          return (
+            <React.Fragment key={e.jump + i}>
+              <div className={className} style={styleObj} onClick={onClick} onMouseEnter={playSeEnter}>
+                <img src={ProgressBarBackground} alt={e.text} />
+                <img src={ProgressBar} className={styles.Choose_item_progress_bar} />
+              </div>
+              <svg width="0" height="0">
+                <defs>
+                  <clipPath id="myClip">
+                    <rect id="rect" width="1082" height="106" rx="53" ry="53" style={{ fill: '#fff' }} />
+                  </clipPath>
+                </defs>
+              </svg>
+            </React.Fragment>
+          );
         }
 
         if (e.style?.image) {
