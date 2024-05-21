@@ -79,6 +79,11 @@ export const Options: FC = () => {
             <OptionSlider
               initValue={userDataState.optionData.textSpeed}
               uniqueID="文本播放速度"
+              onTouchMove={(event) => {
+                const newValue = (event.target as HTMLInputElement).value;
+                dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
+                setStorage();
+              }}
               onChange={(event) => {
                 const newValue = event.target.value;
                 dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
@@ -100,6 +105,11 @@ export const Options: FC = () => {
                 dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
                 setStorage();
               }}
+              onTouchMove={(event) => {
+                const newValue = (event.target as HTMLInputElement).value;
+                dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
+                setStorage();
+              }}
             />
           </div>
           <div className={styles.Bar_line}>
@@ -109,6 +119,11 @@ export const Options: FC = () => {
               uniqueID="背景音量"
               onChange={(event) => {
                 const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
+                setStorage();
+              }}
+              onTouchMove={(event) => {
+                const newValue = (event.target as HTMLInputElement).value;
                 dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
                 setStorage();
               }}
@@ -125,6 +140,12 @@ export const Options: FC = () => {
                 dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
                 setStorage();
               }}
+              onTouchMove={(event) => {
+                const newValue = (event.target as HTMLInputElement).value;
+                dispatch(setOptionData({ key: 'seVolume', value: Number(newValue) }));
+                dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
+                setStorage();
+              }}
             />
           </div>
           <div className={styles.Bar_line}>
@@ -134,6 +155,11 @@ export const Options: FC = () => {
               uniqueID="角色语音"
               onChange={(event) => {
                 const newValue = event.target.value;
+                dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
+                setStorage();
+              }}
+              onTouchMove={(event) => {
+                const newValue = (event.target as HTMLInputElement).value;
                 dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
                 setStorage();
               }}

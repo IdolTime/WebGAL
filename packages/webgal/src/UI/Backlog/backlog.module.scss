@@ -97,8 +97,7 @@
   height: 85%;
   margin-left: px2(80px);
   margin-right: px2(77px);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow:  overlay;
   display: flex;
   flex-flow: column-reverse;
   font-weight: normal;
@@ -107,7 +106,7 @@
   background-image: url('@/assets/imgs/review-content-box-bg.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: 100% 0%;
+  background-position: 0 0;
 }
 
 .backlog_content::-webkit-scrollbar {

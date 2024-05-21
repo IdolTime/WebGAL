@@ -32,6 +32,8 @@ export const OptionSlider = (props: ISlider) => {
         onChange={props.onChange}
         onFocus={playSeEnter}
         onMouseEnter={playSeEnter}
+        onTouchMove={props.onTouchMove}
+        onTouchEnd={props.onTouchMove}
       />
       <div className="Slider_bg" id={`${props.uniqueID}-bg`} />
       <div className="Slider_bg_under" />

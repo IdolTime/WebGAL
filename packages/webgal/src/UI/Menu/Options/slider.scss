@@ -50,12 +50,15 @@ input[type=range]::-moz-range-thumb {
   background-image: url('@/assets/imgs/bar-thumb.png');
   z-index: 3;
   position: relative;
+  touch-action: manipulation;
 }
 
 .Option_WebGAL_slider {
   position: relative;
   .Rang_input {
     position: absolute;
+    touch-action: manipulation;
+    z-index: 3;
   }
   .Slider_bg{
     position: absolute;
@@ -66,6 +69,7 @@ input[type=range]::-moz-range-thumb {
     background-position: center;
     background-image: url('@/assets/imgs/bar-checked.png');
     z-index: 2;
+    touch-action: manipulation;
   }
   .Slider_bg_under {
     width: px2(479px);
@@ -76,6 +80,7 @@ input[type=range]::-moz-range-thumb {
     background-position: center;
     background-image: url('@/assets/imgs/bar-bg.png');
     z-index: 1;
+    touch-action: manipulation;
   }
 }
 
