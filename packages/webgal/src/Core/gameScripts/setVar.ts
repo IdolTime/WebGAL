@@ -15,9 +15,16 @@ import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
  */
 export const setVar = (sentence: ISentence): IPerform => {
   let setGlobal = false;
+  let minValue: number | null = null;
+  let maxValue: number | null = null;
+
   sentence.args.forEach((e) => {
     if (e.key === 'global') {
       setGlobal = true;
+    } else if (e.key === 'minValue') {
+      minValue = e.value as number;
+    } else if (e.key === 'maxValue') {
+      maxValue = e.value as number;
     }
   });
   let targetReducerFunction: ActionCreatorWithPayload<ISetGameVar, string>;
@@ -45,7 +52,22 @@ export const setVar = (sentence: ISentence): IPerform => {
         })
         .reduce((pre, curr) => pre + curr, '');
       const exp = compile(valExp2);
-      const result = exp();
+      let result = exp();
+
+      if (typeof result === 'number') {
+        if (typeof minValue === 'number') {
+          if (result < minValue) {
+            result = minValue;
+          }
+        }
+
+        if (typeof maxValue === 'number') {
+          if (result > maxValue) {
+            result = maxValue;
+          }
+        }
+      }
+
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
