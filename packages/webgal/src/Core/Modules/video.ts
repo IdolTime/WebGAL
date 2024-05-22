@@ -45,6 +45,7 @@ export class VideoManager {
     videoTag.style.zIndex = '11';
     videoTag.style.position = 'absolute';
     videoTag.style.display = 'block';
+    videoTag.volume = 0;
     const onEndedHandler = () => {
       const callbacks = this.videosByKey[url].events.ended.callbacks;
       callbacks.forEach((cb) => cb());
@@ -130,6 +131,7 @@ export class VideoManager {
     const videoItem = this.videosByKey[key];
     if (videoItem) {
       videoItem.player.pause();
+      videoItem.player.volume = 0;
       const videoContainer = document.getElementById(videoItem.id);
 
       if (videoContainer) {
