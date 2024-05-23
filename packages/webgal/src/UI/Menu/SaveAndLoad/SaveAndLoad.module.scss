@@ -295,6 +295,7 @@
   background-position: center;
   background-image: url('@/assets/imgs/save-load-bg.png');
   transition: all ease 0.3s;
+  z-index: 9;
 }
 
 .Save_Load_content_space {

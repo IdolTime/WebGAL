@@ -20,7 +20,7 @@ export const OptionSlider = (props: ISlider) => {
   function calcSlideBg() {
     const inputBg = document.getElementById(`${props.uniqueID}-bg`);
     if (inputBg !== null) {
-      inputBg.style.width = ((Number(props.initValue.toString()) / 100) * 479) / 0.75 + 'px';
+      inputBg.style.width = ((Number(props.initValue.toString()) / 100) * 207) / 0.75 + 'px';
     }
   }
   return (

@@ -1,3 +1,4 @@
+@import 'src/assets/style/px2.scss';
 .Title_main {
   width: 100%;
   height: 100%;
@@ -20,6 +21,11 @@
 }
 
 .Title_button {
+  width: px2(177px);
+  height: px2(62px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
   text-align: center;
   flex: 0 1 auto;
@@ -35,7 +41,6 @@
   background-image: url('@/assets/imgs/game-menu-button-bg.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  background-position: center !important;
   &:not(:last-child) {
     margin-right: 34px;
   }
@@ -46,13 +51,11 @@
   background-image: url('@/assets/imgs/game-menu-button-bg-active.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  background-position: center !important;
 }
 
 .Title_button_text {
-  font-size: 165%;
-  color: #fbfbfb;
-  padding: 0 0.5em 0 0.5em;
+  font-size: px2(28px) !important;
+  color: #fff;
   letter-spacing: 0.2em;
 }
 

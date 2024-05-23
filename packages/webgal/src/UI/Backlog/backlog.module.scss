@@ -7,8 +7,6 @@
   width: 100%;
   height: 100%;
   z-index: 10;
-  // background: rgba(0, 0, 0, 0.7);
-  // padding: 2em 0 2em 0;
   animation: backlog_soft_in 0.7s ease-out forwards;
   box-sizing: border-box;
   padding: px2(35px) px2(77px) px2(25px) px2(46px);
@@ -45,26 +43,33 @@
 .backlog_top {
   padding: 0 0 0 1em;
   display: flex;
+  align-items: center;
   height: 10%;
+  position: relative;
+  &::after {
+    display: block;
+    content: '';
+    width: 100%;
+    height: px2(2px);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-image: url('@/assets/imgs/review-line.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    // background-position: center;
+  }
 }
 
 .backlog_top_icon {
-  // padding: 0.6em 0.6em 0 0.6em;
-  // border-radius: 1000px;
-  // transform: translate(0, -13px);
   cursor: pointer;
-  width: px2(140px);
-  height: px2(57px);
-  background-image: url('@/assets/imgs/review-close-icon.png');
+  width: px2(68px);
+  height: px2(68px);
+  background-image: url('@/assets/imgs/back.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 }
-
-// .backlog_top_icon:hover {
-//   background: rgba(255, 255, 255, 0.25);
-//   animation: backlog_icon_softin 0.25s ease-out forwards;
-// }
 
 @keyframes backlog_icon_softin {
   0% {
@@ -77,15 +82,8 @@
 
 
 .backlog_title {
-  // height: 100%;
-  // line-height: 100%;
-  // font-size: 360%;
-  // font-weight: bold;
-  // color: transparent;
-  // background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
-  // -webkit-background-clip: text;
-  width: px2(513px);
-  height: px2(126px);
+  width: px2(377px);
+  height: px2(133px);
   background-image: url('@/assets/imgs/review-text.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -95,19 +93,30 @@
 .backlog_content {
   position: absolute;
   height: 85%;
-  margin-left: px2(80px);
+  margin-left: px2(50px);
   margin-right: px2(77px);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: overlay;
   display: flex;
   flex-flow: column-reverse;
   font-weight: normal;
-  width: 100%;
+  width: 90%;
   box-sizing: border-box;
-  background-image: url('@/assets/imgs/review-content-box-bg.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 100% 0%;
+  // background-image: url('@/assets/imgs/review-content-box-bg.png');
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-position: 100% 0%;
+}
+
+.backlog_content::-webkit-scrollbar {
+  width: px2(16px) !important;  /* 滚动条宽度 */
+}
+
+.backlog_content::-webkit-scrollbar-thumb {
+  background: rgb(183, 147, 67);
+}
+
+.backlog_content::-webkit-scrollbar-track  {
+  background: transparent;
 }
 
 
@@ -119,10 +128,10 @@
   opacity: 0;
   animation: backlog_item_in 0.5s ease-out forwards;
   // margin: 1.25em 0 0 0;
-  width: 100%;
-  height: px2(170px);
+  width: 90%;
+  // height: px2(170px);
   // border-bottom: 1px solid red;
-  padding: px2(16px) px2(57px) px2(20px) px2(100px);
+  padding: 0 px2(57px) 0 px2(100px);
 
   &:hover {
     background-image: url('@/assets/imgs/review-item-bg-hover.png');
@@ -132,11 +141,11 @@
   }
 
   &:hover .backlog_item_content_name {
-    color: #C6BAD9;
+    color: #ECCF87;
   }
 
   &:hover .backlog_item_content {
-    color: #CCC092;
+    font-size: px2(18px);
   }
 
   &:hover .backlog_item_button_element {
@@ -149,7 +158,7 @@
     bottom: 0;  
     left: 0;  
     width: 100%;  
-    height: 1px;
+    height: px2(2px);
     background-image: url('@/assets/imgs/review-line.png');
     background-size: cover;
     background-position: center;
@@ -177,46 +186,30 @@
 }
 
 .backlog_item_content_name {
-  // color: transparent;
-  color: red;
-  //background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 55%, rgb(210, 243, 255) 100%);
-  // background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 35%, rgba(165, 212, 228, 1) 100%);
-  // -webkit-background-clip: text;
-  //width: 20%;
-  // margin: 0 0 0 auto;
   overflow-wrap: break-word;
   box-sizing: border-box;
-  //background: rgba(255, 255, 255, 0.175);
-  // border-radius: 7px;
-  // padding: 0.2em 0.5em 0.2em 0.5em;
-  // width: 50%;
   text-align: left;
-  //font-family: WebgalUI, serif;
   letter-spacing: 0.1em;
-  color: #A3A0A0;
-  font-size: px2(28px);
+  color: #A79E8B;
+  font-size: px2(14px);
   font-weight: 400;
-  line-height: px2(55px);
+  // line-height: px2(55px);
 }
 
 .backlog_item_content {
-  //display: flex;
-  font-size: 115%;
   width: 82.5%;
   box-sizing: border-box;
   padding-top: 0.2em;
-  //font-family: WebgalUI, serif;
+  padding-bottom: 0.5em;
   letter-spacing: 0.05em;
-
-  color: #9F94A5;
-  font-size: px2(28px);
+  color: #fff;
+  font-size: px2(17px);
   font-weight: 400;
   line-height: px2(34px);
 }
 
 .backlog_item_button_list {
   display: flex;
-  //padding: 0 2em 0 0.3em;
   flex-flow: row;
   align-items: flex-start;
   margin: 0.35em 0 0 0;
@@ -225,8 +218,6 @@
 .backlog_item_button_element {
   cursor: pointer;
   padding: 0.01em 0.75em 0 0.75em;
-  // margin: 0 0 0 0.5em;
-  // background: rgba(255, 255, 255, 0.075);
   border-radius: 7px;
   display: flex;
   opacity: 0;
@@ -234,17 +225,11 @@
   right: 30%;
   top: 50%;
   transform: translateY(-50%);
-  //border: 1px solid rgba(255, 255, 255, 0.15);
-  //box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.075);
-  }
 
   .sound_icon {
     display: block;
-    width: px2(75px);
-    height: px2(69px);
+    width: px2(23px);
+    height: px2(23px);
     background-image: url('@/assets/imgs/sound-icon.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -252,15 +237,8 @@
   }
 }
 
-.backlog_item_button_element:hover {
-  background: rgba(255, 255, 255, 0.25);
-  //border: 1px solid rgba(255, 255, 255, 0);
-  //box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-}
-
 
 .backlog_item_content_text {
-  //width: 80%;
   box-sizing: border-box;
 }
 
@@ -287,7 +265,6 @@
   0% {
     opacity: 0;
     transform: scale(1.05, 1.05) translate(-15px, 10px) rotateX(-5deg) rotateY(-5deg);
-    //background-color: rgba(255, 255, 255, 0.2);
   }
   100% {
     opacity: 1;
