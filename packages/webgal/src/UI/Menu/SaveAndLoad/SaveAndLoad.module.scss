@@ -33,11 +33,11 @@
 
 .Save_back {
   position: absolute;
-  top: px2(43px);
+  top: px2(73px);
   left: px2(43px);
   cursor: pointer;
-  width: px2(140px);
-  height: px2(57px);
+  width: px2(68px);
+  height: px2(68px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -48,10 +48,10 @@
 .Save_title {
   position: absolute;
   top: px2(37px);
-  left: px2(70px);
+  left: px2(100px);
   cursor: pointer;
-  width: px2(539px);
-  height: px2(120px);
+  width: px2(377px);
+  height: px2(133px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -61,10 +61,10 @@
 .Load_title {
   position: absolute;
   top: px2(37px);
-  left: px2(70px);
+  left: px2(100px);
   cursor: pointer;
-  width: px2(539px);
-  height: px2(120px);
+  width: px2(377px);
+  height: px2(133px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -130,12 +130,12 @@
 .Save_Load_top_button:hover {
   color: #77428D;
   font-weight: bold;
-  border-bottom: 4px solid #77428D;
+  // border-bottom: 4px solid #77428D;
 }
 
 .Load_top_button_on {
   font-weight: bold;
-  border-bottom: 5px solid #005CAF;
+  // border-bottom: 5px solid #005CAF;
   color: #005CAF;
   background-color: rgba(0, 92, 175, 0.1);
 }
@@ -143,7 +143,7 @@
 .Load_top_button:hover {
   color: #005CAF;
   font-weight: bold;
-  border-bottom: 5px solid #005CAF;
+  // border-bottom: 5px solid #005CAF;
 }
 
 .Save_Load_content {
@@ -348,22 +348,22 @@
 }
 
 .Btn_l {
-  width: px2(140px);
-  height: px2(57px);
+  width: px2(47px);
+  height: px2(28px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back.png');
+  background-image: url('@/assets/imgs/cg-bottom-left.png');
   cursor: pointer;
 }
 
 .Btn_r {
-  width: px2(140px);
-  height: px2(57px);
+  width: px2(47px);
+  height: px2(28px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back-r.png');
+  background-image: url('@/assets/imgs/cg-bottom-right.png');
   cursor: pointer;
 }
 

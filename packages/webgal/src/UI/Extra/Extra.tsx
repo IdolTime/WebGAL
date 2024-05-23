@@ -7,6 +7,7 @@ import { ExtraBgm } from '@/UI/Extra/ExtraBgm';
 import { ExtraCg } from './ExtraCg';
 import background from '@/assets/imgs//background.png';
 import backTitle from '@/assets/imgs//back-title.png';
+import backIcon from '@/assets/imgs/back.png'
 import cgbgmBg from '@/assets/imgs//cg-bgm-bg.png';
 import cgunselect from '@/assets/imgs//cg-unselect.png';
 import bgmunselect from '@/assets/imgs//bgm-unselect.png';
@@ -45,7 +46,8 @@ export function Extra() {
             }}
             onMouseEnter={playSeEnter}
           >
-            <img src={backTitle} alt="" style={{ width: '100%', objectFit: 'cover' }} />
+            <img className={styles.backIcon} src={backIcon} />
+            <img className={styles.backTitle} src={backTitle} alt="" />
             {/* <CloseSmall
               className={styles.extra_top_icon}
               onClick={() => {

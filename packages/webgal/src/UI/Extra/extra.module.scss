@@ -14,6 +14,19 @@
 .extra_top {
   width: px2(539px);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  .backIcon {
+    width: px2(68px);
+    height: px2(68px);
+  }
+
+  .backTitle {
+    width: px2(365px);
+    height: px2(133px);
+    object-fit: cover;
+  }
 }
 
 @keyframes extra_icon_softin {
@@ -43,8 +56,9 @@
   width: 100%;
   object-fit: cover;
   position: absolute;
-  top: 0;
+  bottom: px2(8px);
   left: 0;
+  right: 0;
 }
 .mainTab_item1 {
   flex: 1;
@@ -69,7 +83,8 @@
   cursor: pointer;
 }
 .mainTab_choose {
-  width: px2(401px);
+  width: px2(541px);
+  height: px2(49px);
   position: absolute;
 }
 .mainTab_choose_bgm {
@@ -103,7 +118,7 @@
   align-items: center;
 }
 .bgmStar {
-  width: px2(62px);
+  width: px2(36px);
 }
 
 .bgmName {
@@ -124,30 +139,40 @@
   white-space: nowrap;
 }
 .bgmNameActive {
-  border-bottom: 5px dashed #CCC092;
+  position: relative;
+  &::after {
+    display: block;
+    content: '';
+    width: px2(481px);
+    height: px2(3px);
+    position: absolute;
+    bottom: px2(-10px);
+    background: linear-gradient(to right, transparent, rgb(188, 142, 90), transparent);
+  }
 }
 .soundunselect {
   width: px2(41px);
   margin-right: px2(17px);
 }
 .soundChoose {
-  width: px2(75px);
+  width: px2(31px);
 }
 .unlockBgm {
-  width: px2(462px);
+  width: px2(306px);
 }
 
 .footer {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: px2(35px);
+  bottom: px2(85px);
   display: flex;
   gap: px2(28px);
   align-items: center;
 }
 .footerButton {
-  width: px2(140px);
+  width: px2(47px);
+  height: px2(28px);
   cursor: pointer;
 }
 .footer_page_container {
@@ -181,9 +206,25 @@
 }
 
 .cgElement {
-  width: 33.33%;
+  width: 30%;
   position: relative;
   cursor: pointer;
+
+  &:nth-child(1),
+  &:nth-child(3) {
+    margin-bottom: px2(51px);
+  }
+
+  &:nth-child(2) {
+    margin-bottom: px2(51px);
+    margin-left: px2(57px);
+    margin-right: px2(57px);
+  }
+
+  &:nth-child(5) {
+    margin-left: px2(57px);
+    margin-right: px2(57px);
+  }
 }
 .cgUnLock {
   width: 85%;

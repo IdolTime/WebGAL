@@ -19,8 +19,8 @@
   justify-content: center;
   align-items: center;
   flex-flow: column;
-  width: px2(906px);
-  height: px2(519px);
+  width: px2(634px);
+  height: px2(401px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -36,25 +36,31 @@
 }
 
 .title {
-  color: #5A536E;
+  color: #000;
   font-family: Inter;
-  font-size:  px2(40px);
+  font-size:  px2(28px);
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   margin-top: px2(50px);
+  margin-bottom: px2(120px);
 }
 
 .button_list {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: px2(169px);
+  // margin-top: px2(50px);
 }
 
 .button_confirm {
-  width: px2(256px);
-  height: px2(117px);
+  width: px2(177px);
+  height: px2(62px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: px2(28px);
+  color: #fff;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -64,9 +70,13 @@
 }
 
 .button_cancel {
-  width: px2(237px);
-  height: px2(76px);
-  margin-top: px2(16px);
+  width: px2(177px);
+  height: px2(62px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: px2(28px);
+  color: #fff;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

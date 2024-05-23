@@ -6,8 +6,8 @@
 
 .gameMenuPanel {
     position: absolute;
-    top: 20px;
-    right: 28px;
+    top: px2(20px);
+    right: px2(28px);
     z-index: 9;
 
     .menuButton {
@@ -44,7 +44,7 @@
         top: 0;
         right: 0;
         z-index: 22;
-        width: 566px;
+        width: px2(566px);
         height: 100%;
         background-image: url('@/assets/imgs/menu-bg.png');
         background-repeat: no-repeat;
@@ -65,15 +65,15 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 237px;
-                height: 76px;
+                width: px2(237px);
+                height: px2(76px);
                 background-image: url('@/assets/imgs/menu-button-default.png');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
-                color: #4E4B6C;
-                font-size: 35px;
-                margin-bottom: 45px;
+                color: #fff;
+                font-size: px2(35px);
+                margin-bottom: px2(45px);
     
                 &:hover {
                     cursor: pointer;
@@ -81,7 +81,6 @@
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
-                    color: #fff;
                 }
             }
         }

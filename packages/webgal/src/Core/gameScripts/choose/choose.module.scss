@@ -28,16 +28,15 @@
   background-size: 100% 100%;
   background-position: center;
   height: px2(153px);
-  font-size: px2(45px);
+  font-size: px2(28px);
   font-weight: 400;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #8A799E;
+  color: #433409;
 
   &:hover {
     background-image: url('@/assets/imgs/choose-item-active.png') !important;;
-    color: #FFF;
   }
 }
 
