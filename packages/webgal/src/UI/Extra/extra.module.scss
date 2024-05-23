@@ -124,7 +124,7 @@
 .bgmName {
   color: #CCC092;
   font-size: px2(32px);
-  padding-left: px2(34px);
+  padding-left: px2(65px);
   display: flex;
   justify-content: space-between;
   width: px2(575px);
@@ -147,15 +147,32 @@
     height: px2(3px);
     position: absolute;
     bottom: px2(-10px);
-    background: linear-gradient(to right, transparent, rgb(188, 142, 90), transparent);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('@/assets/imgs/bgm-line-hover.png');
+    // background: linear-gradient(to right, rgba(188, 142, 90, .1), rgb(188, 142, 90), rgba(188, 142, 90, .1));
+    opacity: 0;
+    transition: all 0.3s;
   }
 }
+
+.bgmNameActive:hover::after {
+  opacity: 1;
+}
+
+.bgmNameActive:hover .soundChoose {
+  opacity: 1;
+}
+
 .soundunselect {
   width: px2(41px);
   margin-right: px2(17px);
 }
 .soundChoose {
   width: px2(31px);
+  opacity: 0;
+  transition: all 0.3s;
 }
 .unlockBgm {
   width: px2(306px);

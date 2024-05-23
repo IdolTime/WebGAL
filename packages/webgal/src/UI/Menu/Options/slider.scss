@@ -64,10 +64,10 @@ input[type=range]::-moz-range-thumb {
     position: absolute;
     width: px2(207px);
     height: px2(24px);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url('@/assets/imgs/bar-checked.png');
+    // background-size: cover;
+    // background-repeat: no-repeat;
+    // background-position: center;
+    // background-image: url('@/assets/imgs/bar-checked.png');
     z-index: 2;
     touch-action: manipulation;
   }

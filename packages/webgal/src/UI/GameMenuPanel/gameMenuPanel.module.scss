@@ -11,7 +11,7 @@
     z-index: 9;
 
     .menuButton {
-        width: px2(75px);
+        width: px2(70px);
         height: px2(70px);
         background-image: url('@/assets/imgs/menu-icon.png');
         background-repeat: no-repeat;
@@ -19,6 +19,8 @@
         background-position: center;
         &:hover {
             cursor: pointer;
+            transform: scale(1.5);
+            background-image: url('@/assets/imgs/menu-icon-unselect.png') !important;
         }
     }
 }
