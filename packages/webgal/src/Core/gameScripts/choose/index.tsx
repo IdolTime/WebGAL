@@ -181,7 +181,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
           return (
             <React.Fragment key={e.jump + i}>
-              <div className={className} style={styleObj} onClick={onClick} onMouseEnter={playSeEnter}>
+              <div className={className} style={styleObj}>
                 <img src={ProgressBarBackground} alt={e.text} style={{ width: '1082px', height: '106px' }} />
                 <img src={ProgressBar} className={styles.Choose_item_progress_bar} />
               </div>
