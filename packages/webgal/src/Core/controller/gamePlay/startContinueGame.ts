@@ -21,9 +21,12 @@ export const startGame = () => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
-    // 开始第一条语句
-    nextSentence();
+    WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl).then((scene) => {
+      if (scene) {
+        // 开始第一条语句
+        nextSentence();
+      }
+    });
   });
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
 };

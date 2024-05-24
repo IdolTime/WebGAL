@@ -182,7 +182,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           return (
             <React.Fragment key={e.jump + i}>
               <div className={className} style={styleObj} onClick={onClick} onMouseEnter={playSeEnter}>
-                <img src={ProgressBarBackground} alt={e.text} />
+                <img src={ProgressBarBackground} alt={e.text} style={{ width: '1082px', height: '106px' }} />
                 <img src={ProgressBar} className={styles.Choose_item_progress_bar} />
               </div>
               <svg width="0" height="0">
@@ -199,10 +199,35 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         if (e.style?.image) {
           className = styles.Choose_item_image;
           const imgUrl = assetSetter(e.style.image, fileType.ui);
+          const id = `img-option-${i}`;
+          const img = new Image();
+          img.src = imgUrl; // 将图片的URL赋值给Image对象的src属性
+
+          img.onload = function () {
+            let ele = document.getElementById(id);
+            img.style.width = img.naturalWidth + 'px';
+            img.style.height = img.naturalHeight + 'px';
+            img.alt = e.text;
+
+            if (ele) {
+              ele.style.width = img.naturalWidth + 'px';
+              ele.style.height = img.naturalHeight + 'px';
+              setTimeout(() => {
+                ele?.prepend(img);
+                ele = null;
+              }, 32);
+            }
+          };
 
           return (
-            <div className={className} style={styleObj} key={e.jump + i} onClick={onClick} onMouseEnter={playSeEnter}>
-              <img src={imgUrl} alt={e.text} />
+            <div
+              id={id}
+              className={className}
+              style={styleObj}
+              key={e.jump + i}
+              onClick={onClick}
+              onMouseEnter={playSeEnter}
+            >
               <span>{e.text}</span>
             </div>
           );

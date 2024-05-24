@@ -13,7 +13,7 @@ import {IWebGALStyleObj, scss2cssinjsParser} from "./styleParser";
 export default class SceneParser {
   private readonly SCRIPT_CONFIG_MAP: ConfigMap;
   constructor(
-    private readonly assetsPrefetcher: (assetList: IAsset[]) => void,
+    private readonly assetsPrefetcher: (assetList: IAsset[], sceneName: string) => void,
     private readonly assetSetter: (
       fileName: string,
       assetType: fileType,

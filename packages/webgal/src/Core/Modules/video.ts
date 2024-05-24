@@ -6,6 +6,7 @@ export class VideoManager {
     {
       player: FlvJs.Player;
       id: string;
+      progressTimer: ReturnType<typeof setTimeout> | null;
       events: {
         ended: {
           callbacks: (() => void)[];
@@ -45,11 +46,11 @@ export class VideoManager {
     videoTag.style.zIndex = '11';
     videoTag.style.position = 'absolute';
     videoTag.style.display = 'block';
+    videoTag.volume = 0;
     const onEndedHandler = () => {
       const callbacks = this.videosByKey[url].events.ended.callbacks;
       callbacks.forEach((cb) => cb());
     };
-    videoTag.addEventListener('ended', onEndedHandler);
 
     videoContainerTag.appendChild(videoTag);
     document.getElementById('videoContainer')?.appendChild(videoContainerTag);
@@ -64,6 +65,7 @@ export class VideoManager {
     this.videosByKey[url] = {
       player: flvPlayer,
       id,
+      progressTimer: null,
       events: {
         ended: {
           callbacks: [],
@@ -98,6 +100,7 @@ export class VideoManager {
 
     if (videoItem) {
       videoItem.player.play();
+      this.checkProgress(key);
     }
   }
 
@@ -130,6 +133,7 @@ export class VideoManager {
     const videoItem = this.videosByKey[key];
     if (videoItem) {
       videoItem.player.pause();
+      videoItem.player.volume = 0;
       const videoContainer = document.getElementById(videoItem.id);
 
       if (videoContainer) {
@@ -137,11 +141,14 @@ export class VideoManager {
         videoContainer.style.zIndex = '-99';
       }
 
+      if (videoItem.progressTimer) {
+        clearTimeout(videoItem.progressTimer);
+      }
+
       setTimeout(() => {
         try {
           const video = videoContainer?.getElementsByTagName('video');
           if (video?.length) {
-            video[0].removeEventListener('ended', videoItem.events.ended.handler);
             videoItem.player.destroy();
           }
         } catch (error) {
@@ -182,5 +189,27 @@ export class VideoManager {
         this.destory(key);
       }
     });
+  }
+
+  private checkProgress(key: string) {
+    const videoItem = this.videosByKey[key];
+
+    if (videoItem) {
+      const player = videoItem.player;
+      const currentTime = player.currentTime;
+      const duration = player.duration;
+
+      if (duration - currentTime <= 0.03) {
+        clearTimeout(videoItem.progressTimer as any);
+        videoItem.progressTimer = null;
+        videoItem.events.ended.handler();
+        return;
+      }
+
+      // 每隔一段时间检查一次播放进度
+      videoItem.progressTimer = setTimeout(() => {
+        this.checkProgress(key);
+      }, 100);
+    }
   }
 }
