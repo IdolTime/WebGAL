@@ -28,7 +28,7 @@ export const end = (sentence: ISentence): IPerform => {
   dumpToStorageFast();
   sceneFetcher(sceneUrl).then((rawScene) => {
     // 场景写入到运行时
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+    WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
   playBgm(webgalStore.getState().GUI.titleBgm);

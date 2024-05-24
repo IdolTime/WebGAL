@@ -34,12 +34,14 @@ export function loadGameFromStageData(stageData: ISaveData) {
   }
   const loadFile = stageData;
   // 重新获取并同步场景状态
-  sceneFetcher(loadFile.sceneData.sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(
+  sceneFetcher(loadFile.sceneData.sceneUrl).then(async (rawScene) => {
+    const scene = await WebGAL.sceneManager.setCurrentScene(
       rawScene,
       loadFile.sceneData.sceneName,
       loadFile.sceneData.sceneUrl,
+      true,
     );
+    if (!scene) return;
     // 开始场景的预加载
     const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
     WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景

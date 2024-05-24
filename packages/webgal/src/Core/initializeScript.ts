@@ -47,8 +47,9 @@ export const initializeScript = (): void => {
   // 获取start场景
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, 'start.txt', sceneUrl);
+  sceneFetcher(sceneUrl).then(async (rawScene) => {
+    const scene = await WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
+    if (!scene) return;
     // 开始场景的预加载
     const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
     WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景

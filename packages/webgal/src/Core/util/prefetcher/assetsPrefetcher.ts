@@ -7,20 +7,30 @@ import { WebGAL } from '@/Core/WebGAL';
  * 预加载函数
  * @param assetList 场景资源列表
  */
-export const assetsPrefetcher = (assetList: Array<IAsset>) => {
+export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) => {
+  WebGAL.sceneManager.sceneAssetsList[sceneName] = assetList.reduce((p, c) => {
+    p[c.url] = false;
+    return p;
+  }, {} as any);
   for (const asset of assetList) {
-    // 是否要插入这个标签
-    let isInsert = true;
     // 判断是否已经存在
-    WebGAL.sceneManager.settledAssets.forEach((settledAssetUrl) => {
+    const hasHandled = !!WebGAL.sceneManager.settledAssets.find((settledAssetUrl) => {
       if (settledAssetUrl === asset.url) {
-        isInsert = false;
+        return true;
       }
+      return false;
     });
-    if (!isInsert) {
+    const assetsLoadedObject = WebGAL.sceneManager.sceneAssetsList[sceneName];
+
+    if (hasHandled) {
+      assetsLoadedObject[asset.url] = true;
+      checkIfAllSceneAssetsAreSettled(sceneName);
       logger.warn('该资源已在预加载列表中，无需重复加载');
     } else {
+      console.log('预加载资源：', asset.url);
       if (asset.url.endsWith('.mp4') || asset.url.endsWith('.flv')) {
+        assetsLoadedObject[asset.url] = true;
+        checkIfAllSceneAssetsAreSettled(sceneName);
         WebGAL.videoManager.preloadVideo(asset.url);
       } else {
         const newLink = document.createElement('link');
@@ -30,8 +40,25 @@ export const assetsPrefetcher = (assetList: Array<IAsset>) => {
         if (head.length) {
           head[0].appendChild(newLink);
         }
+        newLink.onload = () => {
+          assetsLoadedObject[asset.url] = true;
+          checkIfAllSceneAssetsAreSettled(sceneName);
+        };
         WebGAL.sceneManager.settledAssets.push(asset.url);
       }
     }
+  }
+};
+
+const checkIfAllSceneAssetsAreSettled = (sceneName: string) => {
+  const assetsLoadedObject = WebGAL.sceneManager.sceneAssetsList[sceneName];
+  const allSettled = Object.values(assetsLoadedObject).every((x) => x);
+
+  if (allSettled) {
+    setTimeout(() => {
+      WebGAL.sceneManager.sceneAssetsLoadedList[sceneName] = true;
+      // @ts-ignore
+      window.pubsub.publish('sceneAssetsLoaded', { sceneName });
+    }, 10000);
   }
 };
