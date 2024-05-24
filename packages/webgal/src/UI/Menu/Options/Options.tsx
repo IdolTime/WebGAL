@@ -47,7 +47,7 @@ export const Options: FC = () => {
                 </div>
               </div>
               <div className={styles.Check_item}>
-                <div className={styles.Check_name}>窗口</div>
+                <div className={styles.Check_name}>窗口化</div>
                 <div
                   className={styles.Check_box}
                   onClick={() => {
@@ -74,7 +74,8 @@ export const Options: FC = () => {
             </div>
           </div> */}
           {/* <TextPreview /> */}
-          <div className={styles.Bar_line}>
+          <div className={styles.LabelLine}></div>
+          <div className={`${styles.Bar_line} ${styles.Check_line}`}>
             <div className={styles.Label_text_speed}>文本播放速度</div>
             <OptionSlider
               initValue={userDataState.optionData.textSpeed}

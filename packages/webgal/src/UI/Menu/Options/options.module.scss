@@ -12,83 +12,97 @@
 .Options_top {
   position: relative;
   margin-top: px2(38px);
-  margin-left: px2(70px);
+  margin-left: px2(90px);
   cursor: pointer;
-  width: px2(540px);
-  height: px2(118px);
+  width: px2(365px);
+  height: px2(133px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/set-back.png');
 }
 .Options_page_container {
+  width: px2(1054px);
+  height: px2(575px);
   display: flex;
   justify-content: space-between;
-  margin-top: px2(84px);
+  margin: 0 auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/set-bg.png');
 }
 .Options_left {
+  width: 52%;
   .title_base {
-    width: px2(362px);
-    height: px2(65px);
-    margin-left: px2(278px);
+    width: px2(132px);
+    height: px2(36px);
+    margin: px2(82px) auto px2(28px) auto;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('@/assets/imgs/base-set.png');
-    margin-bottom: px2(76px);
+  }
+  .Check_line {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: px2(463px);
+    height: px2(72px);
+    margin-left: px2(29px);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('@/assets/imgs/base-set-bg.png');
+    &:not(:first-child) {
+      margin-bottom: px2(32px);
+    }
   }
 }
 .Options_right {
-  margin-right: px2(131px);
+  // margin-right: px2(131px);
+  width: 48%;
   .title_voice {
-    width: px2(364px);
-    height: px2(65px);
-    margin-left: px2(106px);
+    width: px2(132px);
+    height: px2(36px);
+    margin: px2(82px) auto px2(54px) auto;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('@/assets/imgs/voice-set.png');
-    margin-bottom: px2(74px);
   }
 }
 .Line {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  margin-bottom: px2(69px);
+  flex-direction: column;
   .Label {
-    color: #CCC092;
+    color: #A39A8B;
     font-family: Inter;
-    font-size: px2(32px);
+    font-size: px2(18px);
     font-style: normal;
     font-weight: 400;
-    line-height: px2(55px);
-    margin-left: px2(132px);
-    margin-right: px2(167px);
-  }
-  .Check_line {
-    display: flex;
-    justify-content: space-between;
+    margin-left: px2(37px);
   }
   .Check_item {
     display: flex;
     justify-content: flex-start;
-    margin-right: px2(104px);
+    align-items: center;
   }
   .Check_name {
     width: px2(64px);
     height: px2(55px);
-    color: #CCC092;
+    color: #2B281D;
     font-family: Inter;
-    font-size: px2(32px);
+    font-size: px2(20px);
     font-style: normal;
     font-weight: 400;
     line-height: px2(55px);
     margin-right: px2(19px);
   }
   .Check_box {
-    width: px2(53px);
-    height: px2(53px);
+    width: px2(31px);
+    height: px2(31px);
     flex-shrink: 0;
     cursor: pointer;
     background-size: cover;
@@ -98,43 +112,40 @@
     position: relative;
   }
   .Checked_box {
-    width: px2(72px);
-    height: px2(62px);
+    width: px2(31px);
+    height: px2(31px);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('@/assets/imgs/checked.png');
     position: absolute;
-    top: -14px;
-    left: -14px;
+    top: 0;
+    left: 0;
   }
 }
 .Bar_line {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: px2(75px);
+  margin-bottom: px2(40px);
   .Label {
     width: px2(128px);
     height: px2(55px);
     text-align: right;
-    color: #CCC092;
+    color: #CFC9B2;
     font-family: Inter;
-    font-size: px2(32px);
+    font-size: px2(20px);
     font-style: normal;
     font-weight: 400;
     line-height: px2(55px);
-    margin-right: px2(50px);
+    margin-right: px2(57px);
   }
   .Label_text_speed {
-    color: #CCC092;
+    color: #2B281D;
     font-family: Inter;
-    font-size: px2(32px);
+    font-size: px2(20px);
     font-style: normal;
     font-weight: 400;
-    line-height: px2(55px);
-    margin-left: px2(132px);
-    margin-right: px2(41px);
   }
   .Bar {
     margin-left: px2(41px);
@@ -143,20 +154,30 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url('@/assets/imgs/bar-bg.png');
+    background-image: url('@/assets/imgs/bar-checked.png');
   }
 }
 
 .Save_back {
   position: absolute;
-  top: px2(43px);
-  left: px2(43px);
+  top: px2(70px);
+  left: px2(70px);
   cursor: pointer;
-  width: px2(140px);
-  height: px2(57px);
+  width: px2(68px);
+  height: px2(68px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/back.png');
   z-index: 2;
+}
+
+.LabelLine {
+  width: px2(118px);
+  height: px2(23px);
+  margin-left: px2(37px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/base-set-line.png');
 }
