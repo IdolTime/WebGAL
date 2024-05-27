@@ -55,14 +55,14 @@ export const scriptExecutor = () => {
 
   const interpolationOneItem = (content: string): string => {
     let retContent = content;
-    const contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
+    // const contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
 
-    if (contentExp !== null) {
-      contentExp.forEach((e) => {
-        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
-        retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
-      });
-    }
+    // if (contentExp !== null) {
+    //   contentExp.forEach((e) => {
+    //     const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+    //     retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
+    //   });
+    // }
     retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');
     return retContent;
   };
@@ -75,7 +75,7 @@ export const scriptExecutor = () => {
 
     currentScript.args.forEach((arg) => {
       if (arg.value && typeof arg.value === 'string') {
-        arg.value = interpolationOneItem(arg.value);
+        arg.value = (arg.value);
       }
     });
   };

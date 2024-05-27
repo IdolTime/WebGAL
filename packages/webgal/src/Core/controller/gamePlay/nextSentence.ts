@@ -59,7 +59,7 @@ export const nextSentence = () => {
       }
     }
     webgalStore.dispatch(resetStageState(newStageState));
-    scriptExecutor();
+    // scriptExecutor();
     return;
   }
 

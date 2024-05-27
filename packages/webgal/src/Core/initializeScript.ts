@@ -31,11 +31,11 @@ export const initializeScript = (): void => {
     /**
      * iOS
      */
-    alert(
-      `iOS 用户请横屏使用以获得最佳体验
-| Please use landscape mode on iOS for the best experience
-| iOS ユーザーは横画面での使用をお勧めします`,
-    );
+//     alert(
+//       `iOS 用户请横屏使用以获得最佳体验
+// | Please use landscape mode on iOS for the best experience
+// | iOS ユーザーは横画面での使用をお勧めします`,
+//     );
   }
 
   // 获得 userAnimation
