@@ -44,9 +44,25 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
           assetsLoadedObject[asset.url] = true;
           checkIfAllSceneAssetsAreSettled(sceneName);
         };
+        newLink.onerror = () => {
+          assetsLoadedObject[asset.url] = true;
+          checkIfAllSceneAssetsAreSettled(sceneName);
+          const index = WebGAL.sceneManager.settledAssets.findIndex((settledAssetUrl, index) => {
+            if (settledAssetUrl === asset.url) {
+              return true;
+            }
+            return false;
+          });
+          if (index > -1) {
+            WebGAL.sceneManager.settledAssets.splice(index, 1);
+          }
+        };
         WebGAL.sceneManager.settledAssets.push(asset.url);
       }
     }
+  }
+  if (assetList.length === 0) {
+    checkIfAllSceneAssetsAreSettled(sceneName);
   }
 };
 
@@ -55,10 +71,8 @@ const checkIfAllSceneAssetsAreSettled = (sceneName: string) => {
   const allSettled = Object.values(assetsLoadedObject).every((x) => x);
 
   if (allSettled) {
-    setTimeout(() => {
-      WebGAL.sceneManager.sceneAssetsLoadedList[sceneName] = true;
-      // @ts-ignore
-      window.pubsub.publish('sceneAssetsLoaded', { sceneName });
-    }, 10000);
+    WebGAL.sceneManager.sceneAssetsLoadedList[sceneName] = true;
+    // @ts-ignore
+    window.pubsub.publish('sceneAssetsLoaded', { sceneName });
   }
 };
