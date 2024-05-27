@@ -30,7 +30,7 @@ class ChooseOption {
 
     // Extract style information
     const styleRegex = /\$\{(.*?)\}/;
-    const styleMatch = conditonPart ? conditonPart.match(styleRegex) : mainPart.match(styleRegex);
+    const styleMatch = mainPart.match(styleRegex);
     if (styleMatch) {
       const styleStr = styleMatch[1];
       const styleProps = styleStr.split(',');
@@ -124,6 +124,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         const styleObj: Record<string, number | string> = {
           fontFamily: font,
         };
+        console.log(33333, e);
 
         if (e.style) {
           if (typeof e.style.x === 'number') {
