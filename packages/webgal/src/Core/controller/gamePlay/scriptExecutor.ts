@@ -19,17 +19,23 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
   }
   // 先把变量解析出来
   const valExpArr = whenValue.split(/([+\-*\/()><!]|>=|<=|==|&&|\|\||!=)/g);
-  const valExp = valExpArr
-    .map((e) => {
-      if (e.match(/[a-zA-Z]/)) {
-        if (e.match(/true/) || e.match(/false/)) {
-          return e;
-        }
-        return getValueFromState(e).toString();
-      } else return e;
-    })
-    .reduce((pre, curr) => pre + curr, '');
-  return !!strIf(valExp);
+  const allValExists = valExpArr.every((e) => e.length);
+
+  if (allValExists) {
+    const valExp = valExpArr
+      .map((e) => {
+        if (e.match(/[a-zA-Z]/)) {
+          if (e.match(/true/) || e.match(/false/)) {
+            return e;
+          }
+          return getValueFromState(e).toString();
+        } else return e;
+      })
+      .reduce((pre, curr) => pre + curr, '');
+    return !!strIf(valExp);
+  }
+
+  return true;
 };
 
 /**
