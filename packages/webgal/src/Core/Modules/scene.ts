@@ -1,5 +1,6 @@
-import { ISceneData } from '@/Core/controller/scene/sceneInterface';
+import { IScene, ISceneData } from '@/Core/controller/scene/sceneInterface';
 import cloneDeep from 'lodash/cloneDeep';
+import { sceneParser } from '../parser/sceneParser';
 
 export interface ISceneEntry {
   sceneName: string; // 场景名称
@@ -27,10 +28,52 @@ export class SceneManager {
   public settledScenes: Array<string> = [];
   public settledAssets: Array<string> = [];
   public sceneData: ISceneData = cloneDeep(initSceneData);
+  public sceneAssetsList: Record<string, Record<string, boolean>> = {};
+  public sceneAssetsLoadedList: Record<string, boolean> = {};
 
   public resetScene() {
     this.sceneData.currentSentenceId = 0;
     this.sceneData.sceneStack = [];
     this.sceneData.currentScene = cloneDeep(initSceneData.currentScene);
+  }
+
+  // eslint-disable-next-line max-params
+  public setCurrentScene(rawScene: string, scenaName: string, sceneUrl: string, loading = false) {
+    return new Promise((r) => {
+      let parsedScene: { current: IScene | null } = { current: null };
+      let timer: ReturnType<typeof setTimeout> | null = null;
+
+      if (loading && !this.sceneAssetsLoadedList[scenaName]) {
+        timer = setTimeout(() => {
+          // @ts-ignore
+          window.pubsub.publish('loading', { loading: true });
+        }, 1000);
+      }
+
+      // @ts-ignore
+      const dispose = window.pubsub.subscribe(
+        'sceneAssetsLoaded',
+        ({ sceneName: _sceneName }: { sceneName: string }) => {
+          setTimeout(() => {
+            if (scenaName === _sceneName) {
+              if (parsedScene.current) {
+                this.sceneData.currentScene = parsedScene.current;
+              }
+
+              if (loading) {
+                // @ts-ignore
+                window.pubsub.publish('loading', { loading: false });
+              }
+              timer && clearTimeout(timer);
+              r(parsedScene);
+              parsedScene.current = null;
+              dispose();
+            }
+          }, 16);
+        },
+      );
+
+      parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
+    });
   }
 }

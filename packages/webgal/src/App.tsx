@@ -14,6 +14,7 @@ import Translation from '@/UI/Translation/Translation';
 import { PanicOverlay } from '@/UI/PanicOverlay/PanicOverlay';
 import { useFullScreen } from './hooks/useFullScreen';
 import { GameMenuPanel } from './UI/GameMenuPanel/GameMenuPanel';
+import { Loading } from '@/UI/Loading/Loading';
 
 function App() {
   useEffect(() => {
@@ -25,6 +26,7 @@ function App() {
   // Provider用于对各组件提供状态
   return (
     <div className="App">
+      <Loading />
       <Translation />
       <Stage />
       <GameMenuPanel />

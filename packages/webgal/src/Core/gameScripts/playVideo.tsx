@@ -23,6 +23,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const performInitName: string = getRandomPerformName();
   let chooseContent = '';
   let loopValue = false;
+  const optionId = Date.now();
 
   sentence.args.forEach((e) => {
     if (e.key === 'choose') {
@@ -80,7 +81,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
           for (const e of WebGAL.gameplay.performController.performList) {
             if (e.performName === performInitName) {
               if (chooseContent !== '' && !loopValue) {
-                const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+                const parsedResult = sceneParser(chooseContent, `${optionId}.txt`, '');
 
                 const duration = WebGAL.videoManager.getDuration(url);
                 WebGAL.videoManager.seek(url, (duration || 0) - 0.03);
@@ -151,7 +152,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         WebGAL.videoManager.playVideo(url);
 
         if (chooseContent && loopValue) {
-          const parsedResult = sceneParser(chooseContent, 'temp.txt', '');
+          const parsedResult = sceneParser(chooseContent, `${optionId}.txt`, '');
           const script = parsedResult.sentenceList[0];
           const perform = choose(script, endPerform);
           WebGAL.gameplay.performController.arrangeNewPerform(perform, script);

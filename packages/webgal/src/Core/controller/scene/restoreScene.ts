@@ -12,10 +12,13 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const restoreScene = (entry: ISceneEntry) => {
   // 场景写入到运行时
-  sceneFetcher(entry.sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, entry.sceneName, entry.sceneUrl);
-    WebGAL.sceneManager.sceneData.currentSentenceId = entry.continueLine + 1; // 重设场景
-    logger.debug('现在恢复场景，恢复后场景：', WebGAL.sceneManager.sceneData.currentScene);
-    nextSentence();
+  sceneFetcher(entry.sceneUrl).then(async (rawScene) => {
+    const scene = await WebGAL.sceneManager.setCurrentScene(rawScene, entry.sceneName, entry.sceneUrl, true);
+
+    if (scene) {
+      WebGAL.sceneManager.sceneData.currentSentenceId = entry.continueLine + 1; // 重设场景
+      logger.debug('现在恢复场景，恢复后场景：', WebGAL.sceneManager.sceneData.currentScene);
+      nextSentence();
+    }
   });
 };

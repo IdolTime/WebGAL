@@ -7,6 +7,7 @@ import {
 import { scriptParser } from './scriptParser/scriptParser';
 import uniqWith from 'lodash/uniqWith';
 import { fileType } from './interface/assets';
+
 import { ConfigMap } from './config/scriptConfig';
 
 /**
@@ -24,7 +25,7 @@ export const sceneParser = (
   rawScene: string,
   sceneName: string,
   sceneUrl: string,
-  assetsPrefetcher: (assetList: Array<IAsset>) => void,
+  assetsPrefetcher: (assetList: Array<IAsset>, sceneUrl: string) => void,
   assetSetter: (fileName: string, assetType: fileType) => string,
   ADD_NEXT_ARG_LIST: commandType[],
   SCRIPT_CONFIG_MAP: ConfigMap,
@@ -54,7 +55,7 @@ export const sceneParser = (
 
   // 开始资源的预加载
   assetsList = uniqWith(assetsList); // 去重
-  assetsPrefetcher(assetsList);
+  assetsPrefetcher(assetsList, sceneName);
 
   return {
     sceneName: sceneName, // 场景名称
