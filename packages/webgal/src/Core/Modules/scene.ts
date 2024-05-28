@@ -40,40 +40,8 @@ export class SceneManager {
   // eslint-disable-next-line max-params
   public setCurrentScene(rawScene: string, scenaName: string, sceneUrl: string, loading = false) {
     return new Promise((r) => {
-      let parsedScene: { current: IScene | null } = { current: null };
-      let timer: ReturnType<typeof setTimeout> | null = null;
-
-      if (loading && !this.sceneAssetsLoadedList[scenaName]) {
-        timer = setTimeout(() => {
-          // @ts-ignore
-          window.pubsub.publish('loading', { loading: true });
-        }, 1000);
-      }
-
-      // @ts-ignore
-      const dispose = window.pubsub.subscribe(
-        'sceneAssetsLoaded',
-        ({ sceneName: _sceneName }: { sceneName: string }) => {
-          setTimeout(() => {
-            if (scenaName === _sceneName) {
-              if (parsedScene.current) {
-                this.sceneData.currentScene = parsedScene.current;
-              }
-
-              if (loading) {
-                // @ts-ignore
-                window.pubsub.publish('loading', { loading: false });
-              }
-              timer && clearTimeout(timer);
-              r(parsedScene);
-              parsedScene.current = null;
-              dispose();
-            }
-          }, 16);
-        },
-      );
-
-      parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
+      this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
+      r(this.sceneData.currentScene);
     });
   }
 }
