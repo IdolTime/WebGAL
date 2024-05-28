@@ -81,7 +81,7 @@ export const BottomControlPanel = () => {
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div 
-          className={`${styles.main} ${ isIOS ? styles.main_ios : '' }`} 
+          className={`${styles.main} ${ isIOS && GUIStore.isShowGameingButton ? styles.main_ios : '' }`} 
           style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden'}}
         >
           {/* {GUIStore.showTextBox && (

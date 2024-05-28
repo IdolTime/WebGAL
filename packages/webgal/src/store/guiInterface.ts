@@ -30,6 +30,7 @@ export interface IGuiState {
   isEnterGame: boolean;
   isShowLogo: boolean;
   isShowGameMenu: boolean; // 是否显示游戏菜单
+  isShowGameingButton: boolean; // 是否显示游戏进行按钮
 }
 
 export type componentsVisibility = Pick<

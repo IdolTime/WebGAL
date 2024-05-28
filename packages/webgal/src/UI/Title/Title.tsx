@@ -4,7 +4,7 @@ import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
-import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { setMenuPanelTag, setVisibility, setShowGameingButton } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
@@ -63,6 +63,7 @@ const Title: FC = () => {
               onClick={() => {
                 startGame();
                 playSeClick();
+                dispatch(setShowGameingButton(true));
               }}
               onMouseEnter={playSeEnter}
             >

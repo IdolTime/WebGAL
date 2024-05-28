@@ -24,6 +24,11 @@
     }
 }
 
+.gameMenuPanel_ios {
+    -webkit-transform: translateZ(0px);
+    transform: translateZ(0px);
+}
+
 .gameMenuPanelContentWrapper_ios {
     -webkit-transform: translateZ(0px);
     transform: translateZ(0px);

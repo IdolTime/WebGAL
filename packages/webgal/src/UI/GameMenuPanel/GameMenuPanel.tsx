@@ -14,6 +14,7 @@ export const GameMenuPanel = () => {
   const t = useTrans('gaming.');
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
+  const stageState = useSelector((state: RootState) => state.stage);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -92,7 +93,7 @@ export const GameMenuPanel = () => {
 
   return (
     <>
-      <div className={styles.gameMenuPanel}>
+      <div className={`${styles.gameMenuPanel} ${isIOS && GUIStore.isShowGameingButton ? styles.gameMenuPanel_ios : ''}`}>
         <div className={styles.menuButton} onClick={handleShowGameMenuPanel} onMouseEnter={playSeEnter} />
       </div>
       {show && (
