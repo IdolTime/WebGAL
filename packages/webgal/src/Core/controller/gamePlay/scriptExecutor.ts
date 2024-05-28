@@ -55,15 +55,22 @@ export const scriptExecutor = () => {
 
   const interpolationOneItem = (content: string): string => {
     let retContent = content;
-    const contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
+
+
+    const contentExp = retContent?.match(/(\\\\)?\{(.*?)\}/g) ?? null
+    // retContent?.match(/(?<!\\)\{(.*?)\}/g) ?? null;
 
     if (contentExp !== null) {
       contentExp.forEach((e) => {
-        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        const contentVarValue = getValueFromState(e.replace(/(\\\\)?\{(.*)\}/, '$2'))
+        // getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+
         retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
       });
     }
-    retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');
+    retContent = 
+     retContent.replace(/\\\\{/g, '{').replace(/\\\\}/g, '}');
+    // retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');
     return retContent;
   };
 

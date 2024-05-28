@@ -6,13 +6,14 @@
 
 .gameMenuPanel {
     position: absolute;
-    top: 20px;
-    right: 28px;
+    top: px2(50px);
+    right: px2(20px);
     z-index: 9;
 
     .menuButton {
         width: px2(75px);
         height: px2(70px);
+        margin-right: px2(100px);
         background-image: url('@/assets/imgs/menu-icon.png');
         background-repeat: no-repeat;
         background-size: cover;
@@ -21,6 +22,11 @@
             cursor: pointer;
         }
     }
+}
+
+.gameMenuPanelContentWrapper_ios {
+    -webkit-transform: translateZ(0px);
+    transform: translateZ(0px);
 }
 
 .gameMenuPanelContentWrapper {

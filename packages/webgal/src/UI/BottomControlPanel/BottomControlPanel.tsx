@@ -30,6 +30,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
 import { useEffect } from 'react';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { isIOS } from '@/Core/initializeScript';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -79,7 +80,10 @@ export const BottomControlPanel = () => {
     // <div className={styles.ToCenter}>
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
-        <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
+        <div 
+          className={`${styles.main} ${ isIOS ? styles.main_ios : '' }`} 
+          style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden'}}
+        >
           {/* {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
@@ -148,7 +152,8 @@ export const BottomControlPanel = () => {
             className={`${styles.singleButton} ${styles.fastForwardButton}`}
             style={{ fontSize }}
             title="快进"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               switchFast();
               playSeClick();
             }}
@@ -159,7 +164,8 @@ export const BottomControlPanel = () => {
             className={`${styles.singleButton} ${styles.autoButton}`}
             style={{ fontSize }}
             title="自动"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               switchAuto();
               playSeClick();
             }}
@@ -169,7 +175,8 @@ export const BottomControlPanel = () => {
             className={`${styles.singleButton} ${styles.flashbackButton}`}
             style={{ fontSize }}
             title="剧情回顾"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
               playSeClick();

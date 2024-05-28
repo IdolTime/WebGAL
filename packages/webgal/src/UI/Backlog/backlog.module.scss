@@ -7,8 +7,6 @@
   width: 100%;
   height: 100%;
   z-index: 10;
-  // background: rgba(0, 0, 0, 0.7);
-  // padding: 2em 0 2em 0;
   animation: backlog_soft_in 0.7s ease-out forwards;
   box-sizing: border-box;
   padding: px2(35px) px2(77px) px2(25px) px2(46px);
@@ -16,6 +14,11 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.Backlog_main_ios {
+  -webkit-transform: translateZ(1px);
+  transform: translateZ(1px);
 }
 
 .Backlog_main_out {

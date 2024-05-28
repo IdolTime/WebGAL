@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import { compileSentence, splitChars } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import { isIOS } from '@/Core/initializeScript';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -137,7 +138,8 @@ export const Backlog = () => {
         <div
           className={`
           ${GUIStore.showBacklog ? styles.Backlog_main : styles.Backlog_main_out}
-          ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
+          ${indexHide ? styles.Backlog_main_out_IndexHide : ''} 
+          ${isIOS ? styles.Backlog_main_ios : ''} 
           `}
         >
           <div className={styles.backlog_top}>

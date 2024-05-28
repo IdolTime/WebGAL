@@ -1,6 +1,7 @@
 @import 'src/assets/style/px2.scss';
 .Save_Load_main {
   position: absolute;
+  z-index: 10;
   cursor: default;
   width: px2(1920px);
   height: px2(1080px);
@@ -8,6 +9,11 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/background.png');
+}
+
+.Save_Load_main_IOS {
+  -webkit-transform: translateZ(1px);
+  transform: translateZ(1px);
 }
 
 .Save_Load_top {

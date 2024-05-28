@@ -25,6 +25,12 @@ $height: 330px;
   background-size: cover;
   background-position: center;
   background-image: url('@/assets/imgs/text-dialog-bg.png');
+
+}
+
+.TextBox_Container_ios {
+  -webkit-transform: translateZ(0px);
+  transform: translateZ(0px);
 }
 
 .TextBox_main {

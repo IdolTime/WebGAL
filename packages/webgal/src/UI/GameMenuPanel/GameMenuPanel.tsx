@@ -8,6 +8,7 @@ import { RootState } from '@/store/store';
 import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
+import { isIOS } from '@/Core/initializeScript';
 
 export const GameMenuPanel = () => {
   const t = useTrans('gaming.');
@@ -31,7 +32,8 @@ export const GameMenuPanel = () => {
   /**
    * 显示游戏菜单面板
    */
-  const handleShowGameMenuPanel = () => {
+  const handleShowGameMenuPanel = (e: any) => {
+    e.stopPropagation()
     playSeClick();
     setComponentVisibility('isShowGameMenu', true);
   };
@@ -94,7 +96,7 @@ export const GameMenuPanel = () => {
         <div className={styles.menuButton} onClick={handleShowGameMenuPanel} onMouseEnter={playSeEnter} />
       </div>
       {show && (
-        <div className={styles.gameMenuPanelContentWrapper}>
+        <div className={`${styles.gameMenuPanelContentWrapper} ${isIOS ? styles.gameMenuPanelContentWrapper_ios : ''}`}>
           <div className={styles.mask} />
           <div className={styles.gameMenuPanelContent}>
             <div className={styles.buttonswrapper}>

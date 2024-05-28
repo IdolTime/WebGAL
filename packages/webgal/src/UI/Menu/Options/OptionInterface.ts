@@ -14,5 +14,5 @@ export interface ISlider {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   initValue: number;
   onTouchEnd?: (event: TouchEvent<HTMLInputElement>) => void;
-  onTouchMove: (event: TouchEvent<HTMLInputElement>) => void;
+  onTouchMove?: (event: TouchEvent<HTMLInputElement>) => void;
 }

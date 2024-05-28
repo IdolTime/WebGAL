@@ -15,6 +15,7 @@ import cgchoose from '@/assets/imgs//cg-choose.png';
 import bgmchoose from '@/assets/imgs//bgm-choose.png';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { useEffect, useState } from 'react';
+import { isIOS } from '@/Core/initializeScript';
 
 export function Extra() {
   const { playSeClick, playSeEnter } = useSoundEffect();
@@ -31,7 +32,7 @@ export function Extra() {
     <>
       {showExtra && (
         <div
-          className={styles.extra}
+          className={`${styles.extra} ${isIOS ? styles.extra_ios : ''}`}
           style={{
             background: `url(${background}) no-repeat center center`,
             backgroundSize: 'cover',
@@ -39,7 +40,8 @@ export function Extra() {
         >
           <div
             className={styles.extra_top}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               dispatch(setVisibility({ component: 'showExtra', visibility: false }));
               playSeClick();
             }}
@@ -74,7 +76,8 @@ export function Extra() {
                     src={bgmunselect}
                     alt=""
                     className={`${styles.mainTab_unselect} ${styles.mainTab_bgmunselect}`}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setCheked('bgm');
                       playSeClick();
                     }}
@@ -93,7 +96,8 @@ export function Extra() {
                     src={cgunselect}
                     alt=""
                     className={styles.mainTab_unselect}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setCheked('cg');
                       playSeClick();
                     }}

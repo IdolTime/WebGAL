@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from 'react';
 import { WebGAL } from '@/Core/WebGAL';
 import { ITextboxProps } from './types';
 import useApplyStyle from '@/hooks/useApplyStyle';
+import { isIOS } from '@/Core/initializeScript';
 
 export default function IMSSTextbox(props: ITextboxProps) {
   const {
@@ -102,7 +103,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
   return (
     <>
       {isText && (
-        <div className={styles.TextBox_Container}>
+        <div className={`${styles.TextBox_Container} ${isIOS ? styles.TextBox_Container_ios : ''}`}>
           <div
             className={applyStyle('TextBox_main', styles.TextBox_main)}
             style={{

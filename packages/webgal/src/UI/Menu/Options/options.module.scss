@@ -1,6 +1,7 @@
 @import 'src/assets/style/px2.scss';
 .Options_main {
   position: absolute;
+  z-index: 10;
   cursor: default;
   width: px2(1920px);
   height: px2(1080px);
@@ -9,6 +10,12 @@
   background-position: center;
   background-image: url('@/assets/imgs/background.png');
 }
+
+.Options_main_ios {
+  -webkit-transform: translateZ(1px);
+  transform: translateZ(1px);
+}
+
 .Options_top {
   position: relative;
   margin-top: px2(38px);

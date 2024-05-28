@@ -9,6 +9,7 @@ import { fullScreenOption } from '@/store/userDataInterface';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setVisibility } from '@/store/GUIReducer';
+import { isIOS } from '@/Core/initializeScript';
 
 export const Options: FC = () => {
   useEffect(getStorage, []);
@@ -17,7 +18,7 @@ export const Options: FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className={styles.Options_main}>
+    <div className={`${styles.Options_main} ${isIOS ? styles.Options_main_ios : ''}`}>
       <div
         className={styles.Save_back}
         onClick={() => {

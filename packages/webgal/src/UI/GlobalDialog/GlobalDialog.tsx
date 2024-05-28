@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
+import { isIOS } from '@/Core/initializeScript';
 
 export default function GlobalDialog() {
   const isGlobalDialogShow = useSelector((state: RootState) => state.GUI.showGlobalDialog);
@@ -32,7 +33,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
     hideGlobalDialog();
   };
   const renderElement = (
-    <div className={styles.GlobalDialog_main}>
+    <div className={`${styles.GlobalDialog_main} ${isIOS ? styles.GlobalDialog_main_ios : ''}`}>
       <div className={styles.glabalDialog_container}>
         <div className={styles.glabalDialog_container_inner}>
           <div className={styles.title}>{props.title}</div>

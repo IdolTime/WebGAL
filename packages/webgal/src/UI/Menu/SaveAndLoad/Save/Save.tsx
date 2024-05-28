@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
+import { isIOS } from '@/Core/initializeScript';
 
 export const Save: FC = () => {
   const { playSeClick, playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -127,7 +128,7 @@ export const Save: FC = () => {
   };
 
   return (
-    <div className={styles.Save_Load_main}>
+    <div className={`${styles.Save_Load_main} ${ isIOS ? styles.Save_Load_main_IOS : ''}`}>
       <div className={styles.Save_Load_top}>
         <div
           className={styles.Save_back}
