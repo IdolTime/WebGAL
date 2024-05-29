@@ -24,15 +24,21 @@ export default function useApplyStyle(url: string) {
   };
 
   const updateStyleFile = async () => {
-    logger.debug('更新 Scss 文件', url);
-    const resp = await axios.get(`game/template/${url}`);
-    const scssStr = resp.data;
-    styleObject.set(scss2cssinjsParser(scssStr));
+    try {
+      if (url) {
+        logger.info('更新 Scss 文件', url);
+        const resp = await axios.get(`./game/template/${url}`);
+        const scssStr = resp.data;
+        styleObject.set(scss2cssinjsParser(scssStr));
+      }
+    } catch (error) {
+      console.error('更新 Scss 文件 失败！')
+    }
   };
 
   useEffect(() => {
     updateStyleFile();
-  }, []);
+  }, [url]);
 
   useEffect(() => {
     injectGlobal(styleObject.value.others);
