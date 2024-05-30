@@ -73,6 +73,6 @@ const checkIfAllSceneAssetsAreSettled = (sceneName: string) => {
   if (allSettled) {
     WebGAL.sceneManager.sceneAssetsLoadedList[sceneName] = true;
     // @ts-ignore
-    window.pubsub.publish('sceneAssetsLoaded', { sceneName });
+    // window.pubsub.publish('sceneAssetsLoaded', { sceneName });
   }
 };
