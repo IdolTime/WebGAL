@@ -36,6 +36,9 @@ input[type=range]::-webkit-slider-thumb {
   background-image: url('@/assets/imgs/bar-thumb.png');
   z-index: 3;
   position: relative;
+  &:active {
+    transform: scale(0.8);
+  }
 }
 /* Firefox 同上 */
 input[type=range]::-moz-range-thumb {
@@ -51,6 +54,9 @@ input[type=range]::-moz-range-thumb {
   z-index: 3;
   position: relative;
   touch-action: manipulation;
+  &:active {
+    transform: scale(0.8);
+  }
 }
 
 .Option_WebGAL_slider {
