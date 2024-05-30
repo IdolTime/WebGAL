@@ -1,35 +1,20 @@
-import {
-  AlignTextLeftOne,
-  DoubleRight,
-  FolderOpen,
-  Home,
-  PlayOne,
-  PreviewCloseOne,
-  PreviewOpen,
-  ReplayMusic,
-  Save,
-  SettingTwo,
-  DoubleDown,
-  DoubleUp,
-  Lock,
-  Unlock,
-} from '@icon-park/react';
 import styles from './bottomControlPanel.module.scss';
-import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
+import { switchAuto, stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
-import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import { saveGame } from '@/Core/controller/storage/saveGame';
-import { loadGame } from '@/Core/controller/storage/loadGame';
+// import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
+// import { saveGame } from '@/Core/controller/storage/saveGame';
+// import { loadGame } from '@/Core/controller/storage/loadGame';
 import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
-import { useEffect } from 'react';
-import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { WebGAL } from '@/Core/WebGAL';
+// import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
+// import { useEffect } from 'react';
+// import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
@@ -145,7 +130,7 @@ export const BottomControlPanel = () => {
           </span> */}
           <span
             id="Button_ControlPanel_fast"
-            className={`${styles.singleButton} ${styles.fastForwardButton}`}
+            className={styles.singleButton}
             style={{ fontSize }}
             title="快进"
             onClick={() => {
@@ -153,10 +138,12 @@ export const BottomControlPanel = () => {
               playSeClick();
             }}
             onMouseEnter={playSeEnter}
-          />
+          >
+            <span className={styles.fastIcon}></span>
+          </span>
           <span
             id="Button_ControlPanel_auto"
-            className={`${styles.singleButton} ${styles.autoButton}`}
+            className={styles.singleButton}
             style={{ fontSize }}
             title="自动"
             onClick={() => {
@@ -164,18 +151,27 @@ export const BottomControlPanel = () => {
               playSeClick();
             }}
             onMouseEnter={playSeEnter}
-          />
+          >
+             <span className={styles.autoIcon}></span>
+          </span>
           <span
-            className={`${styles.singleButton} ${styles.flashbackButton}`}
+            className={styles.singleButton}
             style={{ fontSize }}
             title="剧情回顾"
             onClick={() => {
+              // 如果现在正在自动播放，则点击时先停止自动播放
+              if (WebGAL.gameplay.isAuto) {
+                stopAuto()
+              }
+              
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
               playSeClick();
             }}
             onMouseEnter={playSeEnter}
-          />
+          >
+            <span className={styles.historyIcon}></span>
+          </span>
           {/* <span
             className={styles.singleButton + ' ' + styles.fastsave}
             style={{ fontSize }}
