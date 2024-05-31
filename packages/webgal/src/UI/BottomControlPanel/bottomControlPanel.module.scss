@@ -66,7 +66,8 @@
 //   background-color: rgba(255, 255, 255, 0.3);
 // }
 
-.autoButton {
+.autoIcon {
+  display: inline-block;
   width: px2(31px);
   height: px2(36px);
   background-image: url('@/assets/imgs/autoplay-unselect.png');
@@ -74,17 +75,14 @@
   background-size: cover;
   background-position: center;
   margin-left: px2(80px);
-
   &:hover {
-    margin-left: px2(50px);
-    transform: translate(20px, 0);
-    width: px2(61px);
-    height: px2(66px);
+    transform: scale(1.8);
     background-image: url('@/assets/imgs/autoplay.png');
   }
 }
 
-.fastForwardButton {
+.fastIcon {
+  display: inline-block;
   width: px2(48px);
   height: px2(41px);
   background-image: url('@/assets/imgs/fast-forward-unselect.png');
@@ -92,15 +90,13 @@
   background-size: cover;
   background-position: center;
   &:hover {
-    position: relative;
-    transform: translate(20px, 0);
-    width: px2(78px);
-    height: px2(71px);
+    transform: scale(1.8);
     background-image: url('@/assets/imgs/fast-forward.png');
   }
 }
 
-.flashbackButton {
+.historyIcon {
+  display: inline-block;
   width: px2(46px);
   height: px2(46px);
   background-image: url('@/assets/imgs/flashback-unselect.png');
@@ -109,11 +105,7 @@
   background-position: center;
   margin-left: px2(75px);
   &:hover {
-    margin-left: px2(45px);
-    position: relative;
-    transform: translate(20px, 0);
-    width: px2(76px);
-    height: px2(76px);
+    transform: scale(1.8);
     background-image: url('@/assets/imgs/flashback.png');
   }
 }

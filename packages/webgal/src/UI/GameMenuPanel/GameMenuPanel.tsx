@@ -49,13 +49,16 @@ export const GameMenuPanel = () => {
    */
   const handleSave = () => {
     playSeClick();
+    setMenuPanel(MenuPanelTag.Save);
+    setComponentVisibility('isShowGameMenu', false);
+    setComponentVisibility('showMenuPanel', true);
   };
 
   /**
    * 读取
    */
   const handleRead = () => {
-    setMenuPanel(MenuPanelTag.Save);
+    setMenuPanel(MenuPanelTag.Load);
     setComponentVisibility('isShowGameMenu', false);
     setComponentVisibility('showMenuPanel', true);
     playSeClick();

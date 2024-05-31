@@ -144,9 +144,9 @@
     color: #ECCF87;
   }
 
-  &:hover .backlog_item_content {
-    font-size: px2(18px);
-  }
+  // &:hover .backlog_item_content {
+  //   font-size: px2(30px);
+  // }
 
   &:hover .backlog_item_button_element {
     opacity: 1;
@@ -180,8 +180,8 @@
   display: flex;
   flex-flow: row;
   align-items: flex-start;
-  width: 30%;
-  max-width: 30%;
+  width: 80%;
+  max-width: 80%;
   min-width: 30%;
 }
 
@@ -191,7 +191,7 @@
   text-align: left;
   letter-spacing: 0.1em;
   color: #A79E8B;
-  font-size: px2(14px);
+  font-size: px2(30px);
   font-weight: 400;
   // line-height: px2(55px);
 }
@@ -203,7 +203,7 @@
   padding-bottom: 0.5em;
   letter-spacing: 0.05em;
   color: #fff;
-  font-size: px2(17px);
+  font-size: px2(30px);
   font-weight: 400;
   line-height: px2(34px);
 }
