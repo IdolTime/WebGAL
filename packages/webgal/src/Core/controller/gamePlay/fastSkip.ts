@@ -44,6 +44,7 @@ export const startFast = () => {
   WebGAL.gameplay.isFast = true;
   setButton(true);
   WebGAL.gameplay.fastInterval = setInterval(() => {
+    console.log('正在快进语句');
     nextSentence();
   }, SYSTEM_CONFIG.fast_timeout);
 };

@@ -24,6 +24,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let chooseContent = '';
   let loopValue = false;
   const optionId = Date.now();
+  const endPerformRef = {
+    current: () => {
+      console.log('快进状态尝试跳过视频');
+    },
+  };
 
   sentence.args.forEach((e) => {
     if (e.key === 'choose') {
@@ -34,11 +39,29 @@ export const playVideo = (sentence: ISentence): IPerform => {
     }
   });
 
-  let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
-  let blockingNextFlag = false;
-  if (blockingNext || loopValue || chooseContent !== '') {
-    blockingNextFlag = true;
-  }
+  const checkIfBlockingNext = () => {
+    let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
+    let blockingNextFlag = false;
+    let isFast = WebGAL.gameplay.isFast;
+    if (isFast) {
+      if (blockingNext) {
+        blockingNextFlag = true;
+      }
+      if (loopValue) {
+        blockingNextFlag = false;
+      }
+      if (chooseContent !== '') {
+        blockingNextFlag = true;
+        endPerformRef.current();
+      }
+    } else {
+      if (blockingNext || loopValue || chooseContent !== '') {
+        blockingNextFlag = true;
+      }
+    }
+
+    return blockingNextFlag;
+  };
 
   WebGAL.videoManager.showVideo(sentence.content);
 
@@ -48,7 +71,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     duration: 0,
     isHoldOn: false,
     stopFunction: () => {},
-    blockingNext: () => blockingNextFlag,
+    blockingNext: checkIfBlockingNext,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     arrangePerformPromise: new Promise<IPerform>((resolve) => {
@@ -99,6 +122,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             }
           }
         };
+        endPerformRef.current = endPerform;
         const skipVideo = () => {
           console.log('skip');
           endPerform();
@@ -127,7 +151,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
             WebGAL.videoManager.destory(url);
           },
-          blockingNext: () => blockingNextFlag,
+          blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
             return !isOver;
           },
