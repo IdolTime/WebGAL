@@ -23,14 +23,16 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
   // 重新获取初始场景
   const sceneUrl: string = assetSetter(sceneName, fileType.scene);
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then(async (rawScene) => {
-    const scene = await WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
-    if (!scene) return;
-    // 开始快进到指定语句
-    const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
-    WebGAL.gameplay.isFast = true;
-    syncFast(sentenceId, currentSceneName);
-  });
+  setTimeout(() => {
+    sceneFetcher(sceneUrl).then(async (rawScene) => {
+      const scene = await WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
+      if (!scene) return;
+      // 开始快进到指定语句
+      const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+      WebGAL.gameplay.isFast = true;
+      syncFast(sentenceId, currentSceneName);
+    });
+  }, 16);
 };
 
 export function syncFast(sentenceId: number, currentSceneName: string) {

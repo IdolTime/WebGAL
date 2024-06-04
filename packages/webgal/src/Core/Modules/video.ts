@@ -15,6 +15,13 @@ export class VideoManager {
       player: FlvJs.Player;
       id: string;
       progressTimer: ReturnType<typeof setTimeout> | null;
+      waitCommands: {
+        showVideo?: boolean;
+        playVideo?: boolean;
+        setVolume?: number;
+        setLoop?: boolean;
+        seek?: number;
+      };
       events: {
         ended: {
           callbacks: (() => void)[];
@@ -73,6 +80,20 @@ export class VideoManager {
     videoContainerTag.appendChild(videoTag);
     document.getElementById('videoContainer')?.appendChild(videoContainerTag);
 
+    this.videosByKey[url] = {
+      // @ts-ignore
+      player: null,
+      id,
+      progressTimer: null,
+      waitCommands: {},
+      events: {
+        ended: {
+          callbacks: [],
+          handler: onEndedHandler,
+        },
+      },
+    };
+
     fetch(url)
       .then((res) => {
         if (res.status > 200) {
@@ -123,22 +144,25 @@ export class VideoManager {
         flvPlayer.load();
 
         this.videosByKey[url] = {
+          ...this.videosByKey[url],
           player: flvPlayer,
-          id,
-          progressTimer: null,
-          events: {
-            ended: {
-              callbacks: [],
-              handler: onEndedHandler,
-            },
-          },
         };
+
+        const waitCommands = Object.keys(this.videosByKey[url].waitCommands);
+
+        if (waitCommands.length) {
+          waitCommands.forEach((command) => {
+            // @ts-ignore
+            // @ts-ignore
+            this[command](url, this.videosByKey[url].waitCommands[command]);
+          });
+        }
       });
   }
 
   public pauseVideo(key: string): void {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       videoItem.player.pause();
     }
   }
@@ -146,53 +170,63 @@ export class VideoManager {
   public showVideo(key: string): void {
     const videoItem = this.videosByKey[key];
 
-    if (videoItem) {
+    if (videoItem?.player) {
       const videoContainerTag = document.getElementById(videoItem.id);
 
       if (videoContainerTag) {
         videoContainerTag.style.opacity = '1';
         videoContainerTag.style.zIndex = '11';
       }
+    } else {
+      videoItem.waitCommands.showVideo = true;
     }
   }
 
   public playVideo(key: string): void {
     const videoItem = this.videosByKey[key];
 
-    if (videoItem) {
+    if (videoItem?.player) {
       videoItem.player.play();
       this.checkProgress(key);
+    } else {
+      videoItem.waitCommands.playVideo = true;
     }
   }
 
   public setLoop(key: string, loopValue: boolean): void {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       const videoTag = document.getElementById(videoItem.id) as HTMLVideoElement;
 
       if (videoTag) {
         videoTag.loop = loopValue;
       }
+    } else {
+      videoItem.waitCommands.setLoop = loopValue;
     }
   }
 
   public seek(key: string, time: number): void {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       videoItem.player.currentTime = time;
+    } else {
+      videoItem.waitCommands.seek = time;
     }
   }
 
   public setVolume(key: string, volume: number): void {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       videoItem.player.volume = volume;
+    } else {
+      videoItem.waitCommands.setVolume = volume;
     }
   }
 
-  public destory(key: string): void {
+  public destory(key: string, noWait = false): void {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       videoItem.player.pause();
       videoItem.player.volume = 0;
       const videoContainer = document.getElementById(videoItem.id);
@@ -206,40 +240,45 @@ export class VideoManager {
         clearTimeout(videoItem.progressTimer);
       }
 
-      setTimeout(() => {
-        try {
-          const video = videoContainer?.getElementsByTagName('video');
-          if (video?.length) {
-            videoItem.player.destroy();
+      setTimeout(
+        () => {
+          try {
+            const video = videoContainer?.getElementsByTagName('video');
+            if (video?.length) {
+              videoItem.player.destroy();
+            }
+          } catch (error) {
+            console.warn(error);
           }
-        } catch (error) {
-          console.warn(error);
-        }
-        setTimeout(() => {
-          videoContainer?.remove();
-        }, 500);
-        delete this.videosByKey[key];
-      }, 2000);
+          setTimeout(
+            () => {
+              videoContainer?.remove();
+            },
+            noWait ? 0 : 500,
+          );
+          delete this.videosByKey[key];
+        },
+        noWait ? 0 : 2000,
+      );
     }
   }
 
-  public destoryAll(): void {
+  public destoryAll(noWait = false): void {
     Object.keys(this.videosByKey).forEach((key) => {
-      this.destory(key);
+      this.destory(key, noWait);
     });
-    this.videosByKey = {}; // 重置视频对象字典
   }
 
   public onEnded(key: string, callback: () => void) {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       videoItem.events.ended.callbacks.push(callback);
     }
   }
 
   public getDuration(key: string) {
     const videoItem = this.videosByKey[key];
-    if (videoItem) {
+    if (videoItem?.player) {
       return videoItem.player.duration;
     }
   }
@@ -255,7 +294,7 @@ export class VideoManager {
   private checkProgress(key: string) {
     const videoItem = this.videosByKey[key];
 
-    if (videoItem) {
+    if (videoItem?.player) {
       const player = videoItem.player;
       const currentTime = player.currentTime;
       const duration = player.duration;

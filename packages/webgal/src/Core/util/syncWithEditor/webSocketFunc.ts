@@ -22,7 +22,7 @@ export const webSocketFunc = () => {
     return;
   }
   // 根据当前协议构建WebSocket URL，并包括端口号（如果有）
-  let wsUrl = `ws://${loc}${defaultPort}/api/webgalsync`;
+  let wsUrl = `ws://${loc}:9999`;
   if (protocol === 'https:') {
     wsUrl = `wss://${loc}${defaultPort}/api/webgalsync`;
   }
