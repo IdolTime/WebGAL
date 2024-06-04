@@ -25,7 +25,7 @@ export const changeScene = (sceneUrl: string, sceneName: string) => {
           currentSceneVideos.push(x.url);
         }
       });
-      WebGAL.videoManager.destoryExcept(currentSceneVideos);
+      WebGAL.videoManager.destroyExcept(currentSceneVideos);
 
       // 开始场景的预加载
       const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;

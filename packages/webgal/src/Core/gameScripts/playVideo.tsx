@@ -11,6 +11,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
+import { current } from '@reduxjs/toolkit';
 
 /**
  * 播放一段视频 * @param sentence
@@ -24,6 +25,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let chooseContent = '';
   let loopValue = false;
   const optionId = Date.now();
+  const endPerformRef = {
+    current: () => {
+      console.log('尝试跳过视频');
+    },
+  };
 
   sentence.args.forEach((e) => {
     if (e.key === 'choose') {
@@ -34,12 +40,31 @@ export const playVideo = (sentence: ISentence): IPerform => {
     }
   });
 
-  let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
-  // 影游编辑器不允许跳过
-  let blockingNextFlag = true;
-  if (blockingNext || loopValue || chooseContent !== '') {
-    blockingNextFlag = true;
-  }
+  const checkIfBlockingNext = () => {
+    let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
+    // 影游编辑器不允许跳过
+    let blockingNextFlag = true;
+    let isFast = WebGAL.gameplay.isFast && WebGAL.gameplay.isSyncingWithOrigine;
+    if (isFast) {
+      blockingNextFlag = false;
+      if (blockingNext) {
+        blockingNextFlag = true;
+      }
+      if (loopValue) {
+        blockingNextFlag = false;
+      }
+      if (chooseContent !== '') {
+        blockingNextFlag = true;
+        endPerformRef.current();
+      }
+    } else {
+      if (blockingNext || loopValue || chooseContent !== '') {
+        blockingNextFlag = true;
+      }
+    }
+
+    return blockingNextFlag;
+  };
 
   WebGAL.videoManager.showVideo(sentence.content);
 
@@ -49,7 +74,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     duration: 0,
     isHoldOn: false,
     stopFunction: () => {},
-    blockingNext: () => blockingNextFlag,
+    blockingNext: checkIfBlockingNext,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
     arrangePerformPromise: new Promise<IPerform>((resolve) => {
@@ -100,6 +125,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
             }
           }
         };
+        endPerformRef.current = endPerform;
         const skipVideo = () => {
           console.log('skip');
           endPerform();
@@ -126,9 +152,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            WebGAL.videoManager.destory(url);
+            WebGAL.videoManager.destroy(url);
           },
-          blockingNext: () => blockingNextFlag,
+          blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
             return !isOver;
           },
