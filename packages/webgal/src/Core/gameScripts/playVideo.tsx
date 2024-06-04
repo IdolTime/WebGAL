@@ -11,6 +11,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
+import { current } from '@reduxjs/toolkit';
 
 /**
  * 播放一段视频 * @param sentence
@@ -149,7 +150,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            WebGAL.videoManager.destory(url);
+            WebGAL.videoManager.destroy(url);
           },
           blockingNext: checkIfBlockingNext,
           blockingAuto: () => {

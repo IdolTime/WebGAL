@@ -21,6 +21,7 @@ export class VideoManager {
         setVolume?: number;
         setLoop?: boolean;
         seek?: number;
+        destroy?: boolean;
       };
       events: {
         ended: {
@@ -153,7 +154,6 @@ export class VideoManager {
         if (waitCommands.length) {
           waitCommands.forEach((command) => {
             // @ts-ignore
-            // @ts-ignore
             this[command](url, this.videosByKey[url].waitCommands[command]);
           });
         }
@@ -224,7 +224,7 @@ export class VideoManager {
     }
   }
 
-  public destory(key: string, noWait = false): void {
+  public destroy(key: string, noWait = false): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
@@ -260,20 +260,20 @@ export class VideoManager {
         },
         noWait ? 0 : 2000,
       );
+    } else {
+      videoItem.waitCommands.destroy = true;
     }
   }
 
-  public destoryAll(noWait = false): void {
+  public destroyAll(noWait = false): void {
     Object.keys(this.videosByKey).forEach((key) => {
-      this.destory(key, noWait);
+      this.destroy(key, noWait);
     });
   }
 
   public onEnded(key: string, callback: () => void) {
     const videoItem = this.videosByKey[key];
-    if (videoItem?.player) {
-      videoItem.events.ended.callbacks.push(callback);
-    }
+    videoItem.events.ended.callbacks.push(callback);
   }
 
   public getDuration(key: string) {
@@ -283,10 +283,10 @@ export class VideoManager {
     }
   }
 
-  public destoryExcept(keys: string[]) {
+  public destroyExcept(keys: string[]) {
     Object.keys(this.videosByKey).forEach((key) => {
       if (!keys.includes(key)) {
-        this.destory(key);
+        this.destroy(key);
       }
     });
   }

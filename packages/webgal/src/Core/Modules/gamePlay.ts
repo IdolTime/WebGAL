@@ -7,6 +7,7 @@ import { PerformController } from '@/Core/Modules/perform/performController';
 export class Gameplay {
   public isAuto = false;
   public isFast = false;
+  public isSyncingWithOrigine = false;
   public autoInterval: ReturnType<typeof setInterval> | null = null;
   public fastInterval: ReturnType<typeof setInterval> | null = null;
   public autoTimeout: ReturnType<typeof setTimeout> | null = null;

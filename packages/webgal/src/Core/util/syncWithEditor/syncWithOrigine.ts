@@ -30,6 +30,7 @@ export const syncWithOrigine = (sceneName: string, sentenceId: number) => {
       // 开始快进到指定语句
       const currentSceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
       WebGAL.gameplay.isFast = true;
+      WebGAL.gameplay.isSyncingWithOrigine = true;
       syncFast(sentenceId, currentSceneName);
     });
   }, 16);
@@ -41,8 +42,9 @@ export function syncFast(sentenceId: number, currentSceneName: string) {
     WebGAL.sceneManager.sceneData.currentScene.sceneName === currentSceneName
   ) {
     nextSentence();
-    setTimeout(() => syncFast(sentenceId, currentSceneName), 2);
+    setTimeout(() => syncFast(sentenceId, currentSceneName), 100);
   } else {
+    WebGAL.gameplay.isSyncingWithOrigine = false;
     WebGAL.gameplay.isFast = false;
   }
 }
