@@ -33,18 +33,11 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
         checkIfAllSceneAssetsAreSettled(sceneName);
         WebGAL.videoManager.preloadVideo(asset.url);
       } else {
-        const newLink = document.createElement('link');
-        newLink.setAttribute('rel', 'prefetch');
-        newLink.setAttribute('href', asset.url);
-        const head = document.getElementsByTagName('head');
-        if (head.length) {
-          head[0].appendChild(newLink);
-        }
-        newLink.onload = () => {
+        const onloadCallback = function () {
           assetsLoadedObject[asset.url] = true;
           checkIfAllSceneAssetsAreSettled(sceneName);
         };
-        newLink.onerror = () => {
+        const onerrorCallback = function () {
           assetsLoadedObject[asset.url] = true;
           checkIfAllSceneAssetsAreSettled(sceneName);
           const index = WebGAL.sceneManager.settledAssets.findIndex((settledAssetUrl, index) => {
@@ -57,6 +50,20 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
             WebGAL.sceneManager.settledAssets.splice(index, 1);
           }
         };
+        // @ts-ignore
+        if (window.isIOSDevice) {
+          fetch(asset.url).then(onloadCallback).catch(onerrorCallback);
+        } else {
+          const newLink = document.createElement('link');
+          newLink.setAttribute('rel', 'prefetch');
+          newLink.setAttribute('href', asset.url);
+          const head = document.getElementsByTagName('head');
+          if (head.length) {
+            head[0].appendChild(newLink);
+          }
+          newLink.onload = onloadCallback;
+          newLink.onerror = onerrorCallback;
+        }
         WebGAL.sceneManager.settledAssets.push(asset.url);
       }
     }
