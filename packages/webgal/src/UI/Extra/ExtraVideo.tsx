@@ -4,6 +4,7 @@ import styles from '@/UI/Menu/SaveAndLoad/SaveAndLoad.module.scss';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { setshowFavorited } from '@/store/GUIReducer';
 import { setSlPage } from '@/store/userDataReducer';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
@@ -112,6 +113,7 @@ export const ExtraVideo: FC = () => {
     const saveElement = (
       <div
         onClick={() => {
+          dispatch(setshowFavorited(true))
           loadGame(i, true);
           playSeClick();
         }}
