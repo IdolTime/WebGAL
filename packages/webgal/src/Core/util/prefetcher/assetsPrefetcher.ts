@@ -51,7 +51,7 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
           }
         };
         // @ts-ignore
-        if (window.isIOSDevice) {
+        if (window.isSafari) {
           fetch(asset.url).then(onloadCallback).catch(onerrorCallback);
         } else {
           const newLink = document.createElement('link');

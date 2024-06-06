@@ -61,14 +61,41 @@ export const scriptExecutor = () => {
 
   const interpolationOneItem = (content: string): string => {
     let retContent = content;
-    const contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
+
+    let contentExp: string[] | null;
+
+    // @ts-ignore
+    if (window.isSafari) {
+      // Safari 兼容性方案
+      const allMatches = retContent.match(/\{.*?\}/g);
+      if (allMatches) {
+        contentExp = allMatches.filter((match, index) => {
+          // 找到匹配项在字符串中的位置
+          const matchIndex = retContent.indexOf(
+            match,
+            index ? retContent.indexOf(allMatches[index - 1]) + allMatches[index - 1].length : 0,
+          );
+          // 确保匹配项前面没有未转义的反斜杠
+          return matchIndex === 0 || retContent[matchIndex - 1] !== '\\';
+        });
+      } else {
+        contentExp = null;
+      }
+    } else {
+      // 非Safari浏览器使用原来的正则表达式
+      contentExp = retContent.match(/(?<!\\)\{(.*?)\}/g);
+    }
 
     if (contentExp !== null) {
       contentExp.forEach((e) => {
-        const contentVarValue = getValueFromState(e.replace(/(?<!\\)\{(.*)\}/, '$1'));
+        const contentVarValue = getValueFromState(
+          // @ts-ignore
+          window.isSafari ? e.slice(1, -1) : e.replace(/(?<!\\)\{(.*)\}/, '$1'),
+        );
         retContent = retContent.replace(e, contentVarValue ? contentVarValue.toString() : e);
       });
     }
+
     retContent = retContent.replace(/\\{/g, '{').replace(/\\}/g, '}');
     return retContent;
   };
