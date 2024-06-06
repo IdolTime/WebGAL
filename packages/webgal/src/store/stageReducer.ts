@@ -56,6 +56,7 @@ export const initState: IStageState = {
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
+  currentVideoIndex: 0, // 当前视频播放索引
 };
 
 /**
@@ -173,47 +174,13 @@ const stageSlice = createSlice({
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
       state.replacedUIlable[action.payload[0]] = action.payload[1];
     },
+    setVideoIndex: (state, action: PayloadAction<number>) => {
+      state.currentVideoIndex = action.payload;
+    }
   },
 });
 
-export const { resetStageState, setStage, setStageVar } = stageSlice.actions;
+export const { resetStageState, setStage, setStageVar, setVideoIndex } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
 
-// /**
-//  * 创建舞台的状态管理
-//  * @return {IStageState} 舞台状态
-//  * @return {function} 改变舞台状态
-//  */
-// export function stageStateStore():StageStore {
-//     const [stageState, setStageState] = useState(_.cloneDeep(initState));
-//
-//     /**
-//      * 设置舞台状态，以后会改
-//      * @param key
-//      * @param value
-//      */
-//     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
-//
-//         setStageState(state => {
-//             state[key] = value;
-//             return {...state};
-//         });
-//
-//     };
-//
-//     const getStageState = () => {
-//         return stageState;
-//     };
-//
-//     const restoreStage = (newState: IStageState) => {
-//         setStageState((state) => ({ ...state, ...newState }));
-//     };
-//
-//     return {
-//         stageState,
-//         setStage,
-//         getStageState,
-//         restoreStage,
-//     };
-// }

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { CloseSmall } from '@icon-park/react';
-import { ExtraBgm } from '@/UI/Extra/ExtraBgm';
-import { ExtraCg } from './ExtraCg';
+// import { ExtraBgm } from '@/UI/Extra/ExtraBgm';
+// import { ExtraCg } from './ExtraCg';
+import { ExtraVideo } from './ExtraVideo'
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 
@@ -34,8 +35,9 @@ export function Extra() {
             <div className={styles.extra_title}>{t('title')}</div>
           </div>
           <div className={styles.mainContainer}>
-            <ExtraCg />
-            <ExtraBgm />
+            {/* <ExtraCg />
+            <ExtraBgm /> */}
+            <ExtraVideo />
           </div>
         </div>
       )}

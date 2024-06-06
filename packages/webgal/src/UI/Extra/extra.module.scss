@@ -277,3 +277,75 @@ $endTransform: scale(1, 1) translate3d(0, 0, 0);
     transform: $endTransform;
   }
 }
+
+//----------------- ExtraVideo -------------------//
+
+
+
+//----------------- editDialog ------------------//
+.editDialogMark {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.editDialog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .editDialog_content {
+    display: flex;
+    align-items: center;
+    width: 800px;
+    min-height: 230px;
+    background-color: #b7c3cf;
+    padding: 50px 35px;
+
+
+    & label {
+      font-size: 40px;
+      
+    }
+
+    & input {
+      display: block;
+      height: 68px;
+      font-size: 40px;
+    }
+    
+  }
+
+  .editDialog_footer {
+    display: flex;
+    justify-content: space-around;
+    width: 800px;
+    padding: 50px;
+    background-color: #b7c3cf;
+
+    .button {
+      font-size: 40px;
+      display: flex;
+      align-items: center;
+      width: 180px;
+      justify-content: center;
+      background-color: #51A8DD;
+      border-radius: 10px;
+      padding: 10px 20px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+  }
+}

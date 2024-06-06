@@ -29,6 +29,7 @@ export interface IGuiState {
   showPanicOverlay: boolean;
   isEnterGame: boolean;
   isShowLogo: boolean;
+  showFavorited: boolean; // 显示收藏
 }
 
 export type componentsVisibility = Pick<
