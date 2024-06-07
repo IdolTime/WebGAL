@@ -79,6 +79,12 @@
      */
     const ua = navigator.userAgent;
     const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    function isSafari() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.includes('safari') && !ua.includes('chrome') && !ua.includes('android');
+    }
+    window.isSafari = isSafari();
+    window.isIOSDevice = isIOSDevice;
     function resize() {
       const targetHeight = 1440;
       const targetWidth = 2560;
@@ -178,6 +184,11 @@
       style.type = 'text/css';
       style.textContent = '* { font-synthesis: none !important; }';
       document.head.appendChild(style);
+      const root = document.getElementById('root');
+      root.style.position = 'absolute';
+      root.style.left = '50%';
+      root.style.top = '50%';
+      root.style.transform = 'translate(-50%,-50%)';
     }
 
   </script>
@@ -187,7 +198,7 @@
      */
     const u = navigator.userAgent;
     const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
-    if ("serviceWorker" in navigator && !isIOS) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./webgal-serviceworker.js").then(function (reg) {
         // registration worked
         console.log("Registration succeeded. Scope is " + reg.scope);

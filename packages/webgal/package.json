@@ -15,6 +15,7 @@
     "angular-expressions": "^1.1.5",
     "axios": "^0.28.0",
     "cloudlogjs": "^1.0.9",
+    "crypto-js": "^4.2.0",
     "flv.js": "^1.6.2",
     "i18next": "^22.4.15",
     "localforage": "^1.10.0",
