@@ -9,7 +9,8 @@ export default function Translation() {
   const [isShowSelectLanguage, setIsShowSelectLanguage] = useState(false);
 
   useEffect(() => {
-    const lang = window?.localStorage.getItem('lang');
+    // TEMP: 禁用多语言
+    const lang = window?.localStorage.getItem('lang') || '0';
     if (!lang) {
       setIsShowSelectLanguage(true);
     } else {

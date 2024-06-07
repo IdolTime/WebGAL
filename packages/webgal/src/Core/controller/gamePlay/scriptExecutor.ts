@@ -61,7 +61,6 @@ export const scriptExecutor = () => {
 
   const interpolationOneItem = (content: string): string => {
     let retContent = content;
-
     let contentExp: string[] | null;
 
     // @ts-ignore
