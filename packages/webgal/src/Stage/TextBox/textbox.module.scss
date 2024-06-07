@@ -144,7 +144,7 @@ $height: 330px;
   // font-size: 85%;
   position: absolute;
   left: px2(220px) !important;
-  top: px2(180px) !important;
+  top: px2(190px) !important;
   line-height: normal;
   z-index: 3;
   color: #C5B898;
@@ -154,6 +154,17 @@ $height: 330px;
   .outerName {
     color: #C5B898;
   }
+}
+
+.TextBox_showName_avatar {
+  left: px2(246px) !important;
+  top: px2(165px) !important;
+}
+
+.TextBox_showName_player {
+  left: auto !important;
+  right: px2(212px) !important;
+  top: px2(190px) !important;
 }
 
 .TextBox_ShowName_Background {
@@ -239,6 +250,14 @@ $height: 330px;
   margin: px2(233px) auto px2(10px) auto;
   background-image: url('@/assets/imgs/dialogue-default.png');
   background-size: cover;
+}
+
+.line_avatar {
+  margin: px2(207px) auto px2(14px) auto;
+}
+
+.line_hide {
+  background-image: none;
 }
 
 .text {

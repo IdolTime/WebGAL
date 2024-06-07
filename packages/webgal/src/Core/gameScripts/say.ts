@@ -25,6 +25,7 @@ export const say = (sentence: ISentence): IPerform => {
   const speaker = getSentenceArgByKey(sentence, 'speaker'); // 获取说话者
   const clear = getSentenceArgByKey(sentence, 'clear'); // 是否清除说话者
   const vocal = getSentenceArgByKey(sentence, 'vocal'); // 是否播放语音
+  const mode = getSentenceArgByKey(sentence, 'mode'); // 对话模式，旁白，角色，玩家
 
   // 如果是concat，那么就继承上一句的key，并且继承上一句对话。
   if (isConcat) {
@@ -38,6 +39,7 @@ export const say = (sentence: ISentence): IPerform => {
   // 设置文本显示
   dispatch(setStage({ key: 'showText', value: dialogToShow }));
   dispatch(setStage({ key: 'vocal', value: '' }));
+  dispatch(setStage({ key: 'dialogueMode', value: mode }));
 
   // 清除语音
   if (!(userDataState.optionData.voiceInterruption === voiceOption.no && vocal === null)) {
@@ -75,6 +77,9 @@ export const say = (sentence: ISentence): IPerform => {
   let showName: string | number | boolean = stageState.showName; // 先默认继承
   if (speaker !== null) {
     showName = speaker;
+  }
+  if (mode === 'player') {
+    showName = '我';
   }
   if (clear) {
     showName = '';

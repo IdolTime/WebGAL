@@ -66,6 +66,7 @@ export const TextBox = () => {
   const currentDialogKey = stageState.currentDialogKey;
   const miniAvatar = stageState.miniAvatar;
   const textboxOpacity = userDataState.optionData.textboxOpacity;
+  const dialogueMode = stageState.dialogueMode;
   const Textbox = IMSSTextbox;
   return (
     <Textbox
@@ -85,6 +86,7 @@ export const TextBox = () => {
       lineLimit={lineLimit}
       isUseStroke={isShowStroke}
       textboxOpacity={textboxOpacity}
+      dialogueMode={dialogueMode}
     />
   );
 };

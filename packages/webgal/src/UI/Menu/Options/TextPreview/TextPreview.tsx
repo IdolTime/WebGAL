@@ -43,6 +43,7 @@ export const TextPreview = (props: any) => {
     lineLimit: 3,
     isUseStroke: true,
     textboxOpacity: textboxOpacity,
+    dialogueMode: 'role',
   };
 
   return (

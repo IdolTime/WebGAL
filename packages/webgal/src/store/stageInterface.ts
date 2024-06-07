@@ -129,6 +129,7 @@ export interface IStageState {
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
   showText: string; // 文字
   showTextSize: number; // 文字
+  dialogueMode: string;
   showName: string; // 人物名
   command: string; // 语句指令
   choose: Array<IChooseItem>; // 选项列表

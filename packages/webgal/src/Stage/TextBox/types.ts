@@ -17,4 +17,5 @@ export interface ITextboxProps {
   lineLimit: number;
   isUseStroke: boolean;
   textboxOpacity: number;
+  dialogueMode: string;
 }

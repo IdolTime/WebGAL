@@ -20,6 +20,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textDuration,
     isUseStroke,
     textboxOpacity,
+    dialogueMode,
   } = props;
 
   const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
@@ -117,6 +118,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
             }}
           >
             <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
+              <div />
               {miniAvatar !== '' && (
                 <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
               )}
@@ -144,7 +146,12 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     })}
                   </div>
                 </div>
-                <div key={showName} className={applyStyle('TextBox_showName', styles.TextBox_showName)}>
+                <div
+                  key={showName}
+                  className={`${styles.TextBox_showName} ${miniAvatar ? styles.TextBox_showName_avatar : ''} ${
+                    dialogueMode === 'player' ? styles.TextBox_showName_player : ''
+                  }`}
+                >
                   {showName.split('').map((e, i) => {
                     return (
                       <span key={e + i} style={{ position: 'relative' }}>
@@ -159,7 +166,11 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 </div>
               </>
             )}
-            <div className={styles.line} />
+            <div
+              className={`${styles.line} ${dialogueMode === 'narrator' ? styles.line_hide : ''} ${
+                miniAvatar ? styles.line_avatar : ''
+              }`}
+            />
             <div
               className={applyStyle('text', styles.text)}
               style={{
