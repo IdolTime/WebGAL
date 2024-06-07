@@ -2,72 +2,47 @@
 .Save_Load_main {
   position: absolute;
   cursor: default;
-  width: px2(1920px);
-  height: px2(1080px);
+  width: px2(1280px);
+  height: px2(720px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/background.png');
 }
 
-.Save_Load_top {
-  height: 10%;
-  width: 100%;
-  display: flex;
-  animation: Elements_in ease-out 1s forwards;
-  justify-content: center;
-}
-
-.Save_Load_title_save {
+.Common_back {
   position: absolute;
-  top: px2(37px);
-  left: px2(43px);
+  top: 0;
+  left: px2(-26px);
   cursor: pointer;
-  width: px2(539px);
-  height: px2(120px);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('@/assets/imgs/save-title.png');
-}
-
-.Save_back {
-  position: absolute;
-  top: px2(73px);
-  left: px2(43px);
-  cursor: pointer;
-  width: px2(68px);
-  height: px2(68px);
+  width: px2(105px);
+  height: px2(58px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/back.png');
   z-index: 2;
+  &:hover {
+    background-image: url('@/assets/imgs/back-r.png');
+  }
 }
 
-.Save_title {
+.Common_title {
   position: absolute;
-  top: px2(37px);
-  left: px2(100px);
-  cursor: pointer;
-  width: px2(377px);
-  height: px2(133px);
+  top: px2(18px);
+  left: px2(47px);
+  width: px2(344px);
+  height: px2(87px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.Save_title {
   background-image: url('@/assets/imgs/save-title.png');
 }
 
 .Load_title {
-  position: absolute;
-  top: px2(37px);
-  left: px2(100px);
-  cursor: pointer;
-  width: px2(377px);
-  height: px2(133px);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   background-image: url('@/assets/imgs/load-title.png');
 }
 
@@ -90,106 +65,72 @@
 }
 
 .Save_Load_top_buttonList {
-  width: px2(632px);
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: px2(644px);
-  bottom: px2(36px);
-  height: px2(43px);
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: px2(14px);
+}
+
+.Save_Load_indicator_container {
   display: flex;
+  align-items: center;
+  gap: px2(30px);
 }
 
 .Save_Load_top_button {
-  width: px2(20px);
-  height: px2(20px);
-  margin: 0 px2(32px);
-  font-weight: bold;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('@/assets/imgs/point-default.png');
+  width: px2(29px);
+  height: px2(29px);
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.Save_Load_top_button:first-child > div {
-  border-left: 2px solid rgba(0, 0, 0, 0);
+.Save_Load_indicator_default {
+  width: px2(13px);
+  height: px2(13px);
+  background-image: url('@/assets/imgs/point-default.png');
 }
 
-.Save_Load_top_button_on {
-  width: px2(43px);
-  height: px2(43px);
-  font-weight: bold;
+.Save_Load_indicator_active {
+  width: px2(29px);
+  height: px2(29px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/point-active.png')!important;
 }
 
-.Save_Load_top_button:hover {
-  color: #77428D;
-  font-weight: bold;
-  // border-bottom: 4px solid #77428D;
-}
-
-.Load_top_button_on {
-  font-weight: bold;
-  // border-bottom: 5px solid #005CAF;
-  color: #005CAF;
-  background-color: rgba(0, 92, 175, 0.1);
-}
-
-.Load_top_button:hover {
-  color: #005CAF;
-  font-weight: bold;
-  // border-bottom: 5px solid #005CAF;
-}
-
 .Save_Load_content {
   height: auto;
   width: 100%;
   position: absolute;
-  top: px2(203px);
+  top: px2(102px);
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  padding-left: px2(170px);
-  padding-right: px2(170px);
+  padding-left: px2(53px);
+  padding-right: px2(45px);
   box-sizing: border-box;
 }
 
 .Save_Load_content_element {
-  width: px2(467px);
-  height: px2(408px);
+  width: px2(359px);
+  height: px2(233px);
   animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out;
   opacity: 0;
-  border-radius: 4px;
   transition: transform 0.25s, box-shadow 0.25s;
   position: relative;
-  margin-right: px2(86px);
+  margin-right: px2(33.5px);
+  margin-bottom: px2(37px);
   &:nth-child(3n) {
     margin-right: 0;
   }
   cursor: pointer;
-}
-
-.Save_Load_content_element:hover {
-  .Save_Load_border {
-    width: px2(550px);
-    height: px2(348px);
-    top: px2(-48px);
-    left: px2(-48px);
-    background-image: url('@/assets/imgs/border-active.png');
-    z-index: -1;
-  }
-  .Save_Load_info_box {
-    display: block;
-  }
-  .Save_Load_content_miniRen {
-    background-image: url('@/assets/imgs/bg-active.png');
-  }
 }
 
 .Save_Load_content_element_top {
@@ -255,117 +196,89 @@
   align-items: flex-start;
 }
 .Save_Load_info {
-  width: 100%;
-  height: px2(159px);
-  padding: px2(45.5px) 0;
-}
-.Save_Load_info_box {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: px2(227px);
+  width: px2(300px);
+  color: #C6BAD9;
+  text-align: center;
+  font-family: Inter;
+  font-size: px2(24px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: px2(30px); /* 125% */
   transition: all ease 0.3s;
-  display: none;
 }
-
-.Save_Load_content_text_padding {
-  padding: 0.2em 0.75em 0.2em 0.75em;
-}
-
-.Save_Load_content_speaker {
-  box-sizing: border-box;
-  font-weight: bold;
-  color: #77428D;
-  padding: 0.35em 0.8em 0.25em 0.8em;
-  width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.Load_content_speaker {
-  color: #005caf;
-}
-
-.Load_content_text {
-  background-color: rgba(0, 92, 175, 0.75);
-}
-
-.Save_Load_content_miniRen {
-  position: relative;
-  background-size: cover;
-  width: px2(467px);
-  height: px2(249px);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('@/assets/imgs/save-load-bg.png');
-  transition: all ease 0.3s;
-  z-index: 9;
-}
-
 .Save_Load_content_space {
   position: relative;
   background-size: cover;
-  width: px2(467px);
-  height: px2(249px);
-  background-size: cover;
+  width: px2(369px);
+  height: px2(233px);
+  padding: px2(14px) px2(11.5px) px2(20px) px2(11.5px);
+}
+
+.Save_Load_content_wrapper {
+  width: 100%;
+  height: 100%;
+  &:hover {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('@/assets/imgs/saves-hover-bg.png');
+  }
+  padding: px2(21px) px2(18px) px2(19px) px2(17px);
+}
+.Save_Load_content_ele {
+  width: 100%;
+  height: 100%;
   background-repeat: no-repeat;
-  background-position: center;
+  background-size: cover;
   background-image: url('@/assets/imgs/save-load-bg.png');
 }
 
 .Save_Load_content_miniRen_bg {
+  margin-top: px2(35px);
+  margin-left: px2(31px);
   background-size: cover;
-  height: 100%;
-  width: 100%;
+  height: px2(159px);
+  width: px2(313px);
   background-position: center;
-}
-
-.Save_Load_content_miniRen_figure {
-  height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  position: absolute;
-  bottom: 0;
-}
-
-.Save_Load_content_miniRen_figLeft {
-  bottom: 0;
-  left: 0;
-}
-
-.Save_Load_content_miniRen_figRight {
-  bottom: 0;
-  right: 0;
+  position: relative;
+  z-index: 10;
 }
 
 .Save_Load_border {
-  width: px2(519px);
-  height: px2(295px);
+  width: 100%;
+  height: 100%;
   position: absolute;
-  top: px2(-26px);
-  left: px2(-26px);
+  top: 0;
+  left: 0;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/border-bg.png');
+  background-image: url('@/assets/imgs/border-active.png');
   z-index: 2;
   transition: all ease 0.3s;
 }
 
-.Btn_l {
-  width: px2(47px);
-  height: px2(28px);
+.Btn {
+  width: px2(105px);
+  height: px2(58px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/cg-bottom-left.png');
+  background-image: url('@/assets/imgs/back.png');
   cursor: pointer;
+  margin-right: px2(38px);
+  &:hover {
+    background-image: url('@/assets/imgs/back-r.png');
+  }
 }
 
 .Btn_r {
-  width: px2(47px);
-  height: px2(28px);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('@/assets/imgs/cg-bottom-right.png');
-  cursor: pointer;
+  margin-right: 0;
+  margin-left: px2(38px);
+  transform: rotate(180deg);
 }
 
 @keyframes Elements_in {

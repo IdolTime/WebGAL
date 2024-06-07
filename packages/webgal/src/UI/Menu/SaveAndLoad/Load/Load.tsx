@@ -17,10 +17,6 @@ export const Load: FC = () => {
   const dispatch = useDispatch();
   const page = [];
   for (let i = 1; i <= 4; i++) {
-    let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
-    if (i === userDataState.optionData.slPage) {
-      classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on;
-    }
     const element = (
       <div
         onClick={() => {
@@ -30,9 +26,15 @@ export const Load: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'Load_element_page' + i}
-        className={classNameOfElement}
+        className={styles.Save_Load_top_button}
       >
-        <div className={styles.Save_Load_top_button_text} />
+        <div
+          className={
+            i === userDataState.optionData.slPage
+              ? styles.Save_Load_indicator_active
+              : styles.Save_Load_indicator_default
+          }
+        />
       </div>
     );
     page.push(element);
@@ -51,32 +53,22 @@ export const Load: FC = () => {
   for (let i = start; i <= end; i++) {
     animationIndex++;
     const saveData = saveDataState.saveData[i];
-    let saveElementContent = <div className={styles.Save_Load_content_space} />;
+    let saveElementContent = (
+      <div className={styles.Save_Load_content_space}>
+        <div className={styles.Save_Load_content_wrapper}>
+          <div className={styles.Save_Load_content_ele} />
+        </div>
+      </div>
+    );
     if (saveData) {
-      const speaker = saveData.nowStageState.showName === '' ? '\u00A0' : `${saveData.nowStageState.showName}`;
       saveElementContent = (
         <>
-          {/* <div className={styles.Save_Load_content_element_top}>
-            <div className={styles.Save_Load_content_element_top_index + ' ' + styles.Load_content_elememt_top_index}>
-              {saveData.index}
-            </div>
-            <div className={styles.Save_Load_content_element_top_date + ' ' + styles.Load_content_element_top_date}>
-              {saveData.saveTime}
-            </div>
-          </div> */}
           <div className={styles.Save_Load_border} />
-          <div className={styles.Save_Load_content_miniRen}>
-            <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
-          </div>
-          {/* <div className={styles.Save_Load_content_text}>
-            <div className={styles.Save_Load_content_speaker + ' ' + styles.Load_content_speaker}>{speaker}</div>
-            <div className={styles.Save_Load_content_text_padding}>{saveData.nowStageState.showText}</div>
-          </div> */}
+          <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
           <div className={styles.Save_Load_info}>
-            <div className={styles.Save_Load_info_box}>
-              <div className={styles.Save_Load_content_element_top_date}>{saveData.saveTime}</div>
-              <div className={styles.Save_Load_content_element_top_date}>{saveData.nowStageState.showText}</div>
-            </div>
+            {saveData.saveTime}
+            {'\n'}
+            {saveData.nowStageState.showText}
           </div>
         </>
       );
@@ -115,24 +107,27 @@ export const Load: FC = () => {
 
   return (
     <div className={styles.Save_Load_main}>
-      <div className={styles.Save_Load_top}>
+      <div className={`${styles.Common_title} ${styles.Load_title}`}>
         <div
-          className={styles.Save_back}
+          className={styles.Common_back}
           onClick={() => {
             playSeClick();
             dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
           }}
           onMouseEnter={playSeEnter}
         />
-        <div className={styles.Load_title} />
       </div>
       <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
       </div>
       <div className={styles.Save_Load_top_buttonList}>
-        <div className={styles.Btn_l} onClick={() => handleBtnClick('left')} />
-        {page}
-        <div className={styles.Btn_r} onClick={() => handleBtnClick('right')} />
+        <div className={styles.Btn} onMouseEnter={playSeEnter} onClick={() => handleBtnClick('left')} />
+        <div className={styles.Save_Load_indicator_container}>{page}</div>
+        <div
+          className={`${styles.Btn} ${styles.Btn_r}`}
+          onMouseEnter={playSeEnter}
+          onClick={() => handleBtnClick('right')}
+        />
       </div>
     </div>
   );

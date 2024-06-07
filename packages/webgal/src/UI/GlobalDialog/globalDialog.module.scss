@@ -16,19 +16,19 @@
 
 .glabalDialog_container_inner {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-flow: column;
-  width: px2(634px);
-  height: px2(401px);
+  width: px2(607px);
+  height: px2(348px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/dialog-bg.png');
+  position: relative;
 }
 
 .glabalDialog_container {
-  height: 20%;
+  height: 80%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -36,59 +36,44 @@
 }
 
 .title {
-  color: #000;
+  color: #5A536E;
   font-family: Inter;
   font-size:  px2(28px);
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-top: px2(50px);
-  margin-bottom: px2(120px);
+  margin-top: px2(88px);
 }
 
 .button_list {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  bottom: px2(30px);
+  gap: px2(78px)
   // margin-top: px2(50px);
 }
 
-.button_confirm {
-  width: px2(177px);
-  height: px2(62px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.button {
+  width: px2(172px);
+  height: px2(78px);
+  text-align: center;
+  padding-top: px2(22px);
   font-size: px2(28px);
-  color: #fff;
+  color: #4E4B6C;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/dialog-confirm.png');
-  margin-right: px2(110px);
+  background-image: url('@/assets/imgs/menu-button-default.png');
   cursor: pointer;
+  transition: transform 0.33s ease-in-out;
+  &:hover {
+    background-image: url('@/assets/imgs/menu-button-active.png');
+    color: #fff;
+    transform: scale(1.1, 1.1);
+  }
 }
-
-.button_cancel {
-  width: px2(177px);
-  height: px2(62px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: px2(28px);
-  color: #fff;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('@/assets/imgs/dialog-cancel.png');
-  cursor: pointer;
-}
-
-.button:hover {
-  transform: scale(1.1, 1.1);
-}
-
-
 
 @keyframes showGlobalDialog {
   0% {

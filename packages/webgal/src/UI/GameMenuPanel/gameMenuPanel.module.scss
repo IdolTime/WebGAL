@@ -20,7 +20,7 @@
         &:hover {
             cursor: pointer;
             transform: scale(1.5);
-            background-image: url('@/assets/imgs/menu-icon-unselect.png') !important;
+            background-image: url('@/assets/imgs/menu-icon-active.png') !important;
         }
     }
 }
@@ -46,7 +46,7 @@
         top: 0;
         right: 0;
         z-index: 22;
-        width: px2(566px);
+        width: px2(316px);
         height: 100%;
         background-image: url('@/assets/imgs/menu-bg.png');
         background-repeat: no-repeat;
@@ -64,25 +64,27 @@
             z-index: 99;
     
             .button {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: px2(237px);
-                height: px2(76px);
+                padding-top: px2(22px);
+                width: px2(172px);
+                height: px2(78px);
                 background-image: url('@/assets/imgs/menu-button-default.png');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
-                color: #fff;
-                font-size: px2(35px);
-                margin-bottom: px2(45px);
+                color: #4E4B6C;
+                font-size: px2(28px);
+                margin-bottom: px2(2px);
+                text-align: center;
+                transition: transform 0.33s ease-in-out;
     
                 &:hover {
+                    color: #fff;
                     cursor: pointer;
                     background-image: url('@/assets/imgs/menu-button-active.png');
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
+                    transform: scale(1.1);
                 }
             }
         }

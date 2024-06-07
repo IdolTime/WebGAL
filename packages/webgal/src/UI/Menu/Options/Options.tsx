@@ -18,24 +18,29 @@ export const Options: FC = () => {
 
   return (
     <div className={styles.Options_main}>
-      <div
-        className={styles.Save_back}
-        onClick={() => {
-          playSeClick();
-          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-        }}
-        onMouseEnter={playSeEnter}
-      />
-      <div className={styles.Options_top} />
+      <div className={styles.Options_top}>
+        <div
+          className={styles.Save_back}
+          onClick={() => {
+            playSeClick();
+            dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+          }}
+          onMouseEnter={playSeEnter}
+        />
+      </div>
       <div className={styles.Options_page_container}>
         {/* 基础设置 */}
         <div className={styles.Options_left}>
-          <div className={styles.title_base} />
-          <div className={styles.Line}>
+          <div className={`${styles.title_wrapper} ${styles.title_wrapper_left}`}>
+            <div className={styles.star} />
+            <div className={styles.title_base} />
+            <div className={styles.star} />
+          </div>
+          <div className={`${styles.Row} ${styles.Row_padding}`}>
             <div className={styles.Label}>画面模式</div>
             <div className={styles.Check_line}>
               <div className={styles.Check_item}>
-                <div className={styles.Check_name}>全屏</div>
+                <div className={`${styles.Label} ${styles.Label_fullscreen}`}>全屏</div>
                 <div
                   className={styles.Check_box}
                   onClick={() => {
@@ -47,7 +52,7 @@ export const Options: FC = () => {
                 </div>
               </div>
               <div className={styles.Check_item}>
-                <div className={styles.Check_name}>窗口化</div>
+                <div className={`${styles.Label} ${styles.Label_window}`}>窗口</div>
                 <div
                   className={styles.Check_box}
                   onClick={() => {
@@ -60,23 +65,8 @@ export const Options: FC = () => {
               </div>
             </div>
           </div>
-          {/* <div className={styles.Line}>
-            <div className={styles.Label}>快进模式</div>
-            <div className={styles.Check_line}>
-              <div className={styles.Check_item}>
-                <div className={styles.Check_name} />
-                <div className={styles.Check_box} />
-              </div>
-              <div className={styles.Check_item}>
-                <div className={styles.Check_name} />
-                <div className={styles.Check_box} />
-              </div>
-            </div>
-          </div> */}
-          {/* <TextPreview /> */}
-          <div className={styles.LabelLine}></div>
-          <div className={`${styles.Bar_line} ${styles.Check_line}`}>
-            <div className={styles.Label_text_speed}>文本播放速度</div>
+          <div className={styles.Bar_line}>
+            <div className={`${styles.Label} ${styles.Label_text_speed}`}>文本播放速度</div>
             <OptionSlider
               initValue={userDataState.optionData.textSpeed}
               uniqueID="文本播放速度"
@@ -90,8 +80,12 @@ export const Options: FC = () => {
         </div>
         {/* 音效设置 */}
         <div className={styles.Options_right}>
-          <div className={styles.title_voice} />
-          <div className={styles.Bar_line}>
+          <div className={`${styles.title_wrapper} ${styles.title_wrapper_right}`}>
+            <div className={styles.star} />
+            <div className={styles.title_voice} />
+            <div className={styles.star} />
+          </div>
+          <div className={styles.Row}>
             <div className={styles.Label}>全局音量</div>
             <OptionSlider
               initValue={userDataState.optionData.volumeMain}
@@ -103,7 +97,7 @@ export const Options: FC = () => {
               }}
             />
           </div>
-          <div className={styles.Bar_line}>
+          <div className={styles.Row}>
             <div className={styles.Label}>背景音量</div>
             <OptionSlider
               initValue={userDataState.optionData.bgmVolume}
@@ -115,7 +109,7 @@ export const Options: FC = () => {
               }}
             />
           </div>
-          <div className={styles.Bar_line}>
+          <div className={styles.Row}>
             <div className={styles.Label}>音效</div>
             <OptionSlider
               initValue={userDataState.optionData.seVolume}
@@ -128,7 +122,7 @@ export const Options: FC = () => {
               }}
             />
           </div>
-          <div className={styles.Bar_line}>
+          <div className={styles.Row}>
             <div className={styles.Label}>角色语音</div>
             <OptionSlider
               initValue={userDataState.optionData.vocalVolume}

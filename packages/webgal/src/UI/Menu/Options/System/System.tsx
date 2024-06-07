@@ -63,9 +63,10 @@ export function System() {
         playSeDialogOpen();
         showGlogalDialog({
           title: t('gameSave.dialogs.import.title'),
-          leftText: t('$common.yes'),
-          rightText: t('$common.no'),
-          leftFunc: async () => {
+          leftText: t('$common.no'),
+          rightText: t('$common.yes'),
+          leftFunc: () => {},
+          rightFunc: async () => {
             await localforage.setItem(WebGAL.gameKey, saveAsObj.userData).then(() => {
               logger.info(t('gameSave.dialogs.import.tip'));
             });
@@ -75,7 +76,6 @@ export function System() {
             dumpFastSaveToStorage();
             dumpSavesToStorage(0, 200);
           },
-          rightFunc: () => {},
         });
       } catch (e) {
         logger.error(t('gameSave.dialogs.import.error'), e);
@@ -144,43 +144,43 @@ export function System() {
                   playSeDialogOpen();
                   showGlogalDialog({
                     title: t('resetData.dialogs.clearGameSave'),
-                    leftText: t('$common.yes'),
-                    rightText: t('$common.no'),
-                    leftFunc: () => {
+                    leftText: t('$common.no'),
+                    rightText: t('$common.yes'),
+                    leftFunc: () => {},
+                    rightFunc: () => {
                       dispatch(saveActions.resetSaves());
                       dumpSavesToStorage(0, 200);
                       dumpFastSaveToStorage();
                     },
-                    rightFunc: () => {},
                   });
                 },
                 () => {
                   playSeDialogOpen();
                   showGlogalDialog({
                     title: t('resetData.dialogs.resetSettings'),
-                    leftText: t('$common.yes'),
-                    rightText: t('$common.no'),
-                    leftFunc: () => {
+                    leftText: t('$common.no'),
+                    rightText: t('$common.yes'),
+                    leftFunc: () => {},
+                    rightFunc: () => {
                       dispatch(resetOptionSet());
                       dumpToStorageFast();
                     },
-                    rightFunc: () => {},
                   });
                 },
                 () => {
                   playSeDialogOpen();
                   showGlogalDialog({
                     title: t('resetData.dialogs.clearAll'),
-                    leftText: t('$common.yes'),
-                    rightText: t('$common.no'),
-                    leftFunc: () => {
+                    leftText: t('$common.no'),
+                    rightText: t('$common.yes'),
+                    leftFunc: () => {},
+                    rightFunc: () => {
                       dispatch(resetAllData());
                       dumpToStorageFast();
                       dispatch(saveActions.resetSaves());
                       dumpSavesToStorage(0, 200);
                       dumpFastSaveToStorage();
                     },
-                    rightFunc: () => {},
                   });
                 },
               ]}

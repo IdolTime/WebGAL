@@ -43,15 +43,15 @@ export function ExtraCgElement(props: IProps) {
         }}
         onMouseEnter={playSeEnter}
         key={props.name}
-        className={styles.cgElement}
+        className={`${styles.cgElement} ${styles.cgUnLockElement}`}
       >
-        <img src={cgUnLock} alt="" style={{width: '100%'}} />
         <div
           style={{
             background: `url('${props.imgUrl}') no-repeat center center`,
             backgroundSize: `cover`,
+            height: '100%',
+            transform: 'translateX(30px);',
           }}
-          className={styles.cgUnLock}
         />
       </div>
     </>

@@ -68,7 +68,6 @@ export const BottomControlPanel = () => {
           {/* {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
-              style={{ fontSize }}
               onClick={() => {
                 setComponentVisibility('showTextBox', false);
                 playSeClick();
@@ -88,7 +87,6 @@ export const BottomControlPanel = () => {
           {/* {!GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
-              style={{ fontSize }}
               onClick={() => {
                 setComponentVisibility('showTextBox', true);
                 playSeClick();
@@ -107,7 +105,6 @@ export const BottomControlPanel = () => {
           )} */}
           {/* <span
             className={styles.singleButton}
-            style={{ fontSize }}
             onClick={() => {
               let VocalControl: any = document.getElementById('currentVocal');
               if (VocalControl !== null) {
@@ -130,8 +127,7 @@ export const BottomControlPanel = () => {
           </span> */}
           <span
             id="Button_ControlPanel_fast"
-            className={styles.singleButton}
-            style={{ fontSize }}
+            className={`${styles.singleButton} ${styles.singleButton_fast}`}
             title="快进"
             onClick={() => {
               switchFast();
@@ -139,12 +135,11 @@ export const BottomControlPanel = () => {
             }}
             onMouseEnter={playSeEnter}
           >
-            <span className={styles.fastIcon}></span>
+            <span className={styles.fastIcon} />
           </span>
           <span
             id="Button_ControlPanel_auto"
-            className={styles.singleButton}
-            style={{ fontSize }}
+            className={`${styles.singleButton} ${styles.singleButton_auto}`}
             title="自动"
             onClick={() => {
               switchAuto();
@@ -152,29 +147,27 @@ export const BottomControlPanel = () => {
             }}
             onMouseEnter={playSeEnter}
           >
-             <span className={styles.autoIcon}></span>
+            <span className={styles.autoIcon} />
           </span>
           <span
             className={styles.singleButton}
-            style={{ fontSize }}
             title="剧情回顾"
             onClick={() => {
               // 如果现在正在自动播放，则点击时先停止自动播放
               if (WebGAL.gameplay.isAuto) {
-                stopAuto()
+                stopAuto();
               }
-              
+
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
               playSeClick();
             }}
             onMouseEnter={playSeEnter}
           >
-            <span className={styles.historyIcon}></span>
+            <span className={styles.historyIcon} />
           </span>
           {/* <span
             className={styles.singleButton + ' ' + styles.fastsave}
-            style={{ fontSize }}
             onClick={() => {
               saveGame(0);
               playSeClick();
@@ -193,7 +186,6 @@ export const BottomControlPanel = () => {
           </span> */}
           {/* <span
             className={styles.singleButton + ' ' + styles.fastload}
-            style={{ fontSize }}
             onClick={() => {
               loadGame(0);
               playSeClick();
@@ -206,7 +198,6 @@ export const BottomControlPanel = () => {
           </span>
           <span
             className={styles.singleButton}
-            style={{ fontSize }}
             onClick={() => {
               setMenuPanel(MenuPanelTag.Save);
               setComponentVisibility('showMenuPanel', true);
@@ -219,7 +210,6 @@ export const BottomControlPanel = () => {
           </span> */}
           {/* <span
             className={styles.singleButton}
-            style={{ fontSize }}
             onClick={() => {
               setMenuPanel(MenuPanelTag.Load);
               setComponentVisibility('showMenuPanel', true);
@@ -238,7 +228,6 @@ export const BottomControlPanel = () => {
           </span> */}
           {/* <span
             className={styles.singleButton}
-            style={{ fontSize }}
             onClick={() => {
               setMenuPanel(MenuPanelTag.Option);
               setComponentVisibility('showMenuPanel', true);
@@ -257,7 +246,6 @@ export const BottomControlPanel = () => {
           </span> */}
           {/* <span
             className={styles.singleButton}
-            style={{ fontSize }}
             onClick={() => {
               playSeDialogOpen();
               showGlogalDialog({
@@ -277,7 +265,6 @@ export const BottomControlPanel = () => {
           </span> */}
           {/* <span
             className={styles.singleButton}
-            style={{ fontSize }}
             onClick={() => {
               switchControls();
               playSeClick();

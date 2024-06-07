@@ -81,13 +81,13 @@ export const GameMenuPanel = () => {
     playSeDialogOpen();
     showGlogalDialog({
       title: t('buttons.quitTips'),
-      leftText: t('$common.confirm'),
-      rightText: t('$common.cancel'),
-      leftFunc: () => {
+      leftText: t('$common.cancel'),
+      rightText: t('$common.confirm'),
+      leftFunc: () => {},
+      rightFunc: () => {
         setComponentVisibility('isShowGameMenu', false);
         backToTitle();
       },
-      rightFunc: () => {},
     });
   };
 

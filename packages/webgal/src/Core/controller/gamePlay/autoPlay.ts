@@ -12,9 +12,10 @@ import { WebGAL } from '@/Core/WebGAL';
 const setButton = (on: boolean) => {
   const autoIcon = document.getElementById('Button_ControlPanel_auto');
   if (autoIcon) {
+    let prefix = styles.singleButton + ' ' + styles.singleButton_auto;
     if (on) {
-      autoIcon.className = styles.button_on;
-    } else autoIcon.className = styles.singleButton;
+      autoIcon.className = prefix + ' ' + styles.singleButton_auto_active;
+    } else autoIcon.className = prefix;
   }
 };
 

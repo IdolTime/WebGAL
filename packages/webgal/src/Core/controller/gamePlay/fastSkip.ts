@@ -12,10 +12,11 @@ import { SYSTEM_CONFIG } from '@/config';
  */
 const setButton = (on: boolean) => {
   const autoIcon = document.getElementById('Button_ControlPanel_fast');
+  const prefix = styles.singleButton + ' ' + styles.singleButton_fast;
   if (autoIcon) {
     if (on) {
-      autoIcon.className = styles.button_on;
-    } else autoIcon.className = styles.singleButton;
+      autoIcon.className = prefix + ' ' + styles.singleButton_fast_active;
+    } else autoIcon.className = prefix;
   }
 };
 

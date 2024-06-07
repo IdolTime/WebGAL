@@ -82,7 +82,7 @@ export const Backlog = () => {
                   onMouseEnter={playSeEnter}
                   className={styles.backlog_item_button_element}
                 >
-                  <span className={styles.sound_icon}></span>
+                  <span className={styles.sound_icon} />
                 </div>
               ) : null}
             </div>
@@ -140,8 +140,13 @@ export const Backlog = () => {
           ${indexHide ? styles.Backlog_main_out_IndexHide : ''}
           `}
         >
-          <div className={styles.backlog_top}>
-            <span
+          <div
+            className={styles.backlog_title}
+            onClick={() => {
+              logger.info('Rua! Testing');
+            }}
+          >
+            <div
               className={styles.backlog_top_icon}
               onClick={() => {
                 playSeClick();
@@ -153,16 +158,9 @@ export const Backlog = () => {
               // size="4em"
               // fill="#ffffff"
               // strokeWidth={3}
-            ></span>
-            <div
-              className={styles.backlog_title}
-              onClick={() => {
-                logger.info('Rua! Testing');
-              }}
-            >
-              {/* {t('buttons.backlog')} */}
-            </div>
+            />
           </div>
+          <div className={styles.backlog_review_line} />
           {GUIStore.showBacklog && (
             <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
               {backlogList}

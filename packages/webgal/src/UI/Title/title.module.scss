@@ -10,14 +10,11 @@
   display: flex;
   position: absolute;
   left: 0;
-  min-width: 25%;
-  height: 100%;
   width: 100%;
   justify-content: center;
-  align-items: flex-end !important;
   flex-flow: row !important;
-  transition: background 0.75s;
-  padding-left: 120px;
+  gap: px2(17px);
+  bottom: px2(54px);
 }
 
 .Title_button {
@@ -26,37 +23,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
-  text-align: center;
-  flex: 0 1 auto;
   cursor: pointer;
-  padding: 1em 2em 1em 2em;
-  margin: 20px 0;
-  transition: all 0.33s;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-  border-radius: 4px;
-  transform: skewX(-10deg);
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+  transition: all 0.33s ease-in-out;
   background-image: url('@/assets/imgs/game-menu-button-bg.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  &:not(:last-child) {
-    margin-right: 34px;
-  }
 }
 
 .Title_button:hover {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 1);
   background-image: url('@/assets/imgs/game-menu-button-bg-active.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
+  transform: scale(1.1);
 }
 
 .Title_button_text {
-  font-size: px2(28px) !important;
+  font-size: px2(30px) !important;
   color: #fff;
-  letter-spacing: 0.2em;
+  font-weight: 800;
+  font-family: Inter;
 }
 
 .Title_backup_background {

@@ -74,13 +74,13 @@ export const MenuPanel = () => {
           playSeDialogOpen();
           showGlogalDialog({
             title: t('$gaming.buttons.titleTips'),
-            leftText: t('$common.yes'),
-            rightText: t('$common.no'),
-            leftFunc: () => {
+            leftText: t('$common.no'),
+            rightText: t('$common.yes'),
+            leftFunc: () => {},
+            rightFunc: () => {
               backToTitle();
               dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
             },
-            rightFunc: () => {},
           });
         }}
         tagName={t('title.title')}

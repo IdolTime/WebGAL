@@ -107,16 +107,13 @@ export default function IMSSTextbox(props: ITextboxProps) {
             className={applyStyle('TextBox_main', styles.TextBox_main)}
             style={{
               opacity: `${textboxOpacity / 100}`,
-              left: miniAvatar === '' ? 25 : undefined,
             }}
           />
           <div
             id="textBoxMain"
-            className={
-              `${styles.TextBox_main } ${miniAvatar !== '' ? styles.TextBox_avatarDialogue_bg : styles.TextBox_dialogue_bg} `}
+            className={styles.TextBox_main}
             style={{
               fontFamily: font,
-              left: miniAvatar === '' ? 25 : undefined
             }}
           >
             <div id="miniAvatar" className={applyStyle('miniAvatarContainer', styles.miniAvatarContainer)}>
@@ -147,10 +144,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                     })}
                   </div>
                 </div>
-                <div
-                  key={showName}
-                  className={applyStyle('TextBox_showName', styles.TextBox_showName)}
-                >
+                <div key={showName} className={applyStyle('TextBox_showName', styles.TextBox_showName)}>
                   {showName.split('').map((e, i) => {
                     return (
                       <span key={e + i} style={{ position: 'relative' }}>
@@ -165,12 +159,12 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 </div>
               </>
             )}
+            <div className={styles.line} />
             <div
               className={applyStyle('text', styles.text)}
               style={{
                 flexFlow: 'column',
                 overflow: 'hidden',
-                paddingLeft: '0.1em',
               }}
             >
               {textElementList}

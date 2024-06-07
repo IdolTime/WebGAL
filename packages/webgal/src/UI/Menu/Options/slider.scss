@@ -1,8 +1,8 @@
 @import 'src/assets/style/px2.scss';
 input[type=range] {
   -webkit-appearance: none; /* 去掉底部的 track 默认样式，就是整个灰条 */
-  width: px2(207px);
-  height: px2(24px);
+  width: px2(321px);
+  height: px2(11px);
   background: transparent; /* 否则在 Chrome 中是白色背景 */
   font-size: 100%;
 }
@@ -13,80 +13,69 @@ input[type=range]:focus {
 
 /*轨道样式*/
 input[type=range]::-webkit-slider-runnable-track {
-  width: px2(207px);
-  height: px2(24px);
+  width: px2(321px);
+  height: px2(11px);
   background: transparent;
 }
 input[type=range]::-moz-range-track {
-  width: px2(207px);
-  height: px2(24px);
+  width: px2(321px);
+  height: px2(11px);
   background: transparent;
 }
 
 /*滑块样式*/
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: px2(31px);
-  width: px2(31px);
+  height: px2(34px);
+  width: px2(8px);
   cursor: pointer;
-  margin-top: px2(-5px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
+  margin-top: px2(-11.5px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/bar-thumb.png');
   z-index: 3;
   position: relative;
-  &:active {
-    transform: scale(0.8);
-  }
 }
 /* Firefox 同上 */
 input[type=range]::-moz-range-thumb {
   -moz-appearance: none;
-  height: px2(31px);
-  width: px2(31px);
+  height: px2(34px);
+  width: px2(8px);
   cursor: pointer;
-  margin-top: px2(-5px);
+  margin-top: px2(-11.5px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/bar-thumb.png');
   z-index: 3;
   position: relative;
-  touch-action: manipulation;
-  &:active {
-    transform: scale(0.8);
-  }
 }
 
 .Option_WebGAL_slider {
   position: relative;
   .Rang_input {
     position: absolute;
-    touch-action: manipulation;
-    z-index: 3;
   }
   .Slider_bg{
     position: absolute;
-    width: px2(207px);
-    height: px2(24px);
-    // background-size: cover;
-    // background-repeat: no-repeat;
-    // background-position: center;
-    // background-image: url('@/assets/imgs/bar-checked.png');
-    z-index: 2;
-    touch-action: manipulation;
-  }
-  .Slider_bg_under {
-    width: px2(207px);
-    height: px2(24px);
-    cursor: pointer;
+    width: px2(321px);
+    height: px2(11px);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('@/assets/imgs/bar-checked.png');
+    z-index: 2;
+  }
+  .Slider_bg_under {
+    width: px2(321px);
+    height: px2(11px);
+    cursor: pointer;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('@/assets/imgs/bar-bg.png');
     z-index: 1;
-    touch-action: manipulation;
   }
 }
 

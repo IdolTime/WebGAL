@@ -5,10 +5,10 @@ import { RootState } from '@/store/store';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import footerLeft from '@/assets/imgs//cg-bottom-left.png';
-import footerRight from '@/assets/imgs//cg-bottom-right.png';
-import footerChecked from '@/assets/imgs//cg-bottom-checked.png';
-import footerUncheck from '@/assets/imgs//cg-bottom-uncheck.png';
+import footerLeft from '@/assets/imgs/cg-bottom-left.png';
+import footerRight from '@/assets/imgs/cg-bottom-right.png';
+import footerChecked from '@/assets/imgs/cg-bottom-checked.png';
+import footerUncheck from '@/assets/imgs/cg-bottom-uncheck.png';
 import cgLock from '@/assets/imgs//cg-lock.png';
 
 export function ExtraCg() {
@@ -18,6 +18,7 @@ export function ExtraCg() {
   const [list, setList] = useState<any[]>([]);
 
   const cgLen = extraState.cg.length;
+  const pageLen = Math.ceil(cgLen / 6) || 1;
 
   useEffect(() => {
     setList(extraState.cg.slice((page - 1) * 6, page * 6) || []);
@@ -51,14 +52,15 @@ export function ExtraCg() {
           onMouseEnter={playSeEnter}
         />
         <div className={styles.footer_page_container}>
-          {Array.from({ length: Math.ceil(cgLen / 6) }).map((e, i) => {
+          {Array.from({ length: pageLen }).map((e, i) => {
             return (
-              <img
-                key={i}
-                src={i + 1 === page ? footerChecked : footerUncheck}
-                alt=""
-                className={styles.footerPageIcon}
-              />
+              <div key={i} className={styles.footer_page_indicator}>
+                <img
+                  src={i + 1 === page ? footerChecked : footerUncheck}
+                  alt=""
+                  className={i + 1 === page ? styles.footer_page_icon_checked : styles.footer_page_icon_unchecked}
+                />
+              </div>
             );
           })}
         </div>
@@ -68,7 +70,7 @@ export function ExtraCg() {
           className={styles.footerButton}
           onClick={() => {
             playSeClick();
-            if (page === Math.ceil(cgLen / 6)) {
+            if (page === pageLen) {
               return;
             }
             setPage(page + 1);

@@ -25,5 +25,7 @@ dist-ssr
 .eslintcache
 stats.html
 packages/webgal/public/game.old
+packages/webgal/public/game/template/PurpleTemplate
+packages/webgal/public/game/template/OrangeTemplate
 packages/parser/build
 packages/webgal/src/Core/util/pixiPerformManager/initRegister.ts

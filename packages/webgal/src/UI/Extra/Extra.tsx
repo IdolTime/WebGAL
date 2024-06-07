@@ -7,7 +7,6 @@ import { ExtraBgm } from '@/UI/Extra/ExtraBgm';
 import { ExtraCg } from './ExtraCg';
 import background from '@/assets/imgs//background.png';
 import backTitle from '@/assets/imgs//back-title.png';
-import backIcon from '@/assets/imgs/back.png'
 import cgbgmBg from '@/assets/imgs//cg-bgm-bg.png';
 import cgunselect from '@/assets/imgs//cg-unselect.png';
 import bgmunselect from '@/assets/imgs//bgm-unselect.png';
@@ -38,16 +37,16 @@ export function Extra() {
             backgroundSize: 'cover',
           }}
         >
-          <div
-            className={styles.extra_top}
-            onClick={() => {
-              dispatch(setVisibility({ component: 'showExtra', visibility: false }));
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <img className={styles.backIcon} src={backIcon} />
-            <img className={styles.backTitle} src={backTitle} alt="" />
+          <div className={styles.extraTop}>
+            <div
+              className={styles.backIcon}
+              onClick={() => {
+                dispatch(setVisibility({ component: 'showExtra', visibility: false }));
+                playSeClick();
+              }}
+              onMouseEnter={playSeEnter}
+            />
+            <img src={backTitle} alt="" style={{ width: '100%', objectFit: 'cover' }} />
             {/* <CloseSmall
               className={styles.extra_top_icon}
               onClick={() => {
@@ -65,44 +64,38 @@ export function Extra() {
           <div className={styles.mainContainer}>
             <div className={styles.mainTab}>
               <img src={cgbgmBg} alt="" className={styles.mainTab_bg} />
-              <div className={styles.mainTab_item1}>
-                {checked === 'bgm' ? (
-                  <>
-                    <img src={tabchoose} alt="" className={styles.mainTab_choose} />
-                    <img src={bgmchoose} alt="" className={styles.mainTab_choose_bgm} />
-                  </>
-                ) : (
-                  <img
-                    src={bgmunselect}
-                    alt=""
-                    className={`${styles.mainTab_unselect} ${styles.mainTab_bgmunselect}`}
-                    onClick={() => {
-                      setCheked('bgm');
-                      playSeClick();
-                    }}
-                    onMouseEnter={playSeEnter}
-                  />
-                )}
-              </div>
-              <div className={styles.mainTab_item2}>
-                {checked === 'cg' ? (
-                  <>
-                    <img src={tabchoose} alt="" className={styles.mainTab_choose} />
-                    <img src={cgchoose} alt="" className={styles.mainTab_choose_cg} />
-                  </>
-                ) : (
-                  <img
-                    src={cgunselect}
-                    alt=""
-                    className={styles.mainTab_unselect}
-                    onClick={() => {
-                      setCheked('cg');
-                      playSeClick();
-                    }}
-                    onMouseEnter={playSeEnter}
-                  />
-                )}
-              </div>
+              {checked === 'bgm' ? (
+                <div className={`${styles.mainTab_choose} ${styles.mainTab_choose_bgm}`}>
+                  <img src={bgmchoose} alt="" className={styles.mainTab_text} />
+                </div>
+              ) : (
+                <img
+                  src={bgmunselect}
+                  alt=""
+                  className={`${styles.mainTab_unselect} ${styles.mainTab_unselect_bgm}`}
+                  onClick={() => {
+                    setCheked('bgm');
+                    playSeClick();
+                  }}
+                  onMouseEnter={playSeEnter}
+                />
+              )}
+              {checked === 'cg' ? (
+                <div className={`${styles.mainTab_choose} ${styles.mainTab_choose_cg}`}>
+                  <img src={cgchoose} alt="" className={styles.mainTab_text} />
+                </div>
+              ) : (
+                <img
+                  src={cgunselect}
+                  alt=""
+                  className={`${styles.mainTab_unselect} ${styles.mainTab_unselect_cg}`}
+                  onClick={() => {
+                    setCheked('cg');
+                    playSeClick();
+                  }}
+                  onMouseEnter={playSeEnter}
+                />
+              )}
             </div>
             {checked === 'bgm' ? <ExtraBgm /> : <ExtraCg />}
           </div>

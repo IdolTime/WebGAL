@@ -2,107 +2,116 @@
 .Options_main {
   position: absolute;
   cursor: default;
-  width: px2(1920px);
-  height: px2(1080px);
+  width: px2(1280px);
+  height: px2(720px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/background.png');
 }
 .Options_top {
-  position: relative;
-  margin-top: px2(38px);
-  margin-left: px2(90px);
+  position: absolute;
+  top: px2(26px);
+  left: px2(46px);
   cursor: pointer;
-  width: px2(365px);
-  height: px2(133px);
+  width: px2(344px);
+  height: px2(79px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/set-back.png');
 }
 .Options_page_container {
-  width: px2(1054px);
-  height: px2(575px);
   display: flex;
   justify-content: space-between;
-  margin: 0 auto;
+  margin-top: px2(161px);
+}
+.Options_left {
+  margin-left: px2(66px);
+}
+.title_wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: px2(39px);
+  .star {
+    width: px2(43px);
+    height: px2(44px);
+    background-image: url('@/assets/imgs/common-star.png');
+    background-size: cover;
+  }
+}
+.title_wrapper_left {
+  margin-left: px2(120px);
+}
+.title_wrapper_right {
+  margin-left: px2(78px);
+}
+.title_base {
+  position: relative;
+  width: px2(127px);
+  height: px2(25px);
+  margin-left: px2(13px);
+  margin-right: px2(16px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/set-bg.png');
-}
-.Options_left {
-  width: 52%;
-  .title_base {
-    width: px2(132px);
-    height: px2(36px);
-    margin: px2(82px) auto px2(28px) auto;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url('@/assets/imgs/base-set.png');
-  }
-  .Check_line {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: px2(463px);
-    height: px2(72px);
-    margin-left: px2(29px);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url('@/assets/imgs/base-set-bg.png');
-    &:not(:first-child) {
-      margin-bottom: px2(32px);
-    }
-  }
+  background-image: url('@/assets/imgs/base-set.png');
 }
 .Options_right {
-  // margin-right: px2(131px);
-  width: 48%;
+  margin-right: px2(84px);
+  .Label {
+    text-align: right;
+    width: px2(98px);
+    margin-right: px2(28px);
+  }
   .title_voice {
-    width: px2(132px);
-    height: px2(36px);
-    margin: px2(82px) auto px2(54px) auto;
+    width: px2(127px);
+    height: px2(25px);
+    margin-left: px2(106px);
+    margin-left: px2(14px);
+    margin-right: px2(15px);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('@/assets/imgs/voice-set.png');
   }
 }
-.Line {
+.Label {
+  color: #CCC092;
+  font-family: Inter;
+  font-size: px2(24px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: px2(55px);
+}
+.Label_fullscreen {
+  margin-left: px2(101px);
+  margin-right: px2(11px);
+}
+.Label_window {
+  margin-left: px2(65px);
+  margin-right: px2(11px);
+}
+.Label_text_speed {
+  margin-right: px2(22px);
+}
+.Row {
   display: flex;
   justify-content: flex-start;
-  flex-direction: column;
-  .Label {
-    color: #A39A8B;
-    font-family: Inter;
-    font-size: px2(18px);
-    font-style: normal;
-    font-weight: 400;
-    margin-left: px2(37px);
+  align-items: center;
+  margin-bottom: px2(30px);
+  .Check_line {
+    display: flex;
+    justify-content: space-between;
   }
   .Check_item {
     display: flex;
     justify-content: flex-start;
     align-items: center;
   }
-  .Check_name {
-    width: px2(64px);
-    height: px2(55px);
-    color: #2B281D;
-    font-family: Inter;
-    font-size: px2(20px);
-    font-style: normal;
-    font-weight: 400;
-    line-height: px2(55px);
-    margin-right: px2(19px);
-  }
   .Check_box {
-    width: px2(31px);
-    height: px2(31px);
+    width: px2(36px);
+    height: px2(36px);
     flex-shrink: 0;
     cursor: pointer;
     background-size: cover;
@@ -112,72 +121,34 @@
     position: relative;
   }
   .Checked_box {
-    width: px2(31px);
-    height: px2(31px);
+    width: px2(48px);
+    height: px2(42px);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('@/assets/imgs/checked.png');
     position: absolute;
-    top: 0;
-    left: 0;
+    top: px2(-3px);
+    left: px2(-4px);
   }
 }
-.Bar_line {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: px2(40px);
-  .Label {
-    width: px2(128px);
-    height: px2(55px);
-    text-align: right;
-    color: #CFC9B2;
-    font-family: Inter;
-    font-size: px2(20px);
-    font-style: normal;
-    font-weight: 400;
-    line-height: px2(55px);
-    margin-right: px2(57px);
-  }
-  .Label_text_speed {
-    color: #2B281D;
-    font-family: Inter;
-    font-size: px2(20px);
-    font-style: normal;
-    font-weight: 400;
-  }
-  .Bar {
-    margin-left: px2(41px);
-    width: px2(479px);
-    height: px2(17px);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-image: url('@/assets/imgs/bar-checked.png');
-  }
+.Row_padding {
+  padding-left: px2(19px);
 }
 
 .Save_back {
   position: absolute;
-  top: px2(70px);
-  left: px2(70px);
+  top: px2(-8px);
+  left: px2(-25px);
   cursor: pointer;
-  width: px2(68px);
-  height: px2(68px);
+  width: px2(105px);
+  height: px2(58px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/back.png');
   z-index: 2;
-}
-
-.LabelLine {
-  width: px2(118px);
-  height: px2(23px);
-  margin-left: px2(37px);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url('@/assets/imgs/base-set-line.png');
+  &:hover {
+    background-image: url('@/assets/imgs/back-r.png');
+  }
 }

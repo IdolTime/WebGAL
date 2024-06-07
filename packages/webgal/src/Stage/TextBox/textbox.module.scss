@@ -20,7 +20,7 @@ $height: 330px;
   bottom: 0;
   width: 100%;
   animation: showSoftly 0.7s ease-out forwards;
-  height: px2(520px);
+  height: px2(347px);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -30,17 +30,11 @@ $height: 330px;
 .TextBox_main {
   z-index: 3;
   position: absolute;
-  right: 25px;
-  min-height: $height;
-  max-height: px2(450px); //$height;
-  background-blend-mode: darken;
-  border-radius: calc($height / 2) 20px 20px calc($height / 2);
-  bottom: 20px;
-  left: px2(92px);
-  font-weight: bold;
+  left: 0;
+  right: 0;
+  height: px2(347px); //$height;
   color: white;
   font-size: 40px;
-  padding: px2(100px) px2(50px) px2(50px) px2(400px);
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -49,7 +43,6 @@ $height: 330px;
   transition: left 0.33s;
   background-repeat: no-repeat !important;
   background-size: contain !important;
-  
 }
 
 .TextBox_avatarDialogue_bg {
@@ -149,16 +142,13 @@ $height: 330px;
 .TextBox_showName {
   // @include text_shadow_textElement;
   // font-size: 85%;
-  padding: 0 2em 0 2em;
   position: absolute;
-  left: px2(400px) !important;
-  top: px2(-20px) !important;
-  height: 80px;
-  line-height: 80px;
-  border-radius: 40px;
+  left: px2(220px) !important;
+  top: px2(180px) !important;
+  line-height: normal;
   z-index: 3;
   color: #C5B898;
-  font-size: px2(48px);
+  font-size: px2(28px);
   font-weight: 400;
 
   .outerName {
@@ -185,20 +175,28 @@ $height: 330px;
 
 .miniAvatarContainer {
   position: absolute;
-  height: 300px !important;
-  width: 300px !important;
-  bottom: 85px !important;
-  left: 44px !important;
+  min-height: px2(118px) !important;
+  width: px2(155px) !important;
+  bottom: px2(40px) !important;
+  left: px2(53px) !important;
   overflow: hidden;
-  border-radius: 50% !important;
+  border-bottom-left-radius: px2(77.5px);
+  border-bottom-right-radius: px2(77.5px);
+
+  > div {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: px2(118px);
+    width: px2(155px);
+    background-size: cover;
+    background-image: url('@/assets/imgs/avatar-dialogue.png');
+  }
 }
 
 .miniAvatarImg {
-  max-height: 100%;
-  max-width: 100%;
-  position: absolute;
-  bottom: 0;
-  filter: drop-shadow(15px 0 3px rgba(0, 0, 0, 0.5));
+  height: auto;
+  width: 100%;
 }
 
 .nameContainer {
@@ -235,10 +233,20 @@ $height: 330px;
   //text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.75);
 }
 
+.line {
+  width: px2(1135px);
+  height: px2(2px);
+  margin: px2(233px) auto px2(10px) auto;
+  background-image: url('@/assets/imgs/dialogue-default.png');
+  background-size: cover;
+}
+
 .text {
   overflow: hidden;
   color: #FFF;
-  font-size: 40px;
+  font-size: px2(21px);
   font-weight: 400;
-  line-height: 55px !important; 
+  line-height: normal !important;
+  width: px2(840px);
+  margin: 0 auto;
 }
