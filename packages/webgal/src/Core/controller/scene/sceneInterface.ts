@@ -38,6 +38,7 @@ export enum commandType {
   setTransition,
   getUserInput,
   applyStyle,
+  showValue, // 显示变量名称
 }
 
 /**

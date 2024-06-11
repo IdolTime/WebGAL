@@ -158,6 +158,10 @@ export interface IStageState {
   enableFilm: string;
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
+  isShowValueSWitch: boolean;
+  showValueName: string;
+  showValueAxisX: number;
+  showValueAxisY: number
 }
 
 /**
