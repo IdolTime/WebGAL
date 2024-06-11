@@ -38,6 +38,8 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
             checkIfAllSceneAssetsAreSettled(sceneName);
           },
           () => {
+            assetsLoadedObject[asset.url] = true;
+            checkIfAllSceneAssetsAreSettled(sceneName);
             const index = WebGAL.sceneManager.settledAssets.findIndex(
               (settledAssetUrl) => settledAssetUrl === asset.url,
             );
