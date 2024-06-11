@@ -12,14 +12,10 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
     p[c.url] = false;
     return p;
   }, {} as any);
+
   for (const asset of assetList) {
     // 判断是否已经存在
-    const hasHandled = !!WebGAL.sceneManager.settledAssets.find((settledAssetUrl) => {
-      if (settledAssetUrl === asset.url) {
-        return true;
-      }
-      return false;
-    });
+    const hasHandled = !!WebGAL.sceneManager.settledAssets.find((settledAssetUrl) => settledAssetUrl === asset.url);
     const assetsLoadedObject = WebGAL.sceneManager.sceneAssetsList[sceneName];
 
     if (hasHandled) {
@@ -33,37 +29,23 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
         checkIfAllSceneAssetsAreSettled(sceneName);
         WebGAL.videoManager.preloadVideo(asset.url);
       } else {
-        const onloadCallback = function () {
-          assetsLoadedObject[asset.url] = true;
-          checkIfAllSceneAssetsAreSettled(sceneName);
-        };
-        const onerrorCallback = function () {
-          assetsLoadedObject[asset.url] = true;
-          checkIfAllSceneAssetsAreSettled(sceneName);
-          const index = WebGAL.sceneManager.settledAssets.findIndex((settledAssetUrl, index) => {
-            if (settledAssetUrl === asset.url) {
-              return true;
+        loadAssetWithRetry(
+          asset.url,
+          3,
+          1000,
+          () => {
+            assetsLoadedObject[asset.url] = true;
+            checkIfAllSceneAssetsAreSettled(sceneName);
+          },
+          () => {
+            const index = WebGAL.sceneManager.settledAssets.findIndex(
+              (settledAssetUrl) => settledAssetUrl === asset.url,
+            );
+            if (index > -1) {
+              WebGAL.sceneManager.settledAssets.splice(index, 1);
             }
-            return false;
-          });
-          if (index > -1) {
-            WebGAL.sceneManager.settledAssets.splice(index, 1);
-          }
-        };
-        // @ts-ignore
-        if (window.isSafari) {
-          fetch(asset.url).then(onloadCallback).catch(onerrorCallback);
-        } else {
-          const newLink = document.createElement('link');
-          newLink.setAttribute('rel', 'prefetch');
-          newLink.setAttribute('href', asset.url);
-          const head = document.getElementsByTagName('head');
-          if (head.length) {
-            head[0].appendChild(newLink);
-          }
-          newLink.onload = onloadCallback;
-          newLink.onerror = onerrorCallback;
-        }
+          },
+        );
         WebGAL.sceneManager.settledAssets.push(asset.url);
       }
     }
@@ -82,4 +64,46 @@ const checkIfAllSceneAssetsAreSettled = (sceneName: string) => {
     // @ts-ignore
     window.pubsub.publish('sceneAssetsLoaded', { sceneName });
   }
+};
+
+const loadAssetWithRetry = (
+  url: string,
+  retries: number,
+  initialDelay: number,
+  onSuccess: () => void,
+  onError: () => void,
+  // eslint-disable-next-line max-params
+) => {
+  const attemptLoad = (retryCount: number, delay: number) => {
+    const onloadCallback = () => {
+      onSuccess();
+    };
+    const onerrorCallback = () => {
+      if (retryCount > 0) {
+        console.log(`重试加载资源：${url}，剩余次数：${retryCount}，延迟时间：${delay}ms`);
+        setTimeout(() => {
+          attemptLoad(retryCount - 1, delay * 2);
+        }, delay);
+      } else {
+        onError();
+      }
+    };
+
+    // @ts-ignore
+    if (window.isSafari) {
+      fetch(url).then(onloadCallback).catch(onerrorCallback);
+    } else {
+      const newLink = document.createElement('link');
+      newLink.setAttribute('rel', 'prefetch');
+      newLink.setAttribute('href', url);
+      const head = document.getElementsByTagName('head');
+      if (head.length) {
+        head[0].appendChild(newLink);
+      }
+      newLink.onload = onloadCallback;
+      newLink.onerror = onerrorCallback;
+    }
+  };
+
+  attemptLoad(retries, initialDelay);
 };
