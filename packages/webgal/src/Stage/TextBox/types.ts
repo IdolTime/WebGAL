@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 export interface ITextboxProps {
   textArray: ReactNode[][];
@@ -18,4 +18,5 @@ export interface ITextboxProps {
   isUseStroke: boolean;
   textboxOpacity: number;
   dialogueMode: string;
+  textAlign?: CSSProperties['textAlign'];
 }
