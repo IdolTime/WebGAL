@@ -17,10 +17,12 @@ $height: 330px;
 .TextBox_Container {
   position: absolute;
   z-index: 6;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 0;
-  width: 100%;
+  width: px2(1310px);
   animation: showSoftly 0.7s ease-out forwards;
-  height: px2(347px);
+  height: px2(355px);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -32,7 +34,7 @@ $height: 330px;
   position: absolute;
   left: 0;
   right: 0;
-  height: px2(347px); //$height;
+  height: px2(355px); //$height;
   color: white;
   font-size: 40px;
   box-sizing: border-box;
@@ -43,21 +45,6 @@ $height: 330px;
   transition: left 0.33s;
   background-repeat: no-repeat !important;
   background-size: contain !important;
-}
-
-.TextBox_avatarDialogue_bg {
-  background-image: url('@/assets/imgs/avatar-dialogue.png') !important;
-  background-position: 0px -40px !important;
-}
-
-.TextBox_dialogue_bg {
-  background-image: url('@/assets/imgs/dialogue-default.png') !important;
-  background-position: 0px 20px !important;
-}
-// 
-.TextBox_Background {
-  z-index: 2;
-  // background: linear-gradient(rgba(245, 247, 250, 1) 0%, rgba(189, 198, 222, 1) 100%);
 }
 
 @keyframes showSoftly {
@@ -143,9 +130,9 @@ $height: 330px;
   // @include text_shadow_textElement;
   // font-size: 85%;
   position: absolute;
-  left: px2(220px) !important;
-  top: px2(190px) !important;
-  line-height: normal;
+  left: px2(237px) !important;
+  top: px2(180px) !important;
+  line-height: px2(34px);
   z-index: 3;
   color: #C5B898;
   font-size: px2(28px);
@@ -157,8 +144,9 @@ $height: 330px;
 }
 
 .TextBox_showName_avatar {
-  left: px2(246px) !important;
-  top: px2(165px) !important;
+  left: 50% !important;
+  transform: translate(-50%);
+  top: px2(170px) !important;
 }
 
 .TextBox_showName_player {
@@ -188,8 +176,8 @@ $height: 330px;
   position: absolute;
   min-height: px2(118px) !important;
   width: px2(155px) !important;
-  bottom: px2(40px) !important;
-  left: px2(53px) !important;
+  bottom: px2(50px) !important;
+  left: px2(64px) !important;
   overflow: hidden;
   border-bottom-left-radius: px2(77.5px);
   border-bottom-right-radius: px2(77.5px);
@@ -247,7 +235,7 @@ $height: 330px;
 .line {
   width: px2(1135px);
   height: px2(2px);
-  margin: px2(233px) auto px2(10px) auto;
+  margin: px2(221px) auto px2(10px) auto;
   background-image: url('@/assets/imgs/dialogue-default.png');
   background-size: cover;
 }
@@ -265,7 +253,7 @@ $height: 330px;
   color: #FFF;
   font-size: px2(21px);
   font-weight: 400;
-  line-height: normal !important;
+  line-height: px2(25px) !important;
   width: px2(840px);
   margin: 0 auto;
 }

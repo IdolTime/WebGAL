@@ -28,7 +28,7 @@ export class SceneManager {
   public settledScenes: Array<string> = [];
   public settledAssets: Array<string> = [];
   public sceneData: ISceneData = cloneDeep(initSceneData);
-  public sceneAssetsList: Record<string, Record<string, boolean>> = {};
+  public sceneAssetsList: Record<string, Record<string, 'success' | 'error' | 'loading'>> = {};
   public sceneAssetsLoadedList: Record<string, boolean> = {};
 
   public resetScene() {
@@ -42,9 +42,11 @@ export class SceneManager {
     return new Promise((r) => {
       let parsedScene: { current: IScene | null } = { current: null };
       let timer: ReturnType<typeof setTimeout> | null = null;
+      console.log(11111, scenaName, loading, this.sceneAssetsLoadedList[scenaName])
 
       if (loading && !this.sceneAssetsLoadedList[scenaName]) {
         timer = setTimeout(() => {
+          console.error(1111)
           // @ts-ignore
           window.pubsub.publish('loading', { loading: true });
         }, 1000);

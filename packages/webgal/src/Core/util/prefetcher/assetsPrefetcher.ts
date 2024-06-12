@@ -8,10 +8,15 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param assetList 场景资源列表
  */
 export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) => {
-  WebGAL.sceneManager.sceneAssetsList[sceneName] = assetList.reduce((p, c) => {
-    p[c.url] = false;
-    return p;
-  }, {} as any);
+  if (
+    !WebGAL.sceneManager.sceneAssetsList[sceneName] ||
+    !Object.values(WebGAL.sceneManager.sceneAssetsList[sceneName]).length
+  ) {
+    WebGAL.sceneManager.sceneAssetsList[sceneName] = assetList.reduce((p, c) => {
+      p[c.url] = 'loading';
+      return p;
+    }, {} as any);
+  }
 
   for (const asset of assetList) {
     // 判断是否已经存在
@@ -19,26 +24,26 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
     const assetsLoadedObject = WebGAL.sceneManager.sceneAssetsList[sceneName];
 
     if (hasHandled) {
-      assetsLoadedObject[asset.url] = true;
       checkIfAllSceneAssetsAreSettled(sceneName);
       logger.warn('该资源已在预加载列表中，无需重复加载');
     } else {
       console.log('预加载资源：', asset.url);
       if (asset.url.endsWith('.mp4') || asset.url.endsWith('.flv')) {
-        assetsLoadedObject[asset.url] = true;
+        assetsLoadedObject[asset.url] = 'success';
         checkIfAllSceneAssetsAreSettled(sceneName);
         WebGAL.videoManager.preloadVideo(asset.url);
       } else {
+        assetsLoadedObject[asset.url] = 'loading';
         loadAssetWithRetry(
           asset.url,
           3,
           1000,
           () => {
-            assetsLoadedObject[asset.url] = true;
+            assetsLoadedObject[asset.url] = 'success';
             checkIfAllSceneAssetsAreSettled(sceneName);
           },
           () => {
-            assetsLoadedObject[asset.url] = true;
+            assetsLoadedObject[asset.url] = 'error';
             checkIfAllSceneAssetsAreSettled(sceneName);
             const index = WebGAL.sceneManager.settledAssets.findIndex(
               (settledAssetUrl) => settledAssetUrl === asset.url,
@@ -59,10 +64,15 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
 
 const checkIfAllSceneAssetsAreSettled = (sceneName: string) => {
   const assetsLoadedObject = WebGAL.sceneManager.sceneAssetsList[sceneName];
-  const allSettled = Object.values(assetsLoadedObject).every((x) => x);
+  const allSettled = Object.values(assetsLoadedObject).every((x) => x === 'error' || x === 'success');
+
+  WebGAL.sceneManager.sceneAssetsLoadedList[sceneName] = Object.values(assetsLoadedObject).every(
+    (x) => x === 'success',
+  );
+
+  console.log(sceneName, Object.values(assetsLoadedObject));
 
   if (allSettled) {
-    WebGAL.sceneManager.sceneAssetsLoadedList[sceneName] = true;
     // @ts-ignore
     window.pubsub.publish('sceneAssetsLoaded', { sceneName });
   }
@@ -93,7 +103,15 @@ const loadAssetWithRetry = (
 
     // @ts-ignore
     if (window.isSafari) {
-      fetch(url).then(onloadCallback).catch(onerrorCallback);
+      fetch(url)
+        .then((res) => {
+          if (res.status >= 400) {
+            throw new Error('Error!');
+          } else {
+            onloadCallback();
+          }
+        })
+        .catch(onerrorCallback);
     } else {
       const newLink = document.createElement('link');
       newLink.setAttribute('rel', 'prefetch');
