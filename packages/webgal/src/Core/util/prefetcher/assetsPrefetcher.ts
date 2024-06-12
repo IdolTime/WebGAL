@@ -70,8 +70,6 @@ const checkIfAllSceneAssetsAreSettled = (sceneName: string) => {
     (x) => x === 'success',
   );
 
-  console.log(sceneName, Object.values(assetsLoadedObject));
-
   if (allSettled) {
     // @ts-ignore
     window.pubsub.publish('sceneAssetsLoaded', { sceneName });

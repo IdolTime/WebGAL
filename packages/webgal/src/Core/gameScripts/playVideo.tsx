@@ -24,6 +24,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const performInitName: string = getRandomPerformName();
   let chooseContent = '';
   let loopValue = false;
+  let continueBgmValue = false;
   const optionId = Date.now();
   const endPerformRef = {
     current: () => {
@@ -34,6 +35,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
   sentence.args.forEach((e) => {
     if (e.key === 'choose') {
       chooseContent = 'choose:' + (e.value as string);
+    }
+    if (e.key === 'continueBgm') {
+      continueBgmValue = e.value === true;
     }
     if (e.key === 'loop') {
       loopValue = e.value === true;
@@ -138,15 +142,19 @@ export const playVideo = (sentence: ISentence): IPerform => {
           isHoldOn: false,
           stopFunction: () => {
             WebGAL.events.fullscreenDbClick.off(skipVideo);
-            /**
-             * 恢复音量
-             */
-            const bgmElement: any = document.getElementById('currentBgm');
-            if (bgmElement) {
-              bgmElement.volume = bgmVol.toString();
+
+            if (!continueBgmValue) {
+              /**
+               * 恢复音量
+               */
+              const bgmElement: any = document.getElementById('currentBgm');
+              if (bgmElement) {
+                bgmElement.volume = bgmVol.toString();
+              }
             }
+
             const vocalElement: any = document.getElementById('currentVocal');
-            if (bgmElement) {
+            if (vocalElement) {
               vocalElement.volume = vocalVol.toString();
             }
 
@@ -163,14 +171,16 @@ export const playVideo = (sentence: ISentence): IPerform => {
         /**
          * 把bgm和语音的音量设为0
          */
-        const vocalVol2 = 0;
-        const bgmVol2 = 0;
-        const bgmElement: any = document.getElementById('currentBgm');
-        if (bgmElement) {
-          bgmElement.volume = bgmVol2.toString();
+        if (!continueBgmValue) {
+          const bgmVol2 = 0;
+          const bgmElement: any = document.getElementById('currentBgm');
+          if (bgmElement) {
+            bgmElement.volume = bgmVol2.toString();
+          }
         }
+        const vocalVol2 = 0;
         const vocalElement: any = document.getElementById('currentVocal');
-        if (bgmElement) {
+        if (vocalElement) {
           vocalElement.volume = vocalVol2.toString();
         }
 
