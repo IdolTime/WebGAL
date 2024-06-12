@@ -326,15 +326,15 @@
     }
 
     function show() {
-      // title.style.opacity = 0;
-      // setTimeout(() => {
-      //   if (title) {
-      //     title.style.display = "none";
-      //     title.remove();
-      //   }
-      // }, 2000); // 将落地页设置为不显示
-      // window.enterPromise();
-      // delete window.enterPromise;
+      title.style.opacity = 0;
+      setTimeout(() => {
+        if (title) {
+          title.style.display = "none";
+          title.remove();
+        }
+      }, 2000); // 将落地页设置为不显示
+      window.enterPromise();
+      delete window.enterPromise;
     }
 
     function setProgress(num, width, height) {
