@@ -28,7 +28,7 @@ export class SceneManager {
   public settledScenes: Array<string> = [];
   public settledAssets: Array<string> = [];
   public sceneData: ISceneData = cloneDeep(initSceneData);
-  public sceneAssetsList: Record<string, Record<string, boolean>> = {};
+  public sceneAssetsList: Record<string, Record<string, 'success' | 'error' | 'loading'>> = {};
   public sceneAssetsLoadedList: Record<string, boolean> = {};
 
   public resetScene() {
