@@ -30,6 +30,8 @@ export const webSocketFunc = () => {
   const socket = new WebSocket(wsUrl);
   socket.onopen = () => {
     logger.info('socket已连接');
+    // @ts-ignore
+    window.pubsub.publish('isPreviewMode', true);
     function sendStageSyncMessage() {
       const message: IDebugMessage = {
         event: 'message',
@@ -72,6 +74,8 @@ export const webSocketFunc = () => {
     }
   };
   socket.onerror = (e) => {
+    // @ts-ignore
+    window.pubsub.publish('isPreviewMode', true);
     logger.info('当前没有连接到 Terre 编辑器');
   };
 };
