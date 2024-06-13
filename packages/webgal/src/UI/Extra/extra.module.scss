@@ -169,15 +169,10 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: px2(18px);
+  bottom: px2(12px);
   display: flex;
   gap: px2(38px);
   align-items: center;
-}
-.footerButton {
-  width: px2(105px);
-  height: px2(58px);
-  cursor: pointer;
 }
 .footer_page_container {
   display: flex;
@@ -227,6 +222,9 @@
   padding: px2(36px) px2(38px) px2(38px) px2(18px);
   position: relative;
   cursor: pointer;
+  &:nth-child(4), &:nth-child(5), &:nth-child(6) {
+    margin-top: px2(-15px);
+  }
 }
 .cgUnLockElement {
   background-image: url('@/assets/imgs/cg-unlock.png');
@@ -320,4 +318,21 @@ $endTransform: scale(1, 1) translate3d(0, 0, 0);
     opacity: 1;
     transform: $endTransform;
   }
+}
+
+.Btn {
+  width: px2(105px);
+  height: px2(58px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/back.png');
+  cursor: pointer;
+  &:hover {
+    background-image: url('@/assets/imgs/back-r.png');
+  }
+}
+
+.Btn_r {
+  transform: rotate(180deg);
 }

@@ -238,6 +238,9 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    &:hover {
+      background-image: url('@/assets/imgs/sound-choose.png');
+    }
   }
 }
 

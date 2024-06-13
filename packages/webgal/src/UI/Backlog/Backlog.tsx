@@ -67,8 +67,10 @@ export const Backlog = () => {
               </div>
               {backlogItem.currentStageState.vocal ? (
                 <div
-                  onClick={() => {
+                  onClick={(e) => {
                     playSeClick();
+                    e.preventDefault();
+                    e.stopPropagation();
                     // 获取到播放 backlog 语音的元素
                     const backlog_audio_element: any = document.getElementById('backlog_audio_play_element_' + i);
                     if (backlog_audio_element) {
@@ -87,7 +89,15 @@ export const Backlog = () => {
               ) : null}
             </div>
           </div>
-          <div className={styles.backlog_item_content}>
+          <div
+            className={styles.backlog_item_content}
+            onClick={(e) => {
+              playSeClick();
+              jumpFromBacklog(i);
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
           </div>
           <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />

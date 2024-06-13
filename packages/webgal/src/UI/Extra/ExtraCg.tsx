@@ -39,17 +39,15 @@ export function ExtraCg() {
         })}
       </div>
       <div className={styles.footer}>
-        <img
-          src={footerLeft}
-          alt=""
-          className={styles.footerButton}
+        <div
+          className={styles.Btn}
+          onMouseEnter={playSeEnter}
           onClick={() => {
             playSeClick();
             if (page > 1) {
               setPage(page - 1);
             }
           }}
-          onMouseEnter={playSeEnter}
         />
         <div className={styles.footer_page_container}>
           {Array.from({ length: pageLen }).map((e, i) => {
@@ -64,10 +62,9 @@ export function ExtraCg() {
             );
           })}
         </div>
-        <img
-          src={footerRight}
-          alt=""
-          className={styles.footerButton}
+        <div
+          className={`${styles.Btn} ${styles.Btn_r}`}
+          onMouseEnter={playSeEnter}
           onClick={() => {
             playSeClick();
             if (page === pageLen) {
@@ -75,7 +72,6 @@ export function ExtraCg() {
             }
             setPage(page + 1);
           }}
-          onMouseEnter={playSeEnter}
         />
       </div>
     </div>

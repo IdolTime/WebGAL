@@ -126,18 +126,6 @@ export const BottomControlPanel = () => {
             <span className={styles.button_text}>{t('buttons.replay')}</span>
           </span> */}
           <span
-            id="Button_ControlPanel_fast"
-            className={`${styles.singleButton} ${styles.singleButton_fast}`}
-            title="快进"
-            onClick={() => {
-              switchFast();
-              playSeClick();
-            }}
-            onMouseEnter={playSeEnter}
-          >
-            <span className={styles.fastIcon} />
-          </span>
-          <span
             id="Button_ControlPanel_auto"
             className={`${styles.singleButton} ${styles.singleButton_auto}`}
             title="自动"
@@ -148,6 +136,18 @@ export const BottomControlPanel = () => {
             onMouseEnter={playSeEnter}
           >
             <span className={styles.autoIcon} />
+          </span>
+          <span
+            id="Button_ControlPanel_fast"
+            className={`${styles.singleButton} ${styles.singleButton_fast}`}
+            title="快进"
+            onClick={() => {
+              switchFast();
+              playSeClick();
+            }}
+            onMouseEnter={playSeEnter}
+          >
+            <span className={styles.fastIcon} />
           </span>
           <span
             className={styles.singleButton}
