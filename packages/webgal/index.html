@@ -7,6 +7,40 @@
   <link rel="manifest" href="./manifest.json" />
   <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
   <title>IdolTime</title>
+  <script>
+    function PubSub() {
+      this.subscribers = {};
+    }
+
+    PubSub.prototype.subscribe = function (topic, callback) {
+      if (!this.subscribers[topic]) {
+        this.subscribers[topic] = [];
+      }
+      this.subscribers[topic].push(callback);
+      var that = this;
+      return function () {
+        that.unsubscribe(topic, callback);
+      };
+    };
+
+    PubSub.prototype.publish = function (topic, data) {
+      if (this.subscribers[topic]) {
+        this.subscribers[topic].forEach(function (callback) {
+          callback(data);
+        });
+      }
+    };
+
+    PubSub.prototype.unsubscribe = function (topic, callback) {
+      if (this.subscribers[topic]) {
+        this.subscribers[topic] = this.subscribers[topic].filter(function (cb) {
+          return cb !== callback;
+        });
+      }
+    };
+
+    window.pubsub = new PubSub();
+  </script>
 </head>
 
 <body>
@@ -196,17 +230,31 @@
     /**
      * 注册 Service Worker
      */
-    const u = navigator.userAgent;
-    const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./webgal-serviceworker.js").then(function (reg) {
-        // registration worked
-        console.log("Registration succeeded. Scope is " + reg.scope);
-      }).catch(function (error) {
-        // registration failed
-        console.log("Registration failed with " + error);
-      });
-    }
+    window.pubsub.subscribe('isPreviewMode', (res) => {
+      if (res) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister().then(function () {
+              console.log('Service Worker unregistered:', registration);
+            });
+          }
+        }).catch(function (error) {
+          console.error('Error getting Service Worker registrations:', error);
+        });
+      } else {
+        const u = navigator.userAgent;
+        const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./webgal-serviceworker.js").then(function (reg) {
+            // registration worked
+            console.log("Registration succeeded. Scope is " + reg.scope);
+          }).catch(function (error) {
+            // registration failed
+            console.log("Registration failed with " + error);
+          });
+        }
+      }
+    })
   </script>
   <script type="module" src="/src/main.tsx"></script>
   <!--<script type="module" src="/src/Core/util/resize.ts"></script>-->
@@ -265,7 +313,7 @@
         if (title)
           title.style.opacity = "0";
       }, 500); //500ms后开始降低落地页透明度
-      if (!isIOS && title) {
+      if (!window.isIOSDevice && title) {
         title.style.pointerEvents = "none"; //落地页不再响应点击
         title.style.background = "linear-gradient( #a1c4fd 0%, #c2e9fb 100%)"; //改变标题渐变效果
       }
