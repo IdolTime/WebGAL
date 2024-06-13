@@ -46,7 +46,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
   const checkIfBlockingNext = () => {
     let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
-    let blockingNextFlag = false;
+    let blockingNextFlag = true; // 暂时不允许跳过
     let isFast = WebGAL.gameplay.isFast;
     if (isFast) {
       if (blockingNext) {
