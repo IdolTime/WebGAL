@@ -13,17 +13,15 @@ export const assetsPrefetcher = (assetList: Array<IAsset>, sceneName: string) =>
     !Object.values(WebGAL.sceneManager.sceneAssetsList[sceneName]).length
   ) {
     WebGAL.sceneManager.sceneAssetsList[sceneName] = assetList.reduce((p, c) => {
-      p[c.url] = 'loading';
+      p[c.url] = '';
       return p;
     }, {} as any);
   }
 
   for (const asset of assetList) {
-    // 判断是否已经存在
-    const hasHandled = !!WebGAL.sceneManager.settledAssets.find((settledAssetUrl) => settledAssetUrl === asset.url);
     const assetsLoadedObject = WebGAL.sceneManager.sceneAssetsList[sceneName];
 
-    if (hasHandled) {
+    if (assetsLoadedObject[asset.url] === 'success' || assetsLoadedObject[asset.url] === 'loading') {
       checkIfAllSceneAssetsAreSettled(sceneName);
       logger.warn('该资源已在预加载列表中，无需重复加载');
     } else {

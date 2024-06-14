@@ -192,7 +192,7 @@ const zhCn = {
       preserve: '保存',
       read: '读取',
       setting: '设置',
-      backToTitle: '返回标题'      
+      backToTitle: '退出游戏',
     },
   },
 

@@ -148,10 +148,10 @@ export function useMouseWheel() {
     }
   }, []);
   useMounted(() => {
-    document.addEventListener('wheel', handleMouseWheel);
+    // document.addEventListener('wheel', handleMouseWheel);
   });
   useUnMounted(() => {
-    document.removeEventListener('wheel', handleMouseWheel);
+    // document.removeEventListener('wheel', handleMouseWheel);
   });
 }
 
