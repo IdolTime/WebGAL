@@ -366,7 +366,6 @@
         if (!progressTimerRef.current) {
           downloadCompleteRef.current = 1;
         } else {
-          console.error(1111, progressTimerRef.current)
           clearTimeout(progressTimerRef.current);
           setProgress(100, barImageLayout.width / scaleX, barImageLayout.height / scaleY);
           setTimeout(() => {
