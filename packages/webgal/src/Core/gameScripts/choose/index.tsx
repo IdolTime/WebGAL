@@ -114,7 +114,8 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               }
 
               if (e.jumpToScene) {
-                changeScene(e.jump, e.text);
+                const sceneName = e.jump.split('./game/scene/')[1];
+                changeScene(e.jump, sceneName);
               } else {
                 jmp(e.jump);
               }
