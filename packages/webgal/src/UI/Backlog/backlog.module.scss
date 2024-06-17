@@ -87,7 +87,6 @@
   font-weight: normal;
   box-sizing: border-box;
   height: calc(100% - px2(93px));
-  width: 100%;
   // background-image: url('@/assets/imgs/review-content-box-bg.png');
   // background-repeat: no-repeat;
   // background-size: cover;
@@ -99,10 +98,11 @@
 }
 
 .backlog_review_line {
-  position: absolute;
-  top: px2(95px);
-  left: 50%;
-  transform: translateX(-50%);
+  // position: absolute;
+  // top: px2(95px);
+  // left: 50%;
+  // transform: translateX(-50%);
+  margin: 0 auto;
   background-size: cover;
   height: px2(1px);
   width: px2(1079px);
@@ -158,6 +158,22 @@
 
   &:hover .backlog_item_button_element {
     opacity: 1;
+  }
+
+  &:last-child {
+    &::before {
+      content: "";  
+      position: absolute;  
+      top: px2(-5px);  
+      left: 50%;  
+      transform: translateX(-50%);
+      width: px2(1079px);  
+      height: px2(1px);
+      background-image: url('@/assets/imgs/review-line.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
   }
 
   &::after {  

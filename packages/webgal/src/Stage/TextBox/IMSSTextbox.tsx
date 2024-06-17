@@ -124,7 +124,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
                 <img className={applyStyle('miniAvatarImg', styles.miniAvatarImg)} alt="miniAvatar" src={miniAvatar} />
               )}
             </div>
-            {showName !== '' && (
+            {showName !== '' && dialogueMode !== 'narrator' && (
               <>
                 <div
                   className={applyStyle('TextBox_showName', styles.TextBox_showName)}

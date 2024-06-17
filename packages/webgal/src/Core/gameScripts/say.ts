@@ -81,6 +81,9 @@ export const say = (sentence: ISentence): IPerform => {
   if (mode === 'player') {
     showName = '我';
   }
+  if (mode === 'narrator') {
+    showName = '旁白';
+  }
   if (clear) {
     showName = '';
   }

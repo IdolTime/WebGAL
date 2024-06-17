@@ -170,7 +170,6 @@ export const Backlog = () => {
               // strokeWidth={3}
             />
           </div>
-          <div className={styles.backlog_review_line} />
           {GUIStore.showBacklog && (
             <div className={`${styles.backlog_content} ${isDisableScroll ? styles.Backlog_main_DisableScroll : ''}`}>
               {backlogList}
