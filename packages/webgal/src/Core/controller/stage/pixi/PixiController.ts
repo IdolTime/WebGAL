@@ -412,30 +412,28 @@ export default class PixiStage {
     const setup = () => {
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
 
-      setTimeout(() => {
-        const texture = loader.resources?.[url]?.texture;
-        if (texture && this.getStageObjByUuid(bgUuid)) {
-          /**
-           * 重设大小
-           */
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.max(scaleX, scaleY);
-          const bgSprite = new PIXI.Sprite(texture);
-          bgSprite.scale.x = targetScale;
-          bgSprite.scale.y = targetScale;
-          bgSprite.anchor.set(0.5);
-          bgSprite.position.y = this.stageHeight / 2;
-          thisBgContainer.setBaseX(this.stageWidth / 2);
-          thisBgContainer.setBaseY(this.stageHeight / 2);
-          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+      const texture = loader.resources?.[url]?.texture;
+      if (texture && this.getStageObjByUuid(bgUuid)) {
+        /**
+         * 重设大小
+         */
+        const originalWidth = texture.width;
+        const originalHeight = texture.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        const targetScale = Math.max(scaleX, scaleY);
+        const bgSprite = new PIXI.Sprite(texture);
+        bgSprite.scale.x = targetScale;
+        bgSprite.scale.y = targetScale;
+        bgSprite.anchor.set(0.5);
+        bgSprite.position.y = this.stageHeight / 2;
+        thisBgContainer.setBaseX(this.stageWidth / 2);
+        thisBgContainer.setBaseY(this.stageHeight / 2);
+        thisBgContainer.pivot.set(0, this.stageHeight / 2);
 
-          // 挂载
-          thisBgContainer.addChild(bgSprite);
-        }
-      }, 0);
+        // 挂载
+        thisBgContainer.addChild(bgSprite);
+      }
     };
 
     /**
@@ -487,81 +485,79 @@ export default class PixiStage {
     // 完成图片加载后执行的函数
     const setup = () => {
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      setTimeout(() => {
-        const texture = loader.resources?.[url]?.texture;
-        let delays: number[] = [];
+      const texture = loader.resources?.[url]?.texture;
+      let delays: number[] = [];
 
-        if (texture && this.getStageObjByUuid(figureUuid)) {
-          const resource = loader.resources[url];
-          const explosionTextures: any[] = [];
+      if (texture && this.getStageObjByUuid(figureUuid)) {
+        const resource = loader.resources[url];
+        const explosionTextures: any[] = [];
 
-          if (isApng) {
-            // @ts-ignore
-            const { frameDelay, textures, frameCount } = resource;
-            delays = frameDelay;
-            Object.values(textures || []).forEach((v) => {
-              explosionTextures.push(v);
-            });
-          }
-
-          /**
-           * 重设大小
-           */
-          const showAndPlay = (textures: any[]) => {
-            const originalWidth = texture.width;
-            const originalHeight = texture.height;
-            const scaleX = this.stageWidth / originalWidth;
-            const scaleY = this.stageHeight / originalHeight;
-            const targetScale = Math.min(scaleX, scaleY);
-            const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
-            figureSprite.scale.x = targetScale;
-            figureSprite.scale.y = targetScale;
-            figureSprite.anchor.set(0.5);
-            figureSprite.position.y = this.stageHeight / 2;
-            const targetWidth = originalWidth * targetScale;
-            const targetHeight = originalHeight * targetScale;
-            thisFigureContainer.setBaseY(this.stageHeight / 2);
-            if (targetHeight < this.stageHeight) {
-              thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-            }
-            if (presetPosition === 'center') {
-              thisFigureContainer.setBaseX(this.stageWidth / 2);
-            }
-            if (presetPosition === 'left') {
-              thisFigureContainer.setBaseX(targetWidth / 2);
-            }
-            if (presetPosition === 'right') {
-              thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-            }
-            if (isApng) {
-              const sprite = figureSprite as PIXI.AnimatedSprite;
-              // 自定义播放速度的函数
-              let currentFrame = 0;
-              let direction = 1;
-              const updateFrame = () => {
-                sprite.gotoAndStop(currentFrame);
-                setTimeout(() => {
-                  if (currentFrame === textures.length - 1) {
-                    direction = -1;
-                  }
-                  if (currentFrame === 0) {
-                    direction = 1;
-                  }
-                  currentFrame += direction;
-                  updateFrame();
-                }, delays[currentFrame]); // 设置下一个帧的显示时长
-              };
-
-              // 开始播放动画
-              updateFrame();
-            }
-            thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-            thisFigureContainer.addChild(figureSprite);
-          };
-
-          showAndPlay(explosionTextures);
+        if (isApng) {
+          // @ts-ignore
+          const { frameDelay, textures, frameCount } = resource;
+          delays = frameDelay;
+          Object.values(textures || []).forEach((v) => {
+            explosionTextures.push(v);
+          });
         }
-      }, 32);
+
+        /**
+         * 重设大小
+         */
+        const showAndPlay = (textures: any[]) => {
+          const originalWidth = texture.width;
+          const originalHeight = texture.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.min(scaleX, scaleY);
+          const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
+          figureSprite.scale.x = targetScale;
+          figureSprite.scale.y = targetScale;
+          figureSprite.anchor.set(0.5);
+          figureSprite.position.y = this.stageHeight / 2;
+          const targetWidth = originalWidth * targetScale;
+          const targetHeight = originalHeight * targetScale;
+          thisFigureContainer.setBaseY(this.stageHeight / 2);
+          if (targetHeight < this.stageHeight) {
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+          }
+          if (presetPosition === 'center') {
+            thisFigureContainer.setBaseX(this.stageWidth / 2);
+          }
+          if (presetPosition === 'left') {
+            thisFigureContainer.setBaseX(targetWidth / 2);
+          }
+          if (presetPosition === 'right') {
+            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+          }
+          if (isApng) {
+            const sprite = figureSprite as PIXI.AnimatedSprite;
+            // 自定义播放速度的函数
+            let currentFrame = 0;
+            let direction = 1;
+            const updateFrame = () => {
+              sprite.gotoAndStop(currentFrame);
+              setTimeout(() => {
+                if (currentFrame === textures.length - 1) {
+                  direction = -1;
+                }
+                if (currentFrame === 0) {
+                  direction = 1;
+                }
+                currentFrame += direction;
+                updateFrame();
+              }, delays[currentFrame]); // 设置下一个帧的显示时长
+            };
+
+            // 开始播放动画
+            updateFrame();
+          }
+          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+          thisFigureContainer.addChild(figureSprite);
+        };
+
+        showAndPlay(explosionTextures);
+      }
     };
 
     /**
@@ -614,48 +610,46 @@ export default class PixiStage {
       console.log(this.assetLoader.resources);
       const spineResource: any = this.assetLoader.resources?.[spineId];
       // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      setTimeout(() => {
-        if (spineResource && this.getStageObjByUuid(figureUuid)) {
-          const figureSpine = new Spine(spineResource.spineData);
-          const transY = spineResource?.spineData?.y ?? 0;
-          /**
-           * 重设大小
-           */
-          console.log(figureSpine);
-          const originalWidth = figureSpine.width;
-          const originalHeight = figureSpine.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          // 我也不知道为什么啊啊啊啊
-          figureSpine.y = -(scaleY * transY) / 2;
-          console.log(figureSpine.state);
-          figureSpine.state.setAnimation(0, '07', true);
-          const targetScale = Math.min(scaleX, scaleY);
-          const figureSprite = new PIXI.Sprite();
-          figureSprite.addChild(figureSpine);
-          figureSprite.scale.x = targetScale;
-          figureSprite.scale.y = targetScale;
-          figureSprite.anchor.set(0.5);
-          figureSprite.position.y = this.stageHeight / 2;
-          const targetWidth = originalWidth * targetScale;
-          const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-          }
-          if (presetPosition === 'center') {
-            thisFigureContainer.setBaseX(this.stageWidth / 2);
-          }
-          if (presetPosition === 'left') {
-            thisFigureContainer.setBaseX(targetWidth / 2);
-          }
-          if (presetPosition === 'right') {
-            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-          }
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-          thisFigureContainer.addChild(figureSprite);
+      if (spineResource && this.getStageObjByUuid(figureUuid)) {
+        const figureSpine = new Spine(spineResource.spineData);
+        const transY = spineResource?.spineData?.y ?? 0;
+        /**
+         * 重设大小
+         */
+        console.log(figureSpine);
+        const originalWidth = figureSpine.width;
+        const originalHeight = figureSpine.height;
+        const scaleX = this.stageWidth / originalWidth;
+        const scaleY = this.stageHeight / originalHeight;
+        // 我也不知道为什么啊啊啊啊
+        figureSpine.y = -(scaleY * transY) / 2;
+        console.log(figureSpine.state);
+        figureSpine.state.setAnimation(0, '07', true);
+        const targetScale = Math.min(scaleX, scaleY);
+        const figureSprite = new PIXI.Sprite();
+        figureSprite.addChild(figureSpine);
+        figureSprite.scale.x = targetScale;
+        figureSprite.scale.y = targetScale;
+        figureSprite.anchor.set(0.5);
+        figureSprite.position.y = this.stageHeight / 2;
+        const targetWidth = originalWidth * targetScale;
+        const targetHeight = originalHeight * targetScale;
+        thisFigureContainer.setBaseY(this.stageHeight / 2);
+        if (targetHeight < this.stageHeight) {
+          thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
         }
-      }, 0);
+        if (presetPosition === 'center') {
+          thisFigureContainer.setBaseX(this.stageWidth / 2);
+        }
+        if (presetPosition === 'left') {
+          thisFigureContainer.setBaseX(targetWidth / 2);
+        }
+        if (presetPosition === 'right') {
+          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+        }
+        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+        thisFigureContainer.addChild(figureSprite);
+      }
     };
 
     /**
