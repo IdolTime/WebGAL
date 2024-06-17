@@ -25,9 +25,11 @@ export function useSetBg(stageState: IStageState) {
       WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName);
       setEbg(bgName);
       logger.debug('重设背景');
-      const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
-      WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
-      setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
+      setTimeout(() => {
+        const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
+        WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
+        setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
+      }, 0);
     } else {
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
