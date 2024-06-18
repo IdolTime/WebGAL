@@ -55,7 +55,7 @@ export class VideoManager {
     this.videosByKey = {};
   }
 
-  public preloadVideo(url: string) {
+  public preloadVideo(url: string, playWhenLoaded = false) {
     if (this.videosByKey[url]) {
       // 已经预加载过的video标签不再重复创建
       return;
@@ -112,6 +112,13 @@ export class VideoManager {
         },
       },
     };
+
+    if (playWhenLoaded) {
+      this.videosByKey[url].waitCommands = {
+        playVideo: true,
+        showVideo: true,
+      };
+    }
 
     fetch(url)
       .then((res) => {
@@ -190,6 +197,8 @@ export class VideoManager {
         videoContainerTag.style.opacity = '1';
         videoContainerTag.style.zIndex = '11';
       }
+    } else if (!videoItem) {
+      this.preloadVideo(key, true);
     } else {
       videoItem.waitCommands.showVideo = true;
     }
@@ -201,6 +210,8 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.play();
       this.checkProgress(key);
+    } else if (!videoItem) {
+      this.preloadVideo(key, true);
     } else {
       videoItem.waitCommands.playVideo = true;
     }
