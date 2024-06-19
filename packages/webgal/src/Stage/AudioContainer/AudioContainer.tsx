@@ -3,6 +3,7 @@ import { RootState, webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/logger';
+import { getAudioUrl } from '@/Core/util/getAudioUrl';
 
 export const AudioContainer = () => {
   const stageStore = useSelector((webgalStore: RootState) => webgalStore.stage);
@@ -17,6 +18,7 @@ export const AudioContainer = () => {
   const seVol = mainVol * 0.01 * (userDataState.optionData?.seVolume ?? 100) * 0.01;
   const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
+  const [bgmUrl, setBgmUrl] = useState('');
 
   // 淡入淡出定时器
   const [fadeTimer, setFadeTimer] = useState(setTimeout(() => {}, 0));
@@ -67,7 +69,16 @@ export const AudioContainer = () => {
     if (bgmElement) {
       bgmEnter === 0 ? (bgmElement.volume = bgmVol) : bgmFadeIn(bgmElement, bgmVol, bgmEnter);
     }
-  }, [isShowTitle, titleBgm, stageStore.bgm.src, bgmVol, bgmEnter]);
+  }, [bgmUrl, bgmVol, bgmEnter]);
+
+  useEffect(() => {
+    const setBgm = async () => {
+      const url = await getAudioUrl(isShowTitle ? titleBgm : stageStore.bgm.src);
+      setBgmUrl(url);
+    };
+
+    setBgm();
+  }, [isShowTitle, titleBgm, stageStore.bgm.src]);
 
   useEffect(() => {
     logger.debug(`设置背景音量：${bgmVol}`);
@@ -87,24 +98,30 @@ export const AudioContainer = () => {
 
   useEffect(() => {
     if (uiSoundEffects === '') return;
-    const uiSeAudioElement = document.createElement('audio');
-    uiSeAudioElement.src = uiSoundEffects;
-    uiSeAudioElement.loop = false;
-    // 设置音量
-    if (!isNaN(uiSeVol)) {
-      uiSeAudioElement.volume = uiSeVol;
-    } else {
-      // 针对原来使用 WebGAL version <= 4.4.2 的用户数据中不存在UI音效音量的情况
-      logger.error('UI SE Vol is NaN');
-      uiSeAudioElement.volume = isNaN(seVol) ? mainVol / 100 : seVol / 100;
-    }
-    // 播放UI音效
-    uiSeAudioElement.play();
-    uiSeAudioElement.addEventListener('ended', () => {
-      // Processing after sound effects are played
-      uiSeAudioElement.remove();
-    });
-    webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
+
+    const setEffects = async () => {
+      const url = await getAudioUrl(uiSoundEffects);
+      const uiSeAudioElement = document.createElement('audio');
+      uiSeAudioElement.src = url;
+      uiSeAudioElement.loop = false;
+      // 设置音量
+      if (!isNaN(uiSeVol)) {
+        uiSeAudioElement.volume = uiSeVol;
+      } else {
+        // 针对原来使用 WebGAL version <= 4.4.2 的用户数据中不存在UI音效音量的情况
+        logger.error('UI SE Vol is NaN');
+        uiSeAudioElement.volume = isNaN(seVol) ? mainVol / 100 : seVol / 100;
+      }
+      // 播放UI音效
+      uiSeAudioElement.play();
+      uiSeAudioElement.addEventListener('ended', () => {
+        // Processing after sound effects are played
+        uiSeAudioElement.remove();
+      });
+      webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
+    };
+
+    setEffects();
   }, [uiSoundEffects]);
 
   useEffect(() => {
@@ -117,13 +134,7 @@ export const AudioContainer = () => {
 
   return (
     <div>
-      <audio
-        key={isShowTitle.toString() + titleBgm}
-        id="currentBgm"
-        src={isShowTitle ? titleBgm : stageStore.bgm.src}
-        loop={true}
-        autoPlay={isEnterGame}
-      />
+      <audio key={isShowTitle.toString() + bgmUrl} id="currentBgm" src={bgmUrl} loop={true} autoPlay={isEnterGame} />
       <audio id="currentVocal" src={stageStore.playVocal} />
     </div>
   );
