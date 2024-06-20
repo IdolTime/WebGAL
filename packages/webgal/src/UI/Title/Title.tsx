@@ -17,6 +17,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
+import { enterAchieve } from '@/Core/controller/achieve/achieve';
 
 /**
  * 标题页
@@ -33,6 +34,13 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
+
+  /**
+   * 展示成就页面
+   */
+  const showAchievement = () => {
+    dispatch(setVisibility({ component: 'showAchievement', visibility: true }));
+  }
 
   return (
     <>
@@ -67,6 +75,17 @@ const Title: FC = () => {
               onMouseEnter={playSeEnter}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
+            </div>
+
+            <div
+              className={applyStyle('Title_button', styles.Title_button)}
+              onClick={() => {
+                enterAchieve();
+                playSeClick();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('achievement.title')}</div>
             </div>
           </div>
         </div>

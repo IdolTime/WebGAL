@@ -21,6 +21,8 @@ export const contentParser = (
       return assetSetter(contentRaw, fileType.vocal);
     case commandType.changeBg:
       return assetSetter(contentRaw, fileType.background);
+    case commandType.achieveBg:
+      return assetSetter(contentRaw, fileType.background);
     case commandType.changeFigure:
       return assetSetter(contentRaw, fileType.figure);
     case commandType.bgm:

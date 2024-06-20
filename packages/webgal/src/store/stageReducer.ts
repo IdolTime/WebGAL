@@ -12,6 +12,7 @@ import {
   ISetGameVar,
   ISetStagePayload,
   IStageState,
+  IUnlockAchieveObj
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -56,6 +57,18 @@ export const initState: IStageState = {
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
+  achieveBg: '', // 成就背景
+  unlockAchieve: { // 解锁成就
+    unlockname: '',
+    saveTime: '',
+    url: '',
+    x: 0,
+    y: 0
+  },
+  unlockAchieves: [],
+  totalAchievements: 0, // 总成就数量
+  unlockedAchievements: 0, //已获得的成就数量
+  // isShowUnlockAchieve: false,
 };
 
 /**
@@ -173,10 +186,16 @@ const stageSlice = createSlice({
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
       state.replacedUIlable[action.payload[0]] = action.payload[1];
     },
+    setAchieveBg: (state, action: PayloadAction<string>) => {
+      state.achieveBg = action.payload
+    },
+    setUnlockAchieve: (state, action: PayloadAction<IUnlockAchieveObj>) => {
+      state.unlockAchieves.push(action.payload)
+    }
   },
 });
 
-export const { resetStageState, setStage, setStageVar } = stageSlice.actions;
+export const { resetStageState, setStage, setStageVar, setAchieveBg, setUnlockAchieve } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
 

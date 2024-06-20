@@ -38,6 +38,8 @@ export enum commandType {
   setTransition,
   getUserInput,
   applyStyle,
+  achieveBg,
+  unlockAchieve
 }
 
 /**

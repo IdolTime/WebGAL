@@ -163,6 +163,10 @@ const zhCn = {
       title: '鉴赏模式',
       subtitle: 'EXTRA',
     },
+    achievement: {
+      title: '成就',
+      subtitle: 'ACHIEVEMENT',
+    }
   },
 
   gaming: {

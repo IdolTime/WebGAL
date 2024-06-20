@@ -37,7 +37,9 @@ export enum commandType {
   setTransform,
   setTransition,
   getUserInput,
-  applyStyle
+  applyStyle,
+  achieveBg, //成就背景
+  unlockAchieve, // 解锁成就
 }
 
 /**

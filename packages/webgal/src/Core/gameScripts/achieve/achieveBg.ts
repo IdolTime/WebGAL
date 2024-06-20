@@ -1,3 +1,29 @@
+// import { ISentence } from '@/Core/controller/scene/sceneInterface';
+// import { IPerform } from '@/Core/Modules/perform/performInterface';
+
+
+// /**
+//  * 成就页-设置背景
+//  * @param sentence 语句
+//  * @return {IPerform}
+//  */
+// export const achieveBg = (sentence: ISentence): IPerform => {
+//   alert('成就页-设置背景')
+//   console.log(sentence);
+//   debugger;
+
+//   return {
+//     performName: 'none',
+//     duration: 0,
+//     isHoldOn: false,
+//     stopFunction: () => {},
+//     blockingNext: () => false,
+//     blockingAuto: () => true,
+//     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+//   };
+// };
+
+
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
@@ -13,29 +39,14 @@ import { IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
-import { setAchieveBg } from '@/store/stageReducer';
 
 /**
  * 进行背景图片的切换
  * @param sentence 语句
  * @return {IPerform}
  */
-export const changeBg = (sentence: ISentence): IPerform => {
+export const achieveBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
-  const dispatch = webgalStore.dispatch;
-  if (webgalStore.getState().GUI.showAchievement) {
-    dispatch(setAchieveBg(url))
-    return {
-      performName: 'none',
-      duration: 0,
-      isHoldOn: false,
-      stopFunction: () => {},
-      blockingNext: () => false,
-      blockingAuto: () => true,
-      stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
-  }
-
   let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {
@@ -47,6 +58,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
     }
   });
 
+  const dispatch = webgalStore.dispatch;
   if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
 
   /**

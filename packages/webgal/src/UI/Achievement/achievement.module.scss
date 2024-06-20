@@ -1,0 +1,177 @@
+.achievement {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 14;
+    background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);;
+    padding: 2em 2em 2em 2em;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    .achievement_header {
+        display: flex;
+        align-items: center;
+
+        .goback {
+            margin-right: 1em;
+            color: #666;
+            font-size: 46px;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .title {
+            color: #000;
+            font-size: 50px;
+        }
+    }
+
+    .achievement_content {
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        transform: translateY(-50%);
+
+        .achievement_current {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background-color: rgb(205, 179, 50);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+
+
+            .text {
+                font-size: 40px;
+                color: #000;
+                font-weight: 600;
+            }
+
+            .number {
+                font-size: 50px;
+                color: #000;
+                font-weight: 600;
+            }
+
+            .pregessBar {
+                width: 100%;
+                height: 15px;
+                background-color: rgb(208, 208, 208);
+                position: relative;
+                border-radius: 8px;
+                overflow: hidden;
+              
+
+                .pregressBar_inner {
+                    width: 0%;
+                    height: 100%;
+                    background-color: rgb(252, 227, 114);
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
+            }
+        }
+
+    }
+
+    .achievement_list {
+
+        .achievement_item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-height: 100px;
+            min-width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+
+            &:hover {
+                transform: scale(1.2);
+                transition: all 0.3s;
+                cursor: pointer;
+                .ripple {
+                    animation: ripple-effect 0.5s linear;
+                }
+                .info_card {
+                    opacity: 1;
+                    transition: all 0.3s;
+                }
+            }
+
+            .ripple {
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: rgba(0, 0, 0, 0.4);
+                border-radius: 50%;
+                opacity: 0;
+            }
+
+            .info_card {
+                position: absolute;
+                top: -30px;
+                left: 100px;
+                width: 500px;
+                min-height: 200px;
+                padding: 1em;
+                background-color: rgb(234, 213, 226);
+                border-radius: 2em;
+                opacity: 0;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                line-height: 1.2;
+                font-weight: bold;
+                
+
+                .unlockname {
+                    display: flex;
+                    justify-content: center;
+                    padding: 0.2em 0.8rem;
+                    font-size: 50px;
+                    color: rgb(249, 239, 224);
+                    border-radius: 1rem;
+                    background-color: rgb(209, 129, 175);
+                  
+                }
+                
+                .time,
+                .description {
+                    color: rgb(162, 99, 137);
+                    font-size: 50px;
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
+
+
+  
+@keyframes ripple-effect {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.3);
+      opacity: 0;
+    }
+}
+  
