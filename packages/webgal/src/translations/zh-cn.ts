@@ -163,6 +163,10 @@ const zhCn = {
       title: '鉴赏模式',
       subtitle: 'EXTRA',
     },
+    storyLine: {
+      title: '故事线',
+      subtitle: 'STORYLINE',
+    }
   },
 
   gaming: {

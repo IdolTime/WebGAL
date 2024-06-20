@@ -27,6 +27,7 @@ const initState: IGuiState = {
   showPanicOverlay: false,
   isEnterGame: false,
   isShowLogo: true,
+  showStoryLine: false
 };
 
 /**
@@ -67,10 +68,13 @@ const GUISlice = createSlice({
     setLogoImage: (state, action: PayloadAction<string[]>) => {
       state.logoImage = [...action.payload];
     },
+    setShowStoryLine: (state, action: PayloadAction<boolean>) => {
+      state.showStoryLine = action.payload;
+    },
   },
 });
 
-export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage } = GUISlice.actions;
+export const { setVisibility, setMenuPanelTag, setGuiAsset, setLogoImage, setShowStoryLine } = GUISlice.actions;
 export default GUISlice.reducer;
 
 // export function GuiStateStore(): GuiStore {

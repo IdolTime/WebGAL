@@ -46,7 +46,8 @@ export const scriptExecutor = () => {
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId >
-    WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1
+    WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1 &&
+    WebGAL.sceneManager.sceneData.currentScene.sceneName !== 'storyline.txt'
   ) {
     if (WebGAL.sceneManager.sceneData.sceneStack.length !== 0) {
       const sceneToRestore: ISceneEntry | undefined = WebGAL.sceneManager.sceneData.sceneStack.pop();

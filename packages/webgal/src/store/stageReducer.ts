@@ -56,6 +56,7 @@ export const initState: IStageState = {
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
+  storyLineBg: '', // 故事线背景
 };
 
 /**
@@ -173,10 +174,13 @@ const stageSlice = createSlice({
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
       state.replacedUIlable[action.payload[0]] = action.payload[1];
     },
+    setStoryLineBg: (state, action: PayloadAction<string>) => {
+      state.storyLineBg = action.payload;
+    }
   },
 });
 
-export const { resetStageState, setStage, setStageVar } = stageSlice.actions;
+export const { resetStageState, setStage, setStageVar, setStoryLineBg } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
 

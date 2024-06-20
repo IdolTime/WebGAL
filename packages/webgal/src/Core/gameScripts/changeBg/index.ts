@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
-import { setStage, stageActions } from '@/store/stageReducer';
+import { setStage, stageActions, setStoryLineBg } from '@/store/stageReducer';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
@@ -21,6 +21,21 @@ import { WebGAL } from '@/Core/WebGAL';
  */
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
+  const dispatch = webgalStore.dispatch;
+   // 故事线背景
+  if (webgalStore.getState().GUI.showStoryLine) {
+    dispatch(setStoryLineBg(url))
+    return {
+      performName: 'none',
+      duration: 0,
+      isHoldOn: false,
+      stopFunction: () => {},
+      blockingNext: () => false,
+      blockingAuto: () => true,
+      stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    }
+  }
+
   let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {
@@ -32,7 +47,6 @@ export const changeBg = (sentence: ISentence): IPerform => {
     }
   });
 
-  const dispatch = webgalStore.dispatch;
   if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
 
   /**

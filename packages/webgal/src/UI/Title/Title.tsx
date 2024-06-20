@@ -2,9 +2,10 @@ import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
+import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
-import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { setMenuPanelTag, setVisibility, setShowStoryLine } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
@@ -67,6 +68,20 @@ const Title: FC = () => {
               onMouseEnter={playSeEnter}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
+            </div>
+
+            <div
+              className={applyStyle('Title_button', styles.Title_button)}
+              onClick={() => {
+                enterStoryLine();
+                dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+                playSeClick();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
+                {t('storyLine.title')}
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,37 @@
+.storyLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+
+    .storyLine_header {
+        padding: 10px 30px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        .goBack {
+            color: #666;
+            font-size: 50px;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .title {
+            color: #000;
+            font-size: 50px;
+            margin-left: 50px;
+        }
+    }
+
+    .storyLine_content {
+        height: 100%;
+        width: 100%;
+        overflow-x: scroll; /* 允许水平滚动 */
+        overflow-y: hidden; /* 禁止垂直滚动 */
+        background-repeat: no-repeat; /* 防止背景图重复 */
+        background-size: cover;
+    }
+}
