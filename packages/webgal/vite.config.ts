@@ -58,6 +58,12 @@ export default defineConfig({
     },
   },
   build: {
-    minify: false,
+    minify: true,
+    assetsInlineLimit: 0, // 设置为 0 表示禁用内联
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name].[ext]', // 控制静态资源文件名格式
+      },
+    },
   },
 });

@@ -10,4 +10,4 @@ cd webgal || exit
 cp -r dist/index.html ../server/WebGAL
 cp -r dist/assets ../server/WebGAL
 cp -r dist/game ../server/WebGAL
-cp -r dist/webgal-serviceworker.js ../server/WebGAL
+cp -r dist/idoltime-serviceworker.js ../server/WebGAL
