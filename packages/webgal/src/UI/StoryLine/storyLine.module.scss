@@ -1,3 +1,6 @@
+$default_storyLine_bg_x: 1920px;
+$default_storyLine_bg_y: 1080px;
+
 .storyLine {
     position: absolute;
     top: 0;
@@ -5,10 +8,11 @@
     right: 0;
     bottom: 0;
     z-index: 99;
+    overflow: auto;
 
     .storyLine_header {
         padding: 10px 30px;
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         z-index: 100;
@@ -29,9 +33,67 @@
     .storyLine_content {
         height: 100%;
         width: 100%;
-        overflow-x: scroll; /* 允许水平滚动 */
-        overflow-y: hidden; /* 禁止垂直滚动 */
-        background-repeat: no-repeat; /* 防止背景图重复 */
-        background-size: cover;
+        overflow: auto;
+        // overflow-x: scroll; /* 允许水平滚动 */
+        // overflow-y: hidden; /* 禁止垂直滚动 */
+        background-repeat: no-repeat;
+        // background-size: cover;
+        position: relative;
+        background-size: $default_storyLine_bg_x $default_storyLine_bg_y;
+
+        .storyLine_item {
+            width: 320px;
+            height: 240px;
+            border-radius: 3rem;
+            overflow: hidden;
+            background-repeat: no-repeat;
+            background-color: #000;
+            position: absolute;
+            background-size: contain;
+            background-position: center;
+
+            &:hover .info_card {
+                z-index: 100;
+                opacity: 1;
+            }
+
+            .info_card {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.2);
+                z-index: -1;
+                opacity: 0;
+                transition: all 0.5s;
+                cursor: pointer;
+
+                .playButton_icon {
+                    display: inline-block;
+                    height: 170px;
+                    text-align: center;  
+                    border-radius: 50%;  
+                    color: #fff;  
+                    font-size: 8em;  
+                    cursor: pointer;
+                    margin-bottom: 20px;
+                    &::before {  
+                        content: "▶";  
+                        color: #fff;
+                      }  
+                }
+
+                .name {
+                    font-size: 50px;
+                    color: red;
+
+                }
+            }
+        }
     }
 }

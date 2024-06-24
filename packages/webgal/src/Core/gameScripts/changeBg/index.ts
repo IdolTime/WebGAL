@@ -24,7 +24,16 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
    // 故事线背景
   if (webgalStore.getState().GUI.showStoryLine) {
-    dispatch(setStoryLineBg(url))
+    dispatch(setStage({ key: 'storyLineBg', value: url }))
+    sentence.args.forEach((e) => {
+      if (e.key === 'x') {
+        dispatch(setStage({ key: 'storyLineBgX', value: `${e.value}px` }))
+      }
+      if (e.key === 'y') {
+        dispatch(setStage({ key: 'storyLineBgY', value: `${e.value}px` }))
+      }
+    });
+
     return {
       performName: 'none',
       duration: 0,

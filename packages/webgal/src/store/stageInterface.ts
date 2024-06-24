@@ -159,6 +159,8 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   storyLineBg: string; // 故事线背景
+  storyLineBgX: string;
+  storyLineBgY: string;
 }
 
 /**
@@ -166,7 +168,7 @@ export interface IStageState {
  */
 export interface ISetStagePayload {
   key: keyof IStageState;
-  value: any;
+  value: unknown;
 }
 
 export interface IStageStore {

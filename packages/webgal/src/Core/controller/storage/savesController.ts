@@ -3,7 +3,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer';
-import { ISaveData } from '@/store/userDataInterface';
+import { ISaveData, ISaveStoryLineData } from '@/store/userDataInterface';
 
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   for (let i = startIndex; i <= endIndex; i++) {
@@ -33,4 +33,16 @@ export async function getFastSaveFromStorage() {
   const save = await localforage.getItem(`${WebGAL.gameKey}-saves-fast`);
   webgalStore.dispatch(saveActions.setFastSave(save as ISaveData));
   logger.info(`快速存档读取自本地存储`);
+}
+
+export async function dumpStorylineToStorage() {
+  const data = webgalStore.getState().saveData.unlockStorylineList;
+  await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
+  logger.info(`故事线 >> 写入本地存储`);
+}
+
+export async function getStorylineFromStorage() {
+  const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
+  webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
+  logger.info(`故事线 >> 读取自本地存储`);
 }

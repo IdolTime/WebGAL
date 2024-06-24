@@ -12,6 +12,8 @@ import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { current } from '@reduxjs/toolkit';
+import  { saveActions } from '@/store/savesReducer';
+import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 
 /**
  * 播放一段视频 * @param sentence
@@ -196,6 +198,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.onEnded(url, () => {
+          getCurrentVideoStageDataForStoryLine()
           if (loopValue) {
             WebGAL.videoManager.seek(url, 0.03);
             WebGAL.videoManager.playVideo(url);

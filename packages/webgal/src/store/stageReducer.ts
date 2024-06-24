@@ -57,6 +57,8 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   storyLineBg: '', // 故事线背景
+  storyLineBgX: '',  // 故事线背景长度
+  storyLineBgY: '',  // 故事线背景宽度
 };
 
 /**

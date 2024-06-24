@@ -74,7 +74,6 @@ const Title: FC = () => {
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
                 enterStoryLine();
-                dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
                 playSeClick();
               }}
               onMouseEnter={playSeEnter}

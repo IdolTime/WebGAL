@@ -31,6 +31,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'setAnimation', scriptType: commandType.setAnimation },
   { scriptString: 'playEffect', scriptType: commandType.playEffect },
   { scriptString: 'applyStyle', scriptType: commandType.applyStyle },
+  { scriptString: 'unlockStoryline', scriptType: commandType.unlockStoryline },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,

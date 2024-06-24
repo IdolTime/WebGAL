@@ -35,6 +35,7 @@ import { setVar } from '../gameScripts/setVar';
 import { showVars } from '../gameScripts/showVars';
 import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRegistry } from './utils';
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
+import { unlockStoryline } from '@/Core/gameScripts/unlockStoryline'
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -68,6 +69,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   setTransition: ScriptConfig(commandType.setTransition, setTransition, { next: true }),
   getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
+  unlockStoryline: ScriptConfig(commandType.unlockStoryline, unlockStoryline, { next: true }),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 
