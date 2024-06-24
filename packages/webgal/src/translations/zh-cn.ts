@@ -166,6 +166,10 @@ const zhCn = {
     storyLine: {
       title: '故事线',
       subtitle: 'STORYLINE',
+    },
+    achievement: {
+      title: '成就',
+      subtitle: 'ACHIEVEMENT',
     }
   },
 

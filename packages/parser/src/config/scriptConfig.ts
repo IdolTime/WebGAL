@@ -32,6 +32,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'playEffect', scriptType: commandType.playEffect },
   { scriptString: 'applyStyle', scriptType: commandType.applyStyle },
   { scriptString: 'unlockStoryline', scriptType: commandType.unlockStoryline },
+  { scriptString: 'unlockAchieve', scriptType: commandType.unlockAchieve },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
@@ -44,7 +45,7 @@ export const ADD_NEXT_ARG_LIST = [
   commandType.unlockBgm,
   commandType.unlockCg,
   commandType.filmMode,
-  commandType.playEffect,
+  commandType.playEffect
 ];
 
 export type ConfigMap = Map<string, ConfigItem>;

@@ -27,7 +27,8 @@ const initState: IGuiState = {
   showPanicOverlay: false,
   isEnterGame: false,
   isShowLogo: true,
-  showStoryLine: false
+  showStoryLine: false,
+  showAchievement: false
 };
 
 /**

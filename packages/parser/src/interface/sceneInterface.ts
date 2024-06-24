@@ -38,6 +38,7 @@ export enum commandType {
   setTransition,
   getUserInput,
   applyStyle,
+  unlockAchieve, // 解锁成就
   unlockStoryline, // 解锁故事线
 }
 

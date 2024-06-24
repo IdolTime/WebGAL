@@ -30,6 +30,7 @@ export interface IGuiState {
   isEnterGame: boolean;
   isShowLogo: boolean;
   showStoryLine: boolean; // 故事线
+  showAchievement: boolean;
 }
 
 export type componentsVisibility = Pick<
