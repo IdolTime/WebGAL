@@ -40,6 +40,7 @@ export enum commandType {
   applyStyle,
   unlockAchieve, // 解锁成就
   unlockStoryline, // 解锁故事线
+  showValue, // 显示变量
 }
 
 /**

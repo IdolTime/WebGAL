@@ -75,6 +75,10 @@ export const initState: IStageState = {
   unlockedAchievements: 0, //已获得的成就数量
   // isShowUnlockAchieve: false,
   currentVideoIndex: 0, // 当前视频播放索引
+  isShowValueSWitch: false,
+  showValueName: '',
+  showValueAxisX: 0,
+  showValueAxisY: 0,
 };
 
 /**

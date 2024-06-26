@@ -39,7 +39,8 @@ export enum commandType {
   getUserInput,
   applyStyle,
   unlockAchieve,
-  unlockStoryline
+  unlockStoryline,
+  showValue, // 显示变量名称
 }
 
 /**

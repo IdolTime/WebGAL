@@ -179,6 +179,10 @@ export interface IStageState {
   achieveBgX: string;
   achieveBgY: string;
   currentVideoIndex: number;
+  isShowValueSWitch: boolean;
+  showValueName: string;
+  showValueAxisX: number;
+  showValueAxisY: number
 }
 
 /**
