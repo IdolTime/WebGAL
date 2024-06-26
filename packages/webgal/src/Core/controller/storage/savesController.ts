@@ -15,12 +15,13 @@ export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   }
 }
 
-export function getSavesFromStorage(startIndex: number, endIndex: number) {
+export async function getSavesFromStorage(startIndex: number, endIndex: number) {
   for (let i = startIndex; i <= endIndex; i++) {
-    localforage.getItem(`${WebGAL.gameKey}-saves${i}`).then((save) => {
+    const save = await localforage.getItem(`${WebGAL.gameKey}-saves${i}`);
+    // localforage.getItem(`${WebGAL.gameKey}-saves${i}`).then((save) => {
       webgalStore.dispatch(saveActions.saveGame({ index: i, saveData: save as ISaveData }));
       logger.info(`存档${i}读取自本地存储`);
-    });
+    // });
   }
 }
 

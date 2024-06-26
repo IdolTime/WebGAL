@@ -72,6 +72,7 @@ export interface ISaveData {
   nowStageState: IStageState;
   backlog: Array<IBacklogItem>; // 舞台数据
   index: number; // 存档的序号
+  saveName: string // 当前保存名称
   saveTime: string; // 保存时间
   sceneData: ISaveScene; // 场景数据
   previewImage: string;

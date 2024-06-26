@@ -178,6 +178,7 @@ export interface IStageState {
   unlockedAchievements: number; //已获得的成就数量
   achieveBgX: string;
   achieveBgY: string;
+  currentVideoIndex: number;
 }
 
 /**

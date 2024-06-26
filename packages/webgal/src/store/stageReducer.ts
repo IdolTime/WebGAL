@@ -74,6 +74,7 @@ export const initState: IStageState = {
   totalAchievements: 0, // 总成就数量
   unlockedAchievements: 0, //已获得的成就数量
   // isShowUnlockAchieve: false,
+  currentVideoIndex: 0, // 当前视频播放索引
 };
 
 /**
@@ -199,48 +200,22 @@ const stageSlice = createSlice({
     },
     setUnlockAchieve: (state, action: PayloadAction<IUnlockAchieveObj>) => {
       state.unlockAchieves.push(action.payload)
+    },
+    setVideoIndex: (state, action: PayloadAction<number>) => {
+      state.currentVideoIndex = action.payload;
     }
   },
 });
 
-export const { resetStageState, setStage, setStageVar, setAchieveBg, setUnlockAchieve, setStoryLineBg } = stageSlice.actions;
+export const { 
+  resetStageState, 
+  setStage, 
+  setStageVar, 
+  setAchieveBg, 
+  setVideoIndex, 
+  setUnlockAchieve, 
+  setStoryLineBg 
+} = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
 
-// /**
-//  * 创建舞台的状态管理
-//  * @return {IStageState} 舞台状态
-//  * @return {function} 改变舞台状态
-//  */
-// export function stageStateStore():StageStore {
-//     const [stageState, setStageState] = useState(_.cloneDeep(initState));
-//
-//     /**
-//      * 设置舞台状态，以后会改
-//      * @param key
-//      * @param value
-//      */
-//     const setStage = <K extends keyof IStageState>(key: K, value: any) => {
-//
-//         setStageState(state => {
-//             state[key] = value;
-//             return {...state};
-//         });
-//
-//     };
-//
-//     const getStageState = () => {
-//         return stageState;
-//     };
-//
-//     const restoreStage = (newState: IStageState) => {
-//         setStageState((state) => ({ ...state, ...newState }));
-//     };
-//
-//     return {
-//         stageState,
-//         setStage,
-//         getStageState,
-//         restoreStage,
-//     };
-// }

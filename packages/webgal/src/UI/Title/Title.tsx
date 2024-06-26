@@ -11,6 +11,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import useTrans from '@/hooks/useTrans';
+import { setshowFavorited } from '@/store/GUIReducer';
 // import { resize } from '@/Core/util/resize';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
@@ -72,6 +73,7 @@ const Title: FC = () => {
               onClick={() => {
                 startGame();
                 playSeClick();
+                dispatch(setshowFavorited(false))
               }}
               onMouseEnter={playSeEnter}
             >
@@ -96,6 +98,16 @@ const Title: FC = () => {
               onMouseEnter={playSeEnter}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
+            </div>
+            <div
+              className={applyStyle('Title_button', styles.Title_button)}
+              onClick={() => {
+                dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+                playSeClick();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>  
             </div>
           </div>
         </div>
