@@ -1,18 +1,12 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import styles from './achievement.module.scss';
-
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
-import uniqWith from 'lodash/uniqWith';
-import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import { setAchieveBg } from '@/store/stageReducer';
-import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
+import { getUnlickAchieveFromStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 
 /**
@@ -35,23 +29,20 @@ export const Achievement: FC = () => {
   useEffect(() => {
     // 控制解锁成就显示，当开始游戏后才可解锁
     webgalStore.dispatch(saveActions.setIsShowUnlock(false));
-    setTimeout(() => {
+    if (GUIState.showAchievement) {
+      setTimeout(() => {
         initData()
-    }, 1000)
-  }, []);
+      }, 10)
+    }
+    
+  }, [GUIState.showAchievement]);
 
   async function initData() {
-    // 读取缓存数据
-    await getUnlickAchieveFromStorage();
+    await getUnlickAchieveFromStorage()
 
-    const currentScene = WebGAL.sceneManager.sceneData.currentScene
-
-    const unlockAchieveAlls = currentScene.sentenceList
-    ?.filter((e: any) => e.commandRaw === 'unlockAchieve' && currentScene.sceneName === 'start.txt') ?? [];
-    
+    const currentScene = WebGAL.sceneManager.sceneData.currentScene  
     const unlocked = webgalStore.getState().saveData.unlockAchieveData?.length ?? 0; 
-    const allTotal = unlockAchieveAlls?.length ?? 0;
-
+    const allTotal = webgalStore.getState().saveData.unlockAchieveAllTotal || 0;
     // 当前完成进度
     const currentProgress  = ((unlocked / allTotal) * 100).toFixed(2) + '%';
 
@@ -64,7 +55,6 @@ export const Achievement: FC = () => {
    */
   const handleGoBack = () => {
     backToTitle();
-    // dispatch(setAchieveBg(''));
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };
 
