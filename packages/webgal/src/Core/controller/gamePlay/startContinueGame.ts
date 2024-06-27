@@ -29,6 +29,8 @@ export const startGame = () => {
       }
     });
   });
+
+  webgalStore.dispatch(saveActions.setIsShowUnlock(true));
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
 };
 

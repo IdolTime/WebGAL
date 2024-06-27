@@ -27,9 +27,10 @@ export const Achievement: FC = () => {
 
   
   useEffect(() => {
-    // 控制解锁成就显示，当开始游戏后才可解锁
-    webgalStore.dispatch(saveActions.setIsShowUnlock(false));
+    
     if (GUIState.showAchievement) {
+      // 控制解锁成就显示，当开始游戏后才可解锁
+      webgalStore.dispatch(saveActions.setIsShowUnlock(false));
       setTimeout(() => {
         initData()
       }, 10)

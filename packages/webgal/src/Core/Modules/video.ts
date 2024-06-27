@@ -191,7 +191,9 @@ export class VideoManager {
         videoContainerTag.style.zIndex = '11';
       }
     } else {
-      videoItem.waitCommands.showVideo = true;
+      if (videoItem) {
+        videoItem.waitCommands.showVideo = true;
+      }
     }
   }
 
@@ -224,7 +226,9 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.currentTime = time;
     } else {
-      videoItem.waitCommands.seek = time;
+      if (videoItem) {
+        videoItem.waitCommands.seek = time; 
+      }
     }
   }
 

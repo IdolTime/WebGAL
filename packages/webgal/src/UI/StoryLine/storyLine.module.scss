@@ -42,8 +42,8 @@ $default_storyLine_bg_y: 1080px;
         background-size: $default_storyLine_bg_x $default_storyLine_bg_y;
 
         .storyLine_item {
-            width: 320px;
-            height: 240px;
+            width: 240px;
+            height: 180px;
             border-radius: 3rem;
             overflow: hidden;
             background-repeat: no-repeat;
@@ -75,11 +75,11 @@ $default_storyLine_bg_y: 1080px;
 
                 .playButton_icon {
                     display: inline-block;
-                    height: 170px;
+                    height: 100px;
                     text-align: center;  
                     border-radius: 50%;  
                     color: #fff;  
-                    font-size: 8em;  
+                    font-size: 6em;  
                     cursor: pointer;
                     margin-bottom: 20px;
                     &::before {  
