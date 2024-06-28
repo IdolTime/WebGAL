@@ -12,16 +12,16 @@
     z-index: 9;
 
     .menuButton {
-        width: px2(70px);
-        height: px2(70px);
+        width: px2(44px);
+        height: px2(43px);
         background-image: url('@/assets/imgs/menu-icon.png');
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
         background-position: center;
 
         &:hover {
             cursor: pointer;
-            transform: scale(1.5);
+            transform: scale(1.05);
             background-image: url('@/assets/imgs/menu-icon-active.png') !important;
         }
     }
@@ -46,14 +46,14 @@
 
     .gameMenuPanelContent {
         position: absolute;
-        top: 0;
+        top: px2(16px);
         right: 0;
         z-index: 22;
-        width: px2(316px);
-        height: 100%;
+        width: px2(301px);
+        height: px2(705px);
         background-image: url('@/assets/imgs/menu-bg.png');
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
         background-position: center;
 
         .buttonswrapper {
@@ -61,22 +61,23 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end;
             justify-content: center;
             position: absolute;
             z-index: 99;
 
             .button {
-                padding-top: px2(22px);
-                width: px2(172px);
-                height: px2(78px);
+                width: px2(165px);
+                height: px2(63px);
+                margin-right: px2(42px);
                 background-image: url('@/assets/imgs/menu-button-default.png');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
-                color: #4E4B6C;
-                font-size: px2(28px);
-                margin-bottom: px2(2px);
+                color: #fff;
+                font-size: px2(26px);
+                margin-bottom: px2(27px);
+                line-height: px2(63px);
                 text-align: center;
                 transition: transform 0.33s ease-in-out;
                 z-index: 1; // 确保这个值高于遮罩层的 z-index

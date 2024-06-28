@@ -18,8 +18,8 @@
   display: flex;
   align-items: center;
   flex-flow: column;
-  width: px2(607px);
-  height: px2(348px);
+  width: px2(530px);
+  height: px2(307px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -36,13 +36,15 @@
 }
 
 .title {
-  color: #5A536E;
+  color: #7C6267;
   font-family: Inter;
-  font-size:  px2(28px);
+  font-size:  px2(22px);
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-top: px2(88px);
+  margin-top: px2(86px);
+  text-align: center;
+  width: px2(352px);
 }
 
 .button_list {
@@ -50,18 +52,18 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: px2(30px);
-  gap: px2(78px)
+  bottom: px2(38px);
+  gap: px2(101px)
   // margin-top: px2(50px);
 }
 
 .button {
-  width: px2(172px);
-  height: px2(78px);
+  width: px2(165px);
+  height: px2(63px);
   text-align: center;
-  padding-top: px2(22px);
-  font-size: px2(28px);
-  color: #4E4B6C;
+  line-height: px2(63px);
+  font-size: px2(26px);
+  color: #fff;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

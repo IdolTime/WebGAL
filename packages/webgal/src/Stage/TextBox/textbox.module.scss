@@ -130,16 +130,16 @@ $height: 330px;
   // @include text_shadow_textElement;
   // font-size: 85%;
   position: absolute;
-  left: px2(237px) !important;
-  top: px2(180px) !important;
+  left: px2(255px) !important;
+  top: px2(171px) !important;
   line-height: px2(34px);
   z-index: 3;
-  color: #C5B898;
-  font-size: px2(28px);
+  color: #ffa2a2;
+  font-size: px2(28px) !important;
   font-weight: 400;
 
   .outerName {
-    color: #C5B898;
+    color: #ffa2a2;
   }
 }
 
@@ -233,9 +233,9 @@ $height: 330px;
 }
 
 .line {
-  width: px2(1135px);
-  height: px2(2px);
-  margin: px2(221px) auto px2(10px) auto;
+  width: px2(890px);
+  height: px2(51px);
+  margin: px2(162px) auto px2(10px) auto;
   background-image: url('@/assets/imgs/dialogue-default.png');
   background-size: cover;
 }

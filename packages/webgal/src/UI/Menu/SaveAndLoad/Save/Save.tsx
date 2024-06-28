@@ -56,13 +56,7 @@ export const Save: FC = () => {
   for (let i = start; i <= end; i++) {
     animationIndex++;
     const saveData = savesDataState.saveData[i];
-    let saveElementContent = (
-      <div className={styles.Save_Load_content_space}>
-        <div className={styles.Save_Load_content_wrapper}>
-          <div className={styles.Save_Load_content_ele} />
-        </div>
-      </div>
-    );
+    let saveElementContent = <div className={styles.Save_Load_content_ele} />;
     if (saveData) {
       saveElementContent = (
         <>

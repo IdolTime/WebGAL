@@ -5,13 +5,10 @@ import styles from '@/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
-import bgmstar from '@/assets/imgs//common-star.png';
 import soundunselect from '@/assets/imgs/sound-unselect.png';
 import soundChoose from '@/assets/imgs/sound-choose.png';
-import bgmUnderline from '@/assets/imgs/bgm-underline.png';
-import unlockBgm from '@/assets/imgs//unlock-bgm.png';
-import footerLeft from '@/assets/imgs//cg-bottom-left.png';
-import footerRight from '@/assets/imgs//cg-bottom-right.png';
+import bgmLocked from '@/assets/imgs//bgm-locked-bg.png';
+import bgmUnlocked from '@/assets/imgs//bgm-unlock-bg.png';
 import footerChecked from '@/assets/imgs//cg-bottom-checked.png';
 import footerUncheck from '@/assets/imgs//cg-bottom-uncheck.png';
 
@@ -57,7 +54,6 @@ export function ExtraBgm() {
               className={styles.bgmElement}
               onMouseEnter={playSeEnter}
             >
-              <img src={bgmstar} alt="" className={styles.bgmStar} />
               <div className={styles.bgmName}>
                 <div className={styles.bgm_item_name}>{e.name}</div>
                 <div className={styles.bgm_sound_wrapper}>
@@ -70,14 +66,14 @@ export function ExtraBgm() {
                   />
                 </div>
               </div>
-              {e.name === currentPlayingBgmName.value && <img src={bgmUnderline} className={styles.bgm_underline} />}
+              <img src={bgmUnlocked} className={styles.bgmUnlocked} alt="" />
             </div>
           );
         })}
         {Array.from({ length: 8 - list.length }).map((e, i) => {
           return (
-            <div key={i} className={styles.bgmElement} style={{ cursor: 'default' }}>
-              <img src={unlockBgm} alt="" className={styles.unlockBgm} />
+            <div key={i} className={`${styles.bgmElement}`} style={{ cursor: 'default' }}>
+              <img src={bgmLocked} alt="" className={styles.bgmLocked} />
             </div>
           );
         })}

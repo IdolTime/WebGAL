@@ -7,16 +7,16 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/background.png');
+  background-image: url('@/assets/imgs/save-load-bg.webp');
 }
 
 .Common_back {
   position: absolute;
-  top: 0;
-  left: px2(-26px);
+  top: px2(-7px);
+  left: px2(-72px);
   cursor: pointer;
-  width: px2(105px);
-  height: px2(58px);
+  width: px2(53px);
+  height: px2(53px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -30,9 +30,9 @@
 .Common_title {
   position: absolute;
   top: px2(18px);
-  left: px2(47px);
-  width: px2(344px);
-  height: px2(87px);
+  left: px2(105px);
+  width: px2(269px);
+  height: px2(47px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -46,24 +46,6 @@
   background-image: url('@/assets/imgs/load-title.png');
 }
 
-.Save_Load_title {
-  font-family: "思源宋体", serif;
-  letter-spacing: 0.1em;
-  width: auto;
-  font-size: 500%;
-  min-width: 350px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  left: 20px;
-  top:0;
-  z-index: -1;
-  opacity: 0.2;
-  transform: translateY(-10px);
-}
-
 .Save_Load_top_buttonList {
   display: flex;
   justify-content: center;
@@ -71,18 +53,18 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: px2(14px);
+  bottom: px2(32px);
 }
 
 .Save_Load_indicator_container {
   display: flex;
   align-items: center;
-  gap: px2(30px);
+  gap: px2(11px);
 }
 
 .Save_Load_top_button {
-  width: px2(29px);
-  height: px2(29px);
+  width: px2(13px);
+  height: px2(14px);
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -91,14 +73,17 @@
 
 .Save_Load_indicator_default {
   width: px2(13px);
-  height: px2(13px);
+  height: px2(14px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   background-image: url('@/assets/imgs/point-default.png');
 }
 
 .Save_Load_indicator_active {
-  width: px2(29px);
-  height: px2(29px);
-  background-size: cover;
+  width: px2(13px);
+  height: px2(14px);
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/point-active.png')!important;
@@ -113,20 +98,19 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  padding-left: px2(53px);
-  padding-right: px2(45px);
+  padding-left: px2(50px);
   box-sizing: border-box;
 }
 
 .Save_Load_content_element {
-  width: px2(359px);
-  height: px2(233px);
+  width: px2(411px);
+  height: px2(254px);
   animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out;
   opacity: 0;
   transition: transform 0.25s, box-shadow 0.25s;
   position: relative;
-  margin-right: px2(33.5px);
-  margin-bottom: px2(37px);
+  margin-right: px2(-14px);
+  margin-bottom: px2(8px);
   &:nth-child(3n) {
     margin-right: 0;
   }
@@ -140,145 +124,96 @@
   display: flex;
 }
 
-.Save_Load_content_element_top_index {
-  color: #C6BAD9;
-  text-align: center;
-  font-family: Inter;
-  font-size: px2(28px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-align: center;
-}
-
-.Load_content_elememt_top_index {
-  color: #ebd8a6;
-  text-align: center;
-  font-family: Inter;
-  font-size: px2(28px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-align: center;
-}
-
-.Save_Load_content_element_top_date {
-  color: #ebd8a6;
-  text-align: center;
-  font-family: Inter;
-  font-size: px2(28px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-align: center;
-  white-space: noWrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.Load_content_element_top_date {
-  background-color: #005CAF;
-}
-
-.Save_Load_content_text {
-  font-family: "WebgalUI", sans-serif;
-  letter-spacing: 0.05em;
-  color: #373C38;
-  background: linear-gradient(-45deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 1) 100%);
-  //background: rgba(255,255,255,1);
-  font-size: 120%;
-  height: 40%;
-  width: 100%;
-  //box-sizing: border-box;
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
 .Save_Load_info {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: px2(227px);
+  top: px2(214px);
   width: px2(300px);
-  color: #C6BAD9;
+  color: #713F44;
   text-align: center;
   font-family: Inter;
-  font-size: px2(24px);
+  font-size: px2(20px);
   font-style: normal;
   font-weight: 400;
   line-height: px2(30px); /* 125% */
   transition: all ease 0.3s;
 }
-.Save_Load_content_space {
-  position: relative;
-  background-size: cover;
-  width: px2(369px);
-  height: px2(233px);
-  padding: px2(14px) px2(11.5px) px2(20px) px2(11.5px);
-}
 
-.Save_Load_content_wrapper {
-  width: 100%;
-  height: 100%;
-  &:hover {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-image: url('@/assets/imgs/saves-hover-bg.png');
-  }
-  padding: px2(21px) px2(18px) px2(19px) px2(17px);
-}
 .Save_Load_content_ele {
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url('@/assets/imgs/save-load-bg.png');
+  background-size: px2(385px) px2(254px);
+  background-position: top 0 left px2(15px);
+  background-image: url('@/assets/imgs/save-load-item-bg.png');
+
+  &:hover {
+    background-repeat: no-repeat;
+    background-size: px2(411px) px2(247px);
+    background-position: bottom 0 left px2(-6px);
+    background-image: url('@/assets/imgs/save-load-item-selected-bg.png');
+  }
+}
+
+.Save_Load_bg {
+  position: absolute;
+  top: px2(13px);
+  left: px2(22.5px);
+  width: px2(352px);
+  height: px2(237px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/save-load-item-unlock-bg.png');
 }
 
 .Save_Load_content_miniRen_bg {
-  margin-top: px2(35px);
-  margin-left: px2(31px);
-  background-size: cover;
-  height: px2(159px);
-  width: px2(313px);
+  margin-top: px2(28.5px);
+  margin-left: px2(38px);
+  background-size: contain;
+  height: px2(167px);
+  width: px2(321px);
   background-position: center;
   position: relative;
   z-index: 10;
 }
 
 .Save_Load_border {
-  width: 100%;
-  height: 100%;
+  width: px2(63px);
+  height: px2(53px);
   position: absolute;
-  top: 0;
-  left: 0;
-  background-size: cover;
+  top: px2(-5px);
+  right: px2(15px);
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/border-active.png');
-  z-index: 2;
+  z-index: 12;
   transition: all ease 0.3s;
 }
 
 .Btn {
-  width: px2(105px);
-  height: px2(58px);
+  width: px2(54px);
+  height: px2(34px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back.png');
+  background-image: url('@/assets/imgs/cg-bottom-left.png');
   cursor: pointer;
-  margin-right: px2(38px);
+  margin-right: px2(137px);
   &:hover {
-    background-image: url('@/assets/imgs/back-r.png');
+    background-image: url('@/assets/imgs/cg-bottom-left-select.png');
   }
 }
 
 .Btn_r {
   margin-right: 0;
-  margin-left: px2(38px);
-  transform: rotate(180deg);
+  margin-left: px2(137px);
+  background-image: url('@/assets/imgs/cg-bottom-right.png');
+  &:hover {
+    background-image: url('@/assets/imgs/cg-bottom-right-select.png');
+  }
 }
 
 @keyframes Elements_in {

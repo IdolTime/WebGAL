@@ -187,7 +187,7 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确认返回到标题界面吗',
-      quitTips: '确认退出游戏吗',
+      quitTips: '返回标题界面将丢失未保存的进度，\n确认返回标题画面吗',
       backToGame: '返回游戏',
       preserve: '保存',
       read: '读取',

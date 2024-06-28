@@ -9,7 +9,7 @@
   z-index: 10;
   animation: backlog_soft_in 0.7s ease-out forwards;
   box-sizing: border-box;
-  background-image: url('@/assets/imgs/background.png');
+  background-image: url('@/assets/imgs/history-bg.webp');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -40,14 +40,14 @@
 
 .backlog_top_icon {
   position: absolute;
-  left: px2(-27px);
+  left: px2(-91px);
   top: px2(-6px);
   cursor: pointer;
-  width: px2(105px);
-  height: px2(58px);
+  width: px2(53px);
+  height: px2(53px);
   background-image: url('@/assets/imgs/back.png');
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
 
   &:hover {
@@ -67,10 +67,10 @@
 
 .backlog_title {
   position: absolute;
-  top: px2(20px);
-  left: px2(47px);
-  width: px2(344px);
-  height: px2(84px);
+  top: px2(21px);
+  left: px2(120px);
+  width: px2(258px);
+  height: px2(47px);
   background-image: url('@/assets/imgs/review-title.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -79,14 +79,14 @@
 
 .backlog_content {
   position: absolute;
-  margin-top: px2(93px);
-  padding: 0 px2(60px);
+  margin-top: px2(100px);
+  padding-left: px2(68px);
   overflow: overlay;
   display: flex;
   flex-flow: column-reverse;
   font-weight: normal;
   box-sizing: border-box;
-  height: calc(100% - px2(93px));
+  height: calc(100% - px2(100px));
   // background-image: url('@/assets/imgs/review-content-box-bg.png');
   // background-repeat: no-repeat;
   // background-size: cover;
@@ -97,21 +97,9 @@
   width: px2(16px) !important;  /* 滚动条宽度 */
 }
 
-.backlog_review_line {
-  // position: absolute;
-  // top: px2(95px);
-  // left: 50%;
-  // transform: translateX(-50%);
-  margin: 0 auto;
-  background-size: cover;
-  height: px2(1px);
-  width: px2(1079px);
-  background-image: url('@/assets/imgs/review-line.png');
-}
-
 .backlog_content::-webkit-scrollbar-thumb {
-  width: 17px;
-  height: 107px;
+  width: px2(26px);
+  height: px2(87px);
   flex-shrink: 0;
   background: url('@/assets/imgs/slider-bar.png');
 }
@@ -129,28 +117,13 @@
   opacity: 0;
   animation: backlog_item_in 0.5s ease-out forwards;
   // margin: 1.25em 0 0 0;
-  width: px2(1160px);
+  width: px2(1129px);
   position: relative;
   padding-bottom: px2(5px);
   margin-top: px2(10px);
   // height: px2(170px);
   // border-bottom: 1px solid red;
   // padding: 0 px2(57px) 0 px2(100px);
-
-  &:hover {
-    background-image: url('@/assets/imgs/review-item-bg-hover.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  &:hover .backlog_item_content_name {
-    color: #C6BAD9;
-  }
-
-  &:hover .backlog_item_content_text {
-    color: #CCC092;
-  }
 
   // &:hover .backlog_item_content {
   //   font-size: px2(30px);
@@ -167,8 +140,8 @@
       top: px2(-5px);  
       left: 50%;  
       transform: translateX(-50%);
-      width: px2(1079px);  
-      height: px2(1px);
+      width: px2(1129px);  
+      height: px2(3px);
       background-image: url('@/assets/imgs/review-line.png');
       background-size: cover;
       background-position: center;
@@ -182,8 +155,8 @@
     bottom: px2(-5px);  
     left: 50%;  
     transform: translateX(-50%);
-    width: px2(1079px);  
-    height: px2(1px);
+    width: px2(1129px);  
+    height: px2(3px);
     background-image: url('@/assets/imgs/review-line.png');
     background-size: cover;
     background-position: center;
@@ -205,36 +178,38 @@
   display: flex;
   flex-flow: row;
   align-items: flex-start;
-  width: 80%;
-  max-width: 80%;
-  min-width: 30%;
 }
 
 .backlog_item_content_name {
-  margin-left: px2(83px);
+  margin-left: px2(26px);
   overflow-wrap: break-word;
   box-sizing: border-box;
   text-align: left;
   letter-spacing: 0.1em;
-  color: #A3A0A0;
+  color: #713F44;
   font-size: px2(18px);
   font-weight: 400;
-  // line-height: px2(55px);
+  line-height: px2(38px);
 }
 
 .backlog_item_content {
-  color: #9F94A5;
-  font-size: px2(20px);
+  color: #713F44;
+  font-size: px2(18px);
   font-weight: 400;
-  line-height: px2(34px);
-  padding-left: px2(91px);
+  line-height: px2(25px);
+  margin-left: px2(32px);
 }
 
-.backlog_item_button_list {
-  display: flex;
-  flex-flow: row;
-  align-items: flex-start;
-  margin: 0.35em 0 0 0;
+.backlog_content_container {
+  width: px2(953px);
+  margin-left: px2(52px);
+
+  &:hover {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('@/assets/imgs/review-item-bg-hover.png');
+  }
 }
 
 .backlog_item_button_element {
@@ -242,14 +217,14 @@
   display: flex;
   opacity: 0;
   position: absolute;
-  right: px2(261px);
+  right: px2(123px);
   top: 50%;
   transform: translateY(-50%);
 
   .sound_icon {
     display: block;
-    width: px2(50px);
-    height: px2(46px);
+    width: px2(42px);
+    height: px2(38px);
     background-image: url('@/assets/imgs/sound-icon.png');
     background-repeat: no-repeat;
     background-size: cover;

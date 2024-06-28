@@ -11,22 +11,28 @@
 }
 
 .extraTop {
-  margin-top: px2(22px);
-  margin-left: px2(49px);
-  width: px2(344px);
-  position: relative;
+  position: absolute;
+  top: px2(22px);
+  left: px2(116px);
+  width: px2(167px);
+  height: px2(47px);
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/gallery-title.png');
 }
 
 .backIcon {
   position: absolute;
-  left: px2(-27px);
-  top: px2(-6px);
+  left: px2(-75px);
+  top: px2(-7px);
   cursor: pointer;
-  width: px2(105px);
-  height: px2(58px);
+  width: px2(53px);
+  height: px2(53px);
 
   background-image: url('@/assets/imgs/back.png');
-  background-size: cover;
+  background-size: contain;
   &:hover {
     background-image: url('@/assets/imgs/back-r.png');
   }
@@ -45,59 +51,56 @@
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
+  margin-top: px2(84px);
 }
 .mainTab {
-  width: px2(984px);
-  height: px2(73px);
-  margin: 0 auto;
-  margin-top: px2(8px);
-  position: relative;
   display: flex;
-  align-items: center;
-}
-.mainTab_bg {
-  width: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: px2(12px);
-  left: 0;
-}
-.mainTab_unselect {
-  position: absolute;
-  cursor: pointer;
-  height: px2(20px);
-}
-.mainTab_unselect_bgm {
-  left: px2(292px);
-}
-.mainTab_unselect_cg {
-  left: px2(613px);
-}
-
-.mainTab_choose {
-  width: px2(269px);
-  height: px2(73px);
-  position: absolute;
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-image: url('@/assets/imgs/tab-choose.png');
-  background-size: cover;
+  gap: px2(40px);
+  align-items: flex-end;
 }
-.mainTab_choose_bgm {
-  left: px2(227px);
+.mainTab_bgm {
+  width: px2(277px);
+  height: px2(74px);
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/bgm-choose.png');
 }
-.mainTab_choose_cg {
-  left: px2(527px);
+.mainTab_unselect_bgm {
+  width: px2(276px);
+  height: px2(74px);
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/bgm-unselect.png');
 }
-.mainTab_text {
-  height: px2(20px);
+.mainTab_cg {
+  width: px2(278px);
+  height: px2(81px);
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/cg-choose.png');
+}
+.mainTab_unselect_cg {
+  width: px2(278px);
+  height: px2(81px);
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/cg-unselect.png');
 }
 
 .bgmContainer {
   width: 100%;
-  padding-top: px2(88px);
-  padding-left: px2(160px);
+  padding-top: px2(85px);
+  padding-left: px2(157px);
 }
 
 .bgmListContainer {
@@ -105,31 +108,28 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  column-gap: px2(106px);
 }
 
 .bgmElement {
   font-family: "思源宋体", serif;
   cursor: pointer;
-  width: 50%;
   display: flex;
-  margin-bottom: px2(40px);
   align-items: center;
   position: relative;
-}
-.bgmStar {
-  width: px2(43px);
-  height: px2(44px);
+  width: px2(465px);
+  height: px2(69px);
+  margin-bottom: px2(16px);
 }
 
 .bgmName {
-  color: #CCC092;
+  color: #713F44;
   font-size: px2(32px);
-  padding-left: px2(19px);
+  padding-left: px2(37px);
   display: flex;
   justify-content: space-between;
   width: px2(385px);
   align-items: center;
-  gap: px2(10px)
 }
 .bgm_item_name {
   min-width: 0;
@@ -138,33 +138,33 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.bgm_underline {
-  width: px2(385px);
-  height: px2(3px);
-  position: absolute;
-  left: px2(46px);
-  bottom: px2(-8px);
-}
 .bgm_sound_wrapper {
-  width: px2(50px);
-  height: px2(46px);
+  width: px2(42px);
+  height: px2(38px);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .bgm_sound_unselect {
-  width: px2(27px);
-  height: px2(27px);
+  width: px2(42px);
+  height: px2(38px);
 }
 .bgm_sound_select {
-  width: px2(50px);
-  height: px2(46px)
+  width: px2(42px);
+  height: px2(38px)
 }
-.unlockBgm {
-  width: px2(310px);
-  height: px2(45px);
+.bgmLocked {
+  // width: px2(459px);
+  height: px2(63px);
 }
-
+.bgmUnlocked {
+  width: px2(465px);
+  height: px2(69px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 .footer {
   position: absolute;
   left: 50%;
@@ -179,19 +179,19 @@
   gap: px2(30px);
 }
 .footer_page_indicator {
-  width: px2(29px);
-  height: px2(29px);
+  width: px2(13px);
+  height: px2(14px);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .footer_page_icon_checked {
-  width: px2(29px);
-  height: px2(29px);
+  width: px2(13px);
+  height: px2(14px);
 }
 .footer_page_icon_unchecked {
   width: px2(13px);
-  height: px2(13px);
+  height: px2(14px);
 }
 
 @keyframes bgmElement_In {
@@ -214,21 +214,25 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  row-gap: px2(25px);
+  column-gap: px2(31px);
 }
 
 .cgElement {
-  width: px2(369px);
-  height: px2(233px);
-  padding: px2(36px) px2(38px) px2(38px) px2(18px);
+  width: px2(336px);
+  height: px2(213px);
   position: relative;
   cursor: pointer;
-  &:nth-child(4), &:nth-child(5), &:nth-child(6) {
-    margin-top: px2(-15px);
-  }
 }
 .cgUnLockElement {
   background-image: url('@/assets/imgs/cg-unlock.png');
   background-size: cover;
+}
+.unlockedCGImg {
+  width: px2(293px);
+  height: px2(163px);
+  margin-left: px2(21px);
+  margin-top: px2(20px);
 }
 
 .cgShowDiv {
@@ -321,18 +325,24 @@ $endTransform: scale(1, 1) translate3d(0, 0, 0);
 }
 
 .Btn {
-  width: px2(105px);
-  height: px2(58px);
+  width: px2(54px);
+  height: px2(34px);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/back.png');
+  background-image: url('@/assets/imgs/cg-bottom-left.png');
   cursor: pointer;
+  margin-right: px2(137px);
   &:hover {
-    background-image: url('@/assets/imgs/back-r.png');
+    background-image: url('@/assets/imgs/cg-bottom-left-select.png');
   }
 }
 
 .Btn_r {
-  transform: rotate(180deg);
+  margin-right: 0;
+  margin-left: px2(137px);
+  background-image: url('@/assets/imgs/cg-bottom-right.png');
+  &:hover {
+    background-image: url('@/assets/imgs/cg-bottom-right-select.png');
+  }
 }

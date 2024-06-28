@@ -7,7 +7,8 @@
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  column-gap: px2(280px);
   align-items: flex-end;
   z-index: 13;
   // background: rgba(0, 0, 0, 0.05);
@@ -24,14 +25,14 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
-  height: px2(79px);
-  width: px2(554px);
+  height: px2(100px);
+  width: px2(385px);
   font-size: px2(28px);
   font-weight: 400;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #433409;
+  color: #fff;
 
   &:hover {
     background-image: url('@/assets/imgs/choose-item-active.png') !important;;

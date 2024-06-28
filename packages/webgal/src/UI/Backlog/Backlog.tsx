@@ -48,8 +48,8 @@ export const Backlog = () => {
           style={{ animationDelay: `${20 * (WebGAL.backlogManager.getBacklog().length - i)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
-          <div className={styles.backlog_func_area}>
-            <div className={styles.backlog_item_button_list}>
+          <div className={styles.backlog_content_container}>
+            <div className={styles.backlog_func_area}>
               {/* <div
                 onClick={(e) => {c
                   playSeClick();
@@ -88,17 +88,17 @@ export const Backlog = () => {
                 </div>
               ) : null}
             </div>
-          </div>
-          <div
-            className={styles.backlog_item_content}
-            onClick={(e) => {
-              playSeClick();
-              jumpFromBacklog(i);
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          >
-            <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
+            <div
+              className={styles.backlog_item_content}
+              onClick={(e) => {
+                playSeClick();
+                jumpFromBacklog(i);
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
+            </div>
           </div>
           <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />
         </div>

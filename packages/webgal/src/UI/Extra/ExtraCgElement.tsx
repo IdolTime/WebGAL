@@ -46,11 +46,10 @@ export function ExtraCgElement(props: IProps) {
         className={`${styles.cgElement} ${styles.cgUnLockElement}`}
       >
         <div
+          className={styles.unlockedCGImg}
           style={{
             background: `url('${props.imgUrl}') no-repeat center center`,
             backgroundSize: `cover`,
-            height: '100%',
-            transform: 'translateX(30px);',
           }}
         />
       </div>

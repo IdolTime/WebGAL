@@ -31,62 +31,59 @@ export const Options: FC = () => {
       <div className={styles.Options_page_container}>
         {/* 基础设置 */}
         <div className={styles.Options_left}>
-          <div className={`${styles.title_wrapper} ${styles.title_wrapper_left}`}>
-            <div className={styles.star} />
-            <div className={styles.title_base} />
-            <div className={styles.star} />
+          <div className={styles.title_base} />
+          <div className={`${styles.Label_row} ${styles.mt48}`}>
+            <span className={styles.Label_row_text}>画面模式</span>
+            <span className={styles.Label_row_decoration} />
           </div>
-          <div className={`${styles.Row} ${styles.Row_padding}`}>
-            <div className={styles.Label}>画面模式</div>
-            <div className={styles.Check_line}>
-              <div className={styles.Check_item}>
-                <div className={`${styles.Label} ${styles.Label_fullscreen}`}>全屏</div>
-                <div
-                  className={styles.Check_box}
-                  onClick={() => {
-                    dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
-                    setStorage();
-                  }}
-                >
-                  {!userDataState.optionData.fullScreen ? <div className={styles.Checked_box} /> : null}
-                </div>
+          <div className={styles.Check_row}>
+            <div className={styles.Check_row_option}>
+              <span className={styles.Check_row_prefix}>全屏</span>
+              <div
+                className={styles.Check_row_box}
+                onClick={() => {
+                  dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
+                  setStorage();
+                }}
+              >
+                {!userDataState.optionData.fullScreen ? <div className={styles.Check_row_box_checked} /> : null}
               </div>
-              <div className={styles.Check_item}>
-                <div className={`${styles.Label} ${styles.Label_window}`}>窗口</div>
-                <div
-                  className={styles.Check_box}
-                  onClick={() => {
-                    dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
-                    setStorage();
-                  }}
-                >
-                  {userDataState.optionData.fullScreen ? <div className={styles.Checked_box} /> : null}
-                </div>
+            </div>
+            <div className={styles.Check_row_option}>
+              <span className={styles.Check_row_prefix}>窗口化</span>
+              <div
+                className={styles.Check_row_box}
+                onClick={() => {
+                  dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
+                  setStorage();
+                }}
+              >
+                {userDataState.optionData.fullScreen ? <div className={styles.Check_row_box_checked} /> : null}
               </div>
             </div>
           </div>
-          <div className={styles.Bar_line}>
-            <div className={`${styles.Label} ${styles.Label_text_speed}`}>文本播放速度</div>
-            <OptionSlider
-              initValue={userDataState.optionData.textSpeed}
-              uniqueID="文本播放速度"
-              onChange={(event) => {
-                const newValue = event.target.value;
-                dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
-                setStorage();
-              }}
-            />
+          <div className={`${styles.Label_row} ${styles.mt48}`}>
+            <span className={styles.Label_row_text}>文本播放速度</span>
+            <span className={styles.Label_row_decoration} />
           </div>
+          <OptionSlider
+            initValue={userDataState.optionData.textSpeed}
+            uniqueID="文本播放速度"
+            onChange={(event) => {
+              const newValue = event.target.value;
+              dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
+              setStorage();
+            }}
+          />
         </div>
         {/* 音效设置 */}
         <div className={styles.Options_right}>
-          <div className={`${styles.title_wrapper} ${styles.title_wrapper_right}`}>
-            <div className={styles.star} />
-            <div className={styles.title_voice} />
-            <div className={styles.star} />
+          <div className={styles.title_voice} />
+          <div className={`${styles.Label_row} ${styles.mt32} ${styles.Label_row_right}`}>
+            <span className={styles.Label_row_text}>全局音量</span>
+            <span className={styles.Label_row_decoration} />
           </div>
-          <div className={styles.Row}>
-            <div className={styles.Label}>全局音量</div>
+          <div className={styles.Slider_wrapper}>
             <OptionSlider
               initValue={userDataState.optionData.volumeMain}
               uniqueID="全局音量"
@@ -97,8 +94,11 @@ export const Options: FC = () => {
               }}
             />
           </div>
-          <div className={styles.Row}>
-            <div className={styles.Label}>背景音量</div>
+          <div className={`${styles.Label_row} ${styles.mt32} ${styles.Label_row_right}`}>
+            <span className={styles.Label_row_text}>背景音量</span>
+            <span className={styles.Label_row_decoration} />
+          </div>
+          <div className={styles.Slider_wrapper}>
             <OptionSlider
               initValue={userDataState.optionData.bgmVolume}
               uniqueID="背景音量"
@@ -109,8 +109,11 @@ export const Options: FC = () => {
               }}
             />
           </div>
-          <div className={styles.Row}>
-            <div className={styles.Label}>音效</div>
+          <div className={`${styles.Label_row} ${styles.mt32} ${styles.Label_row_right}`}>
+            <span className={styles.Label_row_text}>音效</span>
+            <span className={styles.Label_row_decoration} />
+          </div>
+          <div className={styles.Slider_wrapper}>
             <OptionSlider
               initValue={userDataState.optionData.seVolume}
               uniqueID="音效"
@@ -122,8 +125,11 @@ export const Options: FC = () => {
               }}
             />
           </div>
-          <div className={styles.Row}>
-            <div className={styles.Label}>角色语音</div>
+          <div className={`${styles.Label_row} ${styles.mt22} ${styles.Label_row_right}`}>
+            <span className={styles.Label_row_text}>角色语音</span>
+            <span className={styles.Label_row_decoration} />
+          </div>
+          <div className={styles.Slider_wrapper}>
             <OptionSlider
               initValue={userDataState.optionData.vocalVolume}
               uniqueID="角色语音"

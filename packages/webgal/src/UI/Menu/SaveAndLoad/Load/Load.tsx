@@ -53,18 +53,14 @@ export const Load: FC = () => {
   for (let i = start; i <= end; i++) {
     animationIndex++;
     const saveData = saveDataState.saveData[i];
-    let saveElementContent = (
-      <div className={styles.Save_Load_content_space}>
-        <div className={styles.Save_Load_content_wrapper}>
-          <div className={styles.Save_Load_content_ele} />
-        </div>
-      </div>
-    );
+    let saveElementContent = <div className={styles.Save_Load_content_ele} />;
+
     if (saveData) {
       saveElementContent = (
         <>
-          <div className={styles.Save_Load_border} />
+          <div className={styles.Save_Load_bg} />
           <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
+          <div className={styles.Save_Load_border} />
           <div className={styles.Save_Load_info}>
             {saveData.saveTime}
             {'\n'}

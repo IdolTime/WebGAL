@@ -1,8 +1,8 @@
 @import 'src/assets/style/px2.scss';
 input[type=range] {
   -webkit-appearance: none; /* 去掉底部的 track 默认样式，就是整个灰条 */
-  width: px2(321px);
-  height: px2(11px);
+  width: px2(376px);
+  height: px2(26px);
   background: transparent; /* 否则在 Chrome 中是白色背景 */
   font-size: 100%;
 }
@@ -13,24 +13,24 @@ input[type=range]:focus {
 
 /*轨道样式*/
 input[type=range]::-webkit-slider-runnable-track {
-  width: px2(321px);
-  height: px2(11px);
+  width: px2(376px);
+  height: px2(26px);
   background: transparent;
 }
 input[type=range]::-moz-range-track {
-  width: px2(321px);
-  height: px2(11px);
+  width: px2(376px);
+  height: px2(26px);
   background: transparent;
 }
 
 /*滑块样式*/
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: px2(34px);
-  width: px2(8px);
+  height: px2(53px);
+  width: px2(63px);
   cursor: pointer;
-  margin-top: px2(-11.5px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
-  background-size: cover;
+  margin-top: px2(-14px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/bar-thumb.png');
@@ -40,11 +40,11 @@ input[type=range]::-webkit-slider-thumb {
 /* Firefox 同上 */
 input[type=range]::-moz-range-thumb {
   -moz-appearance: none;
-  height: px2(34px);
-  width: px2(8px);
+  height: px2(53px);
+  width: px2(63px);
   cursor: pointer;
-  margin-top: px2(-11.5px);
-  background-size: cover;
+  margin-top: px2(-14px);
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/bar-thumb.png');
@@ -59,8 +59,8 @@ input[type=range]::-moz-range-thumb {
   }
   .Slider_bg{
     position: absolute;
-    width: px2(321px);
-    height: px2(11px);
+    width: px2(376px);
+    height: px2(26px);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -68,8 +68,8 @@ input[type=range]::-moz-range-thumb {
     z-index: 2;
   }
   .Slider_bg_under {
-    width: px2(321px);
-    height: px2(11px);
+    width: px2(376px);
+    height: px2(26px);
     cursor: pointer;
     background-size: cover;
     background-repeat: no-repeat;
