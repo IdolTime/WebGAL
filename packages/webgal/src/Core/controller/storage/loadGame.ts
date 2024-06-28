@@ -82,7 +82,11 @@ export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false)
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   dispatch(setVisibility({ component: 'showExtra', visibility: false }));
-  dispatch(saveActions.setLoadVideo(true))
+
+  if (isLoadVideo) {
+    dispatch(saveActions.setLoadVideo(true))
+  }
+ 
   /**
    * 恢复模糊背景
    */

@@ -45,6 +45,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
     }
   }
 
+  // 成就背景
   if (webgalStore.getState().GUI.showAchievement) {
     dispatch(setAchieveBg(url))
     sentence.args.forEach((e) => {
