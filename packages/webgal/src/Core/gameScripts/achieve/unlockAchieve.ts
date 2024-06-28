@@ -70,7 +70,7 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
     x: unlockAchieveObj['x'] || 0,
     y: unlockAchieveObj['y'] || 0,
     saveTime: currentTime,
-    isShow: saveData.isShowUnlock || unlockItemIndex !== -1,
+    isShow: saveData.isShowUnlock || unlockItemIndex === -1,
   }
 
   // 没有数据 或者 没有找到 > 存储到本地缓存
