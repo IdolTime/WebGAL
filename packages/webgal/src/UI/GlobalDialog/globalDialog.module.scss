@@ -67,11 +67,11 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/menu-button-default.png');
+  background-image: url('@/assets/imgs/game-menu-button-bg.png');
   cursor: pointer;
   transition: transform 0.33s ease-in-out;
   &:hover {
-    background-image: url('@/assets/imgs/menu-button-active.png');
+    background-image: url('@/assets/imgs/game-menu-button-bg-active.png');
     color: #fff;
     transform: scale(1.1, 1.1);
   }

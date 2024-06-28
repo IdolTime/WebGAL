@@ -98,10 +98,10 @@
 }
 
 .backlog_content::-webkit-scrollbar-thumb {
-  width: px2(26px);
-  height: px2(87px);
+  width: px2(17px);
   flex-shrink: 0;
-  background: url('@/assets/imgs/slider-bar.png');
+  // background: url('@/assets/imgs/slider-bar.png');
+  background: #CC8585;
 }
 
 .backlog_content::-webkit-scrollbar-track  {
@@ -205,10 +205,7 @@
   margin-left: px2(52px);
 
   &:hover {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-image: url('@/assets/imgs/review-item-bg-hover.png');
+    background: linear-gradient(90deg, rgba(217, 217, 217, 0.00) 0%, #F6CBD2 16.17%, #FBBDC7 41.71%, rgba(252, 190, 200, 0.00) 100%);
   }
 }
 

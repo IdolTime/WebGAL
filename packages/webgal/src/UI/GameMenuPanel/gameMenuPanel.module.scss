@@ -70,7 +70,7 @@
                 width: px2(165px);
                 height: px2(63px);
                 margin-right: px2(42px);
-                background-image: url('@/assets/imgs/menu-button-default.png');
+                background-image: url('@/assets/imgs/game-menu-button-bg.png');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
@@ -85,7 +85,7 @@
                 &:hover {
                     color: #fff;
                     cursor: pointer;
-                    background-image: url('@/assets/imgs/menu-button-active.png');
+                    background-image: url('@/assets/imgs/game-menu-button-bg-active.png');
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;

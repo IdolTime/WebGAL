@@ -26,10 +26,10 @@ input[type=range]::-moz-range-track {
 /*滑块样式*/
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: px2(53px);
-  width: px2(63px);
+  height: px2(46px);
+  width: px2(42px);
   cursor: pointer;
-  margin-top: px2(-14px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
+  margin-top: px2(-10px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -40,10 +40,10 @@ input[type=range]::-webkit-slider-thumb {
 /* Firefox 同上 */
 input[type=range]::-moz-range-thumb {
   -moz-appearance: none;
-  height: px2(53px);
-  width: px2(63px);
+  height: px2(46px);
+  width: px2(42px);
   cursor: pointer;
-  margin-top: px2(-14px);
+  margin-top: px2(-10px);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

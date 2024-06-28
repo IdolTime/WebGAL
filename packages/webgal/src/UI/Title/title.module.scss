@@ -25,13 +25,13 @@
   align-items: center;
   cursor: pointer;
   transition: all 0.33s ease-in-out;
-  background-image: url('@/assets/imgs/game-menu-button-bg.png') !important;
+  background-image: url('@/assets/imgs/menu-button-default.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
 
 .Title_button:hover {
-  background-image: url('@/assets/imgs/game-menu-button-bg-active.png') !important;
+  background-image: url('@/assets/imgs/menu-button-active.png') !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
   transform: scale(1.1);
