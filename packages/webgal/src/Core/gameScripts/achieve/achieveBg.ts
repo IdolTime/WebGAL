@@ -1,29 +1,3 @@
-// import { ISentence } from '@/Core/controller/scene/sceneInterface';
-// import { IPerform } from '@/Core/Modules/perform/performInterface';
-
-
-// /**
-//  * 成就页-设置背景
-//  * @param sentence 语句
-//  * @return {IPerform}
-//  */
-// export const achieveBg = (sentence: ISentence): IPerform => {
-//   alert('成就页-设置背景')
-//   console.log(sentence);
-//   debugger;
-
-//   return {
-//     performName: 'none',
-//     duration: 0,
-//     isHoldOn: false,
-//     stopFunction: () => {},
-//     blockingNext: () => false,
-//     blockingAuto: () => true,
-//     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-//   };
-// };
-
-
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';

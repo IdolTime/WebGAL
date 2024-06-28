@@ -36,4 +36,6 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true, reset
 
   // 控制解锁成就显示，当开始游戏后才可解锁
   webgalStore.dispatch(saveActions.setIsShowUnlock(true));
+  // 重置鉴赏模式
+  webgalStore.dispatch(saveActions.setLoadVideo(false));
 };

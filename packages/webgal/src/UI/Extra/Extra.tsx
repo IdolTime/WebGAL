@@ -8,6 +8,8 @@ import { CloseSmall } from '@icon-park/react';
 import { ExtraVideo } from './ExtraVideo'
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { useEffect } from 'react';
+import { saveActions } from '@/store/savesReducer';
 
 export function Extra() {
   const { playSeClick } = useSoundEffect();
@@ -15,6 +17,13 @@ export function Extra() {
   const dispatch = useDispatch();
 
   const t = useTrans('extra.');
+
+  useEffect(() => {
+    if (showExtra) {
+      dispatch(saveActions.setLoadVideo(true));
+    }
+  }, [showExtra])
+
   return (
     <>
       {showExtra && (
@@ -24,6 +33,7 @@ export function Extra() {
               className={styles.extra_top_icon}
               onClick={() => {
                 dispatch(setVisibility({ component: 'showExtra', visibility: false }));
+                dispatch(saveActions.setLoadVideo(false));
                 playSeClick();
               }}
               onMouseEnter={playSeClick}

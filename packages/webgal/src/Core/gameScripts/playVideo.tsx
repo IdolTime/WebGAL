@@ -168,7 +168,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            WebGAL.videoManager.destroy(url);
+            WebGAL.videoManager.destroy(url, false, isLoadVideo);
           },
           blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
