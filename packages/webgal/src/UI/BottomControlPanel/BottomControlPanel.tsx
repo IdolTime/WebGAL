@@ -38,7 +38,6 @@ export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
   const strokeWidth = 2.5;
   const { i18n } = useTranslation();
-  const currentPayerVideoUrlKey = useSelector((state: RootState) => state.saveData.currentPayerVideoUrlKey);
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const [isCollection, setIsCollection] = useState(false);  // 是否收藏
 

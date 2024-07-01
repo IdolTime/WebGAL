@@ -12,7 +12,7 @@ import {
   ISetGameVar,
   ISetStagePayload,
   IStageState,
-  IUnlockAchieveObj
+  IUnlockAchieveObj,
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -58,23 +58,23 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   storyLineBg: '', // 故事线背景
-  storyLineBgX: '',  // 故事线背景长度
-  storyLineBgY: '',  // 故事线背景宽度
+  storyLineBgX: '', // 故事线背景长度
+  storyLineBgY: '', // 故事线背景宽度
   achieveBg: '', // 成就背景
-  unlockAchieve: { // 解锁成就
+  unlockAchieve: {
+    // 解锁成就
     unlockname: '',
     saveTime: '',
     url: '',
     x: 0,
-    y: 0
+    y: 0,
   },
   achieveBgX: '',
   achieveBgY: '',
   unlockAchieves: [],
   totalAchievements: 0, // 总成就数量
-  unlockedAchievements: 0, //已获得的成就数量
+  unlockedAchievements: 0, // 已获得的成就数量
   // isShowUnlockAchieve: false,
-  currentVideoIndex: 0, // 当前视频播放索引
   isShowValueSWitch: false,
   showValueName: '',
   showValueAxisX: 0,
@@ -200,26 +200,15 @@ const stageSlice = createSlice({
       state.storyLineBg = action.payload;
     },
     setAchieveBg: (state, action: PayloadAction<string>) => {
-      state.achieveBg = action.payload
+      state.achieveBg = action.payload;
     },
     setUnlockAchieve: (state, action: PayloadAction<IUnlockAchieveObj>) => {
-      state.unlockAchieves.push(action.payload)
+      state.unlockAchieves.push(action.payload);
     },
-    setVideoIndex: (state, action: PayloadAction<number>) => {
-      state.currentVideoIndex = action.payload;
-    }
   },
 });
 
-export const { 
-  resetStageState, 
-  setStage, 
-  setStageVar, 
-  setAchieveBg, 
-  setVideoIndex, 
-  setUnlockAchieve, 
-  setStoryLineBg 
-} = stageSlice.actions;
+export const { resetStageState, setStage, setStageVar, setAchieveBg, setUnlockAchieve, setStoryLineBg } =
+  stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
-

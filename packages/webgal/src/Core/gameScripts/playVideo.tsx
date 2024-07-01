@@ -1,8 +1,5 @@
 import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
@@ -11,10 +8,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-import { current } from '@reduxjs/toolkit';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
-import { saveActions } from '@/store/savesReducer';
-import { setVideoIndex } from '@/store/stageReducer';
 import { setshowFavorited } from '@/store/GUIReducer';
 
 /**
@@ -199,9 +193,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
         WebGAL.videoManager.playVideo(url);
 
         if (url && !isLoadVideo) {
-          webgalStore.dispatch(saveActions.saveCurrentPayerVideoUrl(url));
-          const currentVideoIndex = webgalStore.getState().stage.currentVideoIndex;
-          webgalStore.dispatch(setVideoIndex(Number(currentVideoIndex) + 1));
           webgalStore.dispatch(setshowFavorited(false));
         }
 

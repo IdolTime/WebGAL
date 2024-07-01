@@ -13,7 +13,6 @@ export interface ISavesData {
   unlockAchieveData: Array<IUnlockAchieveItem>; // 解锁成就数据
   isShowUnlock: boolean; // 是否显示解锁成就
   unlockAchieveAllTotal: number; // 解锁成就总数
-  currentPayerVideoUrlKey: string;  // 档前播放视频的url，用作当当前key值
   isLoadVideo: boolean;
 }
 
@@ -25,7 +24,6 @@ const initState: ISavesData = {
   unlockAchieveData: [],
   isShowUnlock: false,
   unlockAchieveAllTotal: 0,
-  currentPayerVideoUrlKey: '',
   isLoadVideo: false
 };
 
@@ -97,9 +95,6 @@ const saveDataSlice = createSlice({
     },
     setUnlockAchieveAllTotal: (state, action: PayloadAction<number>) => {
       state.unlockAchieveAllTotal = action.payload;
-    },
-    saveCurrentPayerVideoUrl: (state, action: PayloadAction<string>) => {
-      state.currentPayerVideoUrlKey = action.payload;
     },
     setLoadVideo: (state, action: PayloadAction<boolean>) => {
       state.isLoadVideo = action.payload

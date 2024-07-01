@@ -125,7 +125,6 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         const styleObj: Record<string, number | string> = {
           fontFamily: font,
         };
-        console.log(33333, e);
 
         if (e.style) {
           if (typeof e.style.x === 'number') {
