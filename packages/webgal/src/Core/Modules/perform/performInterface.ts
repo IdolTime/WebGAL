@@ -10,7 +10,7 @@ export interface IPerform {
   // 演出是不是一个保持类型的演出
   isHoldOn: boolean;
   // 卸载演出的函数
-  stopFunction: () => void;
+  stopFunction: (params?: any) => void;
   // 演出是否阻塞游戏流程继续（一个函数，返回 boolean类型的结果，判断要不要阻塞）
   blockingNext: () => boolean;
   // 演出是否阻塞自动模式（一个函数，返回 boolean类型的结果，判断要不要阻塞）

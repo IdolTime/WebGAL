@@ -169,14 +169,20 @@ export class VideoManager {
           player: flvPlayer,
         };
 
-        const waitCommands = Object.keys(this.videosByKey[url].waitCommands);
+        videoTag.onloadeddata = () => {
+          const waitCommands = Object.keys(this.videosByKey[url].waitCommands);
 
-        if (waitCommands.length) {
-          waitCommands.forEach((command) => {
-            // @ts-ignore
-            this[command](url, this.videosByKey[url].waitCommands[command]);
-          });
-        }
+          if (waitCommands.length) {
+            waitCommands.forEach((command) => {
+              if (!this.videosByKey[url]) {
+                console.log('没有找到视频缓存资源', url);
+                return;
+              }
+              // @ts-ignore
+              this[command](url, this.videosByKey[url].waitCommands[command]);
+            });
+          }
+        };
       });
   }
 
@@ -285,7 +291,7 @@ export class VideoManager {
         noWait ? 0 : 2000,
       );
     } else {
-      if (videoItem) videoItem.waitCommands.destroy = true;
+      // videoItem.waitCommands.destroy = true;
     }
   }
 
