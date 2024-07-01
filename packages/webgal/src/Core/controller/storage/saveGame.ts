@@ -32,7 +32,7 @@ export function generateCurrentStageData(index: number, isSavePreviewImage = tru
   let urlToSave = '';
   if (isSavePreviewImage && !newName) {
     const video = document.querySelector(`#video-${Number(stageState.currentVideoIndex) - 1} > video`)! as HTMLVideoElement;
-    video.currentTime = 0
+    if (video) video.currentTime = 0
     // // const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
     const canvas2 = document.createElement('canvas');
     const context = canvas2.getContext('2d');

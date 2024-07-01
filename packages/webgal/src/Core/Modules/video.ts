@@ -248,7 +248,7 @@ export class VideoManager {
     }
   }
 
-  public destroy(key: string, noWait = false): void {
+  public destroy(key: string, noWait = false, isLoadVideo = false): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
@@ -280,12 +280,12 @@ export class VideoManager {
             },
             noWait ? 0 : 500,
           );
-          delete this.videosByKey[key];
+            delete this.videosByKey[key];
         },
         noWait ? 0 : 2000,
       );
     } else {
-      videoItem.waitCommands.destroy = true;
+      if (videoItem) videoItem.waitCommands.destroy = true;
     }
   }
 
