@@ -50,7 +50,7 @@ export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false)
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
   });
- 
+
   WebGAL.sceneManager.sceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
 
@@ -71,6 +71,7 @@ export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false)
 
   // 播放视频
   if (isLoadVideo) {
+    dispatch(saveActions.setLoadVideo(true));
     loadFile.nowStageState.PerformList.forEach((e) => {
       runScript(e.script);
     });
@@ -83,10 +84,6 @@ export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false)
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   dispatch(setVisibility({ component: 'showExtra', visibility: false }));
 
-  if (isLoadVideo) {
-    dispatch(saveActions.setLoadVideo(true))
-  }
- 
   /**
    * 恢复模糊背景
    */

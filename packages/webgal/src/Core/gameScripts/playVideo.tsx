@@ -25,7 +25,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
-  const performInitName: string = getRandomPerformName();
+  const performInitName: string = 'videoPlay.' + getRandomPerformName();
   let chooseContent = '';
   let loopValue = false;
   let continueBgmValue = false;
@@ -152,7 +152,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
           duration: 1000 * 60 * 60,
           isOver: false,
           isHoldOn: false,
-          stopFunction: () => {
+          stopFunction: (noWait = false) => {
             // WebGAL.events.fullscreenDbClick.off(skipVideo);
 
             if (!continueBgmValue) {
@@ -170,7 +170,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            WebGAL.videoManager.destroy(url);
+            WebGAL.videoManager.destroy(url, noWait);
           },
           blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
