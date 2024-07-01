@@ -55,7 +55,7 @@ export class VideoManager {
     this.videosByKey = {};
   }
 
-  public preloadVideo(url: string) {
+  public preloadVideo(url: string, playWhenLoaded = false) {
     if (this.videosByKey[url]) {
       // 已经预加载过的video标签不再重复创建
       return;
@@ -112,6 +112,13 @@ export class VideoManager {
         },
       },
     };
+
+    if (playWhenLoaded) {
+      this.videosByKey[url].waitCommands = {
+        playVideo: true,
+        showVideo: true,
+      };
+    }
 
     fetch(url)
       .then((res) => {
@@ -190,10 +197,10 @@ export class VideoManager {
         videoContainerTag.style.opacity = '1';
         videoContainerTag.style.zIndex = '11';
       }
+    } else if (!videoItem) {
+      this.preloadVideo(key, true);
     } else {
-      if (videoItem) {
-        videoItem.waitCommands.showVideo = true;
-      }
+      videoItem.waitCommands.showVideo = true;
     }
   }
 
@@ -203,10 +210,10 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.play();
       this.checkProgress(key);
+    } else if (!videoItem) {
+      this.preloadVideo(key, true);
     } else {
-      if (videoItem) {
-        videoItem.waitCommands.playVideo = true;
-      }
+      videoItem.waitCommands.playVideo = true;
     }
   }
 
@@ -219,9 +226,7 @@ export class VideoManager {
         videoTag.loop = loopValue;
       }
     } else {
-      if (videoItem) {
-        videoItem.waitCommands.setLoop = loopValue;
-      }
+      videoItem.waitCommands.setLoop = loopValue;
     }
   }
 
@@ -230,9 +235,7 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.currentTime = time;
     } else {
-      if (videoItem) {
-        videoItem.waitCommands.seek = time; 
-      }
+      videoItem.waitCommands.seek = time;
     }
   }
 
@@ -241,13 +244,11 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.volume = volume;
     } else {
-      if (videoItem) {
-        videoItem.waitCommands.setVolume = volume;
-      }
+      videoItem.waitCommands.setVolume = volume;
     }
   }
 
-  public destroy(key: string, noWait = false, isLoadVideo = false): void {
+  public destroy(key: string, noWait = false): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
@@ -267,7 +268,7 @@ export class VideoManager {
         () => {
           try {
             const video = videoContainer?.getElementsByTagName('video');
-            if (video?.length && !isLoadVideo) {
+            if (video?.length) {
               videoItem.player.destroy();
             }
           } catch (error) {
@@ -275,25 +276,16 @@ export class VideoManager {
           }
           setTimeout(
             () => {
-              if (!isLoadVideo) {
-                videoContainer?.remove();
-              }
+              videoContainer?.remove();
             },
             noWait ? 0 : 500,
           );
-
-          // 判断是否为 鉴赏模式，则不删除
-          if (!isLoadVideo) {
-            delete this.videosByKey[key];
-          }
-          
+          delete this.videosByKey[key];
         },
         noWait ? 0 : 2000,
       );
     } else {
-      if (videoItem) {
-        videoItem.waitCommands.destroy = true;
-      }
+      videoItem.waitCommands.destroy = true;
     }
   }
 
