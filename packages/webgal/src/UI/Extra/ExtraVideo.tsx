@@ -77,7 +77,7 @@ export const ExtraVideo: FC = () => {
   };
 
   let animationIndex = 0;
-  for (let i = start; i <= end; i++) {
+  for (let i = start - 1; i <= end; i++) {
     animationIndex++;
     const saveData = saveDataState.saveData[i];
     let saveElementContent = <div />;
