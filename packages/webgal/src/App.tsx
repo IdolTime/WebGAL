@@ -13,6 +13,8 @@ import DevPanel from '@/UI/DevPanel/DevPanel';
 import Translation from '@/UI/Translation/Translation';
 import { PanicOverlay } from '@/UI/PanicOverlay/PanicOverlay';
 import { useFullScreen } from './hooks/useFullScreen';
+import StoryLine from '@/UI/StoryLine/StoryLine';
+import { Achievement } from '@/UI/Achievement'
 
 function App() {
   useEffect(() => {
@@ -36,6 +38,8 @@ function App() {
       <GlobalDialog />
       <PanicOverlay />
       <DevPanel />
+      <StoryLine />
+      <Achievement />
     </div>
   );
 }

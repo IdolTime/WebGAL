@@ -1,6 +1,7 @@
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
+import { saveActions } from '@/store/savesReducer'
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
@@ -15,6 +16,8 @@ export const backToTitle = () => {
   dispatch(setStage({ key: 'playVocal', value: '' }));
   // 重新打开标题界面
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
+  // 重置解锁成就
+  dispatch(saveActions.setIsShowUnlock(false));
   /**
    * 重设为标题背景
    */

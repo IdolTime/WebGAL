@@ -1,7 +1,6 @@
 import { ISaveData } from '@/store/userDataInterface';
 import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
-import { sceneParser } from '../../parser/sceneParser';
 import { webgalStore } from '@/store/store';
 import { resetStageState } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
@@ -11,23 +10,25 @@ import cloneDeep from 'lodash/cloneDeep';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
-
+import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { WebGAL } from '@/Core/WebGAL';
+import { saveActions } from '@/store/savesReducer';
 
 /**
  * 读取游戏存档
  * @param index 要读取的存档的档位
+ * @param isLoadVideo 是否加载视频
  */
-export const loadGame = (index: number) => {
+export const loadGame = (index: number, isLoadVideo = false) => {
   const userDataState = webgalStore.getState().saveData;
   // 获得存档文件
   const loadFile: ISaveData = userDataState.saveData[index];
   logger.debug('读取的存档数据', loadFile);
   // 加载存档
-  loadGameFromStageData(loadFile);
+  loadGameFromStageData(loadFile, isLoadVideo);
 };
 
-export function loadGameFromStageData(stageData: ISaveData) {
+export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false) {
   if (!stageData) {
     logger.info('暂无存档');
     return;
@@ -41,6 +42,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
       loadFile.sceneData.sceneUrl,
       true,
     );
+    // 设置背景
     if (!scene) return;
     // 开始场景的预加载
     const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
@@ -48,6 +50,7 @@ export function loadGameFromStageData(stageData: ISaveData) {
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
   });
+ 
   WebGAL.sceneManager.sceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
 
@@ -66,12 +69,24 @@ export function loadGameFromStageData(stageData: ISaveData) {
   const dispatch = webgalStore.dispatch;
   dispatch(resetStageState(newStageState));
 
-  // 恢复演出
-  setTimeout(restorePerform, 0);
-  // restorePerform();
+  // 播放视频
+  if (isLoadVideo) {
+    loadFile.nowStageState.PerformList.forEach((e) => {
+      runScript(e.script);
+    });
+  } else {
+    // 恢复演出
+    setTimeout(restorePerform, 0);
+  }
 
   dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+  dispatch(setVisibility({ component: 'showExtra', visibility: false }));
+
+  if (isLoadVideo) {
+    dispatch(saveActions.setLoadVideo(true))
+  }
+ 
   /**
    * 恢复模糊背景
    */

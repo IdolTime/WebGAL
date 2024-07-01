@@ -127,6 +127,9 @@ const zhCn = {
       title: '存档',
       isOverwrite: '是否覆盖存档？',
     },
+    extra: {
+      title: '鉴赏模式',
+    },
     loadSaving: {
       title: '读档',
     },
@@ -163,6 +166,14 @@ const zhCn = {
       title: '鉴赏模式',
       subtitle: 'EXTRA',
     },
+    storyLine: {
+      title: '故事线',
+      subtitle: 'STORYLINE',
+    },
+    achievement: {
+      title: '成就',
+      subtitle: 'ACHIEVEMENT',
+    }
   },
 
   gaming: {
@@ -181,6 +192,8 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确认返回到标题界面吗',
+      collection: '收藏',
+      collected: '已收藏'
     },
   },
 

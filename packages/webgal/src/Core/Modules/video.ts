@@ -191,7 +191,9 @@ export class VideoManager {
         videoContainerTag.style.zIndex = '11';
       }
     } else {
-      videoItem.waitCommands.showVideo = true;
+      if (videoItem) {
+        videoItem.waitCommands.showVideo = true;
+      }
     }
   }
 
@@ -202,7 +204,9 @@ export class VideoManager {
       videoItem.player.play();
       this.checkProgress(key);
     } else {
-      videoItem.waitCommands.playVideo = true;
+      if (videoItem) {
+        videoItem.waitCommands.playVideo = true;
+      }
     }
   }
 
@@ -215,7 +219,9 @@ export class VideoManager {
         videoTag.loop = loopValue;
       }
     } else {
-      videoItem.waitCommands.setLoop = loopValue;
+      if (videoItem) {
+        videoItem.waitCommands.setLoop = loopValue;
+      }
     }
   }
 
@@ -224,7 +230,9 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.currentTime = time;
     } else {
-      videoItem.waitCommands.seek = time;
+      if (videoItem) {
+        videoItem.waitCommands.seek = time; 
+      }
     }
   }
 
@@ -233,11 +241,13 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.volume = volume;
     } else {
-      videoItem.waitCommands.setVolume = volume;
+      if (videoItem) {
+        videoItem.waitCommands.setVolume = volume;
+      }
     }
   }
 
-  public destroy(key: string, noWait = false): void {
+  public destroy(key: string, noWait = false, isLoadVideo = false): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
@@ -257,7 +267,7 @@ export class VideoManager {
         () => {
           try {
             const video = videoContainer?.getElementsByTagName('video');
-            if (video?.length) {
+            if (video?.length && !isLoadVideo) {
               videoItem.player.destroy();
             }
           } catch (error) {
@@ -265,16 +275,25 @@ export class VideoManager {
           }
           setTimeout(
             () => {
-              videoContainer?.remove();
+              if (!isLoadVideo) {
+                videoContainer?.remove();
+              }
             },
             noWait ? 0 : 500,
           );
-          delete this.videosByKey[key];
+
+          // 判断是否为 鉴赏模式，则不删除
+          if (!isLoadVideo) {
+            delete this.videosByKey[key];
+          }
+          
         },
         noWait ? 0 : 2000,
       );
     } else {
-      videoItem.waitCommands.destroy = true;
+      if (videoItem) {
+        videoItem.waitCommands.destroy = true;
+      }
     }
   }
 

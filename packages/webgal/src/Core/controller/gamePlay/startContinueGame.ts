@@ -4,10 +4,11 @@ import { sceneParser } from '../../parser/sceneParser';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
+import { saveActions } from '@/store/savesReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
-
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -21,13 +22,15 @@ export const startGame = () => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl).then((scene) => {
+    WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl).then((scene: any) => {
       if (scene) {
         // 开始第一条语句
         nextSentence();
       }
     });
   });
+
+  webgalStore.dispatch(saveActions.setIsShowUnlock(true));
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
 };
 

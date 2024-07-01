@@ -19,7 +19,7 @@ import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { setMenuPanelTag, setVisibility, setshowFavorited } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { saveGame } from '@/Core/controller/storage/saveGame';
@@ -28,14 +28,20 @@ import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { WebGAL } from '@/Core/WebGAL';
+import { setStorage } from '@/Core/controller/storage/storageController';
+import { webgalStore } from '@/store/store';
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
   const strokeWidth = 2.5;
   const { i18n } = useTranslation();
+  const currentPayerVideoUrlKey = useSelector((state: RootState) => state.saveData.currentPayerVideoUrlKey);
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
+  const [isCollection, setIsCollection] = useState(false);  // 是否收藏
+
   const lang = i18n.language;
   const isFr = lang === 'fr';
   let size = 42;
@@ -73,6 +79,41 @@ export const BottomControlPanel = () => {
         </div>
       </div>
     );
+  }
+
+  /**
+   * 获取收藏快照索引
+   */ 
+  const getSnapshotIndex = async (): Promise<number> => {
+    for (let page = 1; page <= 20; page++) {
+      const start = (page - 1) * 10 + 1;
+      const end = start + 9;
+      await getSavesFromStorage(start, end);
+      const snapshots = webgalStore.getState().saveData.saveData;
+        // 检查当前页面的所有存档，找到第一个空位置的索引
+      for (let i = 0; i < snapshots.length; i++) {  
+          const index = (page - 1) * 10 + i; // 计算全局索引  
+          if (!snapshots[i]) { // 假设没有数据的快照是undefined或null  
+              return index; // 找到第一个没有数据的索引并返回  
+          }  
+      }  
+    }  
+    // 如果所有页面都检查完了还没有找到空位置，则返回最后一个索引（即覆盖最后一个数据）  
+    return (20 - 1) * 10 + 9; // 最后一页的最后一个索引 
+  }
+
+  /**
+   * 收藏视频
+   */
+  const handleCollectVideo = async () => {
+    playSeClick();
+    if (GUIStore.showFavorited) {
+      return
+    }
+    dispatch(setshowFavorited(true))
+    const index = await getSnapshotIndex()
+    saveGame(index)
+    setStorage()
   }
 
   return (
@@ -226,6 +267,19 @@ export const BottomControlPanel = () => {
             <span className={styles.button_text}>{t('buttons.quicklyLoad')}</span>
             <div className={styles.fastSlPreview + ' ' + styles.fastLPreview}>{fastSlPreview}</div>
           </span>
+
+          <span
+            className={styles.singleButton}
+            style={{ fontSize }}
+            onClick={handleCollectVideo}
+            onMouseEnter={playSeEnter}
+          >
+            <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
+            <span className={styles.button_text}>
+              {t(`${GUIStore.showFavorited ? 'buttons.collected' : 'buttons.collection'}`)}
+            </span>
+          </span>
+
           <span
             className={styles.singleButton}
             style={{ fontSize }}

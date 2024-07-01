@@ -14,6 +14,9 @@ import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from '@/store/store';
+import { saveActions } from '@/store/savesReducer';
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
@@ -47,13 +50,19 @@ export const initializeScript = (): void => {
   const sceneUrl: string = assetSetter('start.txt', fileType.scene);
   // 场景写入到运行时
   sceneFetcher(sceneUrl).then(async (rawScene) => {
-    const scene = await WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
+    const scene: any = await WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
     if (!scene) return;
     // 开始场景的预加载
     const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
     WebGAL.sceneManager.settledScenes.push(sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
+
+    // 获取所有 解除成就场景对话
+    const sentenceList = scene?.sentenceList as ISentence[] ?? []
+    const unlockAchieveList =  sentenceList?.filter((e: any) => e?.commandRaw === 'unlockAchieve')
+    webgalStore.dispatch(saveActions.setUnlockAchieveAllTotal(unlockAchieveList?.length ?? 0));
+
   });
   /**
    * 启动Pixi

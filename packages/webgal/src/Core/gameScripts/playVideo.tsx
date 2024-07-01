@@ -1,17 +1,19 @@
 import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
+import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { current } from '@reduxjs/toolkit';
+import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
+import { saveActions } from '@/store/savesReducer';
+import { setVideoIndex } from '@/store/stageReducer';
+import { setshowFavorited } from '@/store/GUIReducer';
 
 /**
  * 播放一段视频 * @param sentence
@@ -93,6 +95,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
        */
       setTimeout(() => {
         const url = sentence.content;
+        const isLoadVideo = webgalStore.getState().saveData.isLoadVideo
         WebGAL.videoManager.seek(url, 0.03);
         WebGAL.videoManager.setVolume(url, bgmVol);
         WebGAL.videoManager.setLoop(url, loopValue);
@@ -108,6 +111,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         const endPerform = () => {
+          // 是否为鉴赏视频
+          if (isLoadVideo) {
+            return
+          }
+          
           for (const e of WebGAL.gameplay.performController.performList) {
             if (e.performName === performInitName) {
               if (chooseContent !== '' && !loopValue) {
@@ -160,7 +168,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            WebGAL.videoManager.destroy(url);
+            WebGAL.videoManager.destroy(url, false, isLoadVideo);
           },
           blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
@@ -188,6 +196,13 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
         WebGAL.videoManager.playVideo(url);
 
+        if (url && !isLoadVideo) { 
+          webgalStore.dispatch(saveActions.saveCurrentPayerVideoUrl(url))
+          const currentVideoIndex = webgalStore.getState().stage.currentVideoIndex;
+          webgalStore.dispatch(setVideoIndex(Number(currentVideoIndex) + 1))
+          webgalStore.dispatch(setshowFavorited(false))
+        }
+
         if (chooseContent && loopValue) {
           const parsedResult = sceneParser(chooseContent, `${optionId}.txt`, '');
           const script = parsedResult.sentenceList[0];
@@ -196,6 +211,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.onEnded(url, () => {
+          getCurrentVideoStageDataForStoryLine()
           if (loopValue) {
             WebGAL.videoManager.seek(url, 0.03);
             WebGAL.videoManager.playVideo(url);

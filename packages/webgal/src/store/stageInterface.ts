@@ -115,6 +115,15 @@ export interface ILive2DExpression {
   expression: string;
 }
 
+export interface IUnlockAchieveItem {
+  unlockname: string;
+  url: string;
+  x: number;
+  y: number;
+  saveTime?: string;
+  isShow?: boolean;
+}
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -158,6 +167,22 @@ export interface IStageState {
   enableFilm: string;
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
+  storyLineBg: string; // 故事线背景
+  storyLineBgX: string;
+  storyLineBgY: string;
+  achieveBg: string;
+  // 解锁成就
+  unlockAchieve: IUnlockAchieveItem;
+  unlockAchieves: Array<IUnlockAchieveObj>;
+  totalAchievements: number; // 总成就数量
+  unlockedAchievements: number; //已获得的成就数量
+  achieveBgX: string;
+  achieveBgY: string;
+  currentVideoIndex: number;
+  isShowValueSWitch: boolean;
+  showValueName: string;
+  showValueAxisX: number;
+  showValueAxisY: number
 }
 
 /**
@@ -165,7 +190,7 @@ export interface IStageState {
  */
 export interface ISetStagePayload {
   key: keyof IStageState;
-  value: any;
+  value: unknown;
 }
 
 export interface IStageStore {
@@ -176,3 +201,10 @@ export interface IStageStore {
 }
 
 export type StageStore = IStageStore;
+
+export interface IUnlockAchieveObj {
+  unlockname?: string;
+  url?: string;
+  x?: number;
+  y?: number;
+}
