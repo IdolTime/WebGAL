@@ -24,6 +24,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let loopValue = false;
   let continueBgmValue = false;
   const optionId = Date.now();
+  webgalStore.dispatch(setshowFavorited(false));
   const endPerformRef = {
     current: () => {
       console.log('快进状态尝试跳过视频');
@@ -192,8 +193,18 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
         WebGAL.videoManager.playVideo(url);
 
-        if (url && !isLoadVideo) {
-          webgalStore.dispatch(setshowFavorited(false));
+        // 从缓存数据中查找 改视频是否收藏过
+        const saveData = webgalStore.getState().saveData.saveData || [];
+        if (saveData?.length) {
+          saveData.forEach((item: any) => {
+            item?.nowStageState?.PerformList?.forEach((item2: any) => {
+              if (item2?.script?.content === url) {
+                setTimeout(() => {
+                  webgalStore.dispatch(setshowFavorited(true));
+                });
+              }
+            });
+          });
         }
 
         if (chooseContent && loopValue) {

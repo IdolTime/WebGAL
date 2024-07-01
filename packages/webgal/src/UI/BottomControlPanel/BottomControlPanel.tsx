@@ -104,7 +104,8 @@ export const BottomControlPanel = () => {
   /**
    * 收藏视频
    */
-  const handleCollectVideo = async () => {
+  const handleCollectVideo = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     playSeClick();
     if (GUIStore.showFavorited) {
       return
@@ -120,7 +121,7 @@ export const BottomControlPanel = () => {
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
-          {GUIStore.showTextBox && (
+          {/* {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
               style={{ fontSize }}
@@ -139,8 +140,8 @@ export const BottomControlPanel = () => {
               />
               <span className={styles.button_text}>{t('buttons.hide')}</span>
             </span>
-          )}
-          {!GUIStore.showTextBox && (
+          )} */}
+          {/* {!GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
               style={{ fontSize }}
@@ -159,8 +160,8 @@ export const BottomControlPanel = () => {
               />
               <span className={styles.button_text}>{t('buttons.show')}</span>
             </span>
-          )}
-          <span
+          )} */}
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -178,8 +179,8 @@ export const BottomControlPanel = () => {
               strokeWidth={strokeWidth}
             />
             <span className={styles.button_text}>{t('buttons.backlog')}</span>
-          </span>
-          <span
+          </span> */}
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -201,8 +202,8 @@ export const BottomControlPanel = () => {
               strokeWidth={strokeWidth}
             />
             <span className={styles.button_text}>{t('buttons.replay')}</span>
-          </span>
-          <span
+          </span> */}
+          {/* <span
             id="Button_ControlPanel_auto"
             className={styles.singleButton}
             style={{ fontSize }}
@@ -214,7 +215,7 @@ export const BottomControlPanel = () => {
           >
             <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.auto')}</span>
-          </span>
+          </span> */}
           <span
             id="Button_ControlPanel_fast"
             className={styles.singleButton}
@@ -234,7 +235,7 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.forward')}</span>
           </span>
-          <span
+          {/* <span
             className={styles.singleButton + ' ' + styles.fastsave}
             style={{ fontSize }}
             onClick={() => {
@@ -252,8 +253,8 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.quicklySave')}</span>
             <div className={styles.fastSlPreview + ' ' + styles.fastSPreview}>{fastSlPreview}</div>
-          </span>
-          <span
+          </span> */}
+          {/* <span
             className={styles.singleButton + ' ' + styles.fastload}
             style={{ fontSize }}
             onClick={() => {
@@ -265,7 +266,7 @@ export const BottomControlPanel = () => {
             <DoubleUp className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.quicklyLoad')}</span>
             <div className={styles.fastSlPreview + ' ' + styles.fastLPreview}>{fastSlPreview}</div>
-          </span>
+          </span> */}
 
           <span
             className={styles.singleButton}
@@ -279,7 +280,7 @@ export const BottomControlPanel = () => {
             </span>
           </span>
 
-          <span
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -291,8 +292,8 @@ export const BottomControlPanel = () => {
           >
             <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.save')}</span>
-          </span>
-          <span
+          </span> */}
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -310,7 +311,7 @@ export const BottomControlPanel = () => {
               strokeWidth={strokeWidth}
             />
             <span className={styles.button_text}>{t('buttons.load')}</span>
-          </span>
+          </span> */}
           <span
             className={styles.singleButton}
             style={{ fontSize }}

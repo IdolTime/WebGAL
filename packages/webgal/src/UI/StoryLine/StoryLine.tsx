@@ -18,7 +18,6 @@ export const StoryLine: FC = () => {
   const StageState = useSelector((state: RootState) => state.stage);
   const SaveState = useSelector((state: RootState) => state.saveData);
   
-
   useEffect(() => {
       if (GUIState.showStoryLine) {
         getStorylineFromStorage()
@@ -60,7 +59,7 @@ export const StoryLine: FC = () => {
             style={{ 
               width: StageState.storyLineBgX,
               backgroundImage: `url("${StageState.storyLineBg}")`,
-              backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${StageState.storyLineBgX} ${StageState.storyLineBgY}`
+              backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${StageState.storyLineBgX} ${StageState.storyLineBgY.includes('1080') ? '100%' : StageState.storyLineBgY}`
             }}
           >
             {SaveState.unlockStorylineList?.map((item: ISaveStoryLineData, index) => {

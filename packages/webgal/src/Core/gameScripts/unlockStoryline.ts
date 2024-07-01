@@ -17,7 +17,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
   // 读取本地解锁数据
   getStorylineFromStorage()
 
-  let thumbnailUrl = sentence.content || ''
+  let thumbnailUrl = sentence?.content || ''
   const storyLineData = {} as unknown as ISaveStoryLine
     // const storyLineData: any = {}
 
