@@ -1,6 +1,6 @@
 import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
-import SceneParser from 'webgal-parser';
+import SceneParser from 'idoltime-parser';
 import { commandType, IScene } from '../controller/scene/sceneInterface';
 import { logger } from '../util/logger';
 import { bgm } from '@/Core/gameScripts/bgm';
