@@ -4,7 +4,7 @@ import { sceneParser } from '../parser/sceneParser';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer'
-import { dumpStorylineToStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
+import { getStorylineFromStorage, dumpStorylineToStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 
 export interface ISceneEntry {
   sceneName: string; // 场景名称
@@ -46,7 +46,9 @@ export class SceneManager {
     return new Promise((r) => {      
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
       const sentenceList = this.sceneData.currentScene.sentenceList;
+      getStorylineFromStorage()
       if (sentenceList?.length && scenaName === 'start.txt') {
+        
         // 是否有故事线配置项，如果没有则重置数据
         const unlockStorylineIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockStoryline);
         if (unlockStorylineIndex === -1) {

@@ -11,8 +11,11 @@ import { saveActions } from '@/store/savesReducer';
  * @param sentence 语句
  * @return {IPerform}
  */
-export const unlockStoryline = (sentence: ISentence): IPerform => {
+export const unlockStoryline =  (sentence: ISentence): IPerform => {
   console.log('解锁故事线 >>>>>>>> start : ', { sentence })
+
+    // 读取本地解锁数据
+    getStorylineFromStorage()
 
   let thumbnailUrl = sentence?.content || ''
   const storyLineData = {} as unknown as ISaveStoryLine
@@ -51,8 +54,6 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
     }
   }
 
-  // 读取本地解锁数据
-  getStorylineFromStorage()
   // 重置解锁故事线数据
   webgalStore.dispatch(saveActions.resetStorylineList());
 
@@ -72,7 +73,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
     thumbnailUrl: storyLineData['thumbnailUrl'] || '',
     x: storyLineData['x'] || 0,
     y: storyLineData['y'] || 0,
-    isUnlock: saveData.isUnlockStoryline || unlockItem && unlockItem?.storyLine?.isUnlock || false// ?
+    isUnlock: unlockItem && unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline || false// ?
   }
 
   // 没有数据 或者 没有找到 > 存储到本地缓存

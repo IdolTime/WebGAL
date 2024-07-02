@@ -19,11 +19,13 @@ export const StoryLine: FC = () => {
   const StageState = useSelector((state: RootState) => state.stage);
   const SaveState = useSelector((state: RootState) => state.saveData);
 
+  getStorylineFromStorage()
+
   useEffect(() => {
-      if (GUIState.showStoryLine) {
-        getStorylineFromStorage()
-        dispatch(saveActions.setShowStoryline(false));
-      }
+    if (GUIState.showStoryLine) {
+      getStorylineFromStorage()
+      dispatch(saveActions.setShowStoryline(false));
+    }
   }, [GUIState.showStoryLine])
 
   /**
