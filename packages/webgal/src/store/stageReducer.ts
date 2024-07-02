@@ -13,6 +13,8 @@ import {
   ISetStagePayload,
   IStageState,
   IUnlockAchieveObj,
+  IShowValueItem,
+  IShowValueListItem
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -79,6 +81,8 @@ export const initState: IStageState = {
   showValueName: '',
   showValueAxisX: 0,
   showValueAxisY: 0,
+  showValues: [],
+  showValueList: [],
 };
 
 /**
@@ -205,10 +209,24 @@ const stageSlice = createSlice({
     setUnlockAchieve: (state, action: PayloadAction<IUnlockAchieveObj>) => {
       state.unlockAchieves.push(action.payload);
     },
+    addShowValues: (state, action: PayloadAction<IShowValueItem>) => {
+      state.showValues.push(action.payload);
+    },
+    addShowValueList: (state, action: PayloadAction<IShowValueListItem>) => {
+      state.showValueList.push(action.payload);
+    },
   },
 });
 
-export const { resetStageState, setStage, setStageVar, setAchieveBg, setUnlockAchieve, setStoryLineBg } =
-  stageSlice.actions;
+export const { 
+  resetStageState, 
+  setStage, 
+  setStageVar, 
+  setAchieveBg, 
+  setUnlockAchieve, 
+  setStoryLineBg, 
+  addShowValues,
+  addShowValueList
+} = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
