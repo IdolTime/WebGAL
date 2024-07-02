@@ -7,6 +7,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
 import { getStorylineFromStorage } from '@/Core/controller/storage/savesController';
 import styles from './storyLine.module.scss';
+import { saveActions } from '@/store/savesReducer';
 
 /**
  * 故事线页面
@@ -17,10 +18,11 @@ export const StoryLine: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
   const SaveState = useSelector((state: RootState) => state.saveData);
-  
+
   useEffect(() => {
       if (GUIState.showStoryLine) {
         getStorylineFromStorage()
+        dispatch(saveActions.setShowStoryline(false));
       }
   }, [GUIState.showStoryLine])
 

@@ -1,6 +1,10 @@
-import { IScene, ISceneData } from '@/Core/controller/scene/sceneInterface';
+import { IScene, ISceneData, ISentence } from '@/Core/controller/scene/sceneInterface';
 import cloneDeep from 'lodash/cloneDeep';
 import { sceneParser } from '../parser/sceneParser';
+import { commandType } from '@/Core/controller/scene/sceneInterface';
+import { webgalStore } from '@/store/store';
+import { saveActions } from '@/store/savesReducer'
+import { dumpStorylineToStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 
 export interface ISceneEntry {
   sceneName: string; // 场景名称
@@ -39,8 +43,25 @@ export class SceneManager {
 
   // eslint-disable-next-line max-params
   public setCurrentScene(rawScene: string, scenaName: string, sceneUrl: string, loading = false) {
-    return new Promise((r) => {
+    return new Promise((r) => {      
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
+      const sentenceList = this.sceneData.currentScene.sentenceList;
+      if (sentenceList?.length && scenaName === 'start.txt') {
+        // 是否有故事线配置项，如果没有则重置数据
+        const unlockStorylineIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockStoryline);
+        if (unlockStorylineIndex === -1) {
+          webgalStore.dispatch(saveActions.resetStorylineList());
+          dumpStorylineToStorage()
+        }
+
+        // 是否有成就配置项，如果没有则重置数据
+        const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
+        if (unlockAchieveIndex === -1) {
+          webgalStore.dispatch(saveActions.resetUnlockAchieveData());
+          dumpUnlickAchieveToStorage()
+        }
+      }
+
       r(this.sceneData.currentScene);
     });
   }
