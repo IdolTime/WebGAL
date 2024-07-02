@@ -90,7 +90,7 @@ export const BottomControlPanel = () => {
       await getSavesFromStorage(start, end);
       const snapshots = webgalStore.getState().saveData.saveData;
         // 检查当前页面的所有存档，找到第一个空位置的索引
-      for (let i = 0; i < snapshots.length; i++) {  
+      for (let i = 1; i < snapshots.length; i++) {  
           const index = (page - 1) * 10 + i; // 计算全局索引  
           if (!snapshots[i]) { // 假设没有数据的快照是undefined或null  
               return index; // 找到第一个没有数据的索引并返回  
