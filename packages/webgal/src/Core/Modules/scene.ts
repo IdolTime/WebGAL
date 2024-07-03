@@ -4,7 +4,8 @@ import { sceneParser } from '../parser/sceneParser';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer'
-import { getStorylineFromStorage, dumpStorylineToStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
+import { IUnlockAchieveItem } from '@/store/stageInterface'
+import { getStorylineFromStorage, dumpStorylineToStorage, dumpUnlickAchieveToStorage, getUnlickAchieveFromStorage } from '@/Core/controller/storage/savesController';
 
 export interface ISceneEntry {
   sceneName: string; // 场景名称
@@ -46,7 +47,7 @@ export class SceneManager {
     return new Promise((r) => {      
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
       const sentenceList = this.sceneData.currentScene.sentenceList;
-      getStorylineFromStorage()
+      getStorylineFromStorage();
       if (sentenceList?.length && scenaName === 'start.txt') {
         
         // 是否有故事线配置项，如果没有则重置数据
@@ -57,10 +58,22 @@ export class SceneManager {
         }
 
         // 是否有成就配置项，如果没有则重置数据
-        const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
-        if (unlockAchieveIndex === -1) {
+        // const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
+        const unlockAchieveList =  sentenceList
+          .filter((e: ISentence) => e.command === commandType.unlockAchieve)
+          .map((item: ISentence) => {
+            const unlocknames: any[] = item.args.filter((e: any) => e.key === 'unlockname')
+            return {
+              key: unlocknames?.length && unlocknames[0].value || '',
+              value: item.content,
+            }
+          })
+
+        if (unlockAchieveList?.length === 0) {
           webgalStore.dispatch(saveActions.resetUnlockAchieveData());
-          dumpUnlickAchieveToStorage()
+          dumpUnlickAchieveToStorage();
+        } else {
+          webgalStore.dispatch(saveActions.setUnlockAchieveAll(unlockAchieveList))
         }
       }
 

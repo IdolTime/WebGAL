@@ -1,4 +1,4 @@
-import { ISaveData, ISaveStoryLineData } from './userDataInterface';
+import { ISaveData, ISaveStoryLineData, IUnlockAchieveAllItem } from './userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
@@ -14,6 +14,7 @@ export interface ISavesData {
   isShowUnlock: boolean; // 是否显示解锁成就
   isUnlockStoryline: boolean; // 是否显示解锁故事线
   unlockAchieveAllTotal: number; // 解锁成就总数
+  unlockAchieveListAll: IUnlockAchieveAllItem[];
   isLoadVideo: boolean;
 }
 
@@ -25,6 +26,7 @@ const initState: ISavesData = {
   unlockAchieveData: [],
   isShowUnlock: false,
   unlockAchieveAllTotal: 0,
+  unlockAchieveListAll: [],
   isLoadVideo: false,
   isUnlockStoryline: false
 };
@@ -103,6 +105,9 @@ const saveDataSlice = createSlice({
     },
     setUnlockAchieveAllTotal: (state, action: PayloadAction<number>) => {
       state.unlockAchieveAllTotal = action.payload;
+    },
+    setUnlockAchieveAll: (state, action: PayloadAction<IUnlockAchieveAllItem[]>) => {
+      state.unlockAchieveListAll = action.payload;
     },
     setLoadVideo: (state, action: PayloadAction<boolean>) => {
       state.isLoadVideo = action.payload

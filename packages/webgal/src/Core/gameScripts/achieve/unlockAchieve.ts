@@ -52,7 +52,7 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
   }
 
    // 读取本地解锁数据
-   getUnlickAchieveFromStorage()
+  //  getUnlickAchieveFromStorage()
    //获取到数据
   const saveData = webgalStore.getState().saveData;
 
@@ -96,6 +96,7 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
       saveActions.addUnlockAchieveData(payload)
     )
   } else {
+    alert('替换')
     // 如果存在，则替换掉源数据
     webgalStore.dispatch(
       saveActions.replaceUnlockAchieveData({ index: unlockItemIndex, data: payload })

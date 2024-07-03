@@ -137,3 +137,8 @@ export interface ISaveStoryLineData {
   storyLine: ISaveStoryLine;
   videoData: ISaveData | null;
 }
+
+export interface IUnlockAchieveAllItem {
+  key: string;
+  value: string;
+}

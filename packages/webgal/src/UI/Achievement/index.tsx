@@ -6,8 +6,9 @@ import styles from './achievement.module.scss';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import { getUnlickAchieveFromStorage } from '@/Core/controller/storage/savesController';
+import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
+import { IUnlockAchieveItem } from '@/store/stageInterface'
 
 /**
  * 成就页面
@@ -41,9 +42,19 @@ export const Achievement: FC = () => {
   async function initData() {
     await getUnlickAchieveFromStorage()
 
+    const unlockAchieveData = webgalStore.getState().saveData.unlockAchieveData;
+    const unlockAchieveListAll = new Map()
+    webgalStore.getState().saveData.unlockAchieveListAll.forEach(ele => {
+      unlockAchieveListAll.set(ele.key, ele.value)
+    })
+    
+    const newList = unlockAchieveData.filter((e) => unlockAchieveListAll.get(e.unlockname));
+    webgalStore.dispatch(saveActions.setUnlockAchieveData(newList));
+    await dumpUnlickAchieveToStorage();
+    
     const currentScene = WebGAL.sceneManager.sceneData.currentScene  
     const unlocked = webgalStore.getState().saveData.unlockAchieveData?.length ?? 0; 
-    const allTotal = webgalStore.getState().saveData.unlockAchieveAllTotal || 0;
+    const allTotal = webgalStore.getState().saveData.unlockAchieveListAll.length || 0;
     // 当前完成进度
     const currentProgress  = ((unlocked / allTotal) * 100).toFixed(2) + '%';
 
