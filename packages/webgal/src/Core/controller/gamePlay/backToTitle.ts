@@ -18,6 +18,7 @@ export const backToTitle = () => {
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
   // 重置解锁成就
   dispatch(saveActions.setIsShowUnlock(false));
+  dispatch(saveActions.setShowStoryline(false));
   /**
    * 重设为标题背景
    */

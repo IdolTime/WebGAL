@@ -181,7 +181,21 @@ export interface IStageState {
   isShowValueSWitch: boolean;
   showValueName: string;
   showValueAxisX: number;
-  showValueAxisY: number
+  showValueAxisY: number;
+  showValues: Array<IShowValueItem>;
+  showValueList: Array<IShowValueListItem>;
+}
+
+export interface IShowValueListItem {
+  isShowValueSWitch: boolean;
+  showValueName: string;
+  showValueAxisX: number;
+  showValueAxisY: number;
+}
+
+export interface IShowValueItem {
+  key: string;
+  value: any;
 }
 
 /**

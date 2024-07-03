@@ -1,4 +1,4 @@
 export const SCREEN_CONSTANTS = {
-  height: 1440,
-  width: 2560,
+  height: 1080,
+  width: 1920,
 };

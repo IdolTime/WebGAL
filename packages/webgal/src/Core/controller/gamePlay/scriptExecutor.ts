@@ -105,7 +105,7 @@ export const scriptExecutor = () => {
    * Variable interpolation
    */
   const variableInterpolation = () => {
-    currentScript.content = interpolationOneItem(currentScript.content);
+    currentScript.content = interpolationOneItem(currentScript?.content ?? '');
 
     currentScript.args.forEach((arg) => {
       if (arg.value && typeof arg.value === 'string') {

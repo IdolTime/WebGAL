@@ -2,7 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { webgalStore } from '@/store/store';
-import { ISaveStoryLine } from '@/store/userDataInterface';
+import { ISaveStoryLine, ISaveStoryLineData } from '@/store/userDataInterface';
 import { getStorylineFromStorage, dumpStorylineToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 
@@ -16,7 +16,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
 
   const asyncAction = async () => {
     // 读取本地解锁数据
-    await getStorylineFromStorage();
+    getStorylineFromStorage();
 
     let thumbnailUrl = sentence?.content || '';
     const storyLineData = {} as unknown as ISaveStoryLine;
@@ -42,36 +42,43 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       }
     });
 
-    if (storyLineData['name'] === '' && storyLineData['thumbnailUrl'] === '') {
+    if (!storyLineData['name'] || !storyLineData['thumbnailUrl']) {
       return {
         performName: 'none',
         duration: 0,
         isHoldOn: false,
-        stopFunction: () => { },
+        stopFunction: () => {},
         blockingNext: () => false,
         blockingAuto: () => true,
         stopTimeout: undefined,
       };
     }
 
+    // 重置解锁故事线数据
+    webgalStore.dispatch(saveActions.resetStorylineList());
+
     // 获取到数据
     const saveData = webgalStore.getState().saveData;
-    console.log(777777, JSON.parse(JSON.stringify(saveData)))
-    const unlockItemIndex = saveData.unlockStorylineList?.findIndex(
-      (item) => item.storyLine.name === storyLineData['name'],
+    const unlockItemIndex: number = saveData.unlockStorylineList?.findIndex(
+      (item) =>
+        item.storyLine.thumbnailUrl === storyLineData['thumbnailUrl'] && item.storyLine.name === storyLineData['name'],
     );
+
+    let unlockItem: ISaveStoryLineData | undefined;
+    if (unlockItemIndex !== -1) {
+      unlockItem = saveData.unlockStorylineList[unlockItemIndex];
+    }
 
     const payload = {
       name: storyLineData['name'] || '',
       thumbnailUrl: storyLineData['thumbnailUrl'] || '',
       x: storyLineData['x'] || 0,
       y: storyLineData['y'] || 0,
-      isUnlock: true,
+      isUnlock: unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline || false, // ?
     };
 
     // 没有数据 或者 没有找到 > 存储到本地缓存
     if (unlockItemIndex === -1) {
-      console.log(5555555, JSON.parse(JSON.stringify(payload)))
       webgalStore.dispatch(
         saveActions.addStorylineList({
           storyLine: payload,
@@ -79,8 +86,6 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
         }),
       );
     } else {
-      console.log(6666666, JSON.parse(JSON.stringify(payload)))
-
       // 如果存在，则替换掉源数据
       webgalStore.dispatch(
         saveActions.replaceStorylineList({
@@ -93,7 +98,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       );
     }
     dumpStorylineToStorage();
-  }
+  };
 
   asyncAction();
 
@@ -101,7 +106,10 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
     performName: 'none',
     duration: 0,
     isHoldOn: false,
-    stopFunction: () => { },
+    stopFunction: () => {},
+    // stopFunction: () => {
+    //   WebGAL.events.textSettle.emit();
+    // },
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除

@@ -14,10 +14,7 @@ import { saveActions } from '@/store/savesReducer';
 export const unlockAchieve = (sentence: ISentence): IPerform => {
   console.log('解锁成就 >>>>>>>> start : ', { sentence })
   
-  // 读取本地解锁数据
-  getUnlickAchieveFromStorage()
-
-  let url = sentence.content || ''
+  let url = sentence?.content || ''
   const unlockAchieveObj: IUnlockAchieveObj = {}
 
   if (url) {
@@ -42,7 +39,7 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
 
   // webgalStore.dispatch(setUnlockAchieve(unlockAchieveObj));
 
-  if (unlockAchieveObj['unlockname'] === '' && unlockAchieveObj['url'] === '') {
+  if (!unlockAchieveObj['unlockname'] || !unlockAchieveObj['url']) {
     return {
       performName: 'none',
       duration: 0,
@@ -54,11 +51,31 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
     }
   }
 
+   // 读取本地解锁数据
+   getUnlickAchieveFromStorage()
    //获取到数据
   const saveData = webgalStore.getState().saveData;
+
+  if (!saveData.isShowUnlock) {
+    return {
+      performName: 'none',
+      duration: 0,
+      isHoldOn: false,
+      stopFunction: () => {},
+      blockingNext: () => false,
+      blockingAuto: () => true,
+      stopTimeout: undefined
+    }
+  }
+
   const unlockItemIndex =  saveData.unlockAchieveData?.findIndex(
-    item => item.unlockname === unlockAchieveObj['unlockname']
+    item => item.unlockname === unlockAchieveObj['unlockname'] && item.url === unlockAchieveObj['url']
   );
+
+  let unlockItem: any | undefined
+  if (unlockItemIndex !== -1) {
+    unlockItem = saveData.unlockAchieveData[unlockItemIndex]
+  }
   
 
  // 保存时间
@@ -70,7 +87,7 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
     x: unlockAchieveObj['x'] || 0,
     y: unlockAchieveObj['y'] || 0,
     saveTime: currentTime,
-    isShow: saveData.isShowUnlock || unlockItemIndex === -1,
+    isShow: unlockItem?.isShow || saveData.isShowUnlock || false,
   }
 
   // 没有数据 或者 没有找到 > 存储到本地缓存
