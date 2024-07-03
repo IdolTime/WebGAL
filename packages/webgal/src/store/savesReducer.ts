@@ -16,6 +16,7 @@ export interface ISavesData {
   unlockAchieveAllTotal: number; // 解锁成就总数
   unlockAchieveListAll: IUnlockAchieveAllItem[];
   isLoadVideo: boolean;
+  allUnlockAchieveList: IUnlockAchieveItem[]
 }
 
 const initState: ISavesData = {
@@ -28,7 +29,8 @@ const initState: ISavesData = {
   unlockAchieveAllTotal: 0,
   unlockAchieveListAll: [],
   isLoadVideo: false,
-  isUnlockStoryline: false
+  isUnlockStoryline: false,
+  allUnlockAchieveList: []
 };
 
 interface ISaveStoryLine {
@@ -92,7 +94,11 @@ const saveDataSlice = createSlice({
       state.unlockAchieveData = [];
     },
     addUnlockAchieveData: (state, action: PayloadAction<IUnlockAchieveItem>) => {
-      state.unlockAchieveData.push(action.payload);
+      const data = [
+        ...state.unlockAchieveData,
+        action.payload,
+      ]
+      state.unlockAchieveData = data;
     },
     replaceUnlockAchieveData: (state, action: PayloadAction<SaveUnlockAchieve>) => {
       state.unlockAchieveData[action.payload.index] = action.payload.data;
@@ -111,6 +117,9 @@ const saveDataSlice = createSlice({
     },
     setLoadVideo: (state, action: PayloadAction<boolean>) => {
       state.isLoadVideo = action.payload
+    },
+    saveAllUnlockAchieveList: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
+      state.allUnlockAchieveList = action.payload
     },
   },
 });

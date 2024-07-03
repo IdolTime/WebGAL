@@ -113,6 +113,20 @@ $default_storyLine_bg_y: 1080px;
             background-repeat: no-repeat;
             background-size: 100% 100%;
             z-index: 101;
+            background-color: #ccc;
+
+            .unlockname {
+                display: flex;
+                justify-content: center;
+                padding: 0.2em 0.8rem;
+                font-size: 30px;
+                color: rgb(249, 239, 224);
+                border-radius: 1rem;
+                background-color: rgb(209, 129, 175);
+                position: absolute;
+                top: -62px;
+                width: max-content;
+            }
 
             &:hover {
                 transform: scale(1.2);
@@ -158,18 +172,17 @@ $default_storyLine_bg_y: 1080px;
                 font-weight: bold;
                 display: none;
                 z-index: -1;
-                
 
-                .unlockname {
+                .condition {
                     display: flex;
                     justify-content: center;
                     padding: 0.2em 0.8rem;
-                    font-size: 50px;
+                    font-size: 30px;
                     color: rgb(249, 239, 224);
                     border-radius: 1rem;
-                    background-color: rgb(209, 129, 175);
-                  
+                    background-color: rgb(88, 88, 88);
                 }
+                
                 
                 .time,
                 .description {

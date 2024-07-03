@@ -44,6 +44,7 @@ export class SceneManager {
 
   // eslint-disable-next-line max-params
   public setCurrentScene(rawScene: string, scenaName: string, sceneUrl: string, loading = false) {
+    // getUnlickAchieveFromStorage();
     return new Promise((r) => {      
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
       const sentenceList = this.sceneData.currentScene.sentenceList;
@@ -57,27 +58,63 @@ export class SceneManager {
           dumpStorylineToStorage()
         }
 
-        // 是否有成就配置项，如果没有则重置数据
-        // const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
-        const unlockAchieveList =  sentenceList
-          .filter((e: ISentence) => e.command === commandType.unlockAchieve)
-          .map((item: ISentence) => {
-            const unlocknames: any[] = item.args.filter((e: any) => e.key === 'unlockname')
-            return {
-              key: unlocknames?.length && unlocknames[0].value || '',
-              value: item.content,
-            }
-          })
-
-        if (unlockAchieveList?.length === 0) {
-          webgalStore.dispatch(saveActions.resetUnlockAchieveData());
-          dumpUnlickAchieveToStorage();
-        } else {
-          webgalStore.dispatch(saveActions.setUnlockAchieveAll(unlockAchieveList))
-        }
+        this.getAllUnlockAchieveList(sentenceList)
       }
 
       r(this.sceneData.currentScene);
     });
   }
+
+    //所有解锁成就
+    public async getAllUnlockAchieveList(sentenceList: ISentence[]) {
+      await getUnlickAchieveFromStorage()
+      const unlockAchieveMapper = new Map();
+      webgalStore.getState().saveData.unlockAchieveData.forEach(e => {
+        if (e.isShowUnlock) {
+          unlockAchieveMapper.set(e.unlockname, e.isShowUnlock)
+        }
+      })
+
+      // 所有解锁成就
+      const allUnlockAchieveList = sentenceList
+      .filter((e: ISentence) => e.command === commandType.unlockAchieve)
+      .map(e2 => {
+  
+        const payload: IUnlockAchieveItem = {
+          url: e2?.content ?? '',
+          unlockname: '',
+          condition: '',
+          x: 0,
+          y: 0,
+          isShowUnlock: false
+        }
+
+        e2.args.forEach(e3 => {
+          if (e3.key === 'unlockname') {
+            payload['unlockname'] = e3.value.toString()
+          } else if (e3.key === 'x') {
+            payload['x'] = Number(e3.value)
+          } else if (e3.key === 'y') {
+            payload['y'] = Number(e3.value)
+          } else if (e3.key === 'condition') {
+            payload['condition'] = e3.value.toString()
+          }
+        })
+
+        if (unlockAchieveMapper?.get(payload?.unlockname)) {
+          payload['isShowUnlock'] = true
+        }
+  
+        return payload
+      })
+  
+  
+      webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList))
+
+      const newList = allUnlockAchieveList.filter(e => e?.isShowUnlock)
+      webgalStore.dispatch(saveActions.setUnlockAchieveData(newList))
+
+      await dumpUnlickAchieveToStorage();
+  
+    }
 }

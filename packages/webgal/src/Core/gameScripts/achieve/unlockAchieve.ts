@@ -5,7 +5,6 @@ import { webgalStore } from '@/store/store';
 import { IUnlockAchieveObj } from '@/store/stageInterface';
 import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
-
 /**
  * 成就页-解锁成就
  * @param sentence 语句
@@ -16,10 +15,10 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
   
   let url = sentence?.content || ''
   const unlockAchieveObj: IUnlockAchieveObj = {}
-
-  if (url) {
-    unlockAchieveObj['url'] = assetSetter(url, fileType.ui)
-  }
+  unlockAchieveObj['url'] = url
+  // if (url) {
+  //   unlockAchieveObj['url'] = assetSetter(url, fileType.ui)
+  // }
   
   sentence.args.forEach((e) => {
     switch (e.key) {
@@ -31,6 +30,9 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
         break;
       case 'y':
         unlockAchieveObj['y'] = e.value && Number(e.value) || 0;
+        break;
+      case 'condition':
+        unlockAchieveObj['condition'] = e.value?.toString() ?? '';
         break;
       default:
         break;
@@ -86,9 +88,23 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
     url: unlockAchieveObj['url'] || '',
     x: unlockAchieveObj['x'] || 0,
     y: unlockAchieveObj['y'] || 0,
+    condition: unlockAchieveObj['condition'] || '',
     saveTime: currentTime,
-    isShow: unlockItem?.isShow || saveData.isShowUnlock || false,
+    isShowUnlock: unlockItem?.isShowUnlock || saveData.isShowUnlock || false,
   }
+
+  const newList = saveData.allUnlockAchieveList.map(item => {
+    if (
+      item.unlockname === unlockAchieveObj['unlockname'] && 
+      unlockAchieveObj['url'] && 
+      unlockAchieveObj['url'].includes(item.url)
+    ) {
+      item = payload
+    }
+    return item
+  })
+
+  webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(newList))
 
   // 没有数据 或者 没有找到 > 存储到本地缓存
   if (unlockItemIndex === -1) {
@@ -96,12 +112,12 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
       saveActions.addUnlockAchieveData(payload)
     )
   } else {
-    alert('替换')
     // 如果存在，则替换掉源数据
     webgalStore.dispatch(
       saveActions.replaceUnlockAchieveData({ index: unlockItemIndex, data: payload })
     )
   }
+
   dumpUnlickAchieveToStorage()
 
   return {

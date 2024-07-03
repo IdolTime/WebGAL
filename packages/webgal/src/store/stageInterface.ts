@@ -121,7 +121,8 @@ export interface IUnlockAchieveItem {
   x: number;
   y: number;
   saveTime?: string;
-  isShow?: boolean;
+  isShowUnlock?: boolean;
+  condition?: string;
 }
 
 /**
@@ -220,4 +221,6 @@ export interface IUnlockAchieveObj {
   url?: string;
   x?: number;
   y?: number;
+  condition?: string;
+  saveTime?: string;
 }

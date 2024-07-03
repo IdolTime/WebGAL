@@ -8,7 +8,8 @@ import { WebGAL } from '@/Core/WebGAL';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
-import { IUnlockAchieveItem } from '@/store/stageInterface'
+import { IUnlockAchieveItem } from '@/store/stageInterface';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 /**
  * 成就页面
@@ -40,25 +41,19 @@ export const Achievement: FC = () => {
   }, [GUIState.showAchievement]);
 
   async function initData() {
-    await getUnlickAchieveFromStorage()
-
-    const unlockAchieveData = webgalStore.getState().saveData.unlockAchieveData;
-    const unlockAchieveListAll = new Map()
-    webgalStore.getState().saveData.unlockAchieveListAll.forEach(ele => {
-      unlockAchieveListAll.set(ele.key, ele.value)
-    })
-    
-    const newList = unlockAchieveData.filter((e) => unlockAchieveListAll.get(e.unlockname));
-    webgalStore.dispatch(saveActions.setUnlockAchieveData(newList));
-    await dumpUnlickAchieveToStorage();
+    // await getUnlickAchieveFromStorage()
+    const allUnlockAchieveList = webgalStore.getState().saveData.allUnlockAchieveList;
     
     const currentScene = WebGAL.sceneManager.sceneData.currentScene  
     const unlocked = webgalStore.getState().saveData.unlockAchieveData?.length ?? 0; 
-    const allTotal = webgalStore.getState().saveData.unlockAchieveListAll.length || 0;
+    const allTotal = allUnlockAchieveList.length || 0;
     // 当前完成进度
     const currentProgress  = ((unlocked / allTotal) * 100).toFixed(2) + '%';
-
     setUnlockedData({ unlocked, allTotal, currentProgress })
+  }
+
+  const getUrl = (url: string) => {
+    return assetSetter(url, fileType.ui)
   }
 
 
@@ -102,25 +97,29 @@ export const Achievement: FC = () => {
               backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${StageState.achieveBgX} ${StageState.achieveBgY.includes('1080') ? '100%' : StageState.achieveBgY}`
             }}  
           >
-            {saveData.unlockAchieveData?.length > 0 && (
+            {saveData.allUnlockAchieveList?.length > 0 && (
               <div className={styles.achievement_list}>
-                {saveData.unlockAchieveData?.map(({ unlockname, x, y, url, isShow, saveTime }, index) => {
-                  if (!isShow) {
-                    return null;
-                  }
+                {saveData.allUnlockAchieveList?.map(
+                  ({ unlockname, x, y, url, isShowUnlock, saveTime, condition }, index) => {
                   return (
                     <div
                       key={`unlockAchieveItem-${index}`}
                       className={styles.achievement_item}
-                      style={url ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${url}")` } : {}}
+                      style={{ top: `${y}px`, left: `${x}px`, backgroundImage: `url("${isShowUnlock && getUrl(url)}")` }}
                     >
                       {/* <span>{unlockname}</span> */}
-                      <div className={styles.ripple}></div>
+                      {isShowUnlock && <div className={styles.ripple}></div>}
+                      {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
+                      
 
                       {/* 信息详情卡片 */}
                       <div className={styles.info_card}>
-                        <span className={styles.unlockname}>{unlockname}</span>
-                        <span className={styles.time}>{`${saveTime}达成`}</span>
+                        {!isShowUnlock && condition && <span className={styles.condition}>{condition}</span>}
+                        
+                        {saveTime && (
+                          <span className={styles.time}>{`${saveTime}达成`}</span>
+                        )}
+                        {}
                         <span className={styles.description}>55% 玩家已达成</span>
                       </div>
                     </div>
