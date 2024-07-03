@@ -215,6 +215,9 @@ const stageSlice = createSlice({
     addShowValueList: (state, action: PayloadAction<IShowValueListItem>) => {
       state.showValueList.push(action.payload);
     },
+    updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
+      state.showValueList = action.payload
+    },
   },
 });
 
@@ -226,7 +229,8 @@ export const {
   setUnlockAchieve, 
   setStoryLineBg, 
   addShowValues,
-  addShowValueList
+  addShowValueList,
+  updateShowValueList
 } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
