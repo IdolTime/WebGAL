@@ -28,28 +28,35 @@ export const loadGame = (index: number, isLoadVideo = false) => {
   loadGameFromStageData(loadFile, isLoadVideo);
 };
 
-export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false) {
+export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false) {
   if (!stageData) {
     logger.info('暂无存档');
     return;
   }
   const loadFile = stageData;
+
   // 重新获取并同步场景状态
-  sceneFetcher(loadFile.sceneData.sceneUrl).then(async (rawScene) => {
+  try {
+    const rawScene = await sceneFetcher(loadFile.sceneData.sceneUrl);
     const scene = await WebGAL.sceneManager.setCurrentScene(
       rawScene,
       loadFile.sceneData.sceneName,
       loadFile.sceneData.sceneUrl,
       true,
     );
+
     // 设置背景
     if (!scene) return;
+
     // 开始场景的预加载
     const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
     WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
-  });
+  } catch (error) {
+    logger.error('场景加载失败', error);
+    return;
+  }
 
   WebGAL.sceneManager.sceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
@@ -72,6 +79,7 @@ export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false)
   // 播放视频
   if (isLoadVideo) {
     dispatch(saveActions.setLoadVideo(true));
+    console.log(33333, loadFile)
     loadFile.nowStageState.PerformList.forEach((e) => {
       runScript(e.script);
     });
@@ -89,3 +97,4 @@ export function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false)
    */
   setEbg(webgalStore.getState().stage.bgName);
 }
+

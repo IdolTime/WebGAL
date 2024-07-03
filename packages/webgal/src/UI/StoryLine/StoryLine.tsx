@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
-import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface'
+import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
 import { getStorylineFromStorage } from '@/Core/controller/storage/savesController';
@@ -16,22 +16,21 @@ export const StoryLine: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
-  const SaveState = useSelector((state: RootState) => state.saveData);
-  
+  const unlockStorylineList = useSelector((state: RootState) => state.saveData.unlockStorylineList);
+
   useEffect(() => {
-      if (GUIState.showStoryLine) {
-        getStorylineFromStorage()
-      }
-  }, [GUIState.showStoryLine])
+    if (GUIState.showStoryLine) {
+      getStorylineFromStorage();
+    }
+  }, [GUIState.showStoryLine]);
 
   /**
    * 返回
    */
   const handlGoBack = () => {
-    backToTitle()
+    backToTitle();
     dispatch(setShowStoryLine(false));
   };
-  
 
   /**
    * 播放故事线
@@ -41,8 +40,8 @@ export const StoryLine: FC = () => {
   const handlPlay = (e: React.MouseEvent, saveData: ISaveStoryLineData) => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
-    loadGameFromStageData(saveData.videoData as ISaveData)
-  }
+    loadGameFromStageData(saveData.videoData as ISaveData);
+  };
 
   return (
     <>
@@ -56,35 +55,40 @@ export const StoryLine: FC = () => {
           </div>
           <div
             className={styles.storyLine_content}
-            style={{ 
+            style={{
               width: StageState.storyLineBgX,
               backgroundImage: `url("${StageState.storyLineBg}")`,
-              backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${StageState.storyLineBgX} ${StageState.storyLineBgY.includes('1080') ? '100%' : StageState.storyLineBgY}`
+              backgroundSize:
+                StageState.storyLineBgX &&
+                StageState.storyLineBgY &&
+                `${StageState.storyLineBgX} ${
+                  StageState.storyLineBgY.includes('1080') ? '100%' : StageState.storyLineBgY
+                }`,
             }}
           >
-            {SaveState.unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
-                const { name, thumbnailUrl, x, y, isUnlock } = item.storyLine;
-                
-                if (!isUnlock) {
-                    return null;
-                }
+            {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
+              const { name, thumbnailUrl, x, y, isUnlock } = item.storyLine;
 
-                return (
-                    <div
-                        key={`storyLine-${index}`}
-                        className={styles.storyLine_item}
-                        style={thumbnailUrl ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${thumbnailUrl}")` } : {}}
-                        onClick={(e) => handlPlay(e, item)}
-                    >
-                        <div className={styles.info_card}>
-                            <span className={styles.playButton_icon}></span>
-                            <span className={styles.name}>{name}</span>
-                        </div>
-                    </div>
-                );
+              if (!isUnlock) {
+                return null;
+              }
 
+              return (
+                <div
+                  key={`storyLine-${index}`}
+                  className={styles.storyLine_item}
+                  style={
+                    thumbnailUrl ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${thumbnailUrl}")` } : {}
+                  }
+                  onClick={(e) => handlPlay(e, item)}
+                >
+                  <div className={styles.info_card}>
+                    <span className={styles.playButton_icon} />
+                    <span className={styles.name}>{name}</span>
+                  </div>
+                </div>
+              );
             }) ?? null}
-
           </div>
         </div>
       )}
