@@ -129,12 +129,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         if (e.style) {
           if (typeof e.style.x === 'number') {
             styleObj.position = 'absolute';
-            styleObj['left'] = e.style.x * 1.33333 + 'px';
+            styleObj['left'] = e.style.x + 'px';
             styleObj['transform'] = 'translateX(-50%)';
           }
           if (typeof e.style.y === 'number') {
             styleObj.position = 'absolute';
-            styleObj['top'] = e.style.y * 1.33333 + 'px';
+            styleObj['top'] = e.style.y + 'px';
             if (styleObj['transform']) {
               styleObj['transform'] += ' translateY(-50%)';
             } else {
