@@ -5,6 +5,8 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { saveActions } from '@/store/savesReducer'
+// import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher'
+import { sceneNameType } from '@/Core/Modules/scene'
 
 /**
  * 进入成就页面
@@ -13,15 +15,15 @@ export const enterAchieve = () => {
   webgalStore.dispatch(saveActions.setIsShowUnlock(false));
     
   // 重新获取初始场景
-  const sceneUrl: string = assetSetter('achieve.txt', fileType.scene);
+  const sceneUrl: string = assetSetter(sceneNameType.Achieve, fileType.scene);
   WebGAL.sceneManager.resetScene();
-
-    // 场景写入到运行时
+//     // 场景写入到运行时
     sceneFetcher(sceneUrl).then((rawScene) => {
-        WebGAL.sceneManager.setCurrentScene(rawScene, 'achieve.txt', sceneUrl).then((scene) => {
+        WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Achieve, sceneUrl).then((scene) => {
         if (scene) {
             // 开始第一条语句
             nextSentence();
+            WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Achieve, sceneUrl);
         }
         });
     });

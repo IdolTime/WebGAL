@@ -10,6 +10,8 @@ import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/
 import { saveActions } from '@/store/savesReducer';
 import { IUnlockAchieveItem } from '@/store/stageInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher'
+import { sceneNameType } from '@/Core/Modules/scene'
 
 /**
  * 成就页面
@@ -33,18 +35,26 @@ export const Achievement: FC = () => {
     if (GUIState.showAchievement) {
       // 控制解锁成就显示，当开始游戏后才可解锁
       webgalStore.dispatch(saveActions.setIsShowUnlock(false));
-      setTimeout(() => {
-        initData()
-      }, 10)
+      initAhieve()
     }
     
   }, [GUIState.showAchievement]);
+
+  async function initAhieve() {
+    // 初始化成就场景
+    const sceneUrl: string = assetSetter(sceneNameType.Achieve, fileType.scene);
+    const rawScene = await sceneFetcher(sceneUrl)
+    await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Achieve, sceneUrl);
+      
+    setTimeout(() => {
+      initData()
+    }, 100)
+  }
 
   async function initData() {
     // await getUnlickAchieveFromStorage()
     const allUnlockAchieveList = webgalStore.getState().saveData.allUnlockAchieveList;
     
-    const currentScene = WebGAL.sceneManager.sceneData.currentScene  
     const unlocked = webgalStore.getState().saveData.unlockAchieveData?.length ?? 0; 
     const allTotal = allUnlockAchieveList.length || 0;
     // 当前完成进度
