@@ -104,23 +104,16 @@ export const Achievement: FC = () => {
                   return (
                     <div
                       key={`unlockAchieveItem-${index}`}
-                      className={styles.achievement_item}
+                      className={`${styles.achievement_item } ${isShowUnlock ? styles.achievement_item_bg_active : ''}`}
                       style={{ top: `${y}px`, left: `${x}px`, backgroundImage: `url("${isShowUnlock && getUrl(url)}")` }}
                     >
-                      {/* <span>{unlockname}</span> */}
                       {isShowUnlock && <div className={styles.ripple}></div>}
                       {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
-                      
-
                       {/* 信息详情卡片 */}
                       <div className={styles.info_card}>
-                        {!isShowUnlock && condition && <span className={styles.condition}>{condition}</span>}
-                        
-                        {saveTime && (
-                          <span className={styles.time}>{`${saveTime}达成`}</span>
-                        )}
-                        {}
-                        <span className={styles.description}>55% 玩家已达成</span>
+                        {condition && <span className={`${styles.condition} ${isShowUnlock ? styles.condition_bg_active : ''}`}>{condition}</span>}
+                        {saveTime && <span className={styles.time}>{`${saveTime}达成`}</span>}
+                        <span className={styles.description}>{`${Math.floor(Math.random() * 101)}%`}玩家已达成</span>
                       </div>
                     </div>
                   );

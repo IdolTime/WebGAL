@@ -69,9 +69,11 @@ export class SceneManager {
     public async getAllUnlockAchieveList(sentenceList: ISentence[]) {
       await getUnlickAchieveFromStorage()
       const unlockAchieveMapper = new Map();
+      const timesMapper = new Map()
       webgalStore.getState().saveData.unlockAchieveData.forEach(e => {
         if (e.isShowUnlock) {
           unlockAchieveMapper.set(e.unlockname, e.isShowUnlock)
+          timesMapper.set(e.unlockname, e?.saveTime ?? '')
         }
       })
 
@@ -84,6 +86,7 @@ export class SceneManager {
           url: e2?.content ?? '',
           unlockname: '',
           condition: '',
+          saveTime: '',
           x: 0,
           y: 0,
           isShowUnlock: false
@@ -102,7 +105,8 @@ export class SceneManager {
         })
 
         if (unlockAchieveMapper?.get(payload?.unlockname)) {
-          payload['isShowUnlock'] = true
+          payload['isShowUnlock'] = true;
+          payload['saveTime'] = timesMapper?.get(payload?.unlockname);
         }
   
         return payload

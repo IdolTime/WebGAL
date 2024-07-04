@@ -113,7 +113,7 @@ $default_storyLine_bg_y: 1080px;
             background-repeat: no-repeat;
             background-size: 100% 100%;
             z-index: 101;
-            background-color: #ccc;
+            background-color: #eee;
 
             .unlockname {
                 display: flex;
@@ -182,15 +182,23 @@ $default_storyLine_bg_y: 1080px;
                     border-radius: 1rem;
                     background-color: rgb(88, 88, 88);
                 }
+
+                .condition_bg_active {
+                    background-color: rgb(209, 129, 175) !important;
+                }
                 
                 
                 .time,
                 .description {
                     color: rgb(162, 99, 137);
-                    font-size: 50px;
+                    font-size: 30px;
                     margin-top: 10px;
                 }
             }
+        }
+
+        .achievement_item_bg_active {
+            background-color: transparent !important;
         }
     }
 }
