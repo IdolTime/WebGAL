@@ -3,9 +3,14 @@ import cloneDeep from 'lodash/cloneDeep';
 import { sceneParser } from '../parser/sceneParser';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 import { webgalStore } from '@/store/store';
-import { saveActions } from '@/store/savesReducer'
-import { IUnlockAchieveItem } from '@/store/stageInterface'
-import { getStorylineFromStorage, dumpStorylineToStorage, dumpUnlickAchieveToStorage, getUnlickAchieveFromStorage } from '@/Core/controller/storage/savesController';
+import { saveActions } from '@/store/savesReducer';
+import { IUnlockAchieveItem } from '@/store/stageInterface';
+import {
+  getStorylineFromStorage,
+  dumpStorylineToStorage,
+  dumpUnlickAchieveToStorage,
+  getUnlickAchieveFromStorage,
+} from '@/Core/controller/storage/savesController';
 
 export interface ISceneEntry {
   sceneName: string; // 场景名称
@@ -45,43 +50,44 @@ export class SceneManager {
   // eslint-disable-next-line max-params
   public setCurrentScene(rawScene: string, scenaName: string, sceneUrl: string, loading = false) {
     // getUnlickAchieveFromStorage();
-    return new Promise((r) => {      
+    return new Promise((r) => {
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
       const sentenceList = this.sceneData.currentScene.sentenceList;
-      getStorylineFromStorage();
       if (sentenceList?.length && scenaName === 'start.txt') {
-        
         // 是否有故事线配置项，如果没有则重置数据
-        const unlockStorylineIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockStoryline);
-        if (unlockStorylineIndex === -1) {
-          webgalStore.dispatch(saveActions.resetStorylineList());
-          dumpStorylineToStorage()
-        }
+        getStorylineFromStorage().then(() => {
+          const unlockStorylineIndex = sentenceList.findIndex(
+            (e: ISentence) => e.command === commandType.unlockStoryline,
+          );
+          if (unlockStorylineIndex === -1) {
+            webgalStore.dispatch(saveActions.resetStorylineList());
+            dumpStorylineToStorage();
+          }
+        });
 
-        this.getAllUnlockAchieveList(sentenceList)
+        this.getAllUnlockAchieveList(sentenceList);
       }
 
       r(this.sceneData.currentScene);
     });
   }
 
-    //所有解锁成就
-    public async getAllUnlockAchieveList(sentenceList: ISentence[]) {
-      await getUnlickAchieveFromStorage()
-      const unlockAchieveMapper = new Map();
-      const timesMapper = new Map()
-      webgalStore.getState().saveData.unlockAchieveData.forEach(e => {
-        if (e.isShowUnlock) {
-          unlockAchieveMapper.set(e.unlockname, e.isShowUnlock)
-          timesMapper.set(e.unlockname, e?.saveTime ?? '')
-        }
-      })
+  // 所有解锁成就
+  public async getAllUnlockAchieveList(sentenceList: ISentence[]) {
+    await getUnlickAchieveFromStorage();
+    const unlockAchieveMapper = new Map();
+    const timesMapper = new Map();
+    webgalStore.getState().saveData.unlockAchieveData.forEach((e) => {
+      if (e.isShowUnlock) {
+        unlockAchieveMapper.set(e.unlockname, e.isShowUnlock);
+        timesMapper.set(e.unlockname, e?.saveTime ?? '');
+      }
+    });
 
-      // 所有解锁成就
-      const allUnlockAchieveList = sentenceList
+    // 所有解锁成就
+    const allUnlockAchieveList = sentenceList
       .filter((e: ISentence) => e.command === commandType.unlockAchieve)
-      .map(e2 => {
-  
+      .map((e2) => {
         const payload: IUnlockAchieveItem = {
           url: e2?.content ?? '',
           unlockname: '',
@@ -89,36 +95,34 @@ export class SceneManager {
           saveTime: '',
           x: 0,
           y: 0,
-          isShowUnlock: false
-        }
+          isShowUnlock: false,
+        };
 
-        e2.args.forEach(e3 => {
+        e2.args.forEach((e3) => {
           if (e3.key === 'unlockname') {
-            payload['unlockname'] = e3.value.toString()
+            payload['unlockname'] = e3.value.toString();
           } else if (e3.key === 'x') {
-            payload['x'] = Number(e3.value)
+            payload['x'] = Number(e3.value);
           } else if (e3.key === 'y') {
-            payload['y'] = Number(e3.value)
+            payload['y'] = Number(e3.value);
           } else if (e3.key === 'condition') {
-            payload['condition'] = e3.value.toString()
+            payload['condition'] = e3.value.toString();
           }
-        })
+        });
 
         if (unlockAchieveMapper?.get(payload?.unlockname)) {
           payload['isShowUnlock'] = true;
           payload['saveTime'] = timesMapper?.get(payload?.unlockname);
         }
-  
-        return payload
-      })
-  
-  
-      webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList))
 
-      const newList = allUnlockAchieveList.filter(e => e?.isShowUnlock)
-      webgalStore.dispatch(saveActions.setUnlockAchieveData(newList))
+        return payload;
+      });
 
-      await dumpUnlickAchieveToStorage();
-  
-    }
+    webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList));
+
+    const newList = allUnlockAchieveList.filter((e) => e?.isShowUnlock);
+    webgalStore.dispatch(saveActions.setUnlockAchieveData(newList));
+
+    await dumpUnlickAchieveToStorage();
+  }
 }

@@ -16,7 +16,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
 
   const asyncAction = async () => {
     // 读取本地解锁数据
-    getStorylineFromStorage();
+    await getStorylineFromStorage();
 
     let thumbnailUrl = sentence?.content || '';
     const storyLineData = {} as unknown as ISaveStoryLine;
@@ -53,9 +53,6 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
         stopTimeout: undefined,
       };
     }
-
-    // 重置解锁故事线数据
-    webgalStore.dispatch(saveActions.resetStorylineList());
 
     // 获取到数据
     const saveData = webgalStore.getState().saveData;
