@@ -18,6 +18,15 @@ export interface ISceneEntry {
   continueLine: number; // 继续原场景的行号
 }
 
+export enum sceneNameType {
+  /** 开始场景 */
+  Start = 'start.txt',
+  /** 成就场景 */
+  Achieve = 'achieve.txt',
+  /** 故事线场景 */
+  Storyline = 'storyline.txt'
+}
+
 /**
  * 初始化场景数据
  */
@@ -53,7 +62,8 @@ export class SceneManager {
     return new Promise((r) => {
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
       const sentenceList = this.sceneData.currentScene.sentenceList;
-      if (sentenceList?.length && scenaName === 'start.txt') {
+
+      if (sentenceList?.length && scenaName === sceneNameType.Start) {
         // 是否有故事线配置项，如果没有则重置数据
         getStorylineFromStorage().then(() => {
           const unlockStorylineIndex = sentenceList.findIndex(
@@ -65,7 +75,17 @@ export class SceneManager {
           }
         });
 
-        this.getAllUnlockAchieveList(sentenceList);
+        // 是否有解锁成就配置项，如果没有则重置数据
+        const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
+        const isSome = this.compareFilenames(scenaName, sceneUrl)
+        if (unlockAchieveIndex === -1 && isSome) {
+          webgalStore.dispatch(saveActions.resetUnlockAchieveData());
+          dumpUnlickAchieveToStorage()
+        }
+      }
+
+      if (scenaName === sceneNameType.Achieve) {
+        this.getAllUnlockAchieveList(sentenceList)
       }
 
       r(this.sceneData.currentScene);
@@ -114,15 +134,25 @@ export class SceneManager {
           payload['isShowUnlock'] = true;
           payload['saveTime'] = timesMapper?.get(payload?.unlockname);
         }
-
-        return payload;
-      });
-
-    webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList));
-
-    const newList = allUnlockAchieveList.filter((e) => e?.isShowUnlock);
-    webgalStore.dispatch(saveActions.setUnlockAchieveData(newList));
-
-    await dumpUnlickAchieveToStorage();
-  }
+  
+        return payload
+      })
+  
+      webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList))
+      const newList = allUnlockAchieveList.filter(e => e?.isShowUnlock)
+      webgalStore.dispatch(saveActions.setUnlockAchieveData(newList))
+      await dumpUnlickAchieveToStorage();
+    }
+    
+    public compareFilenames(filename1: string, filename2: string) {
+      // 提取文件名（不包含路径和后缀名）
+      const name1 = filename1.match(/\/?([^/]+)\.\w+$/);
+      const name2 = filename2.match(/\/?([^/]+)\.\w+$/);
+    
+      if (name1 && name2) {
+        return name1[1] === name2[1];
+      }
+    
+      return false;
+    }
 }

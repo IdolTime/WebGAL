@@ -9,9 +9,11 @@ import { IUnlockAchieveItem } from '@/store/stageInterface'
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   for (let i = startIndex; i <= endIndex; i++) {
     const save = webgalStore.getState().saveData.saveData[i];
-    localforage.setItem(`${WebGAL.gameKey}-saves${i}`, save).then(() => {
-      logger.info(`存档${i}写入本地存储`);
-    });
+    if (save) {
+      localforage.setItem(`${WebGAL.gameKey}-saves${i}`, save).then(() => {
+        logger.info(`存档${i}写入本地存储`);
+      });
+    }
   }
 }
 
