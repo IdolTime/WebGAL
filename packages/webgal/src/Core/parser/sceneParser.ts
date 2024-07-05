@@ -1,6 +1,6 @@
 import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { assetsPrefetcher } from '@/Core/util/prefetcher/assetsPrefetcher';
-import SceneParser from 'webgal-parser';
+import SceneParser from 'idoltime-parser';
 import { commandType, IScene } from '../controller/scene/sceneInterface';
 import { logger } from '../util/logger';
 import { bgm } from '@/Core/gameScripts/bgm';
@@ -35,7 +35,7 @@ import { setVar } from '../gameScripts/setVar';
 import { showVars } from '../gameScripts/showVars';
 import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRegistry } from './utils';
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
-import { unlockStoryline } from '@/Core/gameScripts/unlockStoryline'
+import { unlockStoryline } from '@/Core/gameScripts/unlockStoryline';
 import { achieveBg } from '@/Core/gameScripts/achieve/achieveBg';
 import { unlockAchieve } from '@/Core/gameScripts/achieve/unlockAchieve';
 import { showValue } from '@/Core/gameScripts/showValue';
