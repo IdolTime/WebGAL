@@ -105,6 +105,9 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
         const onClick = () => {
               playSeClick();
+              if (!enable && timer.current) {
+                return
+              }
               chooseCallback?.();
               if (timer.current) {
                 clearTimeout(timer.current);
