@@ -8,12 +8,14 @@ import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
 import { getStorylineFromStorage } from '@/Core/controller/storage/savesController';
 import styles from './storyLine.module.scss';
 import { saveActions } from '@/store/savesReducer';
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 /**
  * 故事线页面
  * @constructor
  */
 export const StoryLine: FC = () => {
+  const { playSeClick, playSeEnter } = useSoundEffect();
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
@@ -30,6 +32,7 @@ export const StoryLine: FC = () => {
    * 返回
    */
   const handlGoBack = () => {
+    playSeClick()
     backToTitle();
     dispatch(setShowStoryLine(false));
   };
@@ -50,7 +53,11 @@ export const StoryLine: FC = () => {
       {GUIState.showStoryLine && (
         <div className={styles.storyLine}>
           <div className={styles.storyLine_header}>
-            <span className={styles.goBack} onClick={handlGoBack}>
+            <span 
+              className={styles.goBack} 
+              onClick={handlGoBack}
+              onMouseEnter={playSeEnter}
+            >
               返回
             </span>
             <span className={styles.title}>故事线</span>

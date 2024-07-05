@@ -12,12 +12,14 @@ import { IUnlockAchieveItem } from '@/store/stageInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher'
 import { sceneNameType } from '@/Core/Modules/scene'
+import useSoundEffect from '@/hooks/useSoundEffect';
 
 /**
  * 成就页面
  * @constructor
  */
 export const Achievement: FC = () => {
+  const { playSeClick, playSeEnter } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
   const saveData = useSelector((state: RootState) => state.saveData);
@@ -71,6 +73,7 @@ export const Achievement: FC = () => {
    * 返回
    */
   const handleGoBack = () => {
+    playSeClick()
     backToTitle();
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };
@@ -81,7 +84,11 @@ export const Achievement: FC = () => {
         <div className={styles.achievement}>
           {/* 头部 */}
           <div className={styles.achievement_header}>
-            <span className={styles.goback} onClick={handleGoBack}>
+            <span 
+              className={styles.goback} 
+              onClick={handleGoBack} 
+              onMouseEnter={playSeEnter}
+            >
               返回
             </span>
             <span className={styles.title}>成就</span>

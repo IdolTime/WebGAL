@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { saveActions } from '@/store/savesReducer';
 
 export function Extra() {
-  const { playSeClick } = useSoundEffect();
+  const { playSeClick, playSeEnter } = useSoundEffect();
   const showExtra = useSelector((state: RootState) => state.GUI.showExtra);
   const dispatch = useDispatch();
 
@@ -36,9 +36,9 @@ export function Extra() {
                 dispatch(saveActions.setLoadVideo(false));
                 playSeClick();
               }}
-              onMouseEnter={playSeClick}
+              onMouseEnter={playSeEnter}
               theme="outline"
-              size="4em"
+              size="3em"
               fill="#fff"
               strokeWidth={3}
             />
