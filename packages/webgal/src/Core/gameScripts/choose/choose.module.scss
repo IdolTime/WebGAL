@@ -45,7 +45,14 @@
 
 .Choose_item_countdown {
   font-family: "WebgalUI", serif;
-  // cursor: pointer;
+  cursor: pointer;
+  margin: 0.25em 0 0.25em 0;
+  position: relative;
+}
+
+.Choose_item_countdown_disabled {
+  font-family: "WebgalUI", serif;
+  cursor: default;
   margin: 0.25em 0 0.25em 0;
   position: relative;
 }
@@ -63,7 +70,7 @@
 
 .Choose_item_disabled {
   font-family: "WebgalUI", serif;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
   min-width: 50%;
   padding: 0.25em 1em 0.25em 1em;
   font-size: 265%;
