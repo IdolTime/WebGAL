@@ -6,7 +6,7 @@ import { useValue } from '@/hooks/useValue';
 import { css, injectGlobal } from '@emotion/css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { IWebGALStyleObj } from 'webgal-parser/build/types/styleParser';
+import { IWebGALStyleObj } from 'idoltime-parser/build/types/styleParser';
 import { logger } from '@/Core/util/logger';
 
 export default function useApplyStyle(url: string) {
