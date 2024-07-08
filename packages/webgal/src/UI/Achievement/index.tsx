@@ -64,8 +64,38 @@ export const Achievement: FC = () => {
     setUnlockedData({ unlocked, allTotal, currentProgress })
   }
 
+  /**
+   * 获得解锁成就图标完整地址
+   * @param url {string} 图标名称
+   * @returns {string} 完整地址路径
+   */
   const getUrl = (url: string) => {
     return assetSetter(url, fileType.ui)
+  }
+
+  /**
+   * 判断当前图标是否在背景图边缘位置
+   * @returns {boolean} true: 在边缘 false: 不在边缘
+   */
+  const isEdge = (IconX: number, achieveBgX: string) => {
+    let num = parseFloat(achieveBgX?.replace(/[^0-9.]/g, ''));
+    const infoCardWidth = 500
+    const totalX = IconX + infoCardWidth;
+    if (totalX >= num) {
+      return true
+    }
+    return false
+  } 
+  
+  /**
+   * 判断当前图标是否在背景图边缘位置
+   */
+  const getPositionX = (x: number, achieveBgX: string) => {
+    let num = parseFloat(achieveBgX?.replace(/[^0-9.]/g, ''));
+    if (x >= num) {
+      return num - 100
+    }
+    return x
   }
 
 
@@ -122,12 +152,14 @@ export const Achievement: FC = () => {
                     <div
                       key={`unlockAchieveItem-${index}`}
                       className={`${styles.achievement_item } ${isShowUnlock ? styles.achievement_item_bg_active : ''}`}
-                      style={{ top: `${y}px`, left: `${x}px`, backgroundImage: `url("${isShowUnlock && getUrl(url)}")` }}
+                      style={{ top: `${y}px`, left: `${getPositionX(x, StageState.achieveBgX)}px`, backgroundImage: `url("${isShowUnlock && getUrl(url)}")` }}
                     >
                       {isShowUnlock && <div className={styles.ripple}></div>}
                       {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
                       {/* 信息详情卡片 */}
-                      <div className={styles.info_card}>
+                      <div 
+                        className={`${styles.info_card} ${isEdge(x, StageState.achieveBgX) ? styles.info_card_position_right : ''}`}
+                      >
                         {condition && <span className={`${styles.condition} ${isShowUnlock ? styles.condition_bg_active : ''}`}>{condition}</span>}
                         {saveTime && <span className={styles.time}>{`${saveTime}达成`}</span>}
                         <span className={styles.description}>{`${Math.floor(Math.random() * 101)}%`}玩家已达成</span>
