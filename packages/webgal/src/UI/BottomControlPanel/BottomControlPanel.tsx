@@ -184,9 +184,14 @@ export const BottomControlPanel = () => {
     playSeClick();
     const url = WebGAL.videoManager.currentPlayingVideo;
     WebGAL.videoManager.destroy(url);
-    // WebGAL.videoManager.pauseVideo(url);
-    debugger;
+    WebGAL.gameplay.isFast = true;
+    WebGAL.gameplay.isSyncingWithOrigine = true;
+
     nextSentence()
+    setTimeout(() => {
+      WebGAL.gameplay.isFast = false;
+      WebGAL.gameplay.isSyncingWithOrigine = false;
+    }, 1000)
   }
 
   return (
