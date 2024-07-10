@@ -45,6 +45,22 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_cursor': {
+            const cursorUrlList = args.map((url) => assetSetter(url, fileType.background));
+            if (cursorUrlList?.length) {
+              const cursorStyle = cursorUrlList.map((url) => `url('${url}'), auto`).join(', ');
+              const styleElement = document.createElement('style');
+              styleElement.innerHTML = `
+                html, body, div, span { cursor: ${cursorStyle} !important; }
+                html:hover, body:hover, div:hover, span:hover { cursor: ${cursorStyle} !important; }
+              `;
+            
+              document.head.appendChild(styleElement);
+            }
+            break;
+          }
+
+//
           case 'Title_bgm': {
             const bgmUrl = assetSetter(args[0], fileType.bgm);
             dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
