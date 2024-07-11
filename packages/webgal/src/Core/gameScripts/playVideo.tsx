@@ -1,8 +1,5 @@
 import { arg, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import styles from '@/Stage/FullScreenPerform/fullScreenPerform.module.scss';
 import { webgalStore } from '@/store/store';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/performController';
@@ -11,7 +8,9 @@ import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-import { current } from '@reduxjs/toolkit';
+import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
+import { setshowFavorited } from '@/store/GUIReducer';
+import { updateShowValueList } from '@/store/stageReducer';
 
 /**
  * 播放一段视频 * @param sentence
@@ -21,11 +20,12 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
-  const performInitName: string = getRandomPerformName();
+  const performInitName: string = 'videoPlay.' + getRandomPerformName();
   let chooseContent = '';
   let loopValue = false;
   let continueBgmValue = false;
   const optionId = Date.now();
+  webgalStore.dispatch(setshowFavorited(false));
   const endPerformRef = {
     current: () => {
       console.log('快进状态尝试跳过视频');
@@ -91,6 +91,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
        */
       setTimeout(() => {
         const url = sentence.content;
+        const isLoadVideo = webgalStore.getState().saveData.isLoadVideo;
         WebGAL.videoManager.seek(url, 0.03);
         WebGAL.videoManager.setVolume(url, bgmVol);
         WebGAL.videoManager.setLoop(url, loopValue);
@@ -106,6 +107,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         const endPerform = () => {
+          // 是否为鉴赏视频
+          if (isLoadVideo) {
+            return;
+          }
+
           for (const e of WebGAL.gameplay.performController.performList) {
             if (e.performName === performInitName) {
               if (chooseContent !== '' && !loopValue) {
@@ -140,7 +146,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
           duration: 1000 * 60 * 60,
           isOver: false,
           isHoldOn: false,
-          stopFunction: () => {
+          stopFunction: (noWait = false) => {
             // WebGAL.events.fullscreenDbClick.off(skipVideo);
 
             if (!continueBgmValue) {
@@ -158,7 +164,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               vocalElement.volume = vocalVol.toString();
             }
 
-            WebGAL.videoManager.destroy(url);
+            WebGAL.videoManager.destroy(url, noWait);
           },
           blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
@@ -186,6 +192,20 @@ export const playVideo = (sentence: ISentence): IPerform => {
 
         WebGAL.videoManager.playVideo(url);
 
+        // 从缓存数据中查找 改视频是否收藏过
+        const saveData = webgalStore.getState().saveData.saveData || [];
+        if (saveData?.length) {
+          saveData.forEach((item: any) => {
+            item?.nowStageState?.PerformList?.forEach((item2: any) => {
+              if (item2?.script?.content === url) {
+                setTimeout(() => {
+                  webgalStore.dispatch(setshowFavorited(true));
+                });
+              }
+            });
+          });
+        }
+
         if (chooseContent && loopValue) {
           const parsedResult = sceneParser(chooseContent, `${optionId}.txt`, '');
           const script = parsedResult.sentenceList[0];
@@ -194,10 +214,19 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.onEnded(url, () => {
+          getCurrentVideoStageDataForStoryLine();
           if (loopValue) {
             WebGAL.videoManager.seek(url, 0.03);
             WebGAL.videoManager.playVideo(url);
           } else {
+            // 视频播放完成后，隐藏当前设置的显示变量
+            const showValueList = webgalStore.getState().stage.showValueList;
+            if (showValueList?.length) {
+              const name = webgalStore.getState().stage.showValueName;
+              const newShowValueList = showValueList.filter((item) => item.showValueName !== name);
+              webgalStore.dispatch(updateShowValueList(newShowValueList));
+            }
+
             endPerform();
           }
         });

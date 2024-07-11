@@ -27,7 +27,7 @@ async function decryptVideo(encryptedData: ArrayBuffer, key: string, iv: string,
 }
 
 export class VideoManager {
-  private videosByKey: Record<
+  public videosByKey: Record<
     string,
     {
       player: FlvJs.Player;
@@ -47,12 +47,15 @@ export class VideoManager {
           handler: () => void;
         };
       };
+      poster: string;
     }
   >;
+  public currentPlayingVideo = '';
   private videoIndex = 0;
 
   public constructor() {
     this.videosByKey = {};
+    this.currentPlayingVideo = '';
   }
 
   public preloadVideo(url: string, playWhenLoaded = false) {
@@ -163,20 +166,39 @@ export class VideoManager {
         });
         flvPlayer.attachMediaElement(videoTag);
         flvPlayer.load();
-
-        this.videosByKey[url] = {
+        const videoKeyItem = {
           ...this.videosByKey[url],
           player: flvPlayer,
         };
 
-        const waitCommands = Object.keys(this.videosByKey[url].waitCommands);
+        this.videosByKey[url] = videoKeyItem;
 
-        if (waitCommands.length) {
-          waitCommands.forEach((command) => {
-            // @ts-ignore
-            this[command](url, this.videosByKey[url].waitCommands[command]);
-          });
-        }
+        videoTag.onloadeddata = () => {
+          const waitCommands = Object.keys(videoKeyItem.waitCommands);
+
+          if (videoKeyItem) {
+            const canvas2 = document.createElement('canvas');
+            const context = canvas2.getContext('2d');
+            canvas2.width = 480;
+            canvas2.height = 270;
+            context!.drawImage(videoTag, 0, 0, 480, 270);
+            const url = canvas2.toDataURL('image/webp', 0.5);
+            canvas2.remove();
+
+            videoKeyItem.poster = url;
+          }
+
+          if (waitCommands.length) {
+            waitCommands.forEach((command) => {
+              if (!videoKeyItem) {
+                console.log('没有找到视频缓存资源', url);
+                return;
+              }
+              // @ts-ignore
+              this[command](url, videoKeyItem.waitCommands[command]);
+            });
+          }
+        };
       });
   }
 
@@ -206,6 +228,7 @@ export class VideoManager {
 
   public playVideo(key: string): void {
     const videoItem = this.videosByKey[key];
+    this.currentPlayingVideo = key;
 
     if (videoItem?.player) {
       videoItem.player.play();
@@ -248,7 +271,7 @@ export class VideoManager {
     }
   }
 
-  public destroy(key: string, noWait = false): void {
+  public destroy(key: string, noWait = false, isLoadVideo = false): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
@@ -280,12 +303,12 @@ export class VideoManager {
             },
             noWait ? 0 : 500,
           );
-          delete this.videosByKey[key];
+            delete this.videosByKey[key];
         },
         noWait ? 0 : 2000,
       );
     } else {
-      videoItem.waitCommands.destroy = true;
+      // videoItem.waitCommands.destroy = true;
     }
   }
 

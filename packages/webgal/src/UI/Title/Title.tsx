@@ -2,14 +2,16 @@ import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
+import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
-import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { setMenuPanelTag, setVisibility, setShowStoryLine } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import useTrans from '@/hooks/useTrans';
+import { setshowFavorited } from '@/store/GUIReducer';
 // import { resize } from '@/Core/util/resize';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
@@ -17,6 +19,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
+import { enterAchieve } from '@/Core/controller/achieve/achieve';
 
 /**
  * 标题页
@@ -33,6 +36,13 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
+
+  /**
+   * 展示成就页面
+   */
+  const showAchievement = () => {
+    dispatch(setVisibility({ component: 'showAchievement', visibility: true }));
+  };
 
   return (
     <>
@@ -63,6 +73,7 @@ const Title: FC = () => {
               onClick={() => {
                 startGame();
                 playSeClick();
+                dispatch(setshowFavorited(false));
               }}
               onMouseEnter={playSeEnter}
             >
@@ -89,6 +100,28 @@ const Title: FC = () => {
               onMouseEnter={playSeEnter}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
+            </div>
+            <div
+              className={applyStyle('Title_button', styles.Title_button)}
+              onClick={() => {
+                startGame();
+                playSeClick();
+                enterAchieve();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('achievement.title')}</div>
+            </div>
+            <div
+              className={applyStyle('Title_button', styles.Title_button)}
+              onClick={() => {
+                startGame();
+                playSeClick();
+                enterAchieve();
+              }}
+              onMouseEnter={playSeEnter}
+            >
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
             </div>
             <div
               className={applyStyle('Title_button', styles.Title_button)}

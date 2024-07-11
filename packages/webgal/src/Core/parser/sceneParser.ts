@@ -35,6 +35,10 @@ import { setVar } from '../gameScripts/setVar';
 import { showVars } from '../gameScripts/showVars';
 import { defineScripts, IConfigInterface, ScriptConfig, ScriptFunction, scriptRegistry } from './utils';
 import { applyStyle } from '@/Core/gameScripts/applyStyle';
+import { unlockStoryline } from '@/Core/gameScripts/unlockStoryline';
+import { achieveBg } from '@/Core/gameScripts/achieve/achieveBg';
+import { unlockAchieve } from '@/Core/gameScripts/achieve/unlockAchieve';
+import { showValue } from '@/Core/gameScripts/showValue';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -68,6 +72,9 @@ export const SCRIPT_TAG_MAP = defineScripts({
   setTransition: ScriptConfig(commandType.setTransition, setTransition, { next: true }),
   getUserInput: ScriptConfig(commandType.getUserInput, getUserInput),
   applyStyle: ScriptConfig(commandType.applyStyle, applyStyle, { next: true }),
+  unlockAchieve: ScriptConfig(commandType.unlockAchieve, unlockAchieve, { next: true }),
+  unlockStoryline: ScriptConfig(commandType.unlockStoryline, unlockStoryline, { next: true }),
+  showValue: ScriptConfig(commandType.showValue, showValue, { next: true }),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 

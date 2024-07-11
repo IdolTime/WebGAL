@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
-import { setStage, stageActions, setAchieveBg } from '@/store/stageReducer';
+import { setStage, stageActions } from '@/store/stageReducer';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
@@ -19,54 +19,8 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param sentence 语句
  * @return {IPerform}
  */
-export const changeBg = (sentence: ISentence): IPerform => {
+export const achieveBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
-  const dispatch = webgalStore.dispatch;
-   // 故事线背景
-  if (webgalStore.getState().GUI.showStoryLine) {
-    dispatch(setStage({ key: 'storyLineBg', value: url }))
-    sentence.args.forEach((e) => {
-      if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgX', value: `${e.value}px` }))
-      }
-      if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgY', value: `${e.value}px` }))
-      }
-    });
-    
-    return {
-      performName: 'none',
-      duration: 0,
-      isHoldOn: false,
-      stopFunction: () => {},
-      blockingNext: () => false,
-      blockingAuto: () => true,
-      stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
-  }
-
-  // 成就背景
-  if (webgalStore.getState().GUI.showAchievement) {
-    dispatch(setAchieveBg(url))
-    sentence.args.forEach((e) => {
-      if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgX', value: `${e.value}px` }))
-      }
-      if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgY', value: `${e.value}px` }))
-      }
-    });
-    return {
-      performName: 'none',
-      duration: 0,
-      isHoldOn: false,
-      stopFunction: () => {},
-      blockingNext: () => false,
-      blockingAuto: () => true,
-      stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
-  }
-
   let name = '';
   let series = 'default';
   sentence.args.forEach((e) => {
@@ -78,6 +32,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
     }
   });
 
+  const dispatch = webgalStore.dispatch;
   if (name !== '') dispatch(unlockCgInUserData({ name, url, series }));
 
   /**

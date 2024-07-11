@@ -31,6 +31,7 @@ export const assetsScanner = (
   if (content === 'none' || content === '') {
     return returnAssetsList;
   }
+
   // 处理语句携带的资源
   if (command === commandType.changeBg) {
     returnAssetsList.push({

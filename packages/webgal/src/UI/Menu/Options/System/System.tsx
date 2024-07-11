@@ -17,7 +17,11 @@ import About from '@/UI/Menu/Options/System/About';
 import { WebGAL } from '@/Core/WebGAL';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import savesReducer, { ISavesData, saveActions } from '@/store/savesReducer';
-import { dumpFastSaveToStorage, dumpSavesToStorage } from '@/Core/controller/storage/savesController';
+import {
+  dumpFastSaveToStorage,
+  dumpSavesToStorage,
+  dumpUnlickAchieveToStorage,
+} from '@/Core/controller/storage/savesController';
 
 interface IExportGameData {
   userData: IUserData;
@@ -175,6 +179,8 @@ export function System() {
                     rightText: t('$common.yes'),
                     leftFunc: () => {},
                     rightFunc: () => {
+                      dispatch(saveActions.resetUnlockAchieveData());
+                      dumpUnlickAchieveToStorage();
                       dispatch(resetAllData());
                       dumpToStorageFast();
                       dispatch(saveActions.resetSaves());

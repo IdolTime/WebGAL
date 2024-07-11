@@ -30,6 +30,9 @@ export interface IGuiState {
   isEnterGame: boolean;
   isShowLogo: boolean;
   isShowGameMenu: boolean; // 是否显示游戏菜单
+  showStoryLine: boolean; // 故事线
+  showAchievement: boolean;
+  showFavorited: boolean; // 显示收藏
 }
 
 export type componentsVisibility = Pick<

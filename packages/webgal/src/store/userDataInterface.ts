@@ -72,9 +72,17 @@ export interface ISaveData {
   nowStageState: IStageState;
   backlog: Array<IBacklogItem>; // 舞台数据
   index: number; // 存档的序号
+  saveName: string; // 当前保存名称
   saveTime: string; // 保存时间
   sceneData: ISaveScene; // 场景数据
   previewImage: string;
+}
+
+export interface ISaveVideoData {
+  nowStageState: IStageState;
+  backlog: Array<IBacklogItem>; // 舞台数据
+  saveTime: string; // 保存时间
+  sceneData: ISaveScene; // 场景数据
 }
 
 export interface IAppreciationAsset {
@@ -116,3 +124,21 @@ export interface IUserDataStore {
 }
 
 export type UserDataStore = IUserDataStore;
+
+export interface ISaveStoryLine {
+  thumbnailUrl:  string; // 缩略图地址
+  name: string; // 解锁名称
+  x: number; // 解锁按钮 X坐标
+  y: number; // 解锁按钮 Y坐标
+  isUnlock: boolean; // 是否已解锁, 如果已经解锁才展示
+}
+
+export interface ISaveStoryLineData {
+  storyLine: ISaveStoryLine;
+  videoData: ISaveData | null;
+}
+
+export interface IUnlockAchieveAllItem {
+  key: string;
+  value: string;
+}

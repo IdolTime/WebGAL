@@ -2,6 +2,7 @@ import { initState, resetStageState, setStage } from '@/store/stageReducer';
 import { webgalStore } from '@/store/store';
 import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
+import { saveActions } from '@/store/savesReducer';
 
 export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true, resetVideo = true) => {
   /**
@@ -32,4 +33,10 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true, reset
   if (!resetSceneAndVar) {
     webgalStore.dispatch(setStage({ key: 'GameVar', value: currentVars }));
   }
+
+  // 控制解锁成就显示，当开始游戏后才可解锁
+  // webgalStore.dispatch(saveActions.setIsShowUnlock(true));
+  // webgalStore.dispatch(saveActions.setShowStoryline(true));
+  // 重置鉴赏模式
+  webgalStore.dispatch(saveActions.setLoadVideo(false));
 };

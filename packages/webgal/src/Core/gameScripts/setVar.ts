@@ -1,7 +1,7 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
-import { setStageVar } from '@/store/stageReducer';
+import { setStageVar, addShowValues } from '@/store/stageReducer';
 import { logger } from '@/Core/util/logger';
 import { compile } from 'angular-expressions';
 import { setGlobalVar } from '@/store/userDataReducer';
@@ -38,7 +38,9 @@ export const setVar = (sentence: ISentence): IPerform => {
     const key = sentence.content.split(/=/)[0];
     const valExp = sentence.content.split(/=/)[1];
     if (valExp === 'random()') {
-      webgalStore.dispatch(targetReducerFunction({ key, value: Math.random() }));
+      const randomVal = Math.random()
+      webgalStore.dispatch(targetReducerFunction({ key, value: randomVal }));
+      webgalStore.dispatch(addShowValues({ key, value: randomVal }));
     } else if (valExp.match(/[+\-*\/()]/)) {
       // 如果包含加减乘除号，则运算
       // 先取出运算表达式中的变量
@@ -69,17 +71,24 @@ export const setVar = (sentence: ISentence): IPerform => {
       }
 
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
+      webgalStore.dispatch(addShowValues({ key, value: result }));
     } else if (valExp.match(/true|false/)) {
       if (valExp.match(/true/)) {
         webgalStore.dispatch(targetReducerFunction({ key, value: true }));
+        webgalStore.dispatch(addShowValues({ key, value: true }));
       }
       if (valExp.match(/false/)) {
         webgalStore.dispatch(targetReducerFunction({ key, value: false }));
+        webgalStore.dispatch(addShowValues({ key, value: false }));
       }
     } else {
       if (!isNaN(Number(valExp))) {
         webgalStore.dispatch(targetReducerFunction({ key, value: Number(valExp) }));
-      } else webgalStore.dispatch(targetReducerFunction({ key, value: valExp }));
+        webgalStore.dispatch(addShowValues({ key, value: Number(valExp) }));
+      } else {
+        webgalStore.dispatch(targetReducerFunction({ key, value: valExp }));
+        webgalStore.dispatch(addShowValues({ key, value: valExp }));
+      } 
     }
     if (setGlobal) {
       logger.debug('设置全局变量：', { key, value: webgalStore.getState().userData.globalGameVar[key] });

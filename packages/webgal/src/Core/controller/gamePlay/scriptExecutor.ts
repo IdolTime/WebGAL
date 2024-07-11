@@ -44,9 +44,11 @@ export const whenChecker = (whenValue: string | undefined): boolean => {
  */
 export const scriptExecutor = () => {
   // 超过总语句数量，则从场景栈拿出一个需要继续的场景，然后继续流程。若场景栈清空，则停止流程
+  const sceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId >
-    WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1
+    WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1 && 
+      sceneName !== 'storyline.txt' && sceneName !== 'achieve.txt'
   ) {
     if (WebGAL.sceneManager.sceneData.sceneStack.length !== 0) {
       const sceneToRestore: ISceneEntry | undefined = WebGAL.sceneManager.sceneData.sceneStack.pop();
@@ -103,7 +105,7 @@ export const scriptExecutor = () => {
    * Variable interpolation
    */
   const variableInterpolation = () => {
-    currentScript.content = interpolationOneItem(currentScript.content);
+    currentScript.content = interpolationOneItem(currentScript?.content ?? '');
 
     currentScript.args.forEach((arg) => {
       if (arg.value && typeof arg.value === 'string') {

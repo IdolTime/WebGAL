@@ -103,25 +103,26 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
         let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
-        const onClick = enable
-          ? () => {
-              playSeClick();
-              chooseCallback?.();
+        const onClick = () => {
+          playSeClick();
+          if (!enable && timer.current) {
+            return;
+          }
+          chooseCallback?.();
+          if (timer.current) {
+            clearTimeout(timer.current);
+            timer.current = null;
+          }
 
-              if (timer.current) {
-                clearTimeout(timer.current);
-                timer.current = null;
-              }
-
-              if (e.jumpToScene) {
-                const sceneName = e.jump.split('./game/scene/')[1];
-                changeScene(e.jump, sceneName);
-              } else {
-                jmp(e.jump);
-              }
-              WebGAL.gameplay.performController.unmountPerform('choose');
-            }
-          : () => {};
+          if (e.jumpToScene) {
+            const sceneName = e.jump.split('./game/scene/')[1];
+            changeScene(e.jump, sceneName);
+          } else {
+            jmp(e.jump);
+          }
+          WebGAL.gameplay.performController.unmountPerform('choose');
+        };
+        // : () => {};
         const styleObj: Record<string, number | string> = {
           fontFamily: font,
         };
@@ -157,7 +158,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         }
 
         if (typeof e.style?.countdown === 'number') {
-          className = styles.Choose_item_countdown;
+          className = enable ? styles.Choose_item_countdown : styles.Choose_item_countdown_disabled;
           let time = e.style.countdown;
           let width = 1082;
           let unit = 1082 / ((time * 1000) / 16);

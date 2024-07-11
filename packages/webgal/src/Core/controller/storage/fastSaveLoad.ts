@@ -22,7 +22,7 @@ export function initKey() {
  * 用于紧急回避时的数据存储 & 快速保存
  */
 export async function fastSaveGame() {
-  const saveData: ISaveData = generateCurrentStageData(-1, false);
+  const saveData: ISaveData = await generateCurrentStageData(-1, false);
   const newSaveData = cloneDeep(saveData);
   webgalStore.dispatch(saveActions.setFastSave(newSaveData));
   await dumpFastSaveToStorage();

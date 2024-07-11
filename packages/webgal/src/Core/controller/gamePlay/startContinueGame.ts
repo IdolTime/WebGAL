@@ -4,10 +4,11 @@ import { sceneParser } from '../../parser/sceneParser';
 import { resetStage } from '@/Core/controller/stage/resetStage';
 import { webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
+import { saveActions } from '@/store/savesReducer';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
-
+import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
 
@@ -28,6 +29,9 @@ export const startGame = () => {
       }
     });
   });
+
+  webgalStore.dispatch(saveActions.setIsShowUnlock(true));
+  webgalStore.dispatch(saveActions.setShowStoryline(true));
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
 };
 
