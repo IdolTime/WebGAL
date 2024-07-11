@@ -3,7 +3,7 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage } from '@/store/GUIReducer';
+import { setEnableAchievement, setEnableStoryline, setGuiAsset, setLogoImage } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
@@ -62,6 +62,16 @@ export const infoFetcher = (url: string) => {
             getStorage();
             getFastSaveFromStorage();
             getSavesFromStorage(0, 0);
+            break;
+          }
+
+          case 'Enable_Achievements': {
+            dispatch(setEnableAchievement(args[0] === 'true'));
+            break;
+          }
+
+          case 'Enable_Storyline': {
+            dispatch(setEnableStoryline(args[0] === 'true'));
             break;
           }
         }

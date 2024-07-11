@@ -32,6 +32,8 @@ export interface IGuiState {
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
+  isEnableStoryline: boolean; // 是否开启故事线
+  isEnableAchievement: boolean; // 是否开启成就
 }
 
 export type componentsVisibility = Pick<

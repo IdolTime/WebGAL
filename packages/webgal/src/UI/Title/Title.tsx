@@ -42,7 +42,7 @@ const Title: FC = () => {
    */
   const showAchievement = () => {
     dispatch(setVisibility({ component: 'showAchievement', visibility: true }));
-  }
+  };
 
   return (
     <>
@@ -73,32 +73,38 @@ const Title: FC = () => {
               onClick={() => {
                 startGame();
                 playSeClick();
-                dispatch(setshowFavorited(false))
+                dispatch(setshowFavorited(false));
               }}
               onMouseEnter={playSeEnter}
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
             </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                enterAchieve();
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('achievement.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                enterStoryLine();
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
-            </div>
+            {GUIState.isEnableAchievement && (
+              <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  enterAchieve();
+                  playSeClick();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
+                  {t('achievement.title')}
+                </div>
+              </div>
+            )}
+            {GUIState.isEnableStoryline && (
+              <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  enterStoryLine();
+                  playSeClick();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
+              </div>
+            )}
             <div
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {
@@ -107,7 +113,7 @@ const Title: FC = () => {
               }}
               onMouseEnter={playSeEnter}
             >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>  
+              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('extra.title')}</div>
             </div>
           </div>
         </div>
