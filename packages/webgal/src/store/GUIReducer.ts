@@ -29,8 +29,7 @@ const initState: IGuiState = {
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
-  isEnableAchievement: false,
-  isEnableStoryline: false,
+  gameMenus: [],
 };
 
 /**
@@ -77,11 +76,8 @@ const GUISlice = createSlice({
     setshowFavorited: (state, action: PayloadAction<boolean>) => {
       state.showFavorited = action.payload;
     },
-    setEnableAchievement: (state, action: PayloadAction<boolean>) => {
-      state.isEnableAchievement = action.payload;
-    },
-    setEnableStoryline: (state, action: PayloadAction<boolean>) => {
-      state.isEnableStoryline = action.payload;
+    setGameMenus: (state, action: PayloadAction<any>) => {
+      state.gameMenus = action.payload;
     },
   },
 });
@@ -93,7 +89,6 @@ export const {
   setLogoImage,
   setShowStoryLine,
   setshowFavorited,
-  setEnableAchievement,
-  setEnableStoryline,
+  setGameMenus,
 } = GUISlice.actions;
 export default GUISlice.reducer;

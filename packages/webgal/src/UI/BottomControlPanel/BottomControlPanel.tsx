@@ -1,19 +1,4 @@
-import {
-  AlignTextLeftOne,
-  DoubleRight,
-  FolderOpen,
-  Home,
-  PlayOne,
-  PreviewCloseOne,
-  PreviewOpen,
-  ReplayMusic,
-  Save,
-  SettingTwo,
-  DoubleDown,
-  DoubleUp,
-  Lock,
-  Unlock,
-} from '@icon-park/react';
+import { Save } from '@icon-park/react';
 import styles from './bottomControlPanel.module.scss';
 import { switchAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
@@ -33,13 +18,23 @@ import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { WebGAL } from '@/Core/WebGAL';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { webgalStore } from '@/store/store';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+
+
+import gamingContinueIcon from '@/assets/imgs/gaming-continue.png';
+import gamingStopIcon from '@/assets/imgs/gaming-stop.png';
+
 
 export const BottomControlPanel = () => {
   const t = useTrans('gaming.');
   const strokeWidth = 2.5;
   const { i18n } = useTranslation();
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
-  const [isCollection, setIsCollection] = useState(false);  // 是否收藏
+  const [isCollection, setIsCollection] = useState<boolean>(false);  // 是否收藏
+  const [isPause, setIsPause] = useState<boolean>(false); // 是否暂停
+  const [isPressing, setIsPressing] = useState<boolean>(false); // 是否长按
+  let pressTimer: any = null;
+
 
   const lang = i18n.language;
   const isFr = lang === 'fr';
@@ -116,11 +111,123 @@ export const BottomControlPanel = () => {
     setStorage()
   }
 
+  /**
+   * 长按逻辑
+   */
+  const handleMouseDown = (type: 'fallBack' | 'forward') => {
+    setIsPressing(true);
+
+    const handleMouseUp = () => {
+      setIsPressing(false);
+      clearTimeout(pressTimer);
+      clearInterval(pressTimer);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mouseup', handleMouseUp);
+
+    pressTimer = setTimeout(() => {
+      pressTimer = setInterval(() => {
+        if (type === 'fallBack') {
+          handleBack();
+        } else if (type === 'forward') {
+          handleForward();
+        }
+      }, 200);
+    }, 500);
+  };
+
+
+  /**
+   * 视频回退一秒
+   */
+  const handleBack = () => {
+    if (!isPressing) {
+      playSeClick();
+    } 
+    const url = WebGAL.videoManager.currentPlayingVideo;
+    WebGAL.videoManager.backward(url);
+  }
+
+  /**
+   * 视频前进一秒
+   */
+  const handleForward = () => {
+    if (!isPressing) {
+      playSeClick();
+    }
+    const url = WebGAL.videoManager.currentPlayingVideo;
+    WebGAL.videoManager.forward(url);
+  }
+
+  /**
+   * 视频暂停和播放
+   */
+
+  const handlePause = () => {
+    playSeClick();
+    const url = WebGAL.videoManager.currentPlayingVideo;
+    if (isPause) {
+      setIsPause(false);
+      WebGAL.videoManager.playVideo(url);
+    } else {
+      setIsPause(true);
+      WebGAL.videoManager.pauseVideo(url);
+    }
+  }
+
+  /**
+   * 跳过当前视频
+   * 先销毁当前视频，然后执行下一条语句
+   */
+  const handleSkip = () => {
+    playSeClick();
+    const url = WebGAL.videoManager.currentPlayingVideo;
+    WebGAL.videoManager.destroy(url);
+    WebGAL.gameplay.isFast = true;
+    WebGAL.gameplay.isSyncingWithOrigine = true;
+
+    nextSentence()
+    setTimeout(() => {
+      WebGAL.gameplay.isFast = false;
+      WebGAL.gameplay.isSyncingWithOrigine = false;
+    }, 1000)
+  }
+
   return (
     // <div className={styles.ToCenter}>
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
+
+          <span 
+            className={styles.fallBack}
+            onMouseEnter={playSeEnter}
+            onClick={() => {
+              handleBack()
+            }}
+            onMouseDown={() => handleMouseDown('fallBack')}
+          ></span>
+          <span 
+            className={styles.pause} 
+            onMouseEnter={playSeEnter} 
+            onClick={handlePause}
+          >
+            <img src={isPause ? gamingStopIcon :  gamingContinueIcon} className={styles.icon} />
+          </span>
+          <span 
+            className={styles.advance}
+            onMouseEnter={playSeEnter}
+            onClick={handleForward}
+            onMouseDown={() => handleMouseDown('forward')}
+          ></span>
+
+          <span 
+            className={styles.autoplay}
+            onMouseEnter={playSeEnter}
+            onClick={handleSkip}
+          ></span>
+
           {/* {GUIStore.showTextBox && (
             <span
               className={styles.singleButton}
@@ -216,7 +323,7 @@ export const BottomControlPanel = () => {
             <PlayOne className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.auto')}</span>
           </span> */}
-          <span
+          {/* <span
             id="Button_ControlPanel_fast"
             className={styles.singleButton}
             style={{ fontSize }}
@@ -234,7 +341,7 @@ export const BottomControlPanel = () => {
               strokeWidth={strokeWidth}
             />
             <span className={styles.button_text}>{t('buttons.forward')}</span>
-          </span>
+          </span> */}
           {/* <span
             className={styles.singleButton + ' ' + styles.fastsave}
             style={{ fontSize }}
@@ -312,7 +419,7 @@ export const BottomControlPanel = () => {
             />
             <span className={styles.button_text}>{t('buttons.load')}</span>
           </span> */}
-          <span
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -330,8 +437,8 @@ export const BottomControlPanel = () => {
               strokeWidth={strokeWidth}
             />
             <span className={styles.button_text}>{t('buttons.options')}</span>
-          </span>
-          <span
+          </span> */}
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -350,8 +457,8 @@ export const BottomControlPanel = () => {
           >
             <Home className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             <span className={styles.button_text}>{t('buttons.title')}</span>
-          </span>
-          <span
+          </span> */}
+          {/* <span
             className={styles.singleButton}
             style={{ fontSize }}
             onClick={() => {
@@ -365,7 +472,7 @@ export const BottomControlPanel = () => {
             ) : (
               <Unlock className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
             )}
-          </span>
+          </span> */}
         </div>
       )}
     </>

@@ -9,25 +9,104 @@
 //}
 
 .main {
-  //border-bottom: 2px solid rgba(255,255,255,0.25);
   position: absolute;
   bottom: 20px;
-  //will-change: z-index;
   z-index: 9;
   display: flex;
-  //background-image: linear-gradient(rgba(245, 247, 250, 0.7) 0%, rgba(195, 207, 226, 0.7) 100%);
   flex-flow: row;
   justify-content: center;
   align-items: center;
-  //width: 100%;
   height: 70px;
   right: 20px;
+  left: 20px;
   border-radius: 35px;
-  //backdrop-filter: blur(5px);
   padding: 0.15em 1.75em 0.15em 1.75em;
-  //background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.25) 100%);
-  //border-radius: 10px;
   font-size: 80%;
+
+  .fallBack {
+    display: inline-block;
+    width: 62px;
+    height: 72px;
+    background-image: url('@/assets/imgs/left-forward.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left: 80px;
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+      background-image: url('@/assets/imgs/left-forward-select.png');
+    }
+  }
+
+  .pause {
+    display: inline-block;
+    width: 93px;
+    height: 108px;
+    // background-image: url('@/assets/imgs/gaming-stop.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left: 80px;
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+      // background-image: url('@/assets/imgs/gaming-stop.png');
+    }
+  }
+
+  .advance {
+    display: inline-block;
+    width: 62px;
+    height: 72px;
+    background-image: url('@/assets/imgs/right-forward.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left: 80px;
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+      background-image: url('@/assets/imgs/right-forward-select.png');
+    }
+  }
+
+  .collect {
+    display: inline-block;
+    width: 62px;
+    height: 72px;
+    background-image: url('@/assets/imgs/right-forward.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left: 80px;
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+      background-image: url('@/assets/imgs/right-forward-select.png');
+    }
+  }
+
+  .autoplay {
+    display: inline-block;
+    width: 62px;
+    height: 72px;
+    background-image: url('@/assets/imgs/autoplay.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left: 80px;
+    transition: all 0.3s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+      background-image: url('@/assets/imgs/autoplay-select.png');
+    }
+  }
 }
 
 .button {

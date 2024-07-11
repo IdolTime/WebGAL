@@ -3,7 +3,7 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setEnableAchievement, setEnableStoryline, setGuiAsset, setLogoImage } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage, setGameMenus } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
@@ -45,6 +45,43 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_cursor': {
+            const cursorUrlList = args.map((url) => assetSetter(url, fileType.background));
+            if (cursorUrlList?.length) {
+              const cursorStyle = cursorUrlList.map((url) => `url('${url}'), auto`).join(', ');
+              const styleElement = document.createElement('style');
+              styleElement.innerHTML = `
+                html, body, div, span { cursor: ${cursorStyle} !important; }
+                html:hover, body:hover, div:hover, span:hover { cursor: ${cursorStyle} !important; }
+              `;
+
+              document.head.appendChild(styleElement);
+            }
+            break;
+          }
+
+          case 'Game_menu': {
+            const boolMap = new Map([
+              ['true', true],
+              ['false', false],
+            ]);
+            // const keyMap = new Map([
+            //   ['achieve', '成就'],
+            //   ['storyline', '故事线'],
+            //   ['beautyGuide', '美女图鉴']
+            // ])
+            const menus = args.map((e) => {
+              const arr: any = typeof e === 'string' ? e.split('-') : [];
+              return {
+                menuKey: typeof e === 'string' && arr?.length ? arr[0] : '',
+                isShowMenu: typeof e === 'string' && arr?.length ? boolMap.get(arr[1]) : false,
+              };
+            });
+
+            dispatch(setGameMenus(menus));
+            break;
+          }
+
           case 'Title_bgm': {
             const bgmUrl = assetSetter(args[0], fileType.bgm);
             dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
@@ -62,16 +99,6 @@ export const infoFetcher = (url: string) => {
             getStorage();
             getFastSaveFromStorage();
             getSavesFromStorage(0, 0);
-            break;
-          }
-
-          case 'Enable_Achievements': {
-            dispatch(setEnableAchievement(args[0] === 'true'));
-            break;
-          }
-
-          case 'Enable_Storyline': {
-            dispatch(setEnableStoryline(args[0] === 'true'));
             break;
           }
         }
