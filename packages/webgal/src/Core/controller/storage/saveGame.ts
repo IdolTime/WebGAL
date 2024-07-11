@@ -34,17 +34,23 @@ export async function generateCurrentStageData(
    */
   let urlToSave = '';
 
+  if (isSavePreviewImage) {
+    const canvas: HTMLCanvasElement = document.getElementById('pixiCanvas')! as HTMLCanvasElement;
+    const canvas2 = document.createElement('canvas');
+    const context = canvas2.getContext('2d');
+    canvas2.width = 480;
+    canvas2.height = 270;
+    context!.drawImage(canvas, 0, 0, 480, 270);
+    urlToSave = canvas2.toDataURL('image/webp', 0.5);
+    canvas2.remove();
+  }
+
   if (isSavePreviewImage && !newName) {
     const videoItem = WebGAL.videoManager.videosByKey[WebGAL.videoManager.currentPlayingVideo];
 
     if (videoItem.player) {
       urlToSave = videoItem.poster;
     }
-  } else {
-    const userDataState = webgalStore.getState().saveData;
-    // 获得存档文件
-    const loadFile: ISaveData = userDataState.saveData[index];
-    urlToSave = loadFile?.previewImage ?? '';
   }
 
   // 保存时间

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
@@ -36,6 +36,16 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
+
+  const menuMap = useMemo(() => {
+    const map = new Map();
+
+    GUIState.gameMenus.forEach((item) => {
+      map.set(item.menuKey, item.isShowMenu);
+    });
+
+    return map;
+  }, [GUIState.gameMenus]);
 
   /**
    * 展示成就页面
@@ -101,28 +111,34 @@ const Title: FC = () => {
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
             </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                startGame();
-                playSeClick();
-                enterAchieve();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('achievement.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                startGame();
-                playSeClick();
-                enterAchieve();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
-            </div>
+            {menuMap.get('achieve') && (
+              <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  startGame();
+                  playSeClick();
+                  enterAchieve();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>
+                  {t('achievement.title')}
+                </div>
+              </div>
+            )}
+            {menuMap.get('storyline') && (
+              <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  startGame();
+                  playSeClick();
+                  enterAchieve();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
+              </div>
+            )}
             <div
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {

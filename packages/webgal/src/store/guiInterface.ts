@@ -33,11 +33,17 @@ export interface IGuiState {
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
+  gameMenus: GameMenuItem[];
+}
+
+export interface GameMenuItem {
+  menuKey: string;
+  isShowMenu: boolean;
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme'>
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus'>
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
@@ -60,3 +66,8 @@ export interface setAssetPayload {
 }
 
 export type GuiStore = IGuiStore;
+
+export enum GameMenuEnum {
+  Achieve = 'achieve',
+  Storyline = 'storyline',
+}
