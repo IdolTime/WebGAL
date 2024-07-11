@@ -29,6 +29,7 @@ const initState: IGuiState = {
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
+  gameMenus: []
 };
 
 /**
@@ -74,6 +75,9 @@ const GUISlice = createSlice({
     },
     setshowFavorited: (state, action: PayloadAction<boolean>) => {
       state.showFavorited = action.payload;
+    },
+    setGameMenus: (state, action: PayloadAction<any>) => {
+      state.gameMenus = action.payload;
     }
   },
 });
@@ -84,6 +88,7 @@ export const {
   setGuiAsset, 
   setLogoImage, 
   setShowStoryLine, 
-  setshowFavorited 
+  setshowFavorited,
+  setGameMenus
 } = GUISlice.actions;
 export default GUISlice.reducer;

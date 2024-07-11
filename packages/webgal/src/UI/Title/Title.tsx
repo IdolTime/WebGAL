@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
@@ -6,7 +6,7 @@ import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility, setShowStoryLine } from '@/store/GUIReducer';
-import { MenuPanelTag } from '@/store/guiInterface';
+import { MenuPanelTag, GameMenuEnum } from '@/store/guiInterface';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
@@ -36,6 +36,16 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
+
+  const menuMap = useMemo(() => {
+    const map = new Map();
+
+    GUIState.gameMenus.forEach((item) => {
+      map.set(item.menuKey, item.isShowMenu);
+    })
+
+    return map;
+  }, [GUIState.gameMenus])
 
   /**
    * 展示成就页面
@@ -79,26 +89,49 @@ const Title: FC = () => {
             >
               <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('start.title')}</div>
             </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                enterAchieve();
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('achievement.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                enterStoryLine();
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
-            </div>
+            
+            {/* 成就 */}
+            {menuMap.get(GameMenuEnum.Achieve) && (
+              <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  enterAchieve();
+                  playSeClick();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('achievement.title')}</div>
+              </div>
+            )}
+
+            {/* 故事线 */}
+            {menuMap.get(GameMenuEnum.Storyline) && (
+                <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  enterStoryLine();
+                  playSeClick();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('storyLine.title')}</div>
+              </div>
+            )}
+
+             {/* 美女图鉴 */}
+             {menuMap.get(GameMenuEnum.BeautyGuide) && (
+                <div
+                className={applyStyle('Title_button', styles.Title_button)}
+                onClick={() => {
+                  // enterStoryLine();
+                  // playSeClick();
+                }}
+                onMouseEnter={playSeEnter}
+              >
+                <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('beautyGuide.title')}</div>
+              </div>
+            )}
+
             <div
               className={applyStyle('Title_button', styles.Title_button)}
               onClick={() => {

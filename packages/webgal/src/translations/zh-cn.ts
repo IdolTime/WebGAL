@@ -173,6 +173,10 @@ const zhCn = {
     achievement: {
       title: '成就',
       subtitle: 'ACHIEVEMENT',
+    },
+    beautyGuide: {
+      title: '美女图鉴',
+      subtitle: 'BEAUTYGUIDE',
     }
   },
 
