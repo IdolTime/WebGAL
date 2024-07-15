@@ -3,6 +3,7 @@ import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
+import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility, setShowStoryLine } from '@/store/GUIReducer';
@@ -119,12 +120,12 @@ const Title: FC = () => {
             )}
 
              {/* 美女图鉴 */}
-             {menuMap.get(GameMenuEnum.BeautyGuide) && (
+             {!menuMap.get(GameMenuEnum.BeautyGuide) && (
                 <div
                 className={applyStyle('Title_button', styles.Title_button)}
                 onClick={() => {
-                  // enterStoryLine();
-                  // playSeClick();
+                  enterBeautyGuide();
+                  playSeClick();
                 }}
                 onMouseEnter={playSeEnter}
               >

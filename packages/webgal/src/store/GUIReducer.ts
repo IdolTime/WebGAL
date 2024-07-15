@@ -29,7 +29,10 @@ const initState: IGuiState = {
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
-  gameMenus: []
+  gameMenus: [],
+  showBeautyGuide: false, // 是否显示美女图鉴页面
+  showBeautyGuideDetail: false, // 是否显示美女图鉴详情页面
+  showBeautyGuideImageDialog: false, 
 };
 
 /**
