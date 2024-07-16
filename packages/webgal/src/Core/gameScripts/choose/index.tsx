@@ -104,25 +104,25 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         const enable = whenChecker(e.enableCondition);
         let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
         const onClick = () => {
-              playSeClick();
-              if (!enable && timer.current) {
-                return
-              }
-              chooseCallback?.();
-              if (timer.current) {
-                clearTimeout(timer.current);
-                timer.current = null;
-              }
+          playSeClick();
+          if (!enable && timer.current) {
+            return;
+          }
+          chooseCallback?.();
+          if (timer.current) {
+            clearTimeout(timer.current);
+            timer.current = null;
+          }
 
-              if (e.jumpToScene) {
-                const sceneName = e.jump.split('./game/scene/')[1];
-                changeScene(e.jump, sceneName);
-              } else {
-                jmp(e.jump);
-              }
-              WebGAL.gameplay.performController.unmountPerform('choose');
-            }
-          // : () => {};
+          if (e.jumpToScene) {
+            const sceneName = e.jump.split('./game/scene/')[1];
+            changeScene(e.jump, sceneName);
+          } else {
+            jmp(e.jump);
+          }
+          WebGAL.gameplay.performController.unmountPerform('choose');
+        };
+        // : () => {};
         const styleObj: Record<string, number | string> = {
           fontFamily: font,
         };
@@ -190,7 +190,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               <svg width="0" height="0">
                 <defs>
                   <clipPath id="myClip">
-                    <rect id="rect" width="1082" height="106" rx="53" ry="53" style={{ fill: '#fff' }} />
+                    <rect id="rect" width="1082" height="106" rx="53" ry="53" style={{ fill: '#ffffff' }} />
                   </clipPath>
                 </defs>
               </svg>

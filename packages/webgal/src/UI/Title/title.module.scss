@@ -31,6 +31,8 @@
   border-radius: 4px;
   transform: skewX(-10deg);
   background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+  font-size: 165%;
+  color: #fbfbfb;
 }
 
 .Title_button:hover {
@@ -39,10 +41,28 @@
 }
 
 .Title_button_text {
-  font-size: 165%;
-  color: #fbfbfb;
   padding: 0 0.5em 0 0.5em;
   letter-spacing: 0.2em;
+}
+
+.Title_button_custom {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.33s;
+  cursor: pointer;
+  margin: 20px 0;
+  font-size: 165%;
+  color: #fbfbfb;
+  letter-spacing: 0.2em;
+
+  span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .Title_backup_background {

@@ -32,12 +32,9 @@ export interface IGuiState {
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
-  gameMenus: GameMenuItem[];
-}
-
-export interface GameMenuItem {
-  menuKey: string;
-  isShowMenu: boolean;
+  gameMenus: {
+    [key in GameMenuKey]: GameMenuItem;
+  };
 }
 
 export type componentsVisibility = Pick<
@@ -70,4 +67,27 @@ export enum GameMenuEnum {
   Achieve = 'achieve',
   Storyline = 'storyline',
   BeautyGuide = 'beautyGuide',
+}
+
+export enum GameMenuKey {
+  Game_start_button = 'Game_start_button',
+  Game_achievement_button = 'Game_achievement_button',
+  Game_storyline_button = 'Game_storyline_button',
+  Game_extra_button = 'Game_extra_button',
+}
+
+export interface GameMenuItem {
+  content: string;
+  args: {
+    hide: boolean;
+    style: {
+      x?: number;
+      y?: number;
+      scale?: number;
+      image?: string;
+      fontSize?: number;
+      fontColor?: string;
+      countdown?: number;
+    };
+  };
 }

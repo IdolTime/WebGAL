@@ -9,7 +9,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 /**
  * 初始GUI状态表
  */
-const initState: IGuiState = {
+export const initState: IGuiState = {
   showBacklog: false,
   showStarter: true,
   showTitle: true,
@@ -29,7 +29,65 @@ const initState: IGuiState = {
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
-  gameMenus: [],
+  gameMenus: {
+    Game_start_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+          countdown: 0,
+        },
+      },
+    },
+    Game_achievement_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
+    Game_extra_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
+    Game_storyline_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
+  },
 };
 
 /**
