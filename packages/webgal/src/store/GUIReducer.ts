@@ -88,6 +88,12 @@ export const initState: IGuiState = {
       },
     },
   },
+  // gameMenus: [],
+  showBeautyGuide: false, // 是否显示美女图鉴页面
+  showBeautyGuideDetail: false, // 是否显示美女图鉴详情页面
+  showBeautyGuideImageDialog: false,
+  isShowR18Modal: false, // 是否显示R18内容
+  openR18Modal: false,
 };
 
 /**
@@ -137,6 +143,9 @@ const GUISlice = createSlice({
     setGameMenus: (state, action: PayloadAction<any>) => {
       state.gameMenus = action.payload;
     },
+    setGameR18: (state, action: PayloadAction<boolean>) => {
+      state.isShowR18Modal = action.payload;
+    }
   },
 });
 
@@ -148,5 +157,6 @@ export const {
   setShowStoryLine,
   setshowFavorited,
   setGameMenus,
+  setGameR18
 } = GUISlice.actions;
 export default GUISlice.reducer;

@@ -3,7 +3,7 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage, setGameMenus, initState } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage, setGameMenus, initState, setGameR18 } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
@@ -17,6 +17,13 @@ declare global {
   }
 }
 
+const boolMap = new Map<string | boolean, boolean>([
+  ['true', true],
+  ['false', false],
+  [true, true],
+  [false, false]
+])
+
 /**
  * 获取游戏信息
  * @param url 游戏信息路径
@@ -28,6 +35,7 @@ export const infoFetcher = (url: string) => {
     let gameConfigRaw: string = r.data;
     const gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
+    debugger;
     // 按照游戏的配置开始设置对应的状态
     if (GUIState) {
       // @ts-ignore
@@ -119,6 +127,13 @@ export const infoFetcher = (url: string) => {
             getStorage();
             getFastSaveFromStorage();
             getSavesFromStorage(0, 0);
+            break;
+          }
+
+          case 'Game_r18': {
+            if (args?.length > 0) {
+              dispatch(setGameR18(!!boolMap.get(args[0])));
+            }
             break;
           }
         }

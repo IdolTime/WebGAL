@@ -1,7 +1,8 @@
 import { FC, useEffect, useRef } from 'react';
 import styles from './logo.module.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { setVisibility } from '@/store/GUIReducer';
 import { useValue } from '@/hooks/useValue';
 
 /**
@@ -9,6 +10,7 @@ import { useValue } from '@/hooks/useValue';
  * @constructor
  */
 const Logo: FC = () => {
+  const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const logoImage = GUIState.logoImage;
   const isEnterGame = GUIState.isEnterGame;
@@ -23,6 +25,14 @@ const Logo: FC = () => {
       currentTimeOutId.set(setTimeout(nextImg, animationDuration));
     } else {
       currentLogoIndex.set(-1);
+      if (GUIState?.isShowR18Modal) {
+        dispatch(
+          setVisibility({ 
+            component: 'openR18Modal', 
+            visibility: true 
+          })
+        )
+      }
     }
   };
 
@@ -51,12 +61,17 @@ const Logo: FC = () => {
         />
       )}
       {currentLogoUrl !== '' && (
-        <div
-          className={styles.Logo_main}
-          key={currentLogoIndex.value + 'bg'}
-          onClick={nextImg}
-          style={{ backgroundImage: `url("${currentLogoUrl}")`, animationDuration: `${animationDuration}ms` }}
-        />
+        <>
+          <div
+            className={styles.Logo_main}
+            key={currentLogoIndex.value + 'bg'}
+            onClick={nextImg}
+            style={{ backgroundImage: `url("${currentLogoUrl}")`, animationDuration: `${animationDuration}ms` }}
+          >
+            
+          </div>
+          <div className={styles.overlay}></div>
+        </>
       )}
     </>
   );

@@ -15,6 +15,8 @@ import { PanicOverlay } from '@/UI/PanicOverlay/PanicOverlay';
 import { useFullScreen } from './hooks/useFullScreen';
 import StoryLine from '@/UI/StoryLine/StoryLine';
 import { Achievement } from '@/UI/Achievement';
+import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
+import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 
 function App() {
   useEffect(() => {
@@ -40,6 +42,8 @@ function App() {
       <DevPanel />
       <StoryLine />
       <Achievement />
+      <BeautyGuide />
+      <ModalR18 />
     </div>
   );
 }

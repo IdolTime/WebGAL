@@ -3,6 +3,7 @@ import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
+import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility, setShowStoryLine } from '@/store/GUIReducer';
@@ -52,8 +53,8 @@ const Title: FC = () => {
       playSeClick();
     },
     [GameMenuKey.Game_extra_button]: () => {
-      // enterStoryLine();
-      // playSeClick();
+      enterBeautyGuide();
+      playSeClick();
     },
   };
 
@@ -179,6 +180,7 @@ const Title: FC = () => {
 
             {/* 图鉴 */}
             {renderButton(GameMenuKey.Game_extra_button)}
+
           </div>
         </div>
       )}

@@ -204,6 +204,13 @@ const zhCn = {
   extra: {
     title: '鉴赏模式',
   },
+
+  r18: {
+    title: '欢迎',
+    desction: '请确认您已年满 18 周岁才能进入本网站。',
+    agree: '同意',
+    disagree: '不同意'
+  }
 };
 
 export default zhCn;
