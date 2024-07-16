@@ -180,6 +180,13 @@ const en = {
   extra: {
     title: 'EXTRA',
   },
+
+  r18: {
+    title: 'Welcome!',
+    desction: 'Please verify that you are 18 years of age or older to enter this site.',
+    agree: 'Agree',
+    disagree: 'Disagree'
+  }
 };
 
 export default en;

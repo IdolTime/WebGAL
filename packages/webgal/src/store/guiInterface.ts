@@ -36,6 +36,8 @@ export interface IGuiState {
   showBeautyGuide: boolean; // 显示美女图鉴页面
   showBeautyGuideDetail: boolean; // 显示美女图鉴详情页面
   showBeautyGuideImageDialog: boolean; // 显示美女图鉴图片对话框
+  isShowR18Modal: boolean; // 是否显示R18内容
+  openR18Modal: boolean;
 }
 
 export interface GameMenuItem {
