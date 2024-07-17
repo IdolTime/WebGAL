@@ -76,12 +76,12 @@ const Title: FC = () => {
     if (menu.args.style) {
       const style = menu.args.style;
       if (typeof style.x === 'number') {
-        styleObj.position = 'absolute';
+        styleObj.position = 'fixed';
         styleObj['left'] = style.x + 'px';
         styleObj['transform'] = 'translateX(-50%)';
       }
       if (typeof style.y === 'number') {
-        styleObj.position = 'absolute';
+        styleObj.position = 'fixed';
         styleObj['top'] = style.y + 'px';
         if (styleObj['transform']) {
           styleObj['transform'] += ' translateY(-50%)';
