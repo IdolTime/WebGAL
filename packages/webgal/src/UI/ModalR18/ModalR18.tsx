@@ -70,11 +70,11 @@ export const ModalR18: FC = () => {
                 src={isHoverConfirmButton ? ConfirmButtonHover : ConfirmButtonDefault}
                 onClick={handleAgree}
                 onMouseEnter={() => {
-                  setIsHoverExitButton(true);
+                  setIsHoverConfirmButton(true);
                   playSeEnter();
                 }}
                 onMouseLeave={() => {
-                  setIsHoverExitButton(false);
+                  setIsHoverConfirmButton(false);
                 }}
                 onLoad={(e) => {
                   setConfirmButtonLayout({
