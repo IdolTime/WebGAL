@@ -6,8 +6,8 @@ import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import styles from './ModalR18.module.scss';
 import ExitButtonDefault from '@/assets/imgs/r18-exit-btn-default.png';
-import ExitButtonHover from '@/assets/imgs/r18-exit-btn-default.png';
-import ConfirmButtonDefault from '@/assets/imgs/r18-confirm-btn-active.png';
+import ExitButtonHover from '@/assets/imgs/r18-exit-btn-active.png';
+import ConfirmButtonDefault from '@/assets/imgs/r18-confirm-btn-default.png';
 import ConfirmButtonHover from '@/assets/imgs/r18-confirm-btn-active.png';
 
 export const ModalR18: FC = () => {
