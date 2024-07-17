@@ -203,7 +203,7 @@ const Title: FC = () => {
             {renderButton(GameMenuKey.Game_extra_button)}
 
             {/* 收藏/美女图鉴 */}
-            {renderButton(GameMenuKey.Game_continue_button)}
+            {renderButton(GameMenuKey.Game_collection_button)}
           </div>
         </div>
       )}

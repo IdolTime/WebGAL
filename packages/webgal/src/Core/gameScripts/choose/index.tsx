@@ -104,10 +104,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         const enable = whenChecker(e.enableCondition);
         let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
         const onClick = () => {
-          playSeClick();
-          if (!enable && timer.current) {
+          if (!enable || timer.current) {
             return;
           }
+          playSeClick();
           chooseCallback?.();
           if (timer.current) {
             clearTimeout(timer.current);
@@ -183,7 +183,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
           return (
             <React.Fragment key={e.jump + i}>
-              <div className={className} style={styleObj} onClick={onClick} onMouseEnter={playSeEnter}>
+              <div className={className} style={styleObj} onClick={onClick}>
                 <img src={ProgressBarBackground} alt={e.text} style={{ width: '1082px', height: '106px' }} />
                 <img src={ProgressBar} className={styles.Choose_item_progress_bar} />
               </div>
@@ -228,7 +228,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               style={styleObj}
               key={e.jump + i}
               onClick={onClick}
-              onMouseEnter={playSeEnter}
+              onMouseEnter={enable ? playSeEnter : undefined}
             >
               <span>{e.text}</span>
             </div>
@@ -236,7 +236,13 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         }
 
         return (
-          <div className={className} style={styleObj} key={e.jump + i} onClick={onClick} onMouseEnter={playSeEnter}>
+          <div
+            className={className}
+            style={styleObj}
+            key={e.jump + i}
+            onClick={onClick}
+            onMouseEnter={enable ? playSeEnter : undefined}
+          >
             {e.text}
           </div>
         );
