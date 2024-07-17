@@ -1,0 +1,92 @@
+
+.beautyGuideImageDialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+
+    .mark{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 109;
+    }
+
+    .content {
+        background-color: aliceblue;
+        width: 1200px;
+        height: 800px;
+        z-index: 120;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+
+        .imgWrapper {
+            flex: 1;
+            overflow: hidden;
+
+            & > img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0;
+                transition: opacity 0.3s;
+                animation: fade 1s forwards;
+            }
+
+            // & > img.transitionImage {
+            //     opacity: 1;
+            // }
+        }
+
+        .btnsWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 30px;
+
+            .btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgb(32, 58, 77);
+                color: #fff;
+                font-size: 22px;
+                padding: 10px 20px;
+                border-radius: 10px;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .btn_prev_disabled,
+            .btn_next_disabled {
+                background-color: rgb(32, 58, 77, 0.5);
+                &:hover {
+                    cursor: not-allowed;
+                }
+            }
+
+            .btn_txt {
+                color: #333;
+                font-size: 25px;
+            }
+        }
+    }
+}
+
+@keyframes fade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

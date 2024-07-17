@@ -33,12 +33,14 @@ export interface IGuiState {
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
-  gameMenus: GameMenuItem[];
-}
-
-export interface GameMenuItem {
-  menuKey: string;
-  isShowMenu: boolean;
+  gameMenus: {
+    [key in GameMenuKey]: GameMenuItem;
+  };
+  showBeautyGuide: boolean; // 显示美女图鉴页面
+  showBeautyGuideDetail: boolean; // 显示美女图鉴详情页面
+  showBeautyGuideImageDialog: boolean; // 显示美女图鉴图片对话框
+  isShowR18Modal: boolean; // 是否显示R18内容
+  openR18Modal: boolean;
 }
 
 export type componentsVisibility = Pick<
@@ -70,4 +72,28 @@ export type GuiStore = IGuiStore;
 export enum GameMenuEnum {
   Achieve = 'achieve',
   Storyline = 'storyline',
+  BeautyGuide = 'beautyGuide',
+}
+
+export enum GameMenuKey {
+  Game_start_button = 'Game_start_button',
+  Game_achievement_button = 'Game_achievement_button',
+  Game_storyline_button = 'Game_storyline_button',
+  Game_extra_button = 'Game_extra_button',
+}
+
+export interface GameMenuItem {
+  content: string;
+  args: {
+    hide: boolean;
+    style: {
+      x?: number;
+      y?: number;
+      scale?: number;
+      image?: string;
+      fontSize?: number;
+      fontColor?: string;
+      countdown?: number;
+    };
+  };
 }

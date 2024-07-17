@@ -3,18 +3,27 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage, setGameMenus } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage, setGameMenus, initState, setGameR18 } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { GameMenuItem, GameMenuKey } from '@/store/guiInterface';
 
 declare global {
   interface Window {
     renderPromise?: Function;
   }
 }
+
+const boolMap = new Map<string | boolean, boolean>([
+  ['true', true],
+  ['false', false],
+  [true, true],
+  [false, false],
+]);
+
 /**
  * 获取游戏信息
  * @param url 游戏信息路径
@@ -28,8 +37,11 @@ export const infoFetcher = (url: string) => {
     logger.info('获取到游戏信息', gameConfig);
     // 按照游戏的配置开始设置对应的状态
     if (GUIState) {
+      // @ts-ignore
+      const gameMenus: Record<GameMenuKey, GameMenuItem> = {};
+
       gameConfig.forEach((e) => {
-        const { command, args } = e;
+        const { command, args, options } = e;
 
         switch (command) {
           case 'Title_img': {
@@ -60,25 +72,40 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
-          case 'Game_menu': {
-            const boolMap = new Map([
-              ['true', true],
-              ['false', false],
-            ]);
-            // const keyMap = new Map([
-            //   ['achieve', '成就'],
-            //   ['storyline', '故事线'],
-            //   ['beautyGuide', '美女图鉴']
-            // ])
-            const menus = args.map((e) => {
-              const arr: any = typeof e === 'string' ? e.split('-') : [];
-              return {
-                menuKey: typeof e === 'string' && arr?.length ? arr[0] : '',
-                isShowMenu: typeof e === 'string' && arr?.length ? boolMap.get(arr[1]) : false,
-              };
-            });
+          case 'Game_start_button':
+          case 'Game_achievement_button':
+          case 'Game_storyline_button':
+          case 'Game_extra_button': {
+            const hide = (options.find((o) => o.key === 'hide')?.value as boolean) || false;
+            const styleStr = (options.find((o) => o.key === 'style')?.value as string) || '';
 
-            dispatch(setGameMenus(menus));
+            let styleObj: GameMenuItem['args']['style'] = { ...initState.gameMenus.Game_achievement_button.args.style };
+
+            const styleRegex = /\{(.*?)\}/;
+            const styleMatch = styleStr.match(styleRegex);
+            if (styleMatch) {
+              const styleStr = styleMatch[1];
+              const styleProps = styleStr.split(',');
+              const style: any = {}; // Change to specific type if possible
+
+              // Parse each style property
+              styleProps.forEach((prop) => {
+                const [key, value] = prop.split('=');
+                if (key && value) {
+                  style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
+                }
+              });
+
+              styleObj = style;
+            }
+
+            gameMenus[GameMenuKey[command]] = {
+              content: args[0],
+              args: {
+                hide,
+                style: styleObj,
+              },
+            };
             break;
           }
 
@@ -101,8 +128,17 @@ export const infoFetcher = (url: string) => {
             getSavesFromStorage(0, 0);
             break;
           }
+
+          case 'Game_r18': {
+            if (args?.length > 0) {
+              dispatch(setGameR18(!!boolMap.get(args[0])));
+            }
+            break;
+          }
         }
       });
+
+      dispatch(setGameMenus(gameMenus));
     }
     window?.renderPromise?.();
     delete window.renderPromise;

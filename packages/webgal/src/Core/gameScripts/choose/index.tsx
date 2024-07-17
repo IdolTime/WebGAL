@@ -190,7 +190,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               <svg width="0" height="0">
                 <defs>
                   <clipPath id="myClip">
-                    <rect id="rect" width="1082" height="106" rx="53" ry="53" style={{ fill: '#fff' }} />
+                    <rect id="rect" width="1082" height="106" rx="53" ry="53" style={{ fill: '#ffffff' }} />
                   </clipPath>
                 </defs>
               </svg>

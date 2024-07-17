@@ -25,23 +25,43 @@
   align-items: center;
   cursor: pointer;
   transition: all 0.33s ease-in-out;
-  background-image: url('@/assets/imgs/menu-button-default.png') !important;
+  background-image: url('@/assets/imgs/menu-button-default.png');
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
 
 .Title_button:hover {
-  background-image: url('@/assets/imgs/menu-button-active.png') !important;
+  background-image: url('@/assets/imgs/menu-button-active.png');
   background-repeat: no-repeat !important;
   background-size: cover !important;
   transform: scale(1.1);
 }
 
 .Title_button_text {
-  font-size: px2(30px) !important;
+  font-size: px2(30px);
   color: #fff;
   font-weight: 800;
   font-family: Inter;
+}
+
+.Title_button_custom {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.33s;
+  cursor: pointer;
+  margin: 20px 0;
+  font-size: 165%;
+  color: #fbfbfb;
+  letter-spacing: 0.2em;
+
+  span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .Title_backup_background {
