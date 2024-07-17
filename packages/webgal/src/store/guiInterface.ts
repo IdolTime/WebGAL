@@ -68,17 +68,15 @@ export interface setAssetPayload {
 
 export type GuiStore = IGuiStore;
 
-export enum GameMenuEnum {
-  Achieve = 'achieve',
-  Storyline = 'storyline',
-  BeautyGuide = 'beautyGuide',
-}
-
 export enum GameMenuKey {
-  Game_start_button = 'Game_start_button',
-  Game_achievement_button = 'Game_achievement_button',
-  Game_storyline_button = 'Game_storyline_button',
-  Game_extra_button = 'Game_extra_button',
+  Game_start_button = 'Game_start_button', // 开始
+  Game_achievement_button = 'Game_achievement_button', // 成就
+  Game_storyline_button = 'Game_storyline_button', // 故事线
+  Game_extra_button = 'Game_extra_button', // bgm和图片收藏
+  Game_collection_button = 'Game_collection_button', // 图鉴
+  Game_option_button = 'Game_option_button', // 设置
+  Game_load_button = 'Game_load_button', // 读取
+  Game_continue_button = 'Game_continue_button', // 继续游戏
 }
 
 export interface GameMenuItem {

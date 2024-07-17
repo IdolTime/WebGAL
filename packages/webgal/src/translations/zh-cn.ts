@@ -177,7 +177,7 @@ const zhCn = {
     beautyGuide: {
       title: '美女图鉴',
       subtitle: 'BEAUTYGUIDE',
-    }
+    },
   },
 
   gaming: {
@@ -197,7 +197,7 @@ const zhCn = {
       title: '标题',
       titleTips: '确认返回到标题界面吗',
       collection: '收藏',
-      collected: '已收藏'
+      collected: '已收藏',
     },
   },
 
@@ -209,8 +209,8 @@ const zhCn = {
     title: '欢迎',
     desction: '请确认您已年满 18 周岁才能进入本网站。',
     agree: '同意',
-    disagree: '不同意'
-  }
+    disagree: '不同意',
+  },
 };
 
 export default zhCn;

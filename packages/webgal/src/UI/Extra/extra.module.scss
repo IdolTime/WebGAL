@@ -43,7 +43,7 @@
   font-family: "思源宋体", serif;
   height: 100%;
   line-height: 100%;
-  font-size: px2(325%);
+  font-size: px2(162.5%);
   font-weight: bold;
   color: transparent;
   background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 75%, #51A8DD 100%);
@@ -335,7 +335,7 @@ $endTransform: scale(1, 1) translate3d(0, 0, 0);
     background-color: #b7c3cf;
 
     .button {
-      font-size: px2(40px);
+      font-size: px2(20px);
       display: flex;
       align-items: center;
       width: px2(180px);
