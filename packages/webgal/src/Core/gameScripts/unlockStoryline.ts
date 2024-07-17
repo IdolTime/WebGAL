@@ -42,7 +42,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       }
     });
 
-    if (!storyLineData['name'] || !storyLineData['thumbnailUrl']) {
+    if (!storyLineData['thumbnailUrl']) {
       return {
         performName: 'none',
         duration: 0,
@@ -58,7 +58,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
     const saveData = webgalStore.getState().saveData;
     const unlockItemIndex: number = saveData.unlockStorylineList?.findIndex(
       (item) =>
-        item.storyLine.thumbnailUrl === storyLineData['thumbnailUrl'] && item.storyLine.name === storyLineData['name'],
+        item.storyLine.thumbnailUrl === storyLineData['thumbnailUrl']
     );
 
     let unlockItem: ISaveStoryLineData | undefined;
