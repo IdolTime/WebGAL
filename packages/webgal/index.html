@@ -89,6 +89,7 @@
     position: absolute;
     top: 0;
 "></div>
+<<<<<<< HEAD
 
     <div id="Title_enter_text" style="width: 100%; height: 100%;">
       <!-- logo page -->
@@ -148,6 +149,34 @@
             </defs>
           </svg>
         </div>
+=======
+    <!--    落地页文字-->
+    <div id="Title_enter_text" style="width: 100%;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    opacity: 1;
+    font-size: 175%;
+    transition: opacity 1s;
+    z-index: 15;
+    font-family: '思源宋体',Georgia,serif">
+      <div class="toCenter" style="
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+">
+        <!-- <div class="StartButton" style="
+            letter-spacing: 0.25em ;
+            padding: 2em 2em 2em 2em;
+            text-shadow: 0 0 30px rgba(0,0,0,0.5);
+            transition: text-shadow 1s;
+            font-size: 175%;
+">
+          PRESS THE SCREEN TO START
+        </div> -->
+>>>>>>> video_game
       </div>
     </div>
   </div>
@@ -463,6 +492,10 @@
         }
         countdown()
       }
+    }
+
+    window.onload = () => {
+      enter()
     }
   </script>
 </body>

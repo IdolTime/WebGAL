@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import 'src/assets/style/px2.scss';
 .TextBox_main {
   z-index: 3;
@@ -12,6 +13,22 @@
   font-weight: bold;
   color: white;
   // padding: 1em 50px 70px 200px;
+=======
+@import 'src/assets/style/px2/scss';
+.TextBox_main {
+  z-index: 3;
+  position: absolute;
+  right: px2(25px);
+  min-height: px2(330px);
+  max-height: px2(330px);
+  background-blend-mode: darken;
+  border-radius: px2(165px) px2(20px) px2(20px) px2(165px);
+  bottom: px2(20px);
+  left: px2(275px);
+  font-weight: bold;
+  color: white;
+  padding: 1em px2(50px) px2(70px) (200px);
+>>>>>>> video_game
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -78,11 +95,11 @@
   font-size: 85%;
   padding: 0 2em 0 2em;
   position: absolute;
-  left: 150px;
-  top: -68px;
-  height: 80px;
-  line-height: 68px;
-  border-radius: 40px;
+  left: px2(150px);
+  top: px2(-68px);
+  height: px2(80px);
+  line-height: px2(68px);
+  border-radius: px2(40px);
   z-index: 3;
   border: 4px solid rgba(255, 255, 255, 0);
 }
@@ -106,10 +123,10 @@
 
 .miniAvatarContainer {
   position: absolute;
-  height: 450px;
-  width: 450px;
+  height: px2(450px);
+  width: px2(450px);
   bottom: 0;
-  left: -250px;
+  left: px2(-250px);
   border-radius: 100% 0 0 100%;
   overflow: hidden;
 }

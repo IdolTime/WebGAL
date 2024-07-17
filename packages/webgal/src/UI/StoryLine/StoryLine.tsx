@@ -71,7 +71,7 @@ export const StoryLine: FC = () => {
                 StageState.storyLineBgX &&
                 StageState.storyLineBgY &&
                 `${StageState.storyLineBgX} ${
-                  StageState.storyLineBgY.includes('1080') ? '100%' : StageState.storyLineBgY
+                  StageState.storyLineBgY.includes('720') ? '100%' : StageState.storyLineBgY
                 }`,
             }}
           >

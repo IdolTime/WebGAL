@@ -261,6 +261,22 @@ export class VideoManager {
       videoItem.waitCommands.seek = time;
     }
   }
+  
+  public backward(key: string): void {
+    const videoItem = this.videosByKey[key];
+    if (videoItem?.player) {
+      if (videoItem.player.currentTime > 0) {
+        videoItem.player.currentTime -= 1; // 回退一秒
+      }
+    }
+  }
+
+  public forward(key: string): void {
+    const videoItem = this.videosByKey[key];
+    if (videoItem?.player) {
+      videoItem.player.currentTime += 1; // 前进一秒
+    }
+  }
 
   public backward(key: string): void {
     const videoItem = this.videosByKey[key];
