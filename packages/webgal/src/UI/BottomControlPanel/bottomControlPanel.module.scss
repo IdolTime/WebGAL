@@ -1,12 +1,4 @@
-//.ToCenter {
-//  display: flex;
-//  justify-content: center;
-//  position: absolute;
-//  bottom: 0;
-//  left: 0;
-//  width: 100%;
-//  z-index: 9;
-//}
+@import 'src/assets/style/px2.scss';
 
 .main {
   position: absolute;
@@ -25,13 +17,13 @@
 
   .fallBack {
     display: inline-block;
-    width: 62px;
-    height: 72px;
+    width: px2(62px);
+    height:px2(72px);
     background-image: url('@/assets/imgs/left-forward.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    margin-left: 80px;
+    margin-left: px2(80px);
     transition: all 0.3s;
     &:hover {
       cursor: pointer;
@@ -42,8 +34,8 @@
 
   .pause {
     display: inline-block;
-    width: 93px;
-    height: 108px;
+    width: px2(62px);
+    height: px2(72px);
     // background-image: url('@/assets/imgs/gaming-stop.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -59,8 +51,8 @@
 
   .advance {
     display: inline-block;
-    width: 62px;
-    height: 72px;
+    width: px2(62px);
+    height: px2(72px);
     background-image: url('@/assets/imgs/right-forward.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -76,8 +68,8 @@
 
   .collect {
     display: inline-block;
-    width: 62px;
-    height: 72px;
+    width: px2(62px);
+    height: px2(72px);
     background-image: url('@/assets/imgs/right-forward.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -93,8 +85,8 @@
 
   .autoplay {
     display: inline-block;
-    width: 62px;
-    height: 72px;
+    width: px2(62px);
+    height: px2(72px);
     background-image: url('@/assets/imgs/autoplay.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -140,7 +132,7 @@
   height: 100%;
   display: inline-block;
   color: white;
-  font-size: 150%;
+  font-size: px2(150%);
   padding: 0.3em 0.3em 0 0.15em;
   transition: background-color 0.5s;
   cursor: pointer;
@@ -158,8 +150,8 @@
   top: -250px;
   right: 0;
   background: linear-gradient(315deg, rgba(253, 251, 251, 0.9) 0%, rgba(235, 237, 238, 0.85) 100%);
-  width: 900px;
-  height: 230px;
+  width: px2(900px);
+  height: px2(230px);
   color: #005caf;
   border-radius: 5px;
   display: none;

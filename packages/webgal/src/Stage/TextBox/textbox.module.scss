@@ -1,3 +1,4 @@
+@import 'src/assets/style/px2.scss';
 .TextBox_EventHandler {
   position: absolute;
   width: 100%;
@@ -23,16 +24,16 @@ $height: 330px;
 .TextBox_main {
   z-index: 3;
   position: absolute;
-  right: 25px;
+  right: px2(25px);
   min-height: $height;
   max-height: $height;
   background-blend-mode: darken;
   border-radius: calc($height / 2) 20px 20px calc($height / 2);
-  bottom: 20px;
-  left: 275px;
+  bottom: px2(20px);
+  left: px2(275px);
   font-weight: bold;
   color: white;
-  padding: 1em 50px 70px 200px;
+  padding: 1em px2(50px) px2(70px) px2(200px);
   box-sizing: border-box;
   display: flex;
   flex-flow: column;
@@ -125,20 +126,20 @@ $height: 330px;
 
 .TextBox_showName {
   @include text_shadow_textElement;
-  font-size: 85%;
+  font-size: px2(85%);
   //border-bottom: 3px solid rgb(176, 176, 176);
   //min-width: 25%;
   padding: 0 2em 0 2em;
   //margin: 0 0 0 0;
   position: absolute;
-  left: 150px;
-  top: -68px;
-  height: 80px;
-  line-height: 68px;
+  left: px2(150px);
+  top: px2(-68px);
+  height: px2(80px);
+  line-height: px2(68px);
   //display: flex;
   //align-items: center;
   // background: rgba(11, 52, 110, 0.9);
-  border-radius: 40px;
+  border-radius: px2(40px);
   // border: 4px solid rgba(255, 255, 255, 0.75);
   // box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
   z-index: 3;
@@ -164,10 +165,10 @@ $height: 330px;
 
 .miniAvatarContainer {
   position: absolute;
-  height: 450px;
-  width: 450px;
+  height: px2(450px);
+  width: px2(450px);
   bottom: 0;
-  left: -250px;
+  left: px2(-250px);
   border-radius: 100% 0 0 100%;
   overflow: hidden;
 }
