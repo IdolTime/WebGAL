@@ -72,10 +72,14 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
-          case 'Game_start_button':
-          case 'Game_achievement_button':
-          case 'Game_storyline_button':
-          case 'Game_extra_button': {
+          case GameMenuKey.Game_start_button:
+          case GameMenuKey.Game_achievement_button:
+          case GameMenuKey.Game_storyline_button:
+          case GameMenuKey.Game_extra_button:
+          case GameMenuKey.Game_collection_button:
+          case GameMenuKey.Game_continue_button:
+          case GameMenuKey.Game_load_button:
+          case GameMenuKey.Game_option_button: {
             const hide = (options.find((o) => o.key === 'hide')?.value as boolean) || false;
             const styleStr = (options.find((o) => o.key === 'style')?.value as string) || '';
 

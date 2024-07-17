@@ -53,16 +53,28 @@ const Title: FC = () => {
       playSeClick();
     },
     [GameMenuKey.Game_extra_button]: () => {
+      dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+      playSeClick();
+    },
+    [GameMenuKey.Game_collection_button]: () => {
       enterBeautyGuide();
       playSeClick();
     },
-  };
-
-  /**
-   * 展示成就页面
-   */
-  const showAchievement = () => {
-    dispatch(setVisibility({ component: 'showAchievement', visibility: true }));
+    [GameMenuKey.Game_continue_button]: () => {
+      playSeClick();
+      dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      continueGame();
+    },
+    [GameMenuKey.Game_option_button]: () => {
+      playSeClick();
+      dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
+      dispatch(setMenuPanelTag(MenuPanelTag.Option));
+    },
+    [GameMenuKey.Game_load_button]: () => {
+      playSeClick();
+      dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
+      dispatch(setMenuPanelTag(MenuPanelTag.Load));
+    },
   };
 
   const renderButton = (key: GameMenuKey) => {
@@ -170,41 +182,23 @@ const Title: FC = () => {
         >
           <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
             {renderButton(GameMenuKey.Game_start_button)}
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
-                dispatch(setMenuPanelTag(MenuPanelTag.Load));
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('load.title')}</div>
-            </div>
-            <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
-                dispatch(setMenuPanelTag(MenuPanelTag.Option));
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('options.title')}</div>
-            </div>
+
+            {/* 继续游戏 */}
+            {renderButton(GameMenuKey.Game_continue_button)}
+
+            {/* 读取存档 */}
+            {renderButton(GameMenuKey.Game_load_button)}
+
+            {/* 选项 */}
+            {renderButton(GameMenuKey.Game_option_button)}
+
+            {/* 成就 */}
             {renderButton(GameMenuKey.Game_achievement_button)}
             {renderButton(GameMenuKey.Game_storyline_button)}
             {renderButton(GameMenuKey.Game_extra_button)}
-            {/* <div
-              className={applyStyle('Title_button', styles.Title_button)}
-              onClick={() => {
-                playSeClick();
-                window.history.back();
-              }}
-              onMouseEnter={playSeEnter}
-            >
-              <div className={applyStyle('Title_button_text', styles.Title_button_text)}>{t('quit.title')}</div>
-            </div> */}
+
+            {/* 收藏/美女图鉴 */}
+            {renderButton(GameMenuKey.Game_collection_button)}
           </div>
         </div>
       )}

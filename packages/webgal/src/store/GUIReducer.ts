@@ -88,6 +88,62 @@ export const initState: IGuiState = {
         },
       },
     },
+    Game_collection_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
+    Game_continue_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
+    Game_load_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
+    Game_option_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          image: '',
+          fontSize: 0,
+          fontColor: '',
+        },
+      },
+    },
   },
   // gameMenus: [],
   showBeautyGuide: false, // 是否显示美女图鉴页面
