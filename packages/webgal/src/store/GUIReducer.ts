@@ -145,7 +145,7 @@ const GUISlice = createSlice({
     },
     setGameR18: (state, action: PayloadAction<boolean>) => {
       state.isShowR18Modal = action.payload;
-    }
+    },
   },
 });
 
@@ -157,6 +157,6 @@ export const {
   setShowStoryLine,
   setshowFavorited,
   setGameMenus,
-  setGameR18
+  setGameR18,
 } = GUISlice.actions;
 export default GUISlice.reducer;

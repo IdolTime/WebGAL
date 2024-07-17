@@ -21,8 +21,8 @@ const boolMap = new Map<string | boolean, boolean>([
   ['true', true],
   ['false', false],
   [true, true],
-  [false, false]
-])
+  [false, false],
+]);
 
 /**
  * 获取游戏信息

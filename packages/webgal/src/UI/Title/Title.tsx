@@ -180,7 +180,6 @@ const Title: FC = () => {
 
             {/* 图鉴 */}
             {renderButton(GameMenuKey.Game_extra_button)}
-
           </div>
         </div>
       )}
