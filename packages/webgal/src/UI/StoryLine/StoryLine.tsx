@@ -72,7 +72,7 @@ export const StoryLine: FC = () => {
               backgroundSize:
                 StageState.storyLineBgX &&
                 StageState.storyLineBgY &&
-                `${StageState.storyLineBgX} ${StageState.storyLineBgY === 720 ? '100%' : px2(StageState.storyLineBgY)}`,
+                `${px2(StageState.storyLineBgX)} ${StageState.storyLineBgY === 720 ? '100%' : px2(StageState.storyLineBgY)}`,
             }}
           >
             {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
