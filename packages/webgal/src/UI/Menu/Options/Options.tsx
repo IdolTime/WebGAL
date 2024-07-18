@@ -29,8 +29,6 @@ export const Options: FC = () => {
 
   const t = useTrans('menu.options.');
 
-  console.log(33333, userDataState.optionData);
-
   return (
     <div className={styles.Options_main}>
       <div
