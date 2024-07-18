@@ -1,6 +1,6 @@
 @import 'src/assets/style/px2.scss';
-$default_storyLine_bg_x: 2560px;
-$default_storyLine_bg_y: 1440px;
+$default_storyLine_bg_x: 1280px;
+$default_storyLine_bg_y: 720px;
 
 .storyLine {
     position: absolute;
@@ -50,18 +50,13 @@ $default_storyLine_bg_y: 1440px;
         background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
 
         .storyLine_item {
-            width: 240px;
-            height: 180px;
-            border-radius: 3rem;
+            width: px2(135px);
+            height: px2(81px);
             overflow: hidden;
             background-repeat: no-repeat;
             position: absolute;
             background-size: contain;
             background-position: center;
-            border: 1px solid #fff3;
-            &:hover {
-                border-width: 3px;
-            }
 
             &:hover .info_card {
                 z-index: 100;
@@ -78,7 +73,6 @@ $default_storyLine_bg_y: 1440px;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background-color: rgba(0, 0, 0, 0.6);
                 z-index: -1;
                 opacity: 0;
                 transition: all 0.5s;
