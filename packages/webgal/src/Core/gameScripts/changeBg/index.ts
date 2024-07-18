@@ -22,18 +22,18 @@ import { WebGAL } from '@/Core/WebGAL';
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   const dispatch = webgalStore.dispatch;
-   // 故事线背景
+  // 故事线背景
   if (webgalStore.getState().GUI.showStoryLine) {
-    dispatch(setStage({ key: 'storyLineBg', value: url }))
+    dispatch(setStage({ key: 'storyLineBg', value: url }));
     sentence.args.forEach((e) => {
       if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgX', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'storyLineBgX', value: e.value }));
       }
       if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgY', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'storyLineBgY', value: e.value }));
       }
     });
-    
+
     return {
       performName: 'none',
       duration: 0,
@@ -42,18 +42,18 @@ export const changeBg = (sentence: ISentence): IPerform => {
       blockingNext: () => false,
       blockingAuto: () => true,
       stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
+    };
   }
 
   // 成就背景
   if (webgalStore.getState().GUI.showAchievement) {
-    dispatch(setAchieveBg(url))
+    dispatch(setAchieveBg(url));
     sentence.args.forEach((e) => {
       if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgX', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'achieveBgX', value: e.value }));
       }
       if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgY', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'achieveBgY', value: e.value }));
       }
     });
     return {
@@ -64,7 +64,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
       blockingNext: () => false,
       blockingAuto: () => true,
       stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
+    };
   }
 
   let name = '';

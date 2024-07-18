@@ -1,10 +1,62 @@
 @import 'src/assets/style/px2.scss';
+
 .Options_main {
   position: absolute;
   cursor: default;
-  height: 90%;
-  width: 100%;
-  //background: rgba(255, 255, 255, 0.65);
+  height: px2(720px);
+  width: px2(1280px);
+  background-image: url('@/assets/imgs/setting-bg.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.Options_back {
+  position: absolute;
+  top: px2(93px);
+  left: px2(142px);
+  width: px2(49px);
+  height: px2(46px);
+  flex-shrink: 0;
+  background-image: url('@/assets/imgs/back.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &:hover {
+    background-image: url("@/assets/imgs/back-active.png");
+  }
+}
+
+.Options_checkbox {
+  position: absolute;
+  top: px2(239px);
+  left: px2(517px);
+  width: px2(21px);
+  height: px2(21px);
+  background-image: url('@/assets/imgs/check.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.Options_main_slider {
+  position: absolute;
+  top: px2(498px);
+  left: px2(622px)
+}
+
+.Options_sound_slider {
+  position: absolute;
+  top: px2(404px);
+  left: px2(622px)
+}
+
+.Options_checkbox_window {
+  left: px2(709px);
+}
+
+.Options_checkbox_active {
+  background-image: url('@/assets/imgs/checked.png');
 }
 
 .Options_top {

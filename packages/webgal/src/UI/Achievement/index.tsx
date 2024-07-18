@@ -10,9 +10,10 @@ import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/
 import { saveActions } from '@/store/savesReducer';
 import { IUnlockAchieveItem } from '@/store/stageInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher'
-import { sceneNameType } from '@/Core/Modules/scene'
+import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
+import { sceneNameType } from '@/Core/Modules/scene';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { px2 } from '@/Core/parser/utils';
 
 /**
  * 成就页面
@@ -24,44 +25,40 @@ export const Achievement: FC = () => {
   const StageState = useSelector((state: RootState) => state.stage);
   const saveData = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
-  const [unlockedData, setUnlockedData] = useState({ 
-    unlocked: 0, 
+  const [unlockedData, setUnlockedData] = useState({
+    unlocked: 0,
     allTotal: 0,
-    currentProgress: '0%'
-});
+    currentProgress: '0%',
+  });
 
-
-  
   useEffect(() => {
-    
     if (GUIState.showAchievement) {
       // 控制解锁成就显示，当开始游戏后才可解锁
       webgalStore.dispatch(saveActions.setIsShowUnlock(false));
-      initAhieve()
+      initAhieve();
     }
-    
   }, [GUIState.showAchievement]);
 
   async function initAhieve() {
     // 初始化成就场景
     const sceneUrl: string = assetSetter(sceneNameType.Achieve, fileType.scene);
-    const rawScene = await sceneFetcher(sceneUrl)
+    const rawScene = await sceneFetcher(sceneUrl);
     await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Achieve, sceneUrl);
-      
+
     setTimeout(() => {
-      initData()
-    }, 100)
+      initData();
+    }, 100);
   }
 
   async function initData() {
     // await getUnlickAchieveFromStorage()
     const allUnlockAchieveList = webgalStore.getState().saveData.allUnlockAchieveList;
-    
-    const unlocked = webgalStore.getState().saveData.unlockAchieveData?.length ?? 0; 
+
+    const unlocked = webgalStore.getState().saveData.unlockAchieveData?.length ?? 0;
     const allTotal = allUnlockAchieveList.length || 0;
     // 当前完成进度
-    const currentProgress  = ((unlocked / allTotal) * 100).toFixed(2) + '%';
-    setUnlockedData({ unlocked, allTotal, currentProgress })
+    const currentProgress = ((unlocked / allTotal) * 100).toFixed(2) + '%';
+    setUnlockedData({ unlocked, allTotal, currentProgress });
   }
 
   /**
@@ -70,40 +67,37 @@ export const Achievement: FC = () => {
    * @returns {string} 完整地址路径
    */
   const getUrl = (url: string) => {
-    return assetSetter(url, fileType.ui)
-  }
+    return assetSetter(url, fileType.ui);
+  };
 
   /**
    * 判断当前图标是否在背景图边缘位置
    * @returns {boolean} true: 在边缘 false: 不在边缘
    */
-  const isEdge = (IconX: number, achieveBgX: string) => {
-    let num = parseFloat(achieveBgX?.replace(/[^0-9.]/g, ''));
-    const infoCardWidth = 500
+  const isEdge = (IconX: number, achieveBgX: number) => {
+    const infoCardWidth = 500;
     const totalX = IconX + infoCardWidth;
-    if (totalX >= num) {
-      return true
+    if (totalX >= achieveBgX) {
+      return true;
     }
-    return false
-  } 
-  
+    return false;
+  };
+
   /**
    * 判断当前图标是否在背景图边缘位置
    */
-  const getPositionX = (x: number, achieveBgX: string) => {
-    let num = parseFloat(achieveBgX?.replace(/[^0-9.]/g, ''));
-    if (x >= num) {
-      return num - 100
+  const getPositionX = (x: number, achieveBgX: number) => {
+    if (x >= achieveBgX) {
+      return achieveBgX - 100;
     }
-    return x
-  }
-
+    return x;
+  };
 
   /**
    * 返回
    */
   const handleGoBack = () => {
-    playSeClick()
+    playSeClick();
     backToTitle();
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };
@@ -114,11 +108,7 @@ export const Achievement: FC = () => {
         <div className={styles.achievement}>
           {/* 头部 */}
           <div className={styles.achievement_header}>
-            <span 
-              className={styles.goback} 
-              onClick={handleGoBack} 
-              onMouseEnter={playSeEnter}
-            >
+            <span className={styles.goback} onClick={handleGoBack} onMouseEnter={playSeEnter}>
               返回
             </span>
             <span className={styles.title}>成就</span>
@@ -130,43 +120,59 @@ export const Achievement: FC = () => {
               <span className={styles.text}>已获得成就</span>
               <span className={styles.number}>{`${unlockedData.unlocked}/${unlockedData.allTotal}`}</span>
               <span className={styles.pregessBar}>
-                <span className={styles.pregressBar_inner} style={{ width: unlockedData.currentProgress }}></span>
+                <span className={styles.pregressBar_inner} style={{ width: unlockedData.currentProgress }} />
               </span>
             </div>
           </div>
 
           {/* 内容部分 */}
-          <div 
+          <div
             className={styles.achievement_content_bg}
-            style={{ 
-              width: StageState.achieveBgX,
+            style={{
+              width: px2(StageState.achieveBgX),
               backgroundImage: `url("${StageState.achieveBg}")`,
-              backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${StageState.achieveBgX} ${StageState.achieveBgY.includes('720') ? '100%' : StageState.achieveBgY}`
-            }}  
+              backgroundSize:
+                StageState.achieveBgX &&
+                StageState.achieveBgY &&
+                `${px2(StageState.achieveBgX)} ${StageState.achieveBgY === 720 ? '100%' : px2(StageState.achieveBgY)}`,
+            }}
           >
             {saveData.allUnlockAchieveList?.length > 0 && (
               <div className={styles.achievement_list}>
                 {saveData.allUnlockAchieveList?.map(
                   ({ unlockname, x, y, url, isShowUnlock, saveTime, condition }, index) => {
-                  return (
-                    <div
-                      key={`unlockAchieveItem-${index}`}
-                      className={`${styles.achievement_item } ${isShowUnlock ? styles.achievement_item_bg_active : ''}`}
-                      style={{ top: `${y}px`, left: `${getPositionX(x, StageState.achieveBgX)}px`, backgroundImage: `url("${isShowUnlock && getUrl(url)}")` }}
-                    >
-                      {isShowUnlock && <div className={styles.ripple}></div>}
-                      {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
-                      {/* 信息详情卡片 */}
-                      <div 
-                        className={`${styles.info_card} ${isEdge(x, StageState.achieveBgX) ? styles.info_card_position_right : ''}`}
+                    return (
+                      <div
+                        key={`unlockAchieveItem-${index}`}
+                        className={`${styles.achievement_item} ${
+                          isShowUnlock ? styles.achievement_item_bg_active : ''
+                        }`}
+                        style={{
+                          top: `${px2(y)}px`,
+                          left: `${getPositionX(px2(x), px2(StageState.achieveBgX))}px`,
+                          backgroundImage: `url("${isShowUnlock && getUrl(url)}")`,
+                        }}
                       >
-                        {condition && <span className={`${styles.condition} ${isShowUnlock ? styles.condition_bg_active : ''}`}>{condition}</span>}
-                        {saveTime && <span className={styles.time}>{`${saveTime}达成`}</span>}
-                        <span className={styles.description}>{`${Math.floor(Math.random() * 101)}%`}玩家已达成</span>
+                        {isShowUnlock && <div className={styles.ripple} />}
+                        {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
+                        {/* 信息详情卡片 */}
+                        <div
+                          className={`${styles.info_card} ${
+                            isEdge(px2(x), px2(StageState.achieveBgX)) ? styles.info_card_position_right : ''
+                          }`}
+                        >
+                          {condition && (
+                            <span className={`${styles.condition} ${isShowUnlock ? styles.condition_bg_active : ''}`}>
+                              {condition}
+                            </span>
+                          )}
+                          {saveTime && <span className={styles.time}>{`${saveTime}达成`}</span>}
+                          <span className={styles.description}>{`${Math.floor(Math.random() * 101)}%`}玩家已达成</span>
+                        </div>
                       </div>
-                    </div>
-                  );
-                }) ?? null}
+                    );
+                  },
+                ) ?? null}
               </div>
             )}
           </div>

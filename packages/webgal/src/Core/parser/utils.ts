@@ -39,3 +39,5 @@ export function defineScripts<R extends Record<string, Omit<IConfigInterface, 's
   }
   return result;
 }
+
+export const px2 = (value: number | string) => (typeof value === 'string' ? Number(value) : value) / 0.5;
