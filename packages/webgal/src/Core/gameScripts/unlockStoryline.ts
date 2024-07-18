@@ -20,11 +20,10 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
 
     let thumbnailUrl = sentence?.content || '';
     const storyLineData = {} as unknown as ISaveStoryLine;
-    // const storyLineData: any = {}
 
-    if (thumbnailUrl) {
-      storyLineData['thumbnailUrl'] = assetSetter(thumbnailUrl, fileType.ui);
-    }
+    // if (thumbnailUrl) {
+      // storyLineData['thumbnailUrl'] = assetSetter(thumbnailUrl, fileType.ui);
+    // }
 
     sentence.args.forEach((e) => {
       switch (e.key) {
@@ -37,12 +36,15 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
         case 'y':
           storyLineData['y'] = (e.value && Number(e.value)) || 0;
           break;
+        case 'hideName':
+          storyLineData['isHideName'] = e.value.toString() === 'true';
+          break;
         default:
           break;
       }
     });
 
-    if (!storyLineData['thumbnailUrl']) {
+    if (!storyLineData['name']) {
       return {
         performName: 'none',
         duration: 0,
@@ -57,8 +59,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
     // 获取到数据
     const saveData = webgalStore.getState().saveData;
     const unlockItemIndex: number = saveData.unlockStorylineList?.findIndex(
-      (item) =>
-        item.storyLine.thumbnailUrl === storyLineData['thumbnailUrl']
+      (item) => item.storyLine.name === storyLineData['name'],
     );
 
     let unlockItem: ISaveStoryLineData | undefined;
@@ -71,6 +72,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       thumbnailUrl: storyLineData['thumbnailUrl'] || '',
       x: storyLineData['x'] || 0,
       y: storyLineData['y'] || 0,
+      isHideName: storyLineData['isHideName'] || false,
       isUnlock: unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline || false, // ?
     };
 

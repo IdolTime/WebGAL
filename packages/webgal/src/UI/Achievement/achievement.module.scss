@@ -1,3 +1,4 @@
+@import 'src/assets/style/px2.scss';
 $default_storyLine_bg_x: 2560px;
 $default_storyLine_bg_y: 1440px;
 
@@ -96,7 +97,7 @@ $default_storyLine_bg_y: 1440px;
         overflow: hidden;
         background-repeat: no-repeat;
         position: relative;
-        background-size: $default_storyLine_bg_x $default_storyLine_bg_y;
+        background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
     }
 
     .achievement_list {

@@ -4,7 +4,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { webgalStore } from '@/store/store';
 import { setVisibility, setShowStoryLine } from '@/store/GUIReducer';
-import { saveActions } from '@/store/savesReducer'
+import { sceneNameType } from '@/Core/Modules/scene';
 
 /**
  * 进入故事线页面
@@ -12,12 +12,12 @@ import { saveActions } from '@/store/savesReducer'
 export const enterStoryLine = () => {
     
     // 重新获取初始场景
-    const sceneUrl: string = assetSetter('storyline.txt', fileType.scene);
+    const sceneUrl: string = assetSetter(sceneNameType.Storyline, fileType.scene);
     WebGAL.sceneManager.resetScene();
 
     // 场景写入到运行时
     sceneFetcher(sceneUrl).then((rawScene) => {
-        WebGAL.sceneManager.setCurrentScene(rawScene, 'storyline.txt', sceneUrl).then((scene) => {
+        WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Storyline, sceneUrl).then((scene) => {
         if (scene) {
             // 开始第一条语句
             nextSentence();

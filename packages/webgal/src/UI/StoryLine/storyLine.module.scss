@@ -1,3 +1,4 @@
+@import 'src/assets/style/px2.scss';
 $default_storyLine_bg_x: 2560px;
 $default_storyLine_bg_y: 1440px;
 
@@ -46,7 +47,7 @@ $default_storyLine_bg_y: 1440px;
         background-repeat: no-repeat;
         // background-size: cover;
         position: relative;
-        background-size: $default_storyLine_bg_x $default_storyLine_bg_y;
+        background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
 
         .storyLine_item {
             width: 240px;
@@ -57,6 +58,10 @@ $default_storyLine_bg_y: 1440px;
             position: absolute;
             background-size: contain;
             background-position: center;
+            border: 1px solid #fff3;
+            &:hover {
+                border-width: 3px;
+            }
 
             &:hover .info_card {
                 z-index: 100;
@@ -73,21 +78,24 @@ $default_storyLine_bg_y: 1440px;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background-color: rgba(0, 0, 0, 0.2);
+                background-color: rgba(0, 0, 0, 0.6);
                 z-index: -1;
                 opacity: 0;
                 transition: all 0.5s;
                 cursor: pointer;
 
                 .playButton_icon {
-                    display: inline-block;
-                    height: 100px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 60%;
                     text-align: center;  
                     border-radius: 50%;  
                     color: #fff;  
-                    font-size: 6em;  
+                    font-size: 4.5em;  
                     cursor: pointer;
-                    margin-bottom: 20px;
+                    flex: 1;
                     &::before {  
                         content: "▶";  
                         color: #fff;
@@ -95,9 +103,13 @@ $default_storyLine_bg_y: 1440px;
                 }
 
                 .name {
-                    font-size: 50px;
-                    color: red;
-
+                    font-size: 30px;
+                    color: #fff;
+                    font-weight: 700;
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
             }
         }

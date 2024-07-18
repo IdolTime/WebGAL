@@ -141,7 +141,10 @@ export const Achievement: FC = () => {
             style={{ 
               width: StageState.achieveBgX,
               backgroundImage: `url("${StageState.achieveBg}")`,
-              backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${StageState.achieveBgX} ${StageState.achieveBgY.includes('720') ? '100%' : StageState.achieveBgY}`
+              backgroundSize: 
+              StageState.achieveBgX && StageState.achieveBgY && 
+              `${StageState.achieveBgX.includes('1280') ? '100%' : StageState.achieveBgX} 
+              ${StageState.achieveBgY.includes('720') ? '100%' : StageState.achieveBgY}`
             }}  
           >
             {saveData.allUnlockAchieveList?.length > 0 && (
