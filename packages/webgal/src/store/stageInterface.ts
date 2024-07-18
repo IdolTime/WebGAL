@@ -169,16 +169,16 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   storyLineBg: string; // 故事线背景
-  storyLineBgX: string;
-  storyLineBgY: string;
+  storyLineBgX: number;
+  storyLineBgY: number;
   achieveBg: string;
   // 解锁成就
   unlockAchieve: IUnlockAchieveItem;
   unlockAchieves: Array<IUnlockAchieveObj>;
   totalAchievements: number; // 总成就数量
-  unlockedAchievements: number; //已获得的成就数量
-  achieveBgX: string;
-  achieveBgY: string;
+  unlockedAchievements: number; // 已获得的成就数量
+  achieveBgX: number;
+  achieveBgY: number;
   isShowValueSWitch: boolean;
   showValueName: string;
   showValueAxisX: number;

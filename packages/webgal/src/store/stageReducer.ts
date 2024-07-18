@@ -14,7 +14,7 @@ import {
   IStageState,
   IUnlockAchieveObj,
   IShowValueItem,
-  IShowValueListItem
+  IShowValueListItem,
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -60,8 +60,8 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   storyLineBg: '', // 故事线背景
-  storyLineBgX: '', // 故事线背景长度
-  storyLineBgY: '', // 故事线背景宽度
+  storyLineBgX: 1280, // 故事线背景长度
+  storyLineBgY: 720, // 故事线背景宽度
   achieveBg: '', // 成就背景
   unlockAchieve: {
     // 解锁成就
@@ -71,8 +71,8 @@ export const initState: IStageState = {
     x: 0,
     y: 0,
   },
-  achieveBgX: '',
-  achieveBgY: '',
+  achieveBgX: 1280,
+  achieveBgY: 720,
   unlockAchieves: [],
   totalAchievements: 0, // 总成就数量
   unlockedAchievements: 0, // 已获得的成就数量
@@ -216,21 +216,21 @@ const stageSlice = createSlice({
       state.showValueList.push(action.payload);
     },
     updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
-      state.showValueList = action.payload
+      state.showValueList = action.payload;
     },
   },
 });
 
-export const { 
-  resetStageState, 
-  setStage, 
-  setStageVar, 
-  setAchieveBg, 
-  setUnlockAchieve, 
-  setStoryLineBg, 
+export const {
+  resetStageState,
+  setStage,
+  setStageVar,
+  setAchieveBg,
+  setUnlockAchieve,
+  setStoryLineBg,
   addShowValues,
   addShowValueList,
-  updateShowValueList
+  updateShowValueList,
 } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;

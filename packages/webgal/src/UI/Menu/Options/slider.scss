@@ -1,0 +1,93 @@
+@import 'src/assets/style/px2.scss';
+
+input[type=range] {
+  -webkit-appearance: none; /* 去掉底部的 track 默认样式，就是整个灰条 */
+  width: px2(342px);
+  height: px2(20px);
+  background: transparent; /* 否则在 Chrome 中是白色背景 */
+  font-size: 100%;
+}
+
+input[type=range]:focus {
+  outline: none; /* 去除获取焦点时蓝色的外边框，你也可以自己定制其他你想要的效果 */
+}
+
+/*轨道样式*/
+input[type=range]::-webkit-slider-runnable-track {
+  width: px2(342px);
+  height: px2(6px);
+  background: transparent;
+}
+input[type=range]::-moz-range-track {
+  width: px2(342px);
+  height: px2(6px);
+  background: transparent;
+}
+
+/*滑块样式*/
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: px2(46px);
+  width: px2(42px);
+  cursor: pointer;
+  margin-top: px2(-10px);  /* 在 Chrome 中你需要给定一个明确的 margin，但是在 Firefox 和 IE 中这个是固定的 */
+  // background-size: contain;
+  // background-repeat: no-repeat;
+  // background-position: center;
+  // background-image: url('@/assets/imgs/bar-thumb.png');
+  z-index: 3;
+  position: relative;
+}
+/* Firefox 同上 */
+input[type=range]::-moz-range-thumb {
+  -moz-appearance: none;
+  height: px2(46px);
+  width: px2(42px);
+  cursor: pointer;
+  margin-top: px2(-10px);
+  // background-size: contain;
+  // background-repeat: no-repeat;
+  // background-position: center;
+  // background-image: url('@/assets/imgs/bar-thumb.png');
+  z-index: 3;
+  position: relative;
+}
+
+.Option_WebGAL_slider {
+  position: relative;
+  height: px2(20px);
+
+  .Rang_input {
+    cursor: pointer;
+    position: absolute;
+  }
+  .Slider_group {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .Slider_bg{
+    position: absolute;
+    left: 0;
+    top: px2(1px);
+    width: px2(342px);
+    height: px2(4px);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('@/assets/imgs/bar-checked.png');
+    z-index: 2;
+  }
+  .Slider_bg_under {
+    width: px2(342px);
+    height: px2(6px);
+    cursor: pointer;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('@/assets/imgs/bar-bg.png');
+    z-index: 1;
+  }
+}
+

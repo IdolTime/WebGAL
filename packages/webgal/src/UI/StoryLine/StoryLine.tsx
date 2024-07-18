@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
@@ -10,6 +10,7 @@ import styles from './storyLine.module.scss';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { px2 } from '@/Core/parser/utils';
 
 /**
  * 故事线页面
@@ -23,17 +24,17 @@ export const StoryLine: FC = () => {
   const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
 
   useEffect(() => {
-    getStorylineFromStorage()
+    getStorylineFromStorage();
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
     }
-  }, [GUIState.showStoryLine])
+  }, [GUIState.showStoryLine]);
 
   /**
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick()
+    playSeClick();
     backToTitle();
     dispatch(setShowStoryLine(false));
   };
@@ -58,11 +59,7 @@ export const StoryLine: FC = () => {
       {GUIState.showStoryLine && (
         <div className={styles.storyLine}>
           <div className={styles.storyLine_header}>
-            <span 
-              className={styles.goBack} 
-              onClick={handlGoBack}
-              onMouseEnter={playSeEnter}
-            >
+            <span className={styles.goBack} onClick={handlGoBack} onMouseEnter={playSeEnter}>
               返回
             </span>
             <span className={styles.title}>故事线</span>
@@ -70,14 +67,12 @@ export const StoryLine: FC = () => {
           <div
             className={styles.storyLine_content}
             style={{
-              width: StageState.storyLineBgX.includes('1280') ? '100%' : StageState.storyLineBgX,
+              width: px2(StageState.storyLineBgX),
               backgroundImage: `url("${StageState.storyLineBg}")`,
               backgroundSize:
                 StageState.storyLineBgX &&
                 StageState.storyLineBgY &&
-                `${StageState.storyLineBgX.includes('1280') ? '100%' : StageState.storyLineBgX} ${
-                  StageState.storyLineBgY.includes('720') ? '100%' : StageState.storyLineBgY
-                }`,
+                `${StageState.storyLineBgX} ${StageState.storyLineBgY === 720 ? '100%' : px2(StageState.storyLineBgY)}`,
             }}
           >
             {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
@@ -92,8 +87,8 @@ export const StoryLine: FC = () => {
                   key={`storyLine-${index}`}
                   className={styles.storyLine_item}
                   style={
-                    thumbnailUrl 
-                      ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${getImagePath(thumbnailUrl)}")` } 
+                    thumbnailUrl
+                      ? { top: `${px2(y)}px`, left: `${px2(x)}px`, backgroundImage: `url("${getImagePath(thumbnailUrl)}")` }
                       : {}
                   }
                   onClick={(e) => handlPlay(e, item)}
