@@ -27,11 +27,11 @@ const Logo: FC = () => {
       currentLogoIndex.set(-1);
       if (GUIState?.isShowR18Modal) {
         dispatch(
-          setVisibility({ 
-            component: 'openR18Modal', 
-            visibility: true 
-          })
-        )
+          setVisibility({
+            component: 'openR18Modal',
+            visibility: true,
+          }),
+        );
       }
     }
   };
@@ -67,10 +67,8 @@ const Logo: FC = () => {
             key={currentLogoIndex.value + 'bg'}
             onClick={nextImg}
             style={{ backgroundImage: `url("${currentLogoUrl}")`, animationDuration: `${animationDuration}ms` }}
-          >
-            
-          </div>
-          <div className={styles.overlay}></div>
+          />
+          <div className={styles.overlay} />
         </>
       )}
     </>
