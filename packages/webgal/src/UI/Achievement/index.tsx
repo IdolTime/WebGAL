@@ -109,9 +109,8 @@ export const Achievement: FC = () => {
           {/* 头部 */}
           <div className={styles.achievement_header}>
             <span className={styles.goback} onClick={handleGoBack} onMouseEnter={playSeEnter}>
-              返回
+              {/* 返回 */}
             </span>
-            <span className={styles.title}>成就</span>
           </div>
 
           {/* 已获得成就  */}
@@ -131,10 +130,7 @@ export const Achievement: FC = () => {
             style={{
               width: px2(StageState.achieveBgX),
               backgroundImage: `url("${StageState.achieveBg}")`,
-              backgroundSize:
-                StageState.achieveBgX &&
-                StageState.achieveBgY &&
-                `${px2(StageState.achieveBgX)} ${StageState.achieveBgY === 720 ? '100%' : px2(StageState.achieveBgY)}`,
+              backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${px2(StageState.achieveBgX)}px ${px2(StageState.achieveBgY)}px`,
             }}
           >
             {saveData.allUnlockAchieveList?.length > 0 && (

@@ -33,16 +33,14 @@
                 display: inline-block;
                 width: 100px;
                 height: 72px;
-                background-image: url('@/assets/imgs/game-back-unselect.png');
+                background-image: url('@/assets/imgs/back.png');
                 background-repeat: no-repeat;
-                background-size: cover;
-                background-position: center;
+                background-size: contain;
+                cursor: pointer;
                 transition: all 0.3s;
-                margin-right: 50px;
                 &:hover {
-                  cursor: pointer;
                   transform: scale(1.2);
-                  background-image: url('@/assets/imgs/game-back-select.png');
+                  background-image: url("@/assets/imgs/back-active.png");
                 }
             }
 

@@ -60,20 +60,15 @@ export const StoryLine: FC = () => {
         <div className={styles.storyLine}>
           <div className={styles.storyLine_header}>
             <span className={styles.goBack} onClick={handlGoBack} onMouseEnter={playSeEnter}>
-              返回
+              {/* 返回 */}
             </span>
-            <span className={styles.title}>故事线</span>
           </div>
           <div
             className={styles.storyLine_content}
             style={{
               width: px2(StageState.storyLineBgX),
               backgroundImage: `url("${StageState.storyLineBg}")`,
-              backgroundSize:
-                StageState.storyLineBgX &&
-                StageState.storyLineBgY &&
-                `${px2(StageState.storyLineBgX)}px ${StageState.storyLineBgY == 720 ? '100%' : px2(StageState.storyLineBgY)}px`,
-            
+              backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`            
             }}
           >
             {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {

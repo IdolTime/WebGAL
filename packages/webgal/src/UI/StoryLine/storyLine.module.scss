@@ -20,21 +20,22 @@ $default_storyLine_bg_y: 720px;
     .storyLine_header {
         padding: 10px 30px;
         position: fixed;
-        top: 0;
-        left: 0;
+        top: px2(35px);
+        left: px2(25px);
         z-index: 100;
         .goBack {
-            color: #666;
-            font-size: 50px;
+            display: inline-block;
+            width: 100px;
+            height: 72px;
+            background-image: url('@/assets/imgs/back.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            cursor: pointer;
+            transition: all 0.3s;
             &:hover {
-                cursor: pointer;
-                color: #000;
+              transform: scale(1.2);
+              background-image: url("@/assets/imgs/back-active.png");
             }
-        }
-        .title {
-            color: #000;
-            font-size: 50px;
-            margin-left: 50px;
         }
     }
 
