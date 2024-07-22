@@ -67,6 +67,7 @@ export const StoryLine: FC = () => {
             className={styles.storyLine_content}
             style={{
               width: px2(StageState.storyLineBgX),
+              height: StageState.storyLineBgY > 720 ? px2(StageState.storyLineBgY) : '100%',
               backgroundImage: `url("${StageState.storyLineBg}")`,
               backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`            
             }}
