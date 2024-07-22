@@ -11,6 +11,10 @@
     background-image: url('@/assets/imgs/r18-warning.png');
     background-size: cover;
     z-index: 9999;
+    
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier(.82,-0.04,.28,.76);
 
     .footer {
         width: 100%;
@@ -23,4 +27,13 @@
         bottom: px2(255px);
     }
     
+}
+
+@keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
 }
