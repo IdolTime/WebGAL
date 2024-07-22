@@ -214,9 +214,14 @@ export const playVideo = (sentence: ISentence): IPerform => {
           const perform = choose(script, endPerform);
           WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
         }
+        
+        setTimeout(() => {
+          //延迟一秒 获取当前视频播放信息，用于故事线信息存储
+          getCurrentVideoStageDataForStoryLine();
+        }, 1000)
 
         WebGAL.videoManager.onEnded(url, () => {
-          getCurrentVideoStageDataForStoryLine();
+          // getCurrentVideoStageDataForStoryLine();
           if (loopValue) {
             WebGAL.videoManager.seek(url, 0.03);
             WebGAL.videoManager.playVideo(url);
