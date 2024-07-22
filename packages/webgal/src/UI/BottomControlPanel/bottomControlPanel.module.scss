@@ -35,13 +35,18 @@
   .pause {
     display: inline-block;
     width: px2(62px);
-    height: px2(72px);
+    height: px2(62px);
     // background-image: url('@/assets/imgs/gaming-stop.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     margin-left: 80px;
     transition: all 0.3s;
+    & > img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
     &:hover {
       cursor: pointer;
       transform: scale(1.2);
