@@ -5,7 +5,7 @@ import { switchFast } from '@/Core/controller/gamePlay/fastSkip';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility, setshowFavorited } from '@/store/GUIReducer';
-import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
+import { componentsVisibility, MenuPanelTag, GameMenuKey } from '@/store/guiInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { loadGame } from '@/Core/controller/storage/loadGame';
@@ -194,6 +194,18 @@ export const BottomControlPanel = () => {
     }, 1000)
   }
 
+  /**
+   * 是否显示 收藏按钮，根据菜单配置 是否隐藏鉴赏
+   * @return {boolean} 是否展示按钮
+   */
+  const isShowCollectedBtn = () => {
+    const menu = GUIStore.gameMenus[GameMenuKey.Game_extra_button];
+    if (!menu || menu.args.hide) return false;
+    return true
+  }
+
+ 
+
   return (
     // <div className={styles.ToCenter}>
     <>
@@ -227,6 +239,20 @@ export const BottomControlPanel = () => {
             onMouseEnter={playSeEnter}
             onClick={handleSkip}
           ></span>
+
+          {isShowCollectedBtn() && (
+            <span
+              className={styles.singleButton}
+              style={{ fontSize }}
+              onClick={handleCollectVideo}
+              onMouseEnter={playSeEnter}
+            >
+              <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
+              <span className={styles.button_text}>
+                {t(`${GUIStore.showFavorited ? 'buttons.collected' : 'buttons.collection'}`)}
+              </span>
+            </span>
+          )}
 
           {/* {GUIStore.showTextBox && (
             <span
@@ -375,17 +401,7 @@ export const BottomControlPanel = () => {
             <div className={styles.fastSlPreview + ' ' + styles.fastLPreview}>{fastSlPreview}</div>
           </span> */}
 
-          <span
-            className={styles.singleButton}
-            style={{ fontSize }}
-            onClick={handleCollectVideo}
-            onMouseEnter={playSeEnter}
-          >
-            <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
-            <span className={styles.button_text}>
-              {t(`${GUIStore.showFavorited ? 'buttons.collected' : 'buttons.collection'}`)}
-            </span>
-          </span>
+        
 
           {/* <span
             className={styles.singleButton}
