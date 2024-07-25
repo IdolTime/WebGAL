@@ -30,12 +30,10 @@ export const setVar = (sentence: ISentence): IPerform => {
       maxValue = e.value as number;
     } else if (e.key === 'random') {
       random = e.value as boolean;
-      debugger;
     }
   });
 
   // 生成随机数
-  debugger;
   if (random && minValue !== null && maxValue !== null) {
     randomNumber = getRandomInt(minValue, maxValue)
   }
