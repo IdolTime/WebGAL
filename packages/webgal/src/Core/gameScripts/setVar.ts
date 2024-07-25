@@ -8,6 +8,7 @@ import { setGlobalVar } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
+import { getRandomInt } from '@/Core/util/getRandomInt'
 
 /**
  * 设置变量
@@ -17,6 +18,8 @@ export const setVar = (sentence: ISentence): IPerform => {
   let setGlobal = false;
   let minValue: number | null = null;
   let maxValue: number | null = null;
+  let random: boolean = false;
+  let randomNumber: number = 0
 
   sentence.args.forEach((e) => {
     if (e.key === 'global') {
@@ -25,8 +28,18 @@ export const setVar = (sentence: ISentence): IPerform => {
       minValue = e.value as number;
     } else if (e.key === 'maxValue') {
       maxValue = e.value as number;
+    } else if (e.key === 'random') {
+      random = e.value as boolean;
+      debugger;
     }
   });
+
+  // 生成随机数
+  debugger;
+  if (random && minValue !== null && maxValue !== null) {
+    randomNumber = getRandomInt(minValue, maxValue)
+  }
+
   let targetReducerFunction: ActionCreatorWithPayload<ISetGameVar, string>;
   if (setGlobal) {
     targetReducerFunction = setGlobalVar;
@@ -38,10 +51,10 @@ export const setVar = (sentence: ISentence): IPerform => {
     const key = sentence.content.split(/=/)[0];
     const valExp = sentence.content.split(/=/)[1];
     if (valExp === 'random()') {
-      const randomVal = Math.random()
+      const randomVal = random ? randomNumber : Math.random()
       webgalStore.dispatch(targetReducerFunction({ key, value: randomVal }));
       webgalStore.dispatch(addShowValues({ key, value: randomVal }));
-    } else if (valExp.match(/[+\-*\/()]/)) {
+    } else if (valExp.match(/[+\-*\/()]/) && !random) {
       // 如果包含加减乘除号，则运算
       // 先取出运算表达式中的变量
       const valExpArr = valExp.split(/([+\-*\/()])/g);
@@ -72,7 +85,7 @@ export const setVar = (sentence: ISentence): IPerform => {
 
       webgalStore.dispatch(targetReducerFunction({ key, value: result }));
       webgalStore.dispatch(addShowValues({ key, value: result }));
-    } else if (valExp.match(/true|false/)) {
+    } else if (valExp.match(/true|false/) && !random) {
       if (valExp.match(/true/)) {
         webgalStore.dispatch(targetReducerFunction({ key, value: true }));
         webgalStore.dispatch(addShowValues({ key, value: true }));
@@ -83,11 +96,11 @@ export const setVar = (sentence: ISentence): IPerform => {
       }
     } else {
       if (!isNaN(Number(valExp))) {
-        webgalStore.dispatch(targetReducerFunction({ key, value: Number(valExp) }));
-        webgalStore.dispatch(addShowValues({ key, value: Number(valExp) }));
+        webgalStore.dispatch(targetReducerFunction({ key, value: random ? randomNumber : Number(valExp) }));
+        webgalStore.dispatch(addShowValues({ key, value: random ? randomNumber : Number(valExp) }));
       } else {
-        webgalStore.dispatch(targetReducerFunction({ key, value: valExp }));
-        webgalStore.dispatch(addShowValues({ key, value: valExp }));
+        webgalStore.dispatch(targetReducerFunction({ key, value: random ? randomNumber : valExp }));
+        webgalStore.dispatch(addShowValues({ key, value: random ? randomNumber : valExp }));
       } 
     }
     if (setGlobal) {
