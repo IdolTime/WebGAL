@@ -19,6 +19,7 @@ export const AudioContainer = () => {
   const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
   const [bgmUrl, setBgmUrl] = useState('');
+  const [vocalUrl, setVocalUrl] = useState('');
 
   // 淡入淡出定时器
   const [fadeTimer, setFadeTimer] = useState(setTimeout(() => {}, 0));
@@ -132,10 +133,18 @@ export const AudioContainer = () => {
     logger.debug(`设置用户界面音效音量: ${uiSeVol}`);
   }, [uiSeVol]);
 
+  useEffect(() => {
+    logger.debug(`播放声音: ${stageStore.playVocal}`);
+
+    getAudioUrl(stageStore.playVocal).then((url) => {
+      setVocalUrl(url);
+    });
+  }, [stageStore.playVocal]);
+
   return (
     <div>
       <audio key={isShowTitle.toString() + bgmUrl} id="currentBgm" src={bgmUrl} loop={true} autoPlay={isEnterGame} />
-      <audio id="currentVocal" src={stageStore.playVocal} />
+      <audio id="currentVocal" src={vocalUrl} />
     </div>
   );
 };

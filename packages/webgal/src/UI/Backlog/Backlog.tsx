@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import { compileSentence, splitChars } from '@/Stage/TextBox/TextBox';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import { getAudioUrl } from '@/Core/util/getAudioUrl';
 
 export const Backlog = () => {
   const t = useTrans('gaming.');
@@ -21,6 +22,8 @@ export const Backlog = () => {
   const [indexHide, setIndexHide] = useState(false);
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   let timeRef = useRef<ReturnType<typeof setTimeout>>();
+  const [url, setUrl] = useState('');
+
   // 缓存一下vdom
   const backlogList = useMemo<any>(() => {
     let backlogs = [];
@@ -78,7 +81,15 @@ export const Backlog = () => {
                       const userDataStore = webgalStore.getState().userData;
                       const mainVol = userDataStore.optionData.volumeMain;
                       backlog_audio_element.volume = mainVol * 0.01 * userDataStore.optionData.vocalVolume * 0.01;
-                      backlog_audio_element?.play();
+
+                      getAudioUrl(backlogItem.currentStageState.vocal).then(() => {
+                        setUrl(url);
+                        if (backlog_audio_element) {
+                          backlog_audio_element.onloadeddata = () => {
+                            backlog_audio_element.play();
+                          };
+                        }
+                      });
                     }
                   }}
                   onMouseEnter={playSeEnter}
@@ -100,7 +111,7 @@ export const Backlog = () => {
               <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
             </div>
           </div>
-          <audio id={'backlog_audio_play_element_' + i} src={backlogItem.currentStageState.vocal} />
+          <audio id={'backlog_audio_play_element_' + i} src={url} />
         </div>
       );
       backlogs.unshift(singleBacklogView);
