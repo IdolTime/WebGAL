@@ -34,113 +34,56 @@ export const initState: IGuiState = {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-          countdown: 0,
-        },
+        style: {},
       },
     },
     Game_achievement_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
     Game_extra_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
     Game_storyline_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
     Game_collection_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
     Game_continue_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
     Game_load_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
     Game_option_button: {
       content: '',
       args: {
         hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
+        style: {},
       },
     },
   },
