@@ -131,6 +131,8 @@ export interface IUnlockAchieveItem {
 export interface IStageState {
   oldBgName: string; // 旧背景的文件路径
   bgName: string; // 背景文件地址（相对或绝对）
+  bgX: number; // 背景x坐标
+  bgY: number; // 背景y坐标
   figName: string; // 立绘_中 文件地址（相对或绝对）
   figNameLeft: string; // 立绘_左 文件地址（相对或绝对）
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
