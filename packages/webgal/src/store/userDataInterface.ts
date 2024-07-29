@@ -131,6 +131,7 @@ export interface ISaveStoryLine {
   x: number; // 解锁按钮 X坐标
   y: number; // 解锁按钮 Y坐标
   isUnlock: boolean; // 是否已解锁, 如果已经解锁才展示
+  isHideName: boolean; // 是否隐藏名称
 }
 
 export interface ISaveStoryLineData {

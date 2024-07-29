@@ -9,6 +9,8 @@ import { getStorylineFromStorage } from '@/Core/controller/storage/savesControll
 import styles from './storyLine.module.scss';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { px2 } from '@/Core/parser/utils';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 /**
  * 故事线页面
@@ -19,7 +21,8 @@ export const StoryLine: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
-  const unlockStorylineList = useSelector((state: RootState) => state.saveData.unlockStorylineList);
+  const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
+
 
   useEffect(() => {
     getStorylineFromStorage()
@@ -48,6 +51,10 @@ export const StoryLine: FC = () => {
     loadGameFromStageData(saveData.videoData as ISaveData);
   };
 
+  function getImagePath(url: string) {
+    return assetSetter(url, fileType.ui);
+  }
+
   return (
     <>
       {GUIState.showStoryLine && (
@@ -58,25 +65,20 @@ export const StoryLine: FC = () => {
               onClick={handlGoBack}
               onMouseEnter={playSeEnter}
             >
-              返回
+              {/* 返回 */}
             </span>
-            <span className={styles.title}>故事线</span>
           </div>
           <div
             className={styles.storyLine_content}
             style={{
-              width: StageState.storyLineBgX,
+              width: px2(StageState.storyLineBgX) + 'px',
+              height: Number(StageState.storyLineBgY) > 720 ? px2(StageState.storyLineBgY) + 'px' : '100%',
               backgroundImage: `url("${StageState.storyLineBg}")`,
-              backgroundSize:
-                StageState.storyLineBgX &&
-                StageState.storyLineBgY &&
-                `${StageState.storyLineBgX} ${
-                  StageState.storyLineBgY.includes('720') ? '100%' : StageState.storyLineBgY
-                }`,
+              backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`            
             }}
           >
             {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
-              const { name, thumbnailUrl, x, y, isUnlock } = item.storyLine;
+              const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
 
               if (!isUnlock) {
                 return null;
@@ -87,13 +89,15 @@ export const StoryLine: FC = () => {
                   key={`storyLine-${index}`}
                   className={styles.storyLine_item}
                   style={
-                    thumbnailUrl ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${thumbnailUrl}")` } : {}
+                    thumbnailUrl 
+                      ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${getImagePath(thumbnailUrl)}")` } 
+                      : {}
                   }
                   onClick={(e) => handlPlay(e, item)}
                 >
                   <div className={styles.info_card}>
-                    <span className={styles.playButton_icon} />
-                    <span className={styles.name}>{name}</span>
+                    <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
+                    {isHideName ? null : <span className={styles.name}>{name}</span>}
                   </div>
                 </div>
               );

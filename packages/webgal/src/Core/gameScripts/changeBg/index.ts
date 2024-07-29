@@ -27,10 +27,10 @@ export const changeBg = (sentence: ISentence): IPerform => {
     dispatch(setStage({ key: 'storyLineBg', value: url }))
     sentence.args.forEach((e) => {
       if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgX', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'storyLineBgX', value: `${e.value}` }))
       }
       if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgY', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'storyLineBgY', value: `${e.value}` }))
       }
     });
     

@@ -11,6 +11,8 @@ import {
   dumpUnlickAchieveToStorage,
   getUnlickAchieveFromStorage,
 } from '@/Core/controller/storage/savesController';
+import { ISaveStoryLineData, ISaveStoryLine } from '@/store/userDataInterface';
+
 
 export interface ISceneEntry {
   sceneName: string; // 场景名称
@@ -97,15 +99,15 @@ export class SceneManager {
 
       if (sentenceList.length && scenaName === sceneNameType.Start) {
         // 是否有故事线配置项，如果没有则重置数据
-        getStorylineFromStorage().then(() => {
-          const unlockStorylineIndex = sentenceList.findIndex(
-            (e: ISentence) => e.command === commandType.unlockStoryline,
-          );
-          if (unlockStorylineIndex === -1) {
-            webgalStore.dispatch(saveActions.resetStorylineList());
-            dumpStorylineToStorage();
-          }
-        });
+        // getStorylineFromStorage().then(() => {
+        //   const unlockStorylineIndex = sentenceList.findIndex(
+        //     (e: ISentence) => e.command === commandType.unlockStoryline,
+        //   );
+        //   if (unlockStorylineIndex === -1) {
+        //     webgalStore.dispatch(saveActions.resetStorylineList());
+        //     dumpStorylineToStorage();
+        //   }
+        // });
 
         // 是否有解锁成就配置项，如果没有则重置数据
         const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
@@ -116,12 +118,78 @@ export class SceneManager {
         }
       }
 
+      if (scenaName === sceneNameType.Storyline) {
+        this.getAllStorylineList(sentenceList)
+      }
+
       if (scenaName === sceneNameType.Achieve) {
         this.getAllUnlockAchieveList(sentenceList);
       }
 
       parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
     });
+  }
+
+  // 得到所有解锁故事线数据
+  private async getAllStorylineList(sentenceList: ISentence[]) {
+    await getStorylineFromStorage();
+    const unlockStoryLineeMapper = new Map();
+    const videoDataMapper = new Map();
+
+
+    webgalStore.getState().saveData.unlockStorylineList.forEach((item: ISaveStoryLineData) => {
+      const { name, isUnlock = false } = item.storyLine as ISaveStoryLine || {};
+      unlockStoryLineeMapper.set(name, name);
+      videoDataMapper.set(name, item.videoData)
+    });
+
+    const allStorylineData: ISaveStoryLineData[] = sentenceList
+      .filter((e: ISentence) => e.command === commandType.unlockStoryline)
+      .map(e2 => {
+
+        const storyLine: ISaveStoryLine = {
+          thumbnailUrl: e2?.content ?? '',
+          name: '',
+          x: 0,
+          y: 0,
+          isUnlock: false,
+          isHideName: false
+        }
+        const payload: ISaveStoryLineData = {
+          storyLine: {} as unknown as ISaveStoryLine,
+          videoData: null
+        };
+ 
+        e2.args.forEach((e3) => {
+          if (e3.key === 'name') {
+            storyLine['name'] = e3.value.toString();
+          } else if (e3.key === 'x') {
+            storyLine['x'] = Number(e3.value);
+          } else if (e3.key === 'y') {
+            storyLine['y'] = Number(e3.value);
+          } else if (e3.key === 'hideName') {
+            storyLine['isHideName'] = e3.value.toString() === 'true';
+          }
+        });
+
+        if (unlockStoryLineeMapper.get(storyLine['name']) && videoDataMapper.get(storyLine['name'])) {
+       
+          storyLine['isUnlock'] = true;
+          payload['videoData'] = videoDataMapper.get(storyLine['name'])
+        } else {
+          storyLine['isUnlock'] = false;
+        }
+        payload['storyLine'] = storyLine
+        return payload;
+      })
+
+      webgalStore.dispatch(
+        saveActions.saveAllStorylineData(allStorylineData)
+      )
+
+      const newList = allStorylineData.filter(e => e.storyLine.isUnlock)
+      webgalStore.dispatch(saveActions.setStorylineListFromStorage(newList))
+      await dumpStorylineToStorage();
   }
 
   // 所有解锁成就

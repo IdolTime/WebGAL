@@ -1,5 +1,6 @@
-$default_storyLine_bg_x: 2560px;
-$default_storyLine_bg_y: 1440px;
+@import 'src/assets/style/px2.scss';
+$default_storyLine_bg_x: 1280px;
+$default_storyLine_bg_y: 720px;
 
 .achievement {
     width: 100%;
@@ -16,23 +17,21 @@ $default_storyLine_bg_y: 1440px;
         display: flex;
         align-items: center;
         position: fixed;
-        top: 20px;
-        left: 50px;
+        top: px2(35px);
+        left: px2(35px);
         z-index: 101;
 
         .goback {
-            margin-right: 1em;
-            color: #666;
-            font-size: 46px;
+            display: inline-block;
+            width: px2(53px);
+            height: px2(53px);
+            background-image: url('@/assets/imgs/back.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            cursor: pointer;
             &:hover {
-                cursor: pointer;
-                color: #000;
+              background-image: url("@/assets/imgs/back-r.png");
             }
-        }
-
-        .title {
-            color: #000;
-            font-size: 50px;
         }
     }
 
@@ -96,7 +95,7 @@ $default_storyLine_bg_y: 1440px;
         overflow: hidden;
         background-repeat: no-repeat;
         position: relative;
-        background-size: $default_storyLine_bg_x $default_storyLine_bg_y;
+        background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
     }
 
     .achievement_list {

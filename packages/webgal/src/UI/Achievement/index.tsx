@@ -13,6 +13,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher'
 import { sceneNameType } from '@/Core/Modules/scene'
 import useSoundEffect from '@/hooks/useSoundEffect';
+import { px2 } from '@/Core/parser/utils';
 
 /**
  * 成就页面
@@ -119,9 +120,8 @@ export const Achievement: FC = () => {
               onClick={handleGoBack} 
               onMouseEnter={playSeEnter}
             >
-              返回
+              {/* 返回 */}
             </span>
-            <span className={styles.title}>成就</span>
           </div>
 
           {/* 已获得成就  */}
@@ -141,8 +141,8 @@ export const Achievement: FC = () => {
             style={{ 
               width: StageState.achieveBgX,
               backgroundImage: `url("${StageState.achieveBg}")`,
-              backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${StageState.achieveBgX} ${StageState.achieveBgY.includes('720') ? '100%' : StageState.achieveBgY}`
-            }}  
+              backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${px2(StageState.achieveBgX)}px ${px2(StageState.achieveBgY)}px`,
+            }}
           >
             {saveData.allUnlockAchieveList?.length > 0 && (
               <div className={styles.achievement_list}>
