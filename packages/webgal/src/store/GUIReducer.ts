@@ -150,6 +150,7 @@ export const initState: IGuiState = {
   showBeautyGuideImageDialog: false,
   isShowR18Modal: false, // 是否显示R18内容
   openR18Modal: false,
+  isShowGameMenu: false
 };
 
 /**

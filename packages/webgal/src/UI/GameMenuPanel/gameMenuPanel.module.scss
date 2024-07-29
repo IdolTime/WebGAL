@@ -1,0 +1,97 @@
+@import 'src/assets/style/px2.scss';
+
+.gameMenuPanelWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.gameMenuPanel {
+    position: absolute;
+    top: px2(20px);
+    right: px2(28px);
+    z-index: 9;
+
+    .menuButton {
+        width: px2(44px);
+        height: px2(43px);
+        background-image: url('@/assets/imgs/menu.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.05);
+            background-image: url('@/assets/imgs/menu-select.png') !important;
+        }
+    }
+}
+
+.gameMenuPanelContentWrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 20;
+
+    .mask {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 21;
+        pointer-events: auto; // 确保遮罩层拦截点击事件
+    }
+
+    .gameMenuPanelContent {
+        position: absolute;
+        top: px2(16px);
+        right: 0;
+        z-index: 22;
+        width: px2(301px);
+        height: px2(705px);
+        background-image: url('@/assets/imgs/menu-bg.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+
+        .buttonswrapper {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            position: absolute;
+            z-index: 99;
+
+            .button {
+                width: px2(165px);
+                height: px2(63px);
+                margin-right: px2(42px);
+                background-image: url('@/assets/imgs/game-menu-button-bg.png');
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center;
+                color: #fff;
+                font-size: px2(20+px);
+                margin-bottom: px2(27px);
+                line-height: px2(63px);
+                text-align: center;
+                transition: transform 0.33s ease-in-out;
+                z-index: 1; // 确保这个值高于遮罩层的 z-index
+
+                &:hover {
+                    color: #fff;
+                    cursor: pointer;
+                    background-image: url('@/assets/imgs/game-menu-button-bg-select.png');
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    background-position: center;
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+}

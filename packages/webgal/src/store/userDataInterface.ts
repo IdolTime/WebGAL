@@ -52,6 +52,7 @@ export interface IOptionData {
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
+  uiLight: number; // 游戏UI亮度
 }
 
 /**

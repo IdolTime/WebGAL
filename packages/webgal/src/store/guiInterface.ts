@@ -40,6 +40,7 @@ export interface IGuiState {
   showBeautyGuideImageDialog: boolean; // 显示美女图鉴图片对话框
   isShowR18Modal: boolean; // 是否显示R18内容
   openR18Modal: boolean;
+  isShowGameMenu: boolean; // 是否显示游戏菜单
 }
 
 export type componentsVisibility = Pick<

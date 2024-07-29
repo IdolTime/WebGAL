@@ -42,13 +42,27 @@
 .Options_main_slider {
   position: absolute;
   top: px2(498px);
-  left: px2(622px)
+  left: px2(622px);
+}
+
+.Options_light_slider {
+  position: absolute;
+  top: px2(304px);
+  left: px2(460px);
+  // left: px2(622px)；
+  display: flex;
+
+  .label {
+    color: #fff;
+    font-size: px2(22px);
+    margin-right: px2(120px);
+  }
 }
 
 .Options_sound_slider {
   position: absolute;
   top: px2(404px);
-  left: px2(622px)
+  left: px2(622px);
 }
 
 .Options_checkbox_window {

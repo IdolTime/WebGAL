@@ -13,6 +13,7 @@ import { fullScreenOption } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { RootState } from '@/store/store';
 import { OptionSlider } from './OptionSlider';
+import { useUILight } from '@/hooks/useUILight';
 
 enum optionPage {
   'System',
@@ -62,6 +63,25 @@ export const Options: FC = () => {
           setStorage();
         }}
       />
+
+      {/* 视频尺寸 */}
+
+
+      {/* 亮度 */}
+      <div className={styles.Options_light_slider}>
+        <span className={styles.label}>亮度</span>
+        <OptionSlider
+          initValue={userDataState.optionData.uiLight}
+          uniqueID="亮度"
+          onChange={(event) => {
+            const newValue = Number(event.target.value);
+            useUILight(newValue);
+            dispatch(setOptionData({ key: 'uiLight', value: newValue }));
+            setStorage();
+          }}
+        />
+      </div>
+
       <div className={styles.Options_sound_slider}>
         <OptionSlider
           initValue={userDataState.optionData.seVolume}

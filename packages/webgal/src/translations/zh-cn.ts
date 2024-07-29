@@ -198,6 +198,10 @@ const zhCn = {
       titleTips: '确认返回到标题界面吗',
       collection: '收藏',
       collected: '已收藏',
+      continue: '继续',
+      backToLevel: '返回关卡',
+      setting: '设置',
+      backToHome: '返回主界面'
     },
   },
 

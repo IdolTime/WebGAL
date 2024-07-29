@@ -36,6 +36,7 @@ const initialOptionSet: IOptionData = {
   language: language.zhCn,
   voiceInterruption: voiceOption.yes,
   fullScreen: fullScreenOption.off,
+  uiLight: 100, // UI亮度
 };
 
 // 初始化用户数据
