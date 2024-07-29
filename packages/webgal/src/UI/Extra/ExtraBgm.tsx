@@ -92,7 +92,15 @@ export function ExtraBgm() {
         <div className={styles.footer_page_container}>
           {Array.from({ length: pageLen }).map((e, i) => {
             return (
-              <div key={i} className={styles.footer_page_indicator}>
+              <div 
+                key={i} 
+                className={styles.footer_page_indicator}
+                onMouseEnter={playSeEnter}
+                onClick={() => {
+                  playSeClick();
+                  setPage(i+1);
+                }}
+              >
                 <img
                   src={i + 1 === page ? footerChecked : footerUncheck}
                   alt=""

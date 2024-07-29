@@ -32,7 +32,11 @@ export function ExtraCg() {
         })}
         {Array.from({ length: 6 - list.length }).map((e, i) => {
           return (
-            <div className={styles.cgElement} key={i} style={{ cursor: 'default' }}>
+            <div 
+              key={i} 
+              className={styles.cgElement} 
+              style={{ cursor: 'default' }} 
+            >
               <img src={cgLock} alt="" style={{ width: '100%' }} />
             </div>
           );
@@ -52,7 +56,15 @@ export function ExtraCg() {
         <div className={styles.footer_page_container}>
           {Array.from({ length: pageLen }).map((e, i) => {
             return (
-              <div key={i} className={styles.footer_page_indicator}>
+              <div 
+                key={i} 
+                className={styles.footer_page_indicator}
+                onMouseEnter={playSeEnter}
+                onClick={() => {
+                  playSeClick();
+                  setPage(i+1);
+                }}  
+              >
                 <img
                   src={i + 1 === page ? footerChecked : footerUncheck}
                   alt=""
