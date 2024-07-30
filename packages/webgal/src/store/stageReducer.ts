@@ -25,6 +25,8 @@ import { commandType } from '@/Core/controller/scene/sceneInterface';
 export const initState: IStageState = {
   oldBgName: '',
   bgName: '', // 背景文件地址（相对或绝对）
+  bgX: 0, // 背景x坐标
+  bgY: 0, // 背景y坐标
   figName: '', // 立绘_中 文件地址（相对或绝对）
   figNameLeft: '', // 立绘_左 文件地址（相对或绝对）
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）

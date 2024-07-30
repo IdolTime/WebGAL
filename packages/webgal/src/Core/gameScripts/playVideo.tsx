@@ -151,15 +151,16 @@ export const playVideo = (sentence: ISentence): IPerform => {
           stopFunction: (noWait = false) => {
             // WebGAL.events.fullscreenDbClick.off(skipVideo);
 
-            if (!continueBgmValue) {
+            // if (!continueBgmValue) {
               /**
                * 恢复音量
+               * 需求变更：bgm与视频同时播放，不被视频打断
                */
-              const bgmElement: any = document.getElementById('currentBgm');
-              if (bgmElement) {
-                bgmElement.volume = bgmVol.toString();
-              }
-            }
+              // const bgmElement: any = document.getElementById('currentBgm');
+              // if (bgmElement) {
+              //   bgmElement.volume = bgmVol.toString();
+              // }
+            // }
 
             const vocalElement: any = document.getElementById('currentVocal');
             if (vocalElement) {
@@ -178,14 +179,15 @@ export const playVideo = (sentence: ISentence): IPerform => {
         resolve(perform);
         /**
          * 把bgm和语音的音量设为0
+         * 需求变更：bgm与视频同时播放，不被视频打断
          */
-        if (!continueBgmValue) {
-          const bgmVol2 = 0;
-          const bgmElement: any = document.getElementById('currentBgm');
-          if (bgmElement) {
-            bgmElement.volume = bgmVol2.toString();
-          }
-        }
+        // if (!continueBgmValue) {
+          // const bgmVol2 = 0;
+          // const bgmElement: any = document.getElementById('currentBgm');
+          // if (bgmElement) {
+          //   bgmElement.volume = bgmVol2.toString();
+          // }
+        // }
         const vocalVol2 = 0;
         const vocalElement: any = document.getElementById('currentVocal');
         if (vocalElement) {

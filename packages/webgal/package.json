@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@icon-park/react": "^1.4.2",
+    "@pixi/gif": "^1.1.3",
     "@reduxjs/toolkit": "^1.8.1",
     "@web-media/ogg-polyfill": "^0.1.2",
     "angular-expressions": "^1.1.5",
@@ -19,6 +20,7 @@
     "crypto-js": "^4.2.0",
     "flv.js": "^1.6.2",
     "i18next": "^22.4.15",
+    "idoltime-parser": "file:../parser",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mitt": "^3.0.0",
@@ -34,8 +36,7 @@
     "react-redux": "^8.0.1",
     "sass": "^1.49.9",
     "uuid": "^9.0.0",
-    "vite-plugin-package-version": "^1.0.2",
-    "idoltime-parser": "file:../parser"
+    "vite-plugin-package-version": "^1.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.180",

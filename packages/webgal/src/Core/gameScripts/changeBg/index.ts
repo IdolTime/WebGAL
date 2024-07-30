@@ -69,12 +69,22 @@ export const changeBg = (sentence: ISentence): IPerform => {
 
   let name = '';
   let series = 'default';
+  let bgX = 0;
+  let bgY = 0;
   sentence.args.forEach((e) => {
-    if (e.key === 'unlockname') {
-      name = e.value.toString();
-    }
-    if (e.key === 'series') {
-      series = e.value.toString();
+    switch(e.key) {
+      case 'unlockname':
+        name = e.value.toString();
+        break;
+      case 'series':
+        series = e.value.toString();
+        break;
+      case 'x':
+        bgX = Number(e?.value ?? 0);
+        break;
+      case 'y':
+        bgY = Number(e?.value ?? 0);
+        break;
     }
   });
 
@@ -135,6 +145,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
     WebGAL.animationManager.nextExitAnimationName.set('bg-main-off', getSentenceArgByKey(sentence, 'exit')!.toString());
     duration = getAnimateDuration(getSentenceArgByKey(sentence, 'exit')!.toString());
   }
+
+  if (bgX) dispatch(setStage({ key: 'bgX', value: bgX }));
+  if (bgY) dispatch(setStage({ key: 'bgY', value: bgY }));
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {

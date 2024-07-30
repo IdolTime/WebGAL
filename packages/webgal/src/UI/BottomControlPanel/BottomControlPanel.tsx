@@ -247,7 +247,7 @@ export const BottomControlPanel = () => {
               onClick={handleCollectVideo}
               onMouseEnter={playSeEnter}
             >
-              <Save className={styles.button} theme="outline" size={size} fill="#f5f5f7" strokeWidth={strokeWidth} />
+              <span className={styles.button_icon}></span>
               <span className={styles.button_text}>
                 {t(`${GUIStore.showFavorited ? 'buttons.collected' : 'buttons.collection'}`)}
               </span>
