@@ -81,10 +81,13 @@ export class SceneManager {
               if (parsedScene.current) {
                 this.sceneData.currentScene = parsedScene.current;
               }
-
+              const sentenceList = this.sceneData?.currentScene?.sentenceList ?? []
               if (scenaName === sceneNameType.Storyline) {
-                const sentenceList = this.sceneData?.currentScene?.sentenceList ?? []
                 this.getAllStorylineList(sentenceList)
+              }
+
+              if (scenaName === sceneNameType.Achieve) {
+                this.getAllUnlockAchieveList(sentenceList);
               }
 
               if (loading) {
@@ -123,9 +126,7 @@ export class SceneManager {
         }
       }
 
-      if (scenaName === sceneNameType.Achieve) {
-        this.getAllUnlockAchieveList(sentenceList);
-      }
+   
 
       parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
     });
