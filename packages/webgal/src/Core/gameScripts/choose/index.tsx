@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React, { useRef } from 'react';
+import React, { CSSProperties, useRef } from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
@@ -13,6 +13,7 @@ import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
+import { parseStyleArg } from '@/Core/parser/utils';
 
 class ChooseOption {
   /**
@@ -126,38 +127,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           WebGAL.gameplay.performController.unmountPerform('choose');
         };
         // : () => {};
-        const styleObj: Record<string, number | string> = {
+        let styleObj: CSSProperties = {
           fontFamily: font,
         };
 
         if (e.style) {
-          if (typeof e.style.x === 'number') {
-            styleObj.position = 'absolute';
-            styleObj['left'] = e.style.x + 'px';
-            styleObj['transform'] = 'translateX(-50%)';
-          }
-          if (typeof e.style.y === 'number') {
-            styleObj.position = 'absolute';
-            styleObj['top'] = e.style.y + 'px';
-            if (styleObj['transform']) {
-              styleObj['transform'] += ' translateY(-50%)';
-            } else {
-              styleObj['transform'] = 'translateY(-50%)';
-            }
-          }
-          if (typeof e.style.scale === 'number') {
-            if (styleObj['transform']) {
-              styleObj['transform'] += ' scale(' + e.style.scale + ')';
-            } else {
-              styleObj['transform'] = 'scale(' + e.style.scale + ')';
-            }
-          }
-          if (typeof e.style.fontSize === 'number') {
-            styleObj['fontSize'] = e.style.fontSize + 'px';
-          }
-          if (typeof e.style.fontColor === 'string' && e.style.fontColor[0] === '#') {
-            styleObj['color'] = e.style.fontColor;
-          }
+          styleObj = parseStyleArg(e.style);
         }
 
         if (typeof e.style?.countdown === 'number') {

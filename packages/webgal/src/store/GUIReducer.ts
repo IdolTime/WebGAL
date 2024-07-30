@@ -3,6 +3,7 @@
  * @author Mahiru
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
+import { sceneUIConfig } from '@/Core/UIConfigTypes';
 import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -29,64 +30,7 @@ export const initState: IGuiState = {
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
-  gameMenus: {
-    Game_start_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_achievement_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_extra_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_storyline_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_collection_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_continue_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_load_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-    Game_option_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {},
-      },
-    },
-  },
+  gameUIConfigs: sceneUIConfig,
   // gameMenus: [],
   showBeautyGuide: false, // 是否显示美女图鉴页面
   showBeautyGuideDetail: false, // 是否显示美女图鉴详情页面
@@ -139,8 +83,8 @@ const GUISlice = createSlice({
     setshowFavorited: (state, action: PayloadAction<boolean>) => {
       state.showFavorited = action.payload;
     },
-    setGameMenus: (state, action: PayloadAction<any>) => {
-      state.gameMenus = action.payload;
+    setGameUIConfigs: (state, action: PayloadAction<any>) => {
+      state.gameUIConfigs = action.payload;
     },
     setGameR18: (state, action: PayloadAction<boolean>) => {
       state.isShowR18Modal = action.payload;
@@ -155,7 +99,7 @@ export const {
   setLogoImage,
   setShowStoryLine,
   setshowFavorited,
-  setGameMenus,
+  setGameUIConfigs,
   setGameR18,
 } = GUISlice.actions;
 export default GUISlice.reducer;

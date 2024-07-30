@@ -3,13 +3,35 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage, setGameMenus, initState, setGameR18 } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage, setGameUIConfigs, initState, setGameR18 } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { GameMenuItem, GameMenuKey } from '@/store/guiInterface';
+import {
+  AchievementSceneButtonKey,
+  AchievementSceneOtherKey,
+  bgKey,
+  ExtraSceneButtonKey,
+  ExtraSceneOtherKey,
+  LoadSceneButtonKey,
+  LoadSceneOtherKey,
+  OptionSceneButtonKey,
+  OptionSceneOtherKey,
+  Scene,
+  SceneKeyMap,
+  SceneUIConfig,
+  StorylineSceneButtonKey,
+  StorylineSceneOtherKey,
+  Style,
+  TitleSceneButtonKey,
+  titleSceneOtherConfig,
+  TitleSceneOtherKey,
+  TitleSceneUIConfig,
+} from '@/Core/UIConfigTypes';
+import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 
 declare global {
   interface Window {
@@ -37,8 +59,7 @@ export const infoFetcher = (url: string) => {
     logger.info('获取到游戏信息', gameConfig);
     // 按照游戏的配置开始设置对应的状态
     if (GUIState) {
-      // @ts-ignore
-      const gameMenus: Record<GameMenuKey, GameMenuItem> = {};
+      const gameUIConfigs = { ...GUIState.gameUIConfigs };
 
       gameConfig.forEach((e) => {
         const { command, args, options } = e;
@@ -72,47 +93,6 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
-          case GameMenuKey.Game_start_button:
-          case GameMenuKey.Game_achievement_button:
-          case GameMenuKey.Game_storyline_button:
-          case GameMenuKey.Game_extra_button:
-          case GameMenuKey.Game_collection_button:
-          case GameMenuKey.Game_continue_button:
-          case GameMenuKey.Game_load_button:
-          case GameMenuKey.Game_option_button: {
-            const hide = (options.find((o) => o.key === 'hide')?.value as boolean) || false;
-            const styleStr = (options.find((o) => o.key === 'style')?.value as string) || '';
-
-            let styleObj: GameMenuItem['args']['style'] = { ...initState.gameMenus.Game_achievement_button.args.style };
-
-            const styleRegex = /\{(.*?)\}/;
-            const styleMatch = styleStr.match(styleRegex);
-            if (styleMatch) {
-              const styleStr = styleMatch[1];
-              const styleProps = styleStr.split(',');
-              const style: any = {}; // Change to specific type if possible
-
-              // Parse each style property
-              styleProps.forEach((prop) => {
-                const [key, value] = prop.split('=');
-                if (key && value) {
-                  style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
-                }
-              });
-
-              styleObj = style;
-            }
-
-            gameMenus[GameMenuKey[command]] = {
-              content: args[0],
-              args: {
-                hide,
-                style: styleObj,
-              },
-            };
-            break;
-          }
-
           case 'Title_bgm': {
             const bgmUrl = assetSetter(args[0], fileType.bgm);
             dispatch(setGuiAsset({ asset: 'titleBgm', value: bgmUrl }));
@@ -140,12 +120,125 @@ export const infoFetcher = (url: string) => {
             break;
           }
         }
+
+        if (
+          (TitleSceneButtonKey[command as TitleSceneButtonKey] || TitleSceneOtherKey[command as TitleSceneOtherKey]) &&
+          command !== TitleSceneOtherKey.Title_bgm
+        ) {
+          const scene = Scene.title;
+
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          LoadSceneButtonKey[command as LoadSceneButtonKey] ||
+          LoadSceneOtherKey[command as LoadSceneOtherKey]
+        ) {
+          const scene = Scene.load;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          StorylineSceneButtonKey[command as StorylineSceneButtonKey] ||
+          StorylineSceneOtherKey[command as StorylineSceneOtherKey]
+        ) {
+          const scene = Scene.storyline;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          AchievementSceneButtonKey[command as AchievementSceneButtonKey] ||
+          AchievementSceneOtherKey[command as AchievementSceneOtherKey]
+        ) {
+          const scene = Scene.achievement;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          OptionSceneButtonKey[command as OptionSceneButtonKey] ||
+          OptionSceneOtherKey[command as OptionSceneOtherKey]
+        ) {
+          const scene = Scene.option;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          ExtraSceneButtonKey[command as ExtraSceneButtonKey] ||
+          ExtraSceneOtherKey[command as ExtraSceneOtherKey]
+        ) {
+          const scene = Scene.extra;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        }
       });
 
-      dispatch(setGameMenus(gameMenus));
+      dispatch(setGameUIConfigs(gameUIConfigs));
     }
     window?.renderPromise?.();
     delete window.renderPromise;
     initKey();
   });
 };
+
+function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: WebgalConfig[0]) {
+  const parseArgs = (args: WebgalConfig[0]['options'], swapImageContent = '') => {
+    const parseStyleString = (styleString: string): Style => {
+      let styleObj: Style = {};
+      const styleRegex = /\{(.*?)\}/;
+      const styleMatch = styleString.match(styleRegex);
+      if (styleMatch) {
+        const styleStr = styleMatch[1];
+        const styleProps = styleStr.split(',');
+        const style: any = {};
+
+        // Parse each style property
+        styleProps.forEach((prop) => {
+          const [key, value] = prop.split('=');
+          if (key && value) {
+            style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
+          }
+        });
+
+        styleObj = style;
+      }
+      return styleObj;
+    };
+
+    const parsedArgs: any = { hide: false, style: {} };
+
+    args.forEach((e: any) => {
+      if (e.key === 'hide') {
+        parsedArgs.hide = e.value === true;
+      } else if (e.key.endsWith('Style')) {
+        const style = parseStyleString(e.value as string);
+
+        if (e.key === 'style' && swapImageContent) {
+          style.image = swapImageContent;
+        }
+
+        parsedArgs[e.key] = style;
+      }
+    });
+
+    return parsedArgs;
+  };
+
+  if (SceneKeyMap[scene]) {
+    // @ts-ignore
+    newOptions[scene] = { ...newOptions[scene] };
+    // @ts-ignore
+    if (SceneKeyMap[scene].buttons[item.command]) {
+      // @ts-ignore
+      newOptions[scene].buttons[item.command] = {
+        key: item.command,
+        content: item.args[0] ?? '',
+        args: parseArgs(item.options ?? []),
+      };
+      // @ts-ignore
+    } else if (SceneKeyMap[scene].other[item.command]) {
+      let swapContentAndStyle = false;
+
+      if (bgKey[item.command as keyof typeof bgKey]) {
+        swapContentAndStyle = true;
+      }
+
+      // @ts-ignore
+      newOptions[scene].other[item.command] = {
+        key: item.command,
+        content: swapContentAndStyle ? '' : item.args[0] ?? '',
+        args: parseArgs(item.options ?? [], item.args[0]),
+      };
+    }
+  }
+
+  return newOptions;
+}

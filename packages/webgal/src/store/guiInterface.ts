@@ -1,3 +1,4 @@
+import { SceneUIConfig } from '@/Core/UIConfigTypes';
 import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
 
 /**
@@ -32,9 +33,7 @@ export interface IGuiState {
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
-  gameMenus: {
-    [key in GameMenuKey]: GameMenuItem;
-  };
+  gameUIConfigs: SceneUIConfig;
   showBeautyGuide: boolean; // 显示美女图鉴页面
   showBeautyGuideDetail: boolean; // 显示美女图鉴详情页面
   showBeautyGuideImageDialog: boolean; // 显示美女图鉴图片对话框
