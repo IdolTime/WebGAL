@@ -82,6 +82,11 @@ export class SceneManager {
                 this.sceneData.currentScene = parsedScene.current;
               }
 
+              if (scenaName === sceneNameType.Storyline) {
+                const sentenceList = this.sceneData?.currentScene?.sentenceList ?? []
+                this.getAllStorylineList(sentenceList)
+              }
+
               if (loading) {
                 // @ts-ignore
                 window.pubsub.publish('loading', { loading: false });
@@ -116,10 +121,6 @@ export class SceneManager {
           webgalStore.dispatch(saveActions.resetUnlockAchieveData());
           dumpUnlickAchieveToStorage();
         }
-      }
-
-      if (scenaName === sceneNameType.Storyline) {
-        this.getAllStorylineList(sentenceList)
       }
 
       if (scenaName === sceneNameType.Achieve) {

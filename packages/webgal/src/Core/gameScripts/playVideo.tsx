@@ -8,7 +8,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
+// import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 import { setshowFavorited } from '@/store/GUIReducer';
 import { updateShowValueList } from '@/store/stageReducer';
 
@@ -214,7 +214,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.onEnded(url, () => {
-          getCurrentVideoStageDataForStoryLine();
+          // getCurrentVideoStageDataForStoryLine();
           if (loopValue) {
             WebGAL.videoManager.seek(url, 0.03);
             WebGAL.videoManager.playVideo(url);

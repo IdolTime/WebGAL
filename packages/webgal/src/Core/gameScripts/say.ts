@@ -8,6 +8,7 @@ import { getRandomPerformName, PerformController } from '@/Core/Modules/perform/
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { textSize, voiceOption } from '@/store/userDataInterface';
 import { WebGAL } from '@/Core/WebGAL';
+import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 
 /**
  * 进行普通对话的显示
@@ -100,7 +101,7 @@ export const say = (sentence: ISentence): IPerform => {
   if (isNotend) {
     endDelay = 0;
   }
-
+  getCurrentVideoStageDataForStoryLine();
   return {
     performName: performInitName,
     duration: sentenceDelay + endDelay,
