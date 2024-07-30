@@ -28,15 +28,11 @@ export function ExtraCg() {
     <div className={styles.cgMain}>
       <div className={styles.cgContainer}>
         {list.map((e, i) => {
-          return <ExtraCgElement name={e.name} imgUrl={"./game/background/Ch00/Yf_cg003.png"} key={i.toString() + e.url} />;
+          return <ExtraCgElement name={e.name} imgUrl={e.url} key={i.toString() + e.url} />;
         })}
         {Array.from({ length: 6 - list.length }).map((e, i) => {
           return (
-            <div 
-              key={i} 
-              className={styles.cgElement} 
-              style={{ cursor: 'default' }} 
-            >
+            <div key={i} className={styles.cgElement} style={{ cursor: 'default' }}>
               <img src={cgLock} alt="" style={{ width: '100%' }} />
             </div>
           );
@@ -56,14 +52,14 @@ export function ExtraCg() {
         <div className={styles.footer_page_container}>
           {Array.from({ length: pageLen }).map((e, i) => {
             return (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className={styles.footer_page_indicator}
                 onMouseEnter={playSeEnter}
                 onClick={() => {
                   playSeClick();
-                  setPage(i+1);
-                }}  
+                  setPage(i + 1);
+                }}
               >
                 <img
                   src={i + 1 === page ? footerChecked : footerUncheck}

@@ -92,13 +92,13 @@ export function ExtraBgm() {
         <div className={styles.footer_page_container}>
           {Array.from({ length: pageLen }).map((e, i) => {
             return (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className={styles.footer_page_indicator}
                 onMouseEnter={playSeEnter}
                 onClick={() => {
                   playSeClick();
-                  setPage(i+1);
+                  setPage(i + 1);
                 }}
               >
                 <img

@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
+import { px2 } from '@/Core/parser/utils';
 
 export const Save: FC = () => {
   const { playSeClick, playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -60,12 +61,23 @@ export const Save: FC = () => {
     if (saveData) {
       saveElementContent = (
         <>
+          <div className={styles.Save_Load_bg} />
           <div className={styles.Save_Load_border} />
           <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
           <div className={styles.Save_Load_info}>
             {saveData.saveTime}
-            {'\n'}
-            {saveData.nowStageState.showText}
+            <br />
+            <span
+              style={{
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                width: px2(300),
+              }}
+            >
+              {saveData.nowStageState.showText}
+            </span>
           </div>
         </>
       );

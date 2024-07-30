@@ -9,6 +9,7 @@ import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
+import { px2 } from '@/Core/parser/utils';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
@@ -63,8 +64,18 @@ export const Load: FC = () => {
           <div className={styles.Save_Load_border} />
           <div className={styles.Save_Load_info}>
             {saveData.saveTime}
-            {'\n'}
-            {saveData.nowStageState.showText}
+            <br />
+            <span
+              style={{
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                width: px2(300),
+              }}
+            >
+              {saveData.nowStageState.showText}
+            </span>
           </div>
         </>
       );

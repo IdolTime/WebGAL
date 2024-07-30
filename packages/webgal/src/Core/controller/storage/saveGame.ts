@@ -48,7 +48,7 @@ export async function generateCurrentStageData(
   if (isSavePreviewImage && !newName) {
     const videoItem = WebGAL.videoManager.videosByKey[WebGAL.videoManager.currentPlayingVideo];
 
-    if (videoItem?.player) {
+    if (videoItem) {
       urlToSave = videoItem.poster;
     }
   }

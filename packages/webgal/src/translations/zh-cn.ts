@@ -207,7 +207,7 @@ const zhCn = {
       preserve: '保存',
       read: '读取',
       setting: '设置',
-      backToTitle: '退出游戏',
+      backToTitle: '返回主页',
       collection: '收藏',
       collected: '已收藏',
     },
