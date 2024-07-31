@@ -14,11 +14,17 @@ import { setOptionData } from '@/store/userDataReducer';
 import { RootState } from '@/store/store';
 import { OptionSlider } from './OptionSlider';
 import { useUILight } from '@/hooks/useUILight';
+import { OptionVideoSize } from './OptionVideoSize';
 
 enum optionPage {
   'System',
   'Display',
   'Sound',
+}
+
+const configLight = {
+  min: 50,
+  max: 100,
 }
 
 export const Options: FC = () => {
@@ -65,16 +71,21 @@ export const Options: FC = () => {
       />
 
       {/* 视频尺寸 */}
-
+      <OptionVideoSize label={"视频尺寸"}/>
 
       {/* 亮度 */}
       <div className={styles.Options_light_slider}>
         <span className={styles.label}>亮度</span>
         <OptionSlider
           initValue={userDataState.optionData.uiLight}
-          uniqueID="亮度"
+          uniqueID="light"
+          min={configLight.min}
+          max={configLight.max}
           onChange={(event) => {
-            const newValue = Number(event.target.value);
+            let newValue = Number(event.target.value);
+            if (newValue < configLight.min) {
+              newValue = configLight.min;
+            }
             useUILight(newValue);
             dispatch(setOptionData({ key: 'uiLight', value: newValue }));
             setStorage();
@@ -85,7 +96,8 @@ export const Options: FC = () => {
       <div className={styles.Options_sound_slider}>
         <OptionSlider
           initValue={userDataState.optionData.seVolume}
-          uniqueID="音效"
+          // uniqueID="音效"
+          uniqueID="seVolume"
           onChange={(event) => {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'seVolume', value: Number(newValue) }));
@@ -97,7 +109,8 @@ export const Options: FC = () => {
       <div className={styles.Options_main_slider}>
         <OptionSlider
           initValue={userDataState.optionData.volumeMain}
-          uniqueID="全局音量"
+          // uniqueID="全局音量"
+          uniqueID="volumeMain"
           onChange={(event) => {
             const newValue = event.target.value;
             dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));

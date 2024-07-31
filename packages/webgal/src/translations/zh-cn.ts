@@ -3,6 +3,8 @@ const zhCn = {
   common: {
     yes: '是',
     no: '否',
+    cancel: '取消',
+    confirm: '确定',
   },
 
   menu: {

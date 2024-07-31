@@ -1,0 +1,47 @@
+@import 'src/assets/style/px2.scss';
+
+.OptionVideoSize_main {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: px2(300px);
+    left: px2(245px);
+
+    .label {
+        font-size: px2(22px);
+        color: #fff;
+    }
+
+    .option_item {
+        margin-left: px2(100px);
+        position: relative;
+
+        & > span {
+            color: #fff;
+            font-size: px2(22px);
+            margin-right: px2(10px);
+        }
+
+        & > input {
+            width: px2(20px);
+            height: px2(20px);
+            cursor: pointer;
+        }
+
+        .option_item_checkbox {
+            position: absolute;
+            top: px2(6px);
+            left: px2(125px);
+            width: px2(21px);
+            height: px2(21px);
+            background-image: url('@/assets/imgs/check.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            cursor: pointer;
+
+            &_active {
+                background-image: url('@/assets/imgs/checked.png');
+            }
+        }
+    }
+}

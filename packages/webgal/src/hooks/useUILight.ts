@@ -3,9 +3,10 @@
  */
 
 export const useUILight = (value: number) => {
-    const root = document.getElementById('root');
+    // const root = document.getElementById('root');
+    const body = document.body;
     value = typeof value === 'string' ? Number(value) : value;
-    if (root) {
-        root.style.opacity = (value / 100).toFixed(2)
+    if (body) {
+        body.style.opacity = (value / 100).toFixed(2)
     }
 };

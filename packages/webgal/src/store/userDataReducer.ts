@@ -16,6 +16,7 @@ import {
   textFont,
   textSize,
   voiceOption,
+  videoSizeOption
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -37,6 +38,7 @@ const initialOptionSet: IOptionData = {
   voiceInterruption: voiceOption.yes,
   fullScreen: fullScreenOption.off,
   uiLight: 100, // UI亮度
+  videoSize: videoSizeOption.Size720P
 };
 
 // 初始化用户数据
