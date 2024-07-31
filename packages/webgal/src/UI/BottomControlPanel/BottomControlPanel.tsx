@@ -181,6 +181,18 @@ export const BottomControlPanel = () => {
    * 先销毁当前视频，然后执行下一条语句
    */
   const handleSkip = () => {
+    let isNext = true
+    WebGAL.gameplay?.performController?.performList?.forEach((e) => {
+      // 如果当前语句是选择语句，则不跳过
+      if (e.performName === 'choose') {
+        isNext = false;
+      }
+    });
+
+    if (!isNext) {
+      return
+    }
+
     playSeClick();
     const url = WebGAL.videoManager.currentPlayingVideo;
     WebGAL.videoManager.destroy(url);
