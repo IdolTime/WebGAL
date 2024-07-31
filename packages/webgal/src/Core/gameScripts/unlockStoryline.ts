@@ -5,6 +5,7 @@ import { webgalStore } from '@/store/store';
 import { ISaveStoryLine, ISaveStoryLineData } from '@/store/userDataInterface';
 import { getStorylineFromStorage, dumpStorylineToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
+import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 
 /**
  * 解锁故事线
@@ -15,6 +16,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
   console.log('解锁故事线 >>>>>>>> start : ', { sentence });
 
   const asyncAction = async () => {
+    await getCurrentVideoStageDataForStoryLine()
     // 读取本地解锁数据
     await getStorylineFromStorage();
 
