@@ -47,6 +47,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
         const volumeArg = getSentenceArgByKey(sentence, 'volume');
         let seElement = document.createElement('audio');
         seElement.src = await getAudioUrl(url);
+        seElement.load();
         if (isLoop) {
           seElement.loop = true;
         }

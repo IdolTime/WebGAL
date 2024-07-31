@@ -76,6 +76,7 @@ export const AudioContainer = () => {
     const setBgm = async () => {
       const url = await getAudioUrl(isShowTitle ? titleBgm : stageStore.bgm.src);
       setBgmUrl(url);
+      (document.getElementById('currentBgm') as HTMLAudioElement)?.load();
     };
 
     setBgm();
@@ -104,6 +105,7 @@ export const AudioContainer = () => {
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
       uiSeAudioElement.src = url;
+      uiSeAudioElement.load();
       uiSeAudioElement.loop = false;
       // 设置音量
       if (!isNaN(uiSeVol)) {
@@ -138,6 +140,7 @@ export const AudioContainer = () => {
 
     getAudioUrl(stageStore.playVocal).then((url) => {
       setVocalUrl(url);
+      (document.getElementById('currentVocal') as HTMLAudioElement).load();
     });
   }, [stageStore.playVocal]);
 

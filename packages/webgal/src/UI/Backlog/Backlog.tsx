@@ -84,6 +84,7 @@ export const Backlog = () => {
 
                       getAudioUrl(backlogItem.currentStageState.vocal).then(() => {
                         setUrl(url);
+                        backlog_audio_element.load();
                         if (backlog_audio_element) {
                           backlog_audio_element.onloadeddata = () => {
                             backlog_audio_element.play();

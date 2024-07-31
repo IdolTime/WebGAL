@@ -21,6 +21,7 @@ export async function getAudioUrl(url: string): Promise<string> {
     // 如果 Opus 解码失败，尝试使用 Vorbis 解码
     try {
       const audioUrl = await decodeVorbis(uint8BufferArray);
+      console.log(44444, audioUrl);
       return audioUrl;
     } catch (error) {
       console.error('Vorbis 解码失败，无法获取音频', error);
