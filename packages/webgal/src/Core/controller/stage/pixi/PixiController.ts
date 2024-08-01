@@ -440,16 +440,17 @@ export default class PixiStage {
         bgSprite.scale.x = targetScale;
         bgSprite.scale.y = targetScale;
         bgSprite.anchor.set(0.5);
+
+        if (url.includes('.gif')) {
+          transformToGIFAnimation(url, bgSprite, bgX, bgY)
+          return
+        }
+
         bgSprite.position.y = this.stageHeight / 2;
         thisBgContainer.setBaseX(this.stageWidth / 2);
         thisBgContainer.setBaseY(this.stageHeight / 2);
         thisBgContainer.pivot.set(0, this.stageHeight / 2);
-
-        if (url.includes('.gif')) {
-         
-          transformToGIFAnimation(url, bgSprite, bgX, bgY)
-          return
-        }
+        
         // 挂载
         thisBgContainer.addChild(bgSprite);
       }
