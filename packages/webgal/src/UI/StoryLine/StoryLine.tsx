@@ -47,6 +47,7 @@ export const StoryLine: FC = () => {
   const handlPlay = (e: React.MouseEvent, saveData: ISaveStoryLineData) => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
+    dispatch(saveActions.setIsShowUnlock(true));
     loadGameFromStageData(saveData.videoData as ISaveData);
   };
 
