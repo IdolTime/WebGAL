@@ -9,7 +9,7 @@ import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
-import { setshowFavorited } from '@/store/GUIReducer';
+import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
 import { updateShowValueList } from '@/store/stageReducer';
 
 /**
@@ -109,8 +109,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         const endPerform = () => {
-          // 是否为鉴赏视频
+          // 如果为鉴赏模式下播放视频，播放完后自动跳转到鉴赏模式页面
           if (isLoadVideo) {
+            webgalStore.dispatch(
+              setVisibility({ component: 'showExtra', visibility: true })
+            );
             return;
           }
 
