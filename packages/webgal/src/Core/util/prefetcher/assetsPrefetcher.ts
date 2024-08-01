@@ -126,11 +126,11 @@ const loadAssetWithRetry = (
       newLink.setAttribute('rel', 'prefetch');
       newLink.setAttribute('href', url);
       const head = document.getElementsByTagName('head');
+      newLink.onload = onloadCallback;
+      newLink.onerror = onerrorCallback;
       if (head.length) {
         head[0].appendChild(newLink);
       }
-      newLink.onload = onloadCallback;
-      newLink.onerror = onerrorCallback;
     }
   };
 
