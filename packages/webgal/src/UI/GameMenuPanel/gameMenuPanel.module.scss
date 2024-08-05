@@ -33,15 +33,15 @@
     right: 0;
     left: 0;
     bottom: 0;
-    z-index: 20;
+    z-index: 18;
 
     .mask {
         display: block;
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
-        z-index: 21;
-        pointer-events: auto; // 确保遮罩层拦截点击事件
+        z-index: 19;
+        pointer-events: auto;
     }
 
     .gameMenuPanelContent {
@@ -56,12 +56,18 @@
         background-size: contain;
         background-position: center;
 
-        .buttonswrapper {
+        .content {
+            position: relative;
+            height: 100%;
+            height: 100%;
+        }
+
+        .buttons_wrapper {
             height: 100%;
             width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
             position: absolute;
             z-index: 99;
@@ -69,18 +75,17 @@
             .button {
                 width: px2(165px);
                 height: px2(63px);
-                margin-right: px2(42px);
                 background-image: url('@/assets/imgs/game-menu-button-bg.png');
                 background-repeat: no-repeat;
                 background-size: contain;
                 background-position: center;
                 color: #fff;
-                font-size: px2(20+px);
+                font-size: px2(20px);
                 margin-bottom: px2(27px);
                 line-height: px2(63px);
                 text-align: center;
                 transition: transform 0.33s ease-in-out;
-                z-index: 1; // 确保这个值高于遮罩层的 z-index
+                z-index: 1;
 
                 &:hover {
                     color: #fff;
@@ -90,6 +95,37 @@
                     background-size: contain;
                     background-position: center;
                     transform: scale(1.2);
+                }
+
+                .button_text {
+                    font-size: px2(16px);
+                }
+            }
+
+            .button_custom {
+                font-weight: bold;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.33s;
+                cursor: pointer;
+                font-size: px2(20px);
+                color: #fbfbfb;
+                transition: transform 0.33s ease-in-out;
+                z-index: 1; // 确保这个值高于遮罩层的 z-index
+                position: relative;
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+              
+                & > span {
+                    width: inherit;
+                    text-align: center;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
                 }
             }
         }

@@ -198,6 +198,7 @@ const zhCn = {
       options: '选项',
       title: '标题',
       titleTips: '确认返回到标题界面吗',
+      quitTips: '确认退出游戏吗？',
       collection: '收藏',
       collected: '已收藏',
       continue: '继续',

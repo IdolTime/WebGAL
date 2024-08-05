@@ -125,6 +125,19 @@ export interface IUnlockAchieveItem {
   condition?: string;
 }
 
+export interface IScound {
+  key: string;
+  value: boolean | string;
+}
+
+export enum EnumScoundType {
+  Click = 'click',
+  Move = 'move',
+  Error = 'error',
+  Alert = 'alert',
+}
+
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
@@ -154,6 +167,9 @@ export interface IStageState {
     volume: number; // 背景音乐 音量调整（0 - 100）
   };
   uiSe: string; // 用户界面音效 文件地址（相对或绝对）
+  gameSe: string; // 游戏内音效
+  gameScounds: IScound[]; // 游戏内音效
+  menuScounds: IScound[]; // 菜单内音效
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换
