@@ -8,6 +8,7 @@ import useTrans from '@/hooks/useTrans';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 import styles from './gameMenuPanel.module.scss';
 
@@ -61,6 +62,7 @@ export const GameMenuPanel = () => {
     [EecMenuKey.Esc_backToLevel_button]: () => {
       playSeClick();
       setComponentVisibility('isShowGameMenu', false);
+      backToTitle();
     },
 
     [EecMenuKey.Esc_setting_button]: () => {
@@ -78,7 +80,8 @@ export const GameMenuPanel = () => {
         rightText: t('$common.confirm'),
         leftFunc: () => {},
         rightFunc: () => {
-          window.location.href = '/';
+          // window.location.href = '/';
+          backToTitle();
         },
       });
     }

@@ -14,4 +14,5 @@ Esc_continueGame_button:继续游戏 -hide=false -style={};
 Esc_backToLevel_button:返回关卡 -hide=false -style={};
 Esc_setting_button:设置 -hide=false -style={};
 Esc_exitGame_button:退出游戏 -hide=false -style={};
+Game_Icon:;
 

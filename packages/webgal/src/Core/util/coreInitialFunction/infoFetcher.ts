@@ -201,6 +201,17 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_Icon': {
+            if (args[0]) {
+              const faviconUrl = assetSetter(args[0], fileType.background);
+              const dynamicFavicon = document.getElementById('dynamic-favicon') as HTMLLinkElement;
+              if (dynamicFavicon) {
+                dynamicFavicon.href = faviconUrl + `?t=${new Date().getTime()}`;
+              }
+            }
+            break;
+          }
+
           case EecMenuKey.Esc_continueGame_button:
           case EecMenuKey.Esc_backToLevel_button:
           case EecMenuKey.Esc_setting_button:
