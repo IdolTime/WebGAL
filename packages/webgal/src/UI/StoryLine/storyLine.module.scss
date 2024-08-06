@@ -19,7 +19,7 @@ $default_storyLine_bg_y: 720px;
 
     .storyLine_header {
         padding: 10px 30px;
-        position: fixed;
+        position: absolute;
         top: px2(35px);
         left: px2(25px);
         z-index: 100;
