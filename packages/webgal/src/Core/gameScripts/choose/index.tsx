@@ -212,6 +212,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             let ele = document.getElementById(id);
             img.style.width = img.naturalWidth + 'px';
             img.style.height = img.naturalHeight + 'px';
+            img.style.position = 'absolute';
             img.alt = e.text;
 
             if (ele) {
