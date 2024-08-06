@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React, { useRef } from 'react';
+import React from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
@@ -92,6 +92,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  let isJump = false;
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };
@@ -107,7 +108,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           // if (!enable || timer.current) {
           //   return;
           // }
-          if (!enable) {
+          if (!enable && !isJump) {
             return;
           }
           playSeClick();
@@ -124,6 +125,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             jmp(e.jump);
           }
           WebGAL.gameplay.performController.unmountPerform('choose');
+          isJump = false;
         };
         // : () => {};
         const styleObj: Record<string, number | string> = {
@@ -170,6 +172,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             if (time <= 0 && timer.current) {
               clearTimeout(timer as any);
               timer.current = null;
+              isJump = !enable;
               onClick();
             } else {
               timer.current = setTimeout(() => {
