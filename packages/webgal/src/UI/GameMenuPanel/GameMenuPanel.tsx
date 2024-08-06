@@ -80,8 +80,9 @@ export const GameMenuPanel = () => {
         rightText: t('$common.confirm'),
         leftFunc: () => {},
         rightFunc: () => {
-          // window.location.href = '/';
-          backToTitle();
+          setComponentVisibility('isShowGameMenu', false);
+          window.location.href = '/';
+          // backToTitle();
         },
       });
     }
@@ -135,7 +136,7 @@ export const GameMenuPanel = () => {
           styleObj['transform'] = `scale(${style.scale})`;
         }
       }
-      if (typeof style.fontSize === 'number') {
+      if (typeof style.fontSize === 'number' && style.fontSize) {
         styleText['fontSize'] = style.fontSize + 'px';
       }
       if (typeof style.fontColor === 'string' && style.fontColor[0] === '#') {
