@@ -17,6 +17,7 @@ import StoryLine from '@/UI/StoryLine/StoryLine';
 import { Achievement } from '@/UI/Achievement';
 import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
+import { GameMenuPanel } from '@/UI/GameMenuPanel/GameMenuPanel';
 
 function App() {
   useEffect(() => {
@@ -44,6 +45,7 @@ function App() {
       <Achievement />
       <BeautyGuide />
       <ModalR18 />
+      <GameMenuPanel />
     </div>
   );
 }

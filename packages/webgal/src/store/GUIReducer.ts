@@ -93,6 +93,78 @@ export const initState: IGuiState = {
   showBeautyGuideImageDialog: false,
   isShowR18Modal: false, // 是否显示R18内容
   openR18Modal: false,
+  isShowGameMenu: false,
+  escMenus: {
+    Esc_continueGame_button: {
+      content: '',
+      args: {
+        hide: false,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          fontSize: 0,
+          fontColor: '',
+          countdown: 0,
+          btnImage: '',
+          btnPosition: '',
+          align: '',
+          fontFamily: '',
+        },
+      },
+    },
+    Esc_backToLevel_button: {
+      content: '',
+      args: {
+        hide: false,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          fontSize: 0,
+          fontColor: '',
+          btnImage: '',
+          btnPosition: '',
+          align: '',
+          fontFamily: '',
+        },
+      },
+    },
+    Esc_setting_button: {
+      content: '',
+      args: {
+        hide: true,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          fontSize: 0,
+          fontColor: '',
+          btnImage: '',
+          btnPosition: '',
+          align: '',
+          fontFamily: '',
+        },
+      },
+    },
+    Esc_exitGame_button: {
+      content: '',
+      args: {
+        hide: false,
+        style: {
+          x: 0,
+          y: 0,
+          scale: 1,
+          fontSize: 20,
+          fontColor: '',
+          btnImage: '',
+          btnPosition: '',
+          align: '',
+          fontFamily: '',
+        },
+      },
+    },
+  }
 };
 
 /**
@@ -145,6 +217,9 @@ const GUISlice = createSlice({
     setGameR18: (state, action: PayloadAction<boolean>) => {
       state.isShowR18Modal = action.payload;
     },
+    setEscMenus: (state, action: PayloadAction<any>) => {
+      state.escMenus = action.payload;
+    },
   },
 });
 
@@ -157,5 +232,6 @@ export const {
   setshowFavorited,
   setGameMenus,
   setGameR18,
+  setEscMenus,
 } = GUISlice.actions;
 export default GUISlice.reducer;

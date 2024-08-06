@@ -3,13 +3,14 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage, setGameMenus, initState, setGameR18 } from '@/store/GUIReducer';
+import { setGuiAsset, setLogoImage, setGameMenus, initState, setGameR18, setEscMenus } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { GameMenuItem, GameMenuKey } from '@/store/guiInterface';
+import { GameMenuItem, GameMenuKey, EecMenuKey, EscMenuItem } from '@/store/guiInterface';
+import { setStage } from '@/store/stageReducer';
 
 declare global {
   interface Window {
@@ -35,14 +36,15 @@ export const infoFetcher = (url: string) => {
     let gameConfigRaw: string = r.data;
     const gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
-    // 按照游戏的配置开始设置对应的状态
     if (GUIState) {
       // @ts-ignore
       const gameMenus: Record<GameMenuKey, GameMenuItem> = {};
+      // @ts-ignore
+      const escMenus: Record<EecMenuKey, EscMenuItem> = {};
+      let isSHowEscMenu = false;
 
       gameConfig.forEach((e) => {
         const { command, args, options } = e;
-
         switch (command) {
           case 'Title_img': {
             const titleUrl = assetSetter(args.join(''), fileType.background);
@@ -139,10 +141,125 @@ export const infoFetcher = (url: string) => {
             }
             break;
           }
+
+          case 'Game_sound': {
+            console.log(args, options)
+            if (options?.length > 0) {
+              const newOptions = options.map((option) => {
+                if (typeof option.value === 'string') {
+                  const values = option.value?.split(',');
+                  if (values?.length && !boolMap.get(values[0])) {
+                    option.value = values[1] ? assetSetter(values[1], fileType.bgm) : '';
+                  }
+                }
+                return option;
+              })
+
+              dispatch(setStage({ key: 'gameScounds', value: newOptions }));
+
+              // options.forEach((option) => {
+              //   switch (option.key) {
+              //     case 'click': {
+              //       if (typeof option.value === 'string') {
+              //         const values = option.value?.split(',');
+              //         if (values?.length > 0 && !boolMap.get(values[0])) {
+              //             if (values[1] && values[1] !== '') {
+              //               const menuClickSoundUrl = assetSetter(values[1], fileType.bgm);
+              //               dispatch(setStage({ key: 'gameSe', value: menuClickSoundUrl }));
+              //             }
+              //         } else {
+              //           dispatch(setStage({ key: 'gameSe', value: '' }));
+              //         }
+              //       } else {
+              //         dispatch(setStage({ key: 'gameSe', value: '' }));
+              //       }
+              //       break;  
+              //     }
+              //     case 'move': {
+              //       break;  
+              //     }
+              //   }
+              // })
+            }
+            break;
+          }
+
+          case 'Menu_sound': {
+            console.log(args, options)
+            if (options?.length > 0) {
+              const newOptions = options.map((option) => {
+                if (typeof option.value === 'string') {
+                  const values = option.value?.split(',');
+                  if (values?.length && !boolMap.get(values[0])) {
+                    option.value = values[1] ? assetSetter(values[1], fileType.bgm) : '';
+                  }
+                }
+                return option;
+              })
+              dispatch(setStage({ key: 'menuScounds', value: newOptions }));
+            }
+            break;
+          }
+
+          case 'Game_Icon': {
+            if (args[0]) {
+              const faviconUrl = assetSetter(args[0], fileType.background);
+              const dynamicFavicon = document.getElementById('dynamic-favicon') as HTMLLinkElement;
+              if (dynamicFavicon) {
+                dynamicFavicon.href = faviconUrl + `?t=${new Date().getTime()}`;
+              }
+            }
+            break;
+          }
+
+          case EecMenuKey.Esc_continueGame_button:
+          case EecMenuKey.Esc_backToLevel_button:
+          case EecMenuKey.Esc_setting_button:
+          case EecMenuKey.Esc_exitGame_button: {
+
+            if (!options?.length) break;
+            
+            let name = '',
+                hide = false;
+            const styleObj = {};
+            // 需要转换为 number 类型的数组
+            const numberArray = ['x', 'y', 'scale', 'fontSize',];
+
+            options?.forEach((item) => {
+              (item.value as string)?.split(',').forEach(pair => {
+                const [key, value] = pair?.split('=');
+                if (key === 'name') {
+                  name = value;
+                } else if ( key === 'hide') {
+                  hide = boolMap?.get(value) ?? false;
+                } else {
+                  // @ts-ignore
+                  styleObj[key] = numberArray.includes(key) ? Number(value) : value;
+                }
+              });
+            });
+ 
+            const oldStyle: EscMenuItem['args']['style'] = { ...initState.escMenus[EecMenuKey[command]].args.style };
+
+            escMenus[EecMenuKey[command]] = {
+              content: name,
+              args: {
+                hide,
+                style: {
+                  ...oldStyle,
+                  ...styleObj
+                },
+              },
+            };
+
+            isSHowEscMenu = true;
+            break;
+          }
         }
       });
-
+      
       dispatch(setGameMenus(gameMenus));
+      isSHowEscMenu && dispatch(setEscMenus(escMenus));
     }
     window?.renderPromise?.();
     delete window.renderPromise;
