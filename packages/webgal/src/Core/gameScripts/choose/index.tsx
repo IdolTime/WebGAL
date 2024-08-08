@@ -13,19 +13,22 @@ import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { buyChapter, getIsBuy } from '@/services/store';
+import { current } from '@reduxjs/toolkit';
 
 class ChooseOption {
   /**
    * 格式：
    * (showConditionVar>1)[enableConditionVar>2]->${x=1,y=1,scale=1,image=./assets/baidu.png,fontSize:24,fontColor:#fff}text:jump
    */
-  public static parse(script: string): ChooseOption {
+  public static parse(script: string, loadingRef: { current: Record<string, boolean> }): ChooseOption {
     const parts = script.split('->');
     const conditonPart = parts.length > 1 ? parts[0] : null;
     const mainPart = parts.length > 1 ? parts[1] : parts[0];
     const mainPartNodes = mainPart.split(':');
 
-    const text = mainPartNodes[0].replace(/\${[^{}]*}/, '');
+    const text = mainPartNodes[0].replace(/[\$\#]{[^{}]*}/, '');
     const option = new ChooseOption(text, mainPartNodes[1]);
 
     // Extract style information
@@ -47,6 +50,40 @@ class ChooseOption {
       option.style = style;
     }
 
+    const payInfoMatch = /\#\{(.*?)\}/.exec(mainPart);
+    if (payInfoMatch) {
+      const payInfoStr = payInfoMatch[1];
+      const payInfoProps = payInfoStr.split(',');
+      let productId = 0;
+      let amount = 0;
+
+      payInfoProps.forEach((prop) => {
+        const [key, value] = prop.split('=');
+        if (key === 'productId') {
+          productId = isNaN(Number(value.trim())) ? 0 : Number(value.trim());
+        } else if (key === 'amount') {
+          amount = isNaN(Number(value.trim())) ? 0 : Number(value.trim());
+        }
+      });
+
+      const item = webgalStore
+        .getState()
+        .storeData.paymentConfigurationList.find((item) => item.product_id === productId);
+
+      if (productId > 0 && amount > 0) {
+        option.shouldPay = true;
+        option.productId = productId;
+        option.amount = amount;
+        getIsBuy(productId).then((res) => {
+          loadingRef.current[productId] = true;
+        });
+      }
+
+      if (item?.is_buy === true) {
+        option.hasBought = true;
+      }
+    }
+
     if (conditonPart !== null) {
       const showConditionPart = conditonPart.match(/\((.*)\)/);
       if (showConditionPart) {
@@ -65,6 +102,10 @@ class ChooseOption {
   public jumpToScene: boolean;
   public showCondition?: string;
   public enableCondition?: string;
+  public shouldPay?: boolean;
+  public amount?: number;
+  public productId?: number;
+  public hasBought?: boolean;
   public style?: {
     x?: number;
     y?: number;
@@ -88,7 +129,8 @@ class ChooseOption {
  */
 export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
-  const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e));
+  const loadingRef: { current: Record<string, boolean> } = { current: {} };
+  const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e, loadingRef));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
@@ -108,19 +150,110 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             return;
           }
           playSeClick();
-          chooseCallback?.();
-          if (timer.current) {
-            clearTimeout(timer.current);
-            timer.current = null;
-          }
+          const continueCallback = () => {
+            chooseCallback?.();
+            if (timer.current) {
+              clearTimeout(timer.current);
+              timer.current = null;
+            }
 
-          if (e.jumpToScene) {
-            const sceneName = e.jump.split('./game/scene/')[1];
-            changeScene(e.jump, sceneName);
-          } else {
-            jmp(e.jump);
+            if (e.jumpToScene) {
+              const sceneName = e.jump.split('./game/scene/')[1];
+              changeScene(e.jump, sceneName);
+            } else {
+              jmp(e.jump);
+            }
+            WebGAL.gameplay.performController.unmountPerform('choose');
+          };
+
+          if (e.shouldPay) {
+            const confirmCallback = () => {
+              // @ts-ignore
+              window.pubsub.publish('loading', { loading: true });
+              buyChapter(e.productId ?? 0)
+                .then((res) => {
+                  // @ts-ignore
+                  window.pubsub.publish('loading', { loading: false });
+
+                  if (res.code === 0) {
+                    // @ts-ignore
+                    window.pubsub.publish('toaster', { show: true, text: '购买成功' });
+                    continueCallback();
+                  } else if (res.code === 10014) {
+                    // @ts-ignore
+                    window.pubsub.publish('toaster', { show: true, text: '余额不足，请充值' });
+                  } else {
+                    // @ts-ignore
+                    window.pubsub.publish('toaster', { show: true, text: res.message });
+                  }
+                })
+                .catch(() => {
+                  // @ts-ignore
+                  window.pubsub.publish('loading', { loading: false });
+                });
+            };
+            let hasBought = false;
+
+            const item = webgalStore
+              .getState()
+              .storeData.paymentConfigurationList.find((i) => i.product_id === e.productId);
+
+            if (item) {
+              hasBought = item.is_buy;
+            }
+
+            if (hasBought) {
+              if (loadingRef.current[e.productId || '']) {
+                continueCallback();
+              } else {
+                getIsBuy(e.productId ?? 0).then((res) => {
+                  if (res.code === 0) {
+                    loadingRef.current[e.productId || ''] = true;
+                    if (res.data.is_buy) {
+                      continueCallback();
+                    } else {
+                      showGlogalDialog({
+                        title: `确认要花费${e.amount}星光\n解锁该隐藏选项吗？`,
+                        leftText: '否',
+                        rightText: '是',
+                        leftFunc: () => {},
+                        rightFunc: confirmCallback,
+                      });
+                    }
+                  }
+                });
+              }
+              return;
+            }
+
+            if (loadingRef.current[e.productId || ''] && !hasBought) {
+              showGlogalDialog({
+                title: `确认要花费${e.amount}星光\n解锁该隐藏选项吗？`,
+                leftText: '否',
+                rightText: '是',
+                leftFunc: () => {},
+                rightFunc: confirmCallback,
+              });
+            } else {
+              getIsBuy(e.productId ?? 0).then((res) => {
+                if (res.code === 0) {
+                  loadingRef.current[e.productId || ''] = true;
+                  if (res.data.is_buy) {
+                    continueCallback();
+                  } else {
+                    showGlogalDialog({
+                      title: `确认要花费${e.amount}星光\n解锁该隐藏选项吗？`,
+                      leftText: '否',
+                      rightText: '是',
+                      leftFunc: () => {},
+                      rightFunc: confirmCallback,
+                    });
+                  }
+                }
+              });
+            }
+            return;
           }
-          WebGAL.gameplay.performController.unmountPerform('choose');
         };
         // : () => {};
         const styleObj: Record<string, number | string> = {
@@ -230,7 +363,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               onClick={onClick}
               onMouseEnter={enable ? playSeEnter : undefined}
             >
-              <span>{e.text}</span>
+              <span>
+                {e.text}
+                {!e.hasBought && e.shouldPay && (
+                  <span style={{ marginLeft: 8, fontSize: '0.7em' }}>(需要{e.amount}星光解锁)</span>
+                )}
+              </span>
             </div>
           );
         }
@@ -244,6 +382,9 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             onMouseEnter={enable ? playSeEnter : undefined}
           >
             {e.text}
+            {!e.hasBought && e.shouldPay && (
+              <span style={{ marginLeft: 8, fontSize: '0.7em' }}>(需要{e.amount}星光解锁)</span>
+            )}
           </div>
         );
       });
@@ -255,7 +396,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   );
   return {
     performName: 'choose',
-    duration: 1000 * 60 * 60 * 24,
+    duration: 1000 * 60 * 60 * 24 * 3650,
     isHoldOn: false,
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated

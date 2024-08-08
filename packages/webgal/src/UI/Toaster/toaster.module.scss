@@ -1,0 +1,56 @@
+@import 'src/assets/style/px2.scss';
+
+.Toaster_container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  border-radius: px2(5px);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: px2(10px) px2(15px);
+  font-size: px2(18px);
+  animation: Toaster_fadein 0.5s ease-out forwards;
+
+  .Toaster_image {
+    position: relative;
+  }
+}
+
+.Toaster_image {
+  border-radius: 0;
+  background: transparent;
+
+  .Toaster_text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.Toaster_out {
+  animation: Toaster_fadeout 0.5s ease-out forwards;
+}
+
+@keyframes Toaster_fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes Toaster_fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -133,6 +133,11 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_id': {
+            WebGAL.gameId = isNaN(Number(args[0])) ? 0 : Number(args[0]);
+            break;
+          }
+
           case 'Game_r18': {
             if (args?.length > 0) {
               dispatch(setGameR18(!!boolMap.get(args[0])));
@@ -145,6 +150,8 @@ export const infoFetcher = (url: string) => {
       dispatch(setGameMenus(gameMenus));
     }
     window?.renderPromise?.();
+    // @ts-ignore
+    window.pubsub.publish('gameReady');
     delete window.renderPromise;
     initKey();
   });

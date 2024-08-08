@@ -79,7 +79,6 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
   // 播放视频
   if (isLoadVideo) {
     dispatch(saveActions.setLoadVideo(true));
-    console.log(33333, loadFile)
     loadFile.nowStageState.PerformList.forEach((e) => {
       runScript(e.script);
     });

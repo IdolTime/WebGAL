@@ -10,7 +10,6 @@ import { bindExtraFunc } from '@/Core/util/coreInitialFunction/bindExtraFunc';
 import { webSocketFunc } from '@/Core/util/syncWithEditor/webSocketFunc';
 import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from './util/prefetcher/scenePrefetcher';
-import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import axios from 'axios';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
@@ -63,10 +62,6 @@ export const initializeScript = (): void => {
     const unlockAchieveList = sentenceList?.filter((e: any) => e?.commandRaw === 'unlockAchieve');
     webgalStore.dispatch(saveActions.setUnlockAchieveAllTotal(unlockAchieveList?.length ?? 0));
   });
-  /**
-   * 启动Pixi
-   */
-  WebGAL.gameplay.pixiStage = new PixiStage();
 
   /**
    * iOS 设备 卸载所有 Service Worker

@@ -46,6 +46,7 @@ export const initState: IUserData = {
     bgm: [],
     cg: [],
   },
+  token: '',
 };
 
 const userDataSlice = createSlice({
@@ -131,6 +132,9 @@ const userDataSlice = createSlice({
     resetAllData(state) {
       Object.assign(state, cloneDeep(initState));
     },
+    setToken(state, action: PayloadAction<string>) {
+      state.token = action.payload;
+    },
   },
 });
 
@@ -144,5 +148,6 @@ export const {
   unlockBgmInUserData,
   resetOptionSet,
   resetAllData,
+  setToken,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;

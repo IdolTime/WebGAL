@@ -13,6 +13,7 @@ export class WebgalCore {
   public gameplay = new Gameplay();
   public gameName = '';
   public gameKey = '';
+  public gameId = 0;
   public events = new Events();
   public videoManager = new VideoManager();
 }

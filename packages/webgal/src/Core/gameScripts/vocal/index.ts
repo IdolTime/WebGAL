@@ -182,22 +182,8 @@ export const playVocal = (sentence: ISentence) => {
           }
 
           (VocalControl as HTMLAudioElement).onloadeddata = () => {
-            console.log(5555);
             VocalControl?.play();
           };
-
-          (VocalControl as HTMLAudioElement).oncanplaythrough = () => {
-            console.log('Can play through');
-          };
-
-          VocalControl.onloadstart = () => {
-            console.log('Loading started');
-          };
-          
-          VocalControl.onloadedmetadata = () => {
-            console.log('Metadata loaded');
-          };
-          
 
           VocalControl.onended = () => {
             for (const e of WebGAL.gameplay.performController.performList) {

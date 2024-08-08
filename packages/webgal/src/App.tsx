@@ -1,6 +1,6 @@
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { initializeScript } from './Core/initializeScript';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
@@ -19,17 +19,46 @@ import StoryLine from '@/UI/StoryLine/StoryLine';
 import { Achievement } from '@/UI/Achievement';
 import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
+import { useDispatch } from 'react-redux';
+import { setToken } from './store/userDataReducer';
+import { getPaymentConfigList } from './services/store';
+import { setPaymentConfigurationList } from './store/storeReducer';
+import { WebGAL } from '@/Core/WebGAL';
+import PixiStage from '@/Core/controller/stage/pixi/PixiController';
+import { Toaster } from './UI/Toaster/Toaster';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     initializeScript();
+    const token = localStorage.getItem('editor-token');
+    const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
+    if (tokenFromQuery) {
+      setLoggedIn(true);
+      dispatch(setToken(tokenFromQuery || ''));
+      // @ts-ignore
+      window.pubsub.subscribe('gameReady', () => {
+        /**
+         * 启动Pixi
+         */
+        WebGAL.gameplay.pixiStage = new PixiStage();
+        getPaymentConfigList();
+      });
+    } else {
+      alert('请先登录');
+    }
   }, []);
 
   useFullScreen();
 
+  if (!loggedIn) return null;
+
   // Provider用于对各组件提供状态
   return (
     <div className="App">
+      <Toaster />
       <Loading />
       <Translation />
       <Stage />

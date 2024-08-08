@@ -34,6 +34,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'unlockAchieve', scriptType: commandType.unlockAchieve },
   { scriptString: 'unlockStoryline', scriptType: commandType.unlockStoryline },
   { scriptString: 'showValue', scriptType: commandType.showValue },
+  { scriptString: 'payProduct', scriptType: commandType.payProduct },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
