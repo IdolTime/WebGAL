@@ -33,7 +33,7 @@ export const buyChapter = (productId: number) => {
       console.error(err);
       return {
         code: -999,
-        data: false,
+        data: null,
         message: '购买失败，请稍后重试',
       };
     });
@@ -101,7 +101,7 @@ export const getGameInfo = () => {
       console.error(err);
       return {
         code: -999,
-        data: false,
+        data: null,
         message: '获取游戏信息失败',
       };
     });

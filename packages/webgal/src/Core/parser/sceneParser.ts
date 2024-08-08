@@ -38,7 +38,8 @@ import { applyStyle } from '@/Core/gameScripts/applyStyle';
 import { unlockStoryline } from '@/Core/gameScripts/unlockStoryline';
 import { unlockAchieve } from '@/Core/gameScripts/achieve/unlockAchieve';
 import { showValue } from '@/Core/gameScripts/showValue';
-import { payProduct } from '../gameScripts/payProduct';
+import { payProduct } from '@/Core/gameScripts/payProduct';
+import { finishTrial } from '@/Core/gameScripts/finishTrial';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -76,6 +77,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   unlockStoryline: ScriptConfig(commandType.unlockStoryline, unlockStoryline, { next: true }),
   showValue: ScriptConfig(commandType.showValue, showValue, { next: true }),
   payProduct: ScriptConfig(commandType.payProduct, payProduct),
+  finishTrial: ScriptConfig(commandType.finishTrial, finishTrial),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 

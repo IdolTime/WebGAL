@@ -1,0 +1,68 @@
+@import 'src/assets/style/px2.scss';
+
+.FinishTrial_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background: rgba(15, 37, 64, 0.39);
+}
+
+.FinishTrial_inner {
+  position: relative;
+}
+
+.FinishTrial_close {
+    position: absolute;
+    right: px2(13px);
+    top: px2(6px);
+}
+
+.FinishTrial_price {
+    position: absolute;
+    top: px2(96px);
+    left: px2(221px);
+    color: #7C6267;
+    font-family: Inter;
+    font-size: px2(30px);
+    line-height: px2(36px);
+}
+
+.FinishTrial_btn {
+    position: absolute;
+    left: px2(191px);
+    top: px2(197px);
+    width: px2(165px);
+    height: px2(63px);
+    text-align: center;
+    line-height: px2(63px);
+    font-size: px2(26px);
+    font-family: Inter;
+    color: #fff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('@/assets/imgs/game-menu-button-bg.png');
+    cursor: pointer;
+    transition: transform 0.33s ease-in-out;
+    &:hover {
+      background-image: url('@/assets/imgs/game-menu-button-bg-active.png');
+      color: #fff;
+      transform: scale(1.1, 1.1);
+    }
+  }
+
+
+@keyframes fadeIn_F {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
