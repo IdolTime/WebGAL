@@ -1,3 +1,5 @@
+import { IGameInfo } from '@/services/storeInterface';
+
 export interface IPaymentConfiguration {
   id: number;
   g_id: number;
@@ -16,4 +18,5 @@ export type IPaymentConfigurationList = IPaymentConfiguration[];
 
 export interface IStoreData {
   paymentConfigurationList: IPaymentConfigurationList;
+  gameInfo: IGameInfo | null;
 }

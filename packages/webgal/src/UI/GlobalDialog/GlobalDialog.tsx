@@ -12,9 +12,9 @@ export default function GlobalDialog() {
 
 interface IShowGlobalDialogProps {
   title: string;
-  leftText: string;
+  leftText?: string;
   rightText: string;
-  leftFunc: Function;
+  leftFunc?: Function;
   rightFunc: Function;
 }
 
@@ -23,7 +23,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
     playSeClick();
-    props.leftFunc();
+    props.leftFunc?.();
     hideGlobalDialog();
   };
   const handleRight = () => {
@@ -37,9 +37,11 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
         <div className={styles.glabalDialog_container_inner}>
           <div className={styles.title}>{props.title}</div>
           <div className={styles.button_list}>
-            <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
-              {props.leftText}
-            </div>
+            {!!props.leftText && (
+              <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
+                {props.leftText}
+              </div>
+            )}
             <div className={styles.button} onClick={handleRight} onMouseEnter={playSeEnter}>
               {props.rightText}
             </div>

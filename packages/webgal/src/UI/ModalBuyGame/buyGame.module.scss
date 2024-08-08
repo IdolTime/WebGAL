@@ -1,0 +1,68 @@
+@import '@/assets/style/px2.scss';
+
+.BuyGame_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background: rgba(15, 37, 64, 0.39);
+}
+
+.BuyGame_inner {
+  position: relative;
+  animation: fadeIn 0.33s forwards;
+}
+
+.BuyGame_close {
+  position: absolute;
+  right: px2(12px);
+  top: px2(12px)
+}
+
+.BuyGame_price {
+  position: absolute;
+  left: px2(261px);
+  top: px2(149px);
+  color: #7C6267;
+  font-family: Inter;
+  font-size: px2(50px);
+  line-height: px2(61px);
+}
+
+.BuyGame_button {
+  position: absolute;
+  left: px2(209px);
+  top: px2(212px);
+  width: px2(165px);
+  height: px2(63px);
+  text-align: center;
+  line-height: px2(63px);
+  font-size: px2(26px);
+  font-family: Inter;
+  color: #fff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/game-menu-button-bg.png');
+  cursor: pointer;
+  transition: transform 0.33s ease-in-out;
+  &:hover {
+    background-image: url('@/assets/imgs/game-menu-button-bg-active.png');
+    color: #fff;
+    transform: scale(1.1, 1.1);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

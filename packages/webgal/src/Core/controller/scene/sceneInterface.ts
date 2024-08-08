@@ -42,6 +42,7 @@ export enum commandType {
   unlockStoryline,
   showValue, // 显示变量名称
   payProduct, // 付费
+  finishTrial, // 结束试玩
 }
 
 /**

@@ -55,11 +55,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
     const retry = () => {
       showGlogalDialog({
         title: `网络请求失败\n请重新尝试！`,
-        leftText: '否',
         rightText: '确定',
-        leftFunc: () => {
-          backToTitle();
-        },
         rightFunc: () => checkBuy(true),
       });
     };

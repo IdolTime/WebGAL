@@ -359,11 +359,15 @@
       const percentage = textWrapper.getElementsByTagName('span')[0];
       percentage.innerText = num.toFixed(0) + '%';
     }
-
-    const dispose = window.pubsub.subscribe('sceneAssetsLoaded', ({ sceneName }) => {
-      if (sceneName === 'start.txt') {
-        dispose();
-        if (!progressTimerRef.current) {
+    let loadedRef = {
+      assets: false,
+      gameInfo: false,
+    }
+    const callback1 = () => {
+      if (!loadedRef.assets || !loadedRef.gameInfo) {
+        return;
+      }
+      if (!progressTimerRef.current) {
           downloadCompleteRef.current = 1;
         } else {
           clearTimeout(progressTimerRef.current);
@@ -372,7 +376,20 @@
             show();
           }, 500);
         }
+    }
+
+    const dispose = window.pubsub.subscribe('sceneAssetsLoaded', ({ sceneName }) => {
+      if (sceneName === 'start.txt') {
+        dispose();
+        loadedRef.assets = true;
+        callback1();
       }
+    })
+
+    const dispose2 = window.pubsub.subscribe('gameInfoReady', () => {
+      dispose2();
+      loadedRef.gameInfo = true;
+      callback1();
     })
 
     let enterPromise = new Promise(res => window.enterPromise = res);

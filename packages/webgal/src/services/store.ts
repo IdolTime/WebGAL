@@ -1,7 +1,8 @@
 import { request } from '@/utils/request';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
-import { setPaymentConfigurationList } from '@/store/storeReducer';
+import { setGameInfo, setPaymentConfigurationList } from '@/store/storeReducer';
+import { IGameInfo } from './storeInterface';
 
 export const getPaymentConfigList = () => {
   return request
@@ -44,7 +45,10 @@ export const buyGame = () => {
       gId: WebGAL.gameId,
     })
     .then((res) => {
-      return res.data.data;
+      if (res.data.code === 0) {
+        getGameInfo();
+      }
+      return res.data;
     })
     .catch((err) => {
       console.error(err);
@@ -80,6 +84,25 @@ export const getIsBuy = (productId: number) => {
         code: -999,
         data: false,
         message: '获取购买状态失败',
+      };
+    });
+};
+
+export const getGameInfo = () => {
+  return request
+    .get<{ code: number; message: string; data: IGameInfo }>('/game/get_game_info?gId=' + WebGAL.gameId)
+    .then((res) => {
+      if (res.data.code === 0) {
+        webgalStore.dispatch(setGameInfo(res.data.data));
+      }
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+      return {
+        code: -999,
+        data: false,
+        message: '获取游戏信息失败',
       };
     });
 };

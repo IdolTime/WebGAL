@@ -8,7 +8,7 @@ import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
 import { Backlog } from '@/UI/Backlog/Backlog';
 import { Extra } from '@/UI/Extra/Extra';
 import { BottomControlPanelFilm } from '@/UI/BottomControlPanel/BottomControlPanelFilm';
-import GlobalDialog from '@/UI/GlobalDialog/GlobalDialog';
+import GlobalDialog, { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import DevPanel from '@/UI/DevPanel/DevPanel';
 import Translation from '@/UI/Translation/Translation';
 import { PanicOverlay } from '@/UI/PanicOverlay/PanicOverlay';
@@ -21,11 +21,12 @@ import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 import { useDispatch } from 'react-redux';
 import { setToken } from './store/userDataReducer';
-import { getPaymentConfigList } from './services/store';
-import { setPaymentConfigurationList } from './store/storeReducer';
+import { getGameInfo, getPaymentConfigList } from './services/store';
+import { setGameInfo, setPaymentConfigurationList } from './store/storeReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { Toaster } from './UI/Toaster/Toaster';
+import { ModalBuyGame } from './UI/ModalBuyGame/ModalBuyGame';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -44,6 +45,22 @@ function App() {
          * 启动Pixi
          */
         WebGAL.gameplay.pixiStage = new PixiStage();
+        getGameInfo().then((res) => {
+          if (res.code === 0) {
+            // @ts-ignore
+            window.pubsub.publish('gameInfoReady');
+          } else {
+            // @ts-ignore
+            window.pubsub.publish('gameInfoReady');
+            showGlogalDialog({
+              title: '获取游戏信息失败\n请刷新页面！',
+              rightText: '确定',
+              rightFunc: () => {
+                window.location.reload();
+              },
+            });
+          }
+        });
         getPaymentConfigList();
       });
     } else {
@@ -58,6 +75,7 @@ function App() {
   // Provider用于对各组件提供状态
   return (
     <div className="App">
+      <ModalBuyGame />
       <Toaster />
       <Loading />
       <Translation />

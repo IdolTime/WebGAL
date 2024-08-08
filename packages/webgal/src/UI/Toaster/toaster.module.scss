@@ -14,7 +14,6 @@
   background: rgba(0, 0, 0, 0.5);
   padding: px2(10px) px2(15px);
   font-size: px2(18px);
-  animation: Toaster_fadein 0.5s ease-out forwards;
 
   .Toaster_image {
     position: relative;
@@ -24,6 +23,9 @@
 .Toaster_image {
   border-radius: 0;
   background: transparent;
+  display: block;
+  padding: 0;
+  top: auto;
 
   .Toaster_text {
     position: absolute;
@@ -33,11 +35,22 @@
   }
 }
 
+.Toaster_fadeIn {
+  animation: K_Toaster_fadein 0.5s ease-out forwards;
+}
+
+.Toaster_slideIn {
+  left: 50%;
+  bottom: px2(61px);
+  transform: translateX(-50%) translateY(0);
+  animation: K_Toaster_slidein 0.5s ease-out forwards;
+}
+
 .Toaster_out {
-  animation: Toaster_fadeout 0.5s ease-out forwards;
+  animation: K_Toaster_fadeout 0.5s ease-out forwards;
 }
 
-@keyframes Toaster_fadein {
+@keyframes K_Toaster_fadein {
   0% {
     opacity: 0;
   }
@@ -46,11 +59,20 @@
   }
 }
 
-@keyframes Toaster_fadeout {
+@keyframes K_Toaster_fadeout {
   0% {
     opacity: 1;
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes K_Toaster_slidein {
+  0% {
+    transform: translateX(-50%) translateY(100%);
+  }
+  100% {
+  transform: translateX(-50%) translateY(0);
   }
 }

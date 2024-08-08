@@ -11,28 +11,63 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 
 /**
  * 从头开始游戏
  */
 export const startGame = () => {
-  resetStage(true, true, false);
+  const gameInfo = webgalStore.getState().storeData.gameInfo;
+  const startGameCallback = () => {
+    resetStage(true, true, false);
 
-  // 重新获取初始场景
-  const sceneUrl: string = assetSetter('start.txt', fileType.scene);
-  // 场景写入到运行时
-  sceneFetcher(sceneUrl).then((rawScene) => {
-    WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl, true).then((scene) => {
-      if (scene) {
-        // 开始第一条语句
-        nextSentence();
-      }
+    // 重新获取初始场景
+    const sceneUrl: string = assetSetter('start.txt', fileType.scene);
+    // 场景写入到运行时
+    sceneFetcher(sceneUrl).then((rawScene) => {
+      WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl, true).then((scene) => {
+        if (scene) {
+          // 开始第一条语句
+          nextSentence();
+        }
+      });
     });
-  });
 
-  webgalStore.dispatch(saveActions.setIsShowUnlock(true));
-  webgalStore.dispatch(saveActions.setShowStoryline(true));
-  webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+    webgalStore.dispatch(saveActions.setIsShowUnlock(true));
+    webgalStore.dispatch(saveActions.setShowStoryline(true));
+    webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  };
+  if (!gameInfo) {
+    showGlogalDialog({
+      title: '获取游戏信息失败\n请刷新页面！',
+      rightText: '确定',
+      rightFunc: () => {
+        window.location.reload();
+      },
+    });
+    return;
+  }
+
+  if (gameInfo.isFree === 1 && gameInfo.tryPlay === 1 && !gameInfo.canPlay) {
+    const buyGameCallback = () => {
+      showGlogalDialog({
+        title: '请购买游戏后开始游戏！',
+        rightText: '确定',
+        rightFunc: () => {
+          // @ts-ignore
+          window.pubsub.publish('showBuyGameModal', {
+            buyGameCallback,
+            startGameCallback,
+          });
+        },
+      });
+    };
+
+    buyGameCallback();
+    return;
+  }
+
+  startGameCallback();
 };
 
 export async function continueGame() {
