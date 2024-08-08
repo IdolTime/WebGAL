@@ -9,12 +9,20 @@ axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
 axiosInstance.interceptors.request.use(
   (config: any) => {
     const token = webgalStore.getState().userData.token; // 获取 token
+    const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
+    const editorToken = localStorage.getItem('editor-token'); // 获取 editor token
+
     if (token) {
-      config.headers = {
-        ...config.headers,
-        token,
-        source: 'web',
-      };
+      config.headers = isPreviewMode
+        ? {
+            ...config.headers,
+            editorToken,
+          }
+        : {
+            ...config.headers,
+            token,
+            source: 'web',
+          };
     }
     return config;
   },

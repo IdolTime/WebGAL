@@ -23,6 +23,22 @@ export const getPaymentConfigList = () => {
     });
 };
 
+export const getEditorGameDetail = () => {
+  return request
+    .post('/editor/game/detail', { gId: WebGAL.gameId })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+      return {
+        code: -999,
+        data: null,
+        message: '获取游戏信息失败',
+      };
+    });
+};
+
 export const buyChapter = (productId: number) => {
   return request
     .post('/game/buy_chapter', { gId: WebGAL.gameId, productId })

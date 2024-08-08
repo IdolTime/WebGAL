@@ -27,6 +27,19 @@ import styles from './finishTrial.module.scss';
  * @param sentence
  */
 export const finishTrial = (sentence: ISentence): IPerform => {
+  if (webgalStore.getState().storeData.isEditorPreviewMode) {
+    return {
+      performName: getRandomPerformName(),
+      duration: 0,
+      isHoldOn: false,
+      stopFunction: () => {},
+      blockingNext: () => false,
+      blockingAuto: () => true,
+      stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+      goNextWhenOver: true,
+    };
+  }
+
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };

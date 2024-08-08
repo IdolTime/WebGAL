@@ -37,6 +37,12 @@ export const startGame = () => {
     webgalStore.dispatch(saveActions.setShowStoryline(true));
     webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   };
+
+  if (webgalStore.getState().storeData.isEditorPreviewMode) {
+    startGameCallback();
+    return;
+  }
+
   if (!gameInfo) {
     showGlogalDialog({
       title: '获取游戏信息失败\n请刷新页面！',

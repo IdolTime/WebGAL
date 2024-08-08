@@ -21,8 +21,8 @@ import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 import { useDispatch } from 'react-redux';
 import { setToken } from './store/userDataReducer';
-import { getGameInfo, getPaymentConfigList } from './services/store';
-import { setGameInfo, setPaymentConfigurationList } from './store/storeReducer';
+import { getEditorGameDetail, getGameInfo, getPaymentConfigList } from './services/store';
+import { setGameInfo, setIsEditorPreviewMode, setPaymentConfigurationList } from './store/storeReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { Toaster } from './UI/Toaster/Toaster';
@@ -36,32 +36,70 @@ function App() {
     initializeScript();
     const token = localStorage.getItem('editor-token');
     const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
-    if (tokenFromQuery) {
+    if (tokenFromQuery || token) {
       setLoggedIn(true);
       dispatch(setToken(tokenFromQuery || ''));
-      // @ts-ignore
-      window.pubsub.subscribe('gameReady', () => {
+      let refObject = {
+        current: {
+          gameReady: false,
+          previewMode: false,
+          previewModeValue: false,
+        },
+      };
+      const checkCallback = () => {
+        if (refObject.current.gameReady && !refObject.current.previewMode) return;
         /**
          * 启动Pixi
          */
         WebGAL.gameplay.pixiStage = new PixiStage();
-        getGameInfo().then((res) => {
-          if (res.code === 0) {
+        if (refObject.current.previewModeValue) {
+          getEditorGameDetail().then((res) => {
             // @ts-ignore
             window.pubsub.publish('gameInfoReady');
-          } else {
-            // @ts-ignore
-            window.pubsub.publish('gameInfoReady');
-            showGlogalDialog({
-              title: '获取游戏信息失败\n请刷新页面！',
-              rightText: '确定',
-              rightFunc: () => {
-                window.location.reload();
-              },
-            });
-          }
-        });
-        getPaymentConfigList();
+            const authorInfoStr = localStorage.getItem('editorUserInfo') || '{}';
+            const authorInfo = JSON.parse(authorInfoStr);
+
+            if (res.code === 0) {
+              if (res.data.authorId !== authorInfo.userId) {
+                dispatch(setIsEditorPreviewMode(false));
+                setLoggedIn(false);
+                alert('不可预览非本人的游戏');
+                return;
+              }
+            }
+          });
+        } else {
+          getGameInfo().then((res) => {
+            if (res.code === 0) {
+              // @ts-ignore
+              window.pubsub.publish('gameInfoReady');
+            } else {
+              // @ts-ignore
+              window.pubsub.publish('gameInfoReady');
+              showGlogalDialog({
+                title: '获取游戏信息失败\n请刷新页面！',
+                rightText: '确定',
+                rightFunc: () => {
+                  window.location.reload();
+                },
+              });
+            }
+          });
+          getPaymentConfigList();
+        }
+      };
+      // @ts-ignore
+      window.pubsub.subscribe('gameReady', () => {
+        refObject.current.gameReady = true;
+        checkCallback();
+      });
+
+      // @ts-ignore
+      window.pubsub.subscribe('isPreviewMode', (value) => {
+        refObject.current.previewMode = true;
+        refObject.current.previewModeValue = value;
+        dispatch(setIsEditorPreviewMode(true));
+        checkCallback();
       });
     } else {
       alert('请先登录');

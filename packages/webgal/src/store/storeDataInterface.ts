@@ -19,4 +19,5 @@ export type IPaymentConfigurationList = IPaymentConfiguration[];
 export interface IStoreData {
   paymentConfigurationList: IPaymentConfigurationList;
   gameInfo: IGameInfo | null;
+  isEditorPreviewMode: boolean;
 }

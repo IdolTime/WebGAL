@@ -51,7 +51,7 @@ class ChooseOption {
     }
 
     const payInfoMatch = /\#\{(.*?)\}/.exec(mainPart);
-    if (payInfoMatch) {
+    if (payInfoMatch && webgalStore.getState().storeData.isEditorPreviewMode === false) {
       const payInfoStr = payInfoMatch[1];
       const payInfoProps = payInfoStr.split(',');
       let productId = 0;

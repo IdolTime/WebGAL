@@ -75,7 +75,7 @@ export const webSocketFunc = () => {
   };
   socket.onerror = (e) => {
     // @ts-ignore
-    window.pubsub.publish('isPreviewMode', true);
+    window.pubsub.publish('isPreviewMode', false);
     logger.info('当前没有连接到 Terre 编辑器');
   };
 };
