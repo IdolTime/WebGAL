@@ -156,30 +156,6 @@ export const infoFetcher = (url: string) => {
               })
 
               dispatch(setStage({ key: 'gameScounds', value: newOptions }));
-
-              // options.forEach((option) => {
-              //   switch (option.key) {
-              //     case 'click': {
-              //       if (typeof option.value === 'string') {
-              //         const values = option.value?.split(',');
-              //         if (values?.length > 0 && !boolMap.get(values[0])) {
-              //             if (values[1] && values[1] !== '') {
-              //               const menuClickSoundUrl = assetSetter(values[1], fileType.bgm);
-              //               dispatch(setStage({ key: 'gameSe', value: menuClickSoundUrl }));
-              //             }
-              //         } else {
-              //           dispatch(setStage({ key: 'gameSe', value: '' }));
-              //         }
-              //       } else {
-              //         dispatch(setStage({ key: 'gameSe', value: '' }));
-              //       }
-              //       break;  
-              //     }
-              //     case 'move': {
-              //       break;  
-              //     }
-              //   }
-              // })
             }
             break;
           }
@@ -226,17 +202,19 @@ export const infoFetcher = (url: string) => {
             const numberArray = ['x', 'y', 'scale', 'fontSize',];
 
             options?.forEach((item) => {
-              (item.value as string)?.split(',').forEach(pair => {
-                const [key, value] = pair?.split('=');
-                if (key === 'name') {
-                  name = value;
-                } else if ( key === 'hide') {
-                  hide = boolMap?.get(value) ?? false;
-                } else {
-                  // @ts-ignore
-                  styleObj[key] = numberArray.includes(key) ? Number(value) : value;
-                }
-              });
+              if (typeof item.value === 'string') {
+                (item.value as string)?.split(',')?.forEach(pair => {
+                  const [key, value] = pair?.split('=');
+                  if (key === 'name') {
+                    name = value;
+                  } else if ( key === 'hide') {
+                    hide = boolMap?.get(value) ?? false;
+                  } else {
+                    // @ts-ignore
+                    styleObj[key] = numberArray.includes(key) ? Number(value) : value;
+                  }
+                });
+              }
             });
  
             const oldStyle: EscMenuItem['args']['style'] = { ...initState.escMenus[EecMenuKey[command]].args.style };

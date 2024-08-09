@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { setVisibility } from '@/store/GUIReducer';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
@@ -97,9 +98,17 @@ export const Load: FC = () => {
 
   const t = useTrans('menu.');
 
+  const handleGoBack = () => {
+    playSeClick();
+    dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+  }
+
   return (
     <div className={styles.Save_Load_main}>
       <div className={styles.Save_Load_top}>
+        <div className={styles.goback} onClick={handleGoBack} onMouseEnter={playSeEnter}>
+          {/* 返回 */}
+        </div>
         <div className={styles.Save_Load_title}>
           <div className={styles.Load_title_text}>{t('loadSaving.title')}</div>
         </div>
