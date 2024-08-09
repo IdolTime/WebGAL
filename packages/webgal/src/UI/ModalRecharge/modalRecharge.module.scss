@@ -1,0 +1,285 @@
+@import 'src/assets/style/px2.scss';
+
+.Recharge_container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  background: rgba(15, 37, 64, 0.39);
+}
+
+.Recharge_inner {
+  position: relative;
+  animation: fadeIn 0.33s forwards;
+  background: linear-gradient(180deg, #EAE7FE 0%, #F9EAFB 100%);
+  border-radius: px2(12px) !important;
+  padding: px2(20px) px2(120px) !important;
+  box-shadow: 0 px2(6px) px2(16px) 0 rgba(0, 0, 0, 0.08), 0 px2(3px) px2(6px) px2(-4px) rgba(0, 0, 0, 0.12), 0 px2(9px) px2(28px) px2(8px) rgba(0, 0, 0, 0.05);
+}
+
+.RechargeModal_modalTitle {
+  display: flex;
+  justify-content: center;
+
+  div {
+    width: px2(538px);
+    height: px2(42px);
+    background: linear-gradient(90deg, rgba(226, 150, 176, 0) 7.09%, #E296B0 38.86%, #E296B0 64.65%, rgba(226, 150, 176, 0) 100%);
+    text-align: center;
+    color: #FFF8EA;
+    font-family: "PingFang SC";
+    font-size: px2(18px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: px2(42px);
+  }
+}
+
+.RechargeModal_rechargeModalItem {
+  width: px2(169px);
+  height: px2(202px);
+  background-image: url('@/assets/imgs/rechargeCardNor.webp');
+  background-size: contain;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: px2(10px);
+  padding-bottom: px2(12px);
+  box-sizing: border-box;
+}
+
+.RechargeModal_rechargeModalItem.RechargeModal_rechargeModalItemChecked {
+  background-image: url('@/assets/imgs/rechargeCardNew.webp');
+}
+
+.RechargeModal_rechargeCardIcon {
+  width: px2(176px);
+  height: px2(77px);
+  position: absolute;
+  top: px2(-3px);
+  left: px2(-3px);
+  background-image: url('@/assets/imgs/rechargeCardIcon.webp');
+  background-size: contain;
+}
+
+.RechargeModal_rechargeModalCard {
+  display: flex;
+  flex-direction: column;
+  gap: px2(36px);
+  margin-top: px2(22px);
+}
+
+.RechargeModal_rechargeModalList {
+  width: px2(586px);
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  gap: px2(20px);
+}
+
+.RechargeModal_rechargeCardDiscount {
+  width: px2(75px);
+  height: px2(47px);
+  position: absolute;
+  top: px2(-30px);
+  right: px2(-16px);
+  background-image: url('@/assets/imgs/rechargeCardDiscount.webp');
+  background-size: contain;
+  color: #FFF;
+  font-family: "PingFang SC";
+  font-size: px2(12px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  box-sizing: border-box;
+  padding-top: px2(13px);
+  padding-left: px2(26px);
+
+  span {
+    text-shadow: 0px 0px px2(4px) rgba(255, 255, 255, 0.27);
+    font-family: "PingFang SC";
+    font-size: px2(16px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}
+
+.RechargeModal_rechargeModalItemChecked .RechargeModal_rechargeModalItemHead {
+  background-image: url('@/assets/imgs/rechargeHeadNel.webp');
+}
+
+.RechargeModal_rechargeModalItemHead {
+  background-image: url('@/assets/imgs/rechargeHeadNor.webp');
+  background-size: contain;
+  width: px2(157px);
+  height: px2(30px);
+  color: #9B7428;
+  font-family: "GenWanMin-M";
+  font-size: px2(14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  div {
+    width: px2(153px);
+    height: px2(26px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: px2(2px);
+    position: relative;
+    z-index: 10;
+
+    img {
+      width: px2(20px);
+    }
+  }
+}
+
+.RechargeModal_rechargeModalItemContent {
+  flex: 1;
+  position: relative;
+  padding-top: px2(89px);
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+
+  div {
+    color: #68552F;
+    font-size: px2(20px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    position: relative;
+    text-align: center;
+    z-index: 5;
+
+    span {
+      font-size: px2(14px);
+    }
+  }
+}
+
+.RechargeModal_rechargeModalItemChecked .RechargeModal_rechargeModalItemBtn {
+  background-image: url('@/assets/imgs/rechargeBtnNel.webp');
+}
+
+.RechargeModal_rechargeModalItemImg {
+  width: px2(125px);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: px2(18px);
+}
+
+.RechargeModal_rechargeModalItemBtn {
+  width: px2(153px);
+  height: px2(30px);
+  background-image: url('@/assets/imgs/rechargeBtnNor.webp');
+  background-size: contain;
+  color: #9B7428;
+  text-align: center;
+  font-size: px2(14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-size: px2(12px);
+    margin-top: px2(2px);
+  }
+}
+
+.RechargeModal_rechargeModalListBottom {
+  position: absolute;
+  width: 100%;
+  height: px2(36px);
+  background-image: url('@/assets/imgs/rechargeCardBottom.webp');
+  background-size: contain;
+  left: 0;
+  bottom: px2(-12px);
+}
+
+.RechargeModal_modalFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: px2(40px);
+  align-items: center;
+  margin-right: px2(-14px);
+  color: #707083;
+  text-align: justify;
+  font-family: "GenWanMin-M";
+  font-size: px2(14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.RechargeModal_modalFooterLeft {
+  font-size: px2(16px);
+}
+
+.RechargeModal_modalFooterRight {
+  display: flex;
+  align-items: center;
+
+  span {
+    font-size: px2(18px);
+    font-weight: 500;
+    margin-right: px2(32px);
+  }
+}
+
+.RechargeModal_modalFooterConfirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: px2(115.5px);
+  height: px2(44.1px);
+  text-align: center;
+  line-height: px2(44.1px);
+  font-size: px2(18.2px);
+  font-family: Inter;
+  color: #fff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url('@/assets/imgs/game-menu-button-bg.png');
+  cursor: pointer;
+  transition: transform 0.33s ease-in-out;
+  &:hover {
+    background-image: url('@/assets/imgs/game-menu-button-bg-active.png');
+    color: #fff;
+    transform: scale(1.1, 1.1);
+  }
+}
+
+.Recharge_modal_close {
+  position: absolute;
+  right: px2(15px);
+  top: px2(15px);
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

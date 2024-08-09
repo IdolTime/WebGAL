@@ -88,7 +88,10 @@ export const payProduct = (sentence: ISentence): IPerform => {
           } else if (res.code === 10014) {
             // @ts-ignore
             window.pubsub.publish('toaster', { show: true, text: '余额不足，请充值' });
-            checkBuy();
+            // @ts-ignore
+            window.pubsub.publish('rechargeModal', {
+              successCallback: checkBuy,
+            });
           } else {
             // @ts-ignore
             window.pubsub.publish('toaster', { show: true, text: res.message });

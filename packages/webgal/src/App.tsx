@@ -27,6 +27,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { Toaster } from './UI/Toaster/Toaster';
 import { ModalBuyGame } from './UI/ModalBuyGame/ModalBuyGame';
+import { ModalRecharge } from './UI/ModalRecharge';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -98,7 +99,7 @@ function App() {
       window.pubsub.subscribe('isPreviewMode', (value) => {
         refObject.current.previewMode = true;
         refObject.current.previewModeValue = value;
-        dispatch(setIsEditorPreviewMode(true));
+        dispatch(setIsEditorPreviewMode(value));
         checkCallback();
       });
     } else {
@@ -113,6 +114,7 @@ function App() {
   // Provider用于对各组件提供状态
   return (
     <div className="App">
+      <ModalRecharge />
       <ModalBuyGame />
       <Toaster />
       <Loading />

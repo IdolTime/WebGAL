@@ -23,13 +23,17 @@ export function ModalBuyGame() {
     const res = await buyGame();
 
     if (res.code === 0 || res.code === 10053) {
+      // if (res.code === 0) {
       // @ts-ignore
       res.code === 0 && window.pubsub.publish('toaster', { show: true, image: BuyGameSuccess, animation: 'slideIn' });
       setVisible(false);
       callbackRef.current.startGameCallback();
     } else if (res.code === 10014) {
+      // } else if (res.code === 10053) {
       // @ts-ignore
       window.pubsub.publish('toaster', { show: true, text: '余额不足, 请充值' });
+      // @ts-ignore
+      window.pubsub.publish('rechargeModal', {});
     } else {
       // @ts-ignore
       window.pubsub.publish('toaster', { show: true, text: res.message });

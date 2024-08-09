@@ -84,3 +84,23 @@ export interface IGameInfo {
   sales: ISale[];
   discount: IDiscount[];
 }
+
+export interface IRechargeItem {
+  id: number;
+  icon: string;
+  recharge_type: number;
+  business_id: number;
+  beans: number;
+  price: number;
+  discount: number;
+  is_bonus_packs: number;
+  bonus_packs_title: string;
+  bonus_packs_num: number;
+  is_show: number;
+}
+
+export interface IRechargeList {
+  code: number;
+  message: string;
+  data: IRechargeItem[];
+}

@@ -2,7 +2,7 @@ import { request } from '@/utils/request';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { setGameInfo, setPaymentConfigurationList } from '@/store/storeReducer';
-import { IGameInfo } from './storeInterface';
+import { IGameInfo, IRechargeList } from './storeInterface';
 
 export const getPaymentConfigList = () => {
   return request
@@ -119,6 +119,64 @@ export const getGameInfo = () => {
         code: -999,
         data: null,
         message: '获取游戏信息失败',
+      };
+    });
+};
+
+// 获取充值列表
+export const getRechargeList = () => {
+  return request
+    .post<IRechargeList>('/user/recharge_config_list', { is_show: 1 })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+      return {
+        code: -999,
+        data: null,
+        message: '获取充值列表失败',
+      };
+    });
+};
+
+// 充值
+export const recharge = (recharge_id: number) => {
+  return request
+    .post('/user/recharge', { recharge_id })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+      return {
+        code: -999,
+        data: null,
+        message: '充值失败',
+      };
+    });
+};
+
+// 查询充值状态
+export const getRechargeStatus = (order_no: string) => {
+  return request
+    .post<{
+      code: number;
+      message: string;
+      data: {
+        order_status: number;
+        pay_status: number;
+      };
+    }>('/user/recharge_status', { order_no })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+      return {
+        code: -999,
+        data: null,
+        message: '查询充值状态失败',
       };
     });
 };

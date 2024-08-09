@@ -182,6 +182,8 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
                   } else if (res.code === 10014) {
                     // @ts-ignore
                     window.pubsub.publish('toaster', { show: true, text: '余额不足，请充值' });
+                    // @ts-ignore
+                    window.pubsub.publish('rechargeModal', {});
                   } else {
                     // @ts-ignore
                     window.pubsub.publish('toaster', { show: true, text: res.message });
