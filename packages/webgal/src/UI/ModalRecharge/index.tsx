@@ -55,7 +55,7 @@ export function ModalRecharge() {
     playSeEnter();
     // @ts-ignore
     window.pubsub.publish('loading', { loading: true });
-    const res = await recharge(selectedItem?.business_id || 0);
+    const res = await recharge(selectedItem?.id || 0);
     if (res.code === 0) {
       const orderNo = res.data.order_no;
       checkPayStatus(orderNo);
