@@ -11,6 +11,7 @@ import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
+import { useUILight } from '@/hooks/useUILight';
 
 /**
  * 从头开始游戏
@@ -33,6 +34,8 @@ export const startGame = () => {
   webgalStore.dispatch(saveActions.setIsShowUnlock(true));
   webgalStore.dispatch(saveActions.setShowStoryline(true));
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  // 设置UI亮度
+  useUILight(webgalStore.getState().userData.optionData.uiLight)
 };
 
 export async function continueGame() {

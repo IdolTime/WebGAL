@@ -39,11 +39,15 @@ export interface IGuiState {
   showBeautyGuideImageDialog: boolean; // 显示美女图鉴图片对话框
   isShowR18Modal: boolean; // 是否显示R18内容
   openR18Modal: boolean;
+  isShowGameMenu: boolean; // 是否显示游戏菜单
+  escMenus: {
+    [key in EecMenuKey]: EscMenuItem;
+  };
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus'>
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus'>
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
@@ -90,6 +94,37 @@ export interface GameMenuItem {
       fontSize?: number;
       fontColor?: string;
       countdown?: number;
+    };
+  };
+}
+
+export enum EecMenuKey {
+  /** 继续游戏 */
+  Esc_continueGame_button = 'Esc_continueGame_button',
+  /** 返回关卡 */
+  Esc_backToLevel_button = 'Esc_backToLevel_button',
+  /** 设置 */
+  Esc_setting_button = 'Esc_setting_button',
+  /** 退出游戏 */
+  Esc_exitGame_button = 'Esc_exitGame_button'
+}
+
+export interface EscMenuItem {
+  content: string;
+  args: {
+    hide: boolean;
+    style: {
+      x?: number;
+      y?: number;
+      scale?: number;
+      image?: string;
+      fontSize?: number;
+      fontColor?: string;
+      countdown?: number;
+      btnImage?: string;
+      btnPosition: string;
+      align: string;
+      fontFamily: string;
     };
   };
 }

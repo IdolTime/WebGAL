@@ -93,6 +93,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  let isJump = false;
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };
@@ -108,7 +109,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           // if (!enable || timer.current) {
           //   return;
           // }
-          if (!enable) {
+          if (!enable && !isJump) {
             return;
           }
           playSeClick();
@@ -125,6 +126,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             jmp(e.jump);
           }
           WebGAL.gameplay.performController.unmountPerform('choose');
+          isJump = false;
         };
         // : () => {};
         let styleObj: CSSProperties = {
@@ -145,6 +147,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             if (time <= 0 && timer.current) {
               clearTimeout(timer as any);
               timer.current = null;
+              isJump = !enable;
               onClick();
             } else {
               timer.current = setTimeout(() => {
@@ -187,6 +190,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             let ele = document.getElementById(id);
             img.style.width = img.naturalWidth + 'px';
             img.style.height = img.naturalHeight + 'px';
+            img.style.position = 'absolute';
             img.alt = e.text;
 
             if (ele) {
