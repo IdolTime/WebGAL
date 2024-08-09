@@ -3236,7 +3236,7 @@ iconv-lite@0.4.24:
     safer-buffer ">= 2.1.2 < 3"
 
 "idoltime-parser@file:packages/parser":
-  version "4.4.17"
+  version "4.4.18"
   dependencies:
     chevrotain "^10.5.0"
     cloudlogjs "^1.0.11"
