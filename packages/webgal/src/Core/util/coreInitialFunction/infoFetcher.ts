@@ -4,13 +4,21 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { setGuiAsset, setLogoImage, setGameUIConfigs, initState, setGameR18, setEscMenus } from '@/store/GUIReducer';
+import { 
+  setGuiAsset, 
+  setLogoImage, 
+  setGameUIConfigs, 
+  initState, 
+  setGameR18, 
+  setEscMenus,
+  setAchievementUI 
+} from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { EecMenuKey, EscMenuItem } from '@/store/guiInterface';
+import { GameMenuItem, GameMenuKey, EecMenuKey, EscMenuItem, EnumAchievementUIKey } from '@/store/guiInterface';
 import { setStage } from '@/store/stageReducer';
 import {
   AchievementSceneButtonKey,
@@ -64,6 +72,9 @@ export const infoFetcher = (url: string) => {
       // @ts-ignore
       const escMenus: Record<EecMenuKey, EscMenuItem> = {};
       let isSHowEscMenu = false;
+      // @ts-ignore
+      const achievementUI: Record<EnumAchievementUIKey, GameMenuItem> = {}
+      let hasAchievement = false;
 
       gameConfig.forEach((e) => {
         const { command, args, options } = e;
@@ -213,9 +224,17 @@ export const infoFetcher = (url: string) => {
             isSHowEscMenu = true;
             break;
           }
+
+          case EnumAchievementUIKey.Achievement_progress_bg: 
+          case EnumAchievementUIKey.Achievement_progress_text:
+          case EnumAchievementUIKey.Achievement_notUnlock:
+          case EnumAchievementUIKey.Achievement_progress: {
+            achievementUI[EnumAchievementUIKey[command]] = getStyle(EnumAchievementUIKey[command], args, options)
+            hasAchievement = true;
+            break;
+          }
         }
 
-        console.log(444555, command);
         if (
           (TitleSceneButtonKey[command as TitleSceneButtonKey] || TitleSceneOtherKey[command as TitleSceneOtherKey]) &&
           command !== TitleSceneOtherKey.Title_bgm
@@ -259,6 +278,7 @@ export const infoFetcher = (url: string) => {
 
       dispatch(setGameUIConfigs(gameUIConfigs));
       isSHowEscMenu && dispatch(setEscMenus(escMenus));
+      hasAchievement && dispatch(setAchievementUI(achievementUI));
     }
     window?.renderPromise?.();
     delete window.renderPromise;
@@ -355,4 +375,45 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
   }
 
   return newOptions;
+}
+
+
+function getStyle(uiKey: string, args: string[], options: { key: string; value: any }[]) {
+  const hide = (options.find((o) => o.key === 'hide')?.value as boolean) || false;
+  const styleStr = (options.find((o) => o.key === 'style')?.value as string) || '';
+  const hoverStyleStr = (options.find((o) => o.key === 'hoverStyle')?.value as string) || '';
+
+  let styleObj: GameMenuItem['args']['style'] = { ...initState.achievementUI[uiKey as EnumAchievementUIKey].args.style };
+  let hoverStyleObj: GameMenuItem['args']['hoverStyle'] = { ...initState.achievementUI[uiKey as EnumAchievementUIKey].args.hoverStyle };
+
+  styleObj = parseStyle(styleStr);
+  hoverStyleObj = parseStyle(hoverStyleStr);
+
+  function parseStyle(strStyle: string) {
+    const styleRegex = /\{(.*?)\}/;
+    const styleMatch = strStyle.match(styleRegex);
+    if (styleMatch) {
+      const strStyle = styleMatch[1];
+      const styleProps = strStyle.split(',');
+      const style: any = {};
+  
+      styleProps.forEach((prop) => {
+        const [key, value] = prop.split('=');
+        if (key && value) {
+          style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
+        }
+      });
+  
+      return style;
+    }
+  }
+
+  return {
+    content: args?.length ? args[0] : '',
+    args: {
+      hide,
+      style: styleObj,
+      hoverStyle: hoverStyleObj
+    },
+  };
 }

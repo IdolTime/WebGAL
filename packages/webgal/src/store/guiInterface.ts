@@ -43,11 +43,14 @@ export interface IGuiState {
   escMenus: {
     [key in EecMenuKey]: EscMenuItem;
   };
+  achievementUI: {
+    [key in EnumAchievementUIKey]: GameMenuItem;
+  }
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus'>
+  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI'>
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
@@ -82,19 +85,24 @@ export enum GameMenuKey {
   Game_continue_button = 'Game_continue_button', // 继续游戏
 }
 
+export interface IStyle {
+  x?: number;
+  y?: number;
+  scale?: number;
+  image?: string;
+  fontSize?: number;
+  fontColor?: string;
+  countdown?: number;
+  width?: number;
+  height?: number;
+}
+
 export interface GameMenuItem {
   content: string;
   args: {
     hide: boolean;
-    style: {
-      x?: number;
-      y?: number;
-      scale?: number;
-      image?: string;
-      fontSize?: number;
-      fontColor?: string;
-      countdown?: number;
-    };
+    style: IStyle;
+    hoverStyle?: IStyle
   };
 }
 
@@ -127,4 +135,23 @@ export interface EscMenuItem {
       fontFamily: string;
     };
   };
+}
+
+
+/**
+ * 成就页面UI
+ */
+export enum EnumAchievementUIKey {
+  /** 成就返回键 */
+  Achievement_back_button = 'Achievement_back_button',
+  /** 成就标题 */
+  Achievement_title = 'Achievement_title',
+  /** 成就进度条背景 */
+  Achievement_progress_bg = 'Achievement_progress_bg',
+  /** 成就进度条文字 */
+  Achievement_progress_text = 'Achievement_progress_text',
+  /** 成就进度条 */
+  Achievement_progress = 'Achievement_progress',
+  /** 未解锁图标元素 */
+  Achievement_notUnlock = 'Achievement_notUnlock'
 }

@@ -6,9 +6,7 @@ import styles from './achievement.module.scss';
 import { __INFO } from '@/config/info';
 import { WebGAL } from '@/Core/WebGAL';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
-import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
-import { IUnlockAchieveItem } from '@/store/stageInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { sceneNameType } from '@/Core/Modules/scene';
@@ -16,6 +14,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { px2 } from '@/Core/parser/utils';
 import { Button } from '../Components/Base';
 import { AchievementSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
+import { GameMenuItem } from '@/store/guiInterface';
 
 /**
  * 成就页面
@@ -27,6 +26,16 @@ export const Achievement: FC = () => {
   const StageState = useSelector((state: RootState) => state.stage);
   const saveData = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
+
+  const [textStyle, setTextStyle] = useState<GameMenuItem | null>(null);
+  const [progressBgStyle, setProgressBgStyle] = useState<GameMenuItem | null>(null);
+  const [progressStyle, setProgressStyle] = useState<GameMenuItem | null>(null);
+  const [notUnlockStyle, setNotUnlockStyle] = useState<GameMenuItem | null>(null);
+  /**
+   * 
+   Achievement_notUnlock
+  */
+
   const [unlockedData, setUnlockedData] = useState({
     unlocked: 0,
     allTotal: 0,
@@ -38,6 +47,18 @@ export const Achievement: FC = () => {
 
   useEffect(() => {
     if (GUIState.showAchievement) {
+      if (GUIState.achievementUI.Achievement_progress_text) {
+        setTextStyle(GUIState.achievementUI.Achievement_progress_text);
+      }
+      if (GUIState.achievementUI.Achievement_progress_bg) {
+        setProgressBgStyle(GUIState.achievementUI.Achievement_progress_bg);
+      }
+      if (GUIState.achievementUI.Achievement_progress) {
+        setProgressStyle(GUIState.achievementUI.Achievement_progress);
+      }
+      if (GUIState.achievementUI.Achievement_notUnlock) {
+        setNotUnlockStyle(GUIState.achievementUI.Achievement_notUnlock);
+      }
       // 控制解锁成就显示，当开始游戏后才可解锁
       webgalStore.dispatch(saveActions.setIsShowUnlock(false));
       initAhieve();
@@ -107,6 +128,83 @@ export const Achievement: FC = () => {
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };
 
+  const renderInfoAchievement = () => {
+    const text = !textStyle?.args?.hide ? textStyle?.content ?? '已获得成就' : '';
+    const bgUrl = progressBgStyle?.content ? assetSetter(progressBgStyle?.content, fileType.background) : '';
+    const pregressUrl = progressStyle?.args.style.image ? assetSetter(progressStyle?.args.style.image , fileType.ui) : '';
+    // @ts-ignore
+    const pregressActionUrl = progressStyle?.args?.hoverStyle.image ? assetSetter(progressStyle?.args.hoverStyle.image , fileType.ui) : '';
+    
+    const bgStyle = !progressBgStyle?.args?.hide && bgUrl 
+      ? { 
+          ...progressBgStyle?.args?.style,
+          backgroundImage: `url(${bgUrl})`,
+          transform: progressBgStyle?.args.style?.scale && `scale(${progressBgStyle?.args.style?.scale})`,
+          width: progressBgStyle?.args.style?.width && `${px2(progressBgStyle?.args.style?.width)}px`,
+          height: progressBgStyle?.args.style?.height && `${px2(progressBgStyle?.args.style?.height)}px`,
+        } 
+      : {};
+    
+    const textCss = !textStyle?.args?.hide 
+    ? {
+        ...textStyle?.args?.style,
+        color: textStyle?.args?.style.fontColor,
+        transform: textStyle?.args.style?.scale ? `scale(${textStyle.args.style.scale})` : '',
+      }
+    : {}
+
+    const progressBgCss = !progressStyle?.args?.hide
+      ? {
+        backgroundImage: `url(${pregressUrl})`,
+        transform: progressStyle?.args?.style?.scale ? `scale(${progressStyle.args.style.scale})` : undefined,
+        width: progressStyle?.args?.style?.width ? `${px2(progressStyle.args.style.width)}px` : undefined,
+        height: progressStyle?.args?.style?.height ? `${px2(progressStyle.args.style.height)}px` : undefined,
+        top: progressStyle?.args?.style?.y ? `${px2(progressStyle.args.style.y)}px` : undefined,
+        left: progressStyle?.args?.style?.x ? `${px2(progressStyle.args.style.x)}px` : undefined,
+      } : {}
+
+    const progressBgActionCss = !progressStyle?.args?.hide 
+    ? {
+      backgroundImage: `url(${pregressActionUrl})`,
+      transform: progressStyle?.args?.hoverStyle?.scale ? `scale(${progressStyle.args.hoverStyle?.scale})` : undefined,
+      width: progressStyle?.args?.hoverStyle?.width ? `${px2(progressStyle.args.hoverStyle.width)}px` : undefined,
+      height: progressStyle?.args?.hoverStyle?.height ? `${px2(progressStyle.args.hoverStyle.height)}px` : undefined
+    } : {}
+
+    return (
+      <div 
+        className={styles.achievement_content}
+      >
+        <div 
+          className={styles.achievement_current}
+          style={bgStyle || {}} 
+        >
+          <span className={styles.text} style={textCss || {}}>
+            {text}
+          </span>
+          <span 
+            className={styles.number}
+            style={textCss || {}}
+          >
+            {`${unlockedData.unlocked}/${unlockedData.allTotal}`}
+          </span>
+          <span 
+            className={styles.pregessBar}
+            style={progressBgCss || {}}
+          >
+            <span 
+              className={styles.pregressBar_inner} 
+              style={{ 
+                ...progressBgActionCss,
+                width: unlockedData.currentProgress
+              }} 
+            />
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {GUIState.showAchievement && (
@@ -120,15 +218,7 @@ export const Achievement: FC = () => {
           />
 
           {/* 已获得成就  */}
-          <div className={styles.achievement_content}>
-            <div className={styles.achievement_current}>
-              <span className={styles.text}>已获得成就</span>
-              <span className={styles.number}>{`${unlockedData.unlocked}/${unlockedData.allTotal}`}</span>
-              <span className={styles.pregessBar}>
-                <span className={styles.pregressBar_inner} style={{ width: unlockedData.currentProgress }} />
-              </span>
-            </div>
-          </div>
+          {renderInfoAchievement()}
 
           {/* 内容部分 */}
           <div
@@ -146,6 +236,14 @@ export const Achievement: FC = () => {
               <div className={styles.achievement_list}>
                 {saveData.allUnlockAchieveList?.map(
                   ({ unlockname, x, y, url, isShowUnlock, saveTime, condition }, index) => {
+
+                    const notUnlockCss = !notUnlockStyle?.args.hide
+                      ? {
+                        width: notUnlockStyle?.args?.style?.width ? `${px2(notUnlockStyle.args.style.width)}px` : undefined,
+                        height: notUnlockStyle?.args?.style?.height ? `${px2(notUnlockStyle.args.style.height)}px` : undefined
+                      }
+                      : {}
+
                     return (
                       <div
                         key={`unlockAchieveItem-${index}`}
@@ -155,7 +253,11 @@ export const Achievement: FC = () => {
                         style={{
                           top: `${px2(y)}px`,
                           left: `${getPositionX(px2(x), px2(StageState.achieveBgX))}px`,
-                          backgroundImage: `url("${isShowUnlock && getUrl(url)}")`,
+                          backgroundImage: `url("${
+                            isShowUnlock 
+                            ? getUrl(url) 
+                            : getUrl(!notUnlockStyle?.args.hide && notUnlockStyle?.args?.style?.image ? notUnlockStyle?.args?.style?.image : '')}")`,
+                          ...notUnlockCss
                         }}
                       >
                         {isShowUnlock && <div className={styles.ripple} />}

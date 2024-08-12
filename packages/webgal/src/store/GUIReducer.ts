@@ -4,8 +4,59 @@
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
 import { sceneUIConfig } from '@/Core/UIConfigTypes';
-import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
+import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload, EnumAchievementUIKey } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+const initAchievementUI = {
+  Achievement_progress_bg: {
+    content: '',
+    args: {
+      hide: true,
+      style: {},
+      hoverStyle: {}
+    },
+  },
+  Achievement_progress_text: {
+    content: '',
+    args: {
+      hide: true,
+      style: {},
+      hoverStyle: {}
+    },
+  },
+  Achievement_progress: {
+    content: '',
+    args: {
+      hide: true,
+      style: {},
+      hoverStyle: {}
+    },
+  },
+  Achievement_notUnlock: {
+    content: '',
+    args: {
+      hide: true,
+      style: {},
+      hoverStyle: {}
+    },
+  },
+  Achievement_back_button: {
+    content: '',
+    args: {
+      hide: true,
+      style: {},
+      hoverStyle: {}
+    },
+  },
+  Achievement_title: {
+    content: '',
+    args: {
+      hide: true,
+      style: {},
+      hoverStyle: {}
+    },
+  }
+}
 
 /**
  * 初始GUI状态表
@@ -108,7 +159,8 @@ export const initState: IGuiState = {
         },
       },
     },
-  }
+  },
+  achievementUI: initAchievementUI
 };
 
 /**
@@ -164,6 +216,9 @@ const GUISlice = createSlice({
     setEscMenus: (state, action: PayloadAction<any>) => {
       state.escMenus = action.payload;
     },
+    setAchievementUI: (state, action: PayloadAction<any>) => {
+      state.achievementUI = action.payload;
+    },
   },
 });
 
@@ -177,5 +232,6 @@ export const {
   setGameUIConfigs,
   setGameR18,
   setEscMenus,
+  setAchievementUI,
 } = GUISlice.actions;
 export default GUISlice.reducer;
