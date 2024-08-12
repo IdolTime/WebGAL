@@ -47,6 +47,8 @@ export const Achievement: FC = () => {
 
   useEffect(() => {
     if (GUIState.showAchievement) {
+      console.log(GUIState.achievementUI);
+      debugger
       if (GUIState.achievementUI.Achievement_progress_text) {
         setTextStyle(GUIState.achievementUI.Achievement_progress_text);
       }
@@ -131,9 +133,9 @@ export const Achievement: FC = () => {
   const renderInfoAchievement = () => {
     const text = !textStyle?.args?.hide ? textStyle?.content ?? '已获得成就' : '';
     const bgUrl = progressBgStyle?.content ? assetSetter(progressBgStyle?.content, fileType.background) : '';
-    const pregressUrl = progressStyle?.args.style.image ? assetSetter(progressStyle?.args.style.image , fileType.ui) : '';
+    const pregressUrl = progressStyle?.args?.style?.image ? assetSetter(progressStyle.args.style.image , fileType.ui) : '';
     // @ts-ignore
-    const pregressActionUrl = progressStyle?.args?.hoverStyle.image ? assetSetter(progressStyle?.args.hoverStyle.image , fileType.ui) : '';
+    const pregressActionUrl = progressStyle?.args?.hoverStyle?.image ? assetSetter(progressStyle?.args.hoverStyle.image , fileType.ui) : '';
     
     const bgStyle = !progressBgStyle?.args?.hide && bgUrl 
       ? { 
