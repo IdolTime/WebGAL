@@ -64,18 +64,6 @@ export class SceneManager {
       this.sceneData.currentScene = sceneParser(rawScene, scenaName, sceneUrl);
       const sentenceList = this.sceneData.currentScene.sentenceList;
 
-      if (sentenceList?.length && scenaName === sceneNameType.Start) {
-        const isSome = this.compareFilenames(scenaName, sceneUrl)
-
-        // 是否有解锁成就配置项，如果没有则重置数据
-        const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
-        // const isSome = this.compareFilenames(scenaName, sceneUrl)
-        if (unlockAchieveIndex === -1 && isSome) {
-          webgalStore.dispatch(saveActions.resetUnlockAchieveData());
-          dumpUnlickAchieveToStorage()
-        }
-      }
-
       if (scenaName === sceneNameType.Storyline) {
         this.getAllStorylineList(sentenceList)
       }

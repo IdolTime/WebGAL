@@ -12,6 +12,8 @@ import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import EditNameDialog from './EditNameDialog';
 import { ISaveData } from '@/store/userDataInterface';
 import { saveGame } from '@/Core/controller/storage/saveGame';
+import { setVisibility } from '@/store/GUIReducer';
+import { saveActions } from '@/store/savesReducer';
 
 let editNameVal = '';
 let editNameIndex = 0;
@@ -130,10 +132,17 @@ export const ExtraVideo: FC = () => {
 
   const t = useTrans('menu.');
 
+  const handleGoBack = () => {
+    playSeClick();
+    dispatch(setVisibility({ component: 'showExtra', visibility: false }));
+    dispatch(saveActions.setLoadVideo(false));
+  }
+
   return (
     <>
       <div className={styles.Save_Load_main}>
         <div className={styles.Save_Load_top}>
+          <div className={`${styles.goback} ${styles.extraVideo_goback}`} onClick={handleGoBack} onMouseEnter={playSeEnter}></div>
           <div className={styles.Save_Load_title}>
             <div className={styles.Load_title_text}>{t('extra.title')}</div>
           </div>
