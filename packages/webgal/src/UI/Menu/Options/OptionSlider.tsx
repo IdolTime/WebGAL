@@ -8,7 +8,7 @@ export const OptionSlider = (props: ISlider) => {
   useEffect(() => {
     setTimeout(() => {
       const input = document.getElementById(props.uniqueID);
-      if (input !== null) input.setAttribute('value', props.initValue.toString());
+      if (input !== null) input.setAttribute('value', (props.initValue || 0).toString());
       calcSlideBg();
     }, 1);
   }, []);

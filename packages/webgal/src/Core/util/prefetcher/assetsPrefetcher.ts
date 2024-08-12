@@ -97,6 +97,8 @@ const loadAssetWithRetry = (
       }
     };
 
+    const newLink = document.createElement('link');
+
     // @ts-ignore
     if (window.isSafari) {
       fetch(url)

@@ -5,9 +5,18 @@
   cursor: default;
   height: px2(720px);
   width: px2(1280px);
+}
+
+.Options_bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background-image: url('@/assets/imgs/setting-bg.png');
   background-repeat: no-repeat;
   background-size: contain;
+  background-position: center;
 }
 
 .Options_back {

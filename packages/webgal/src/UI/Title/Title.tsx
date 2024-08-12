@@ -1,27 +1,22 @@
-import { CSSProperties, FC, useMemo } from 'react';
+import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
 import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, webgalStore } from '@/store/store';
-import { setMenuPanelTag, setVisibility, setShowStoryLine } from '@/store/GUIReducer';
-import { MenuPanelTag, GameMenuKey } from '@/store/guiInterface';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { restorePerform } from '@/Core/controller/storage/jumpFromBacklog';
-import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
-import useTrans from '@/hooks/useTrans';
+import { RootState } from '@/store/store';
+import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { MenuPanelTag } from '@/store/guiInterface';
 import { setshowFavorited } from '@/store/GUIReducer';
 // import { resize } from '@/Core/util/resize';
-import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { WebGAL } from '@/Core/WebGAL';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
 import { keyboard } from '@/hooks/useHotkey';
 import { enterAchieve } from '@/Core/controller/achieve/achieve';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { BgImage, Button } from '../Components/Base';
+import { Scene, TitleSceneButtonKey, TitleSceneOtherKey, TitleSceneUIConfig } from '@/Core/UIConfigTypes';
 
 /**
  * 标题页
@@ -32,129 +27,47 @@ const Title: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
   const fullScreen = userDataState.optionData.fullScreen;
-  const background = GUIState.titleBg;
-  const showBackground = background === '' ? 'rgba(0,0,0,1)' : `url("${background}")`;
-  const t = useTrans('title.');
   const { playSeEnter, playSeClick } = useSoundEffect();
+  const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
   const clickCallbackMap = {
-    [GameMenuKey.Game_start_button]: () => {
+    [TitleSceneButtonKey.Game_start_button]: () => {
       startGame();
       playSeClick();
       dispatch(setshowFavorited(false));
     },
-    [GameMenuKey.Game_achievement_button]: () => {
+    [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();
       playSeClick();
     },
-    [GameMenuKey.Game_storyline_button]: () => {
+    [TitleSceneButtonKey.Game_storyline_button]: () => {
       enterStoryLine();
       playSeClick();
     },
-    [GameMenuKey.Game_extra_button]: () => {
+    [TitleSceneButtonKey.Game_extra_button]: () => {
       dispatch(setVisibility({ component: 'showExtra', visibility: true }));
       playSeClick();
     },
-    [GameMenuKey.Game_collection_button]: () => {
+    [TitleSceneButtonKey.Game_collection_button]: () => {
       enterBeautyGuide();
       playSeClick();
     },
-    [GameMenuKey.Game_continue_button]: () => {
+    [TitleSceneButtonKey.Game_continue_button]: () => {
       playSeClick();
       dispatch(setVisibility({ component: 'showTitle', visibility: false }));
       continueGame();
     },
-    [GameMenuKey.Game_option_button]: () => {
+    [TitleSceneButtonKey.Game_option_button]: () => {
       playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Option));
     },
-    [GameMenuKey.Game_load_button]: () => {
+    [TitleSceneButtonKey.Game_load_button]: () => {
       playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
     },
-  };
-
-  const renderButton = (key: GameMenuKey) => {
-    const menu = GUIState.gameMenus[key];
-
-    if (!menu || menu.args.hide) return null;
-    const styleObj: CSSProperties = {};
-    let className = styles.Title_button;
-    const id = `title-${key}`;
-
-    if (menu.args.style) {
-      const style = menu.args.style;
-      if (typeof style.x === 'number') {
-        styleObj.position = 'fixed';
-        styleObj['left'] = style.x + 'px';
-        styleObj['transform'] = 'translateX(-50%)';
-      }
-      if (typeof style.y === 'number') {
-        styleObj.position = 'fixed';
-        styleObj['top'] = style.y + 'px';
-        if (styleObj['transform']) {
-          styleObj['transform'] += ' translateY(-50%)';
-        } else {
-          styleObj['transform'] = 'translateY(-50%)';
-        }
-      }
-      if (typeof style.scale === 'number') {
-        if (styleObj['transform']) {
-          styleObj['transform'] += ' scale(' + style.scale + ')';
-        } else {
-          styleObj['transform'] = 'scale(' + style.scale + ')';
-        }
-      }
-      if (typeof style.fontSize === 'number') {
-        styleObj['fontSize'] = style.fontSize + 'px';
-      }
-      if (typeof style.fontColor === 'string' && style.fontColor[0] === '#') {
-        styleObj['color'] = style.fontColor;
-      }
-    }
-
-    if (menu.args.style?.image) {
-      let ele = document.getElementById(id);
-      className = styles.Title_button_custom;
-
-      if (!ele) {
-        const imgUrl = assetSetter(menu.args.style.image, fileType.ui);
-        const img = new Image();
-        img.src = imgUrl; // 将图片的URL赋值给Image对象的src属性
-
-        img.onload = function () {
-          let ele = document.getElementById(id);
-          img.style.width = img.naturalWidth + 'px';
-          img.style.height = img.naturalHeight + 'px';
-          img.alt = menu.content;
-
-          if (ele) {
-            ele.style.width = img.naturalWidth + 'px';
-            ele.style.height = img.naturalHeight + 'px';
-            setTimeout(() => {
-              ele?.prepend(img);
-              ele = null;
-            }, 32);
-          }
-        };
-      }
-    }
-
-    return (
-      <div
-        id={id}
-        key={key}
-        className={applyStyle('Title_button', className)}
-        onClick={clickCallbackMap[key]}
-        onMouseEnter={playSeEnter}
-        style={styleObj}
-      >
-        <span className={styles.Title_button_text}>{menu.content}</span>
-      </div>
-    );
   };
 
   return (
@@ -173,37 +86,26 @@ const Title: FC = () => {
         onMouseEnter={playSeEnter}
       />
       {GUIState.showTitle && (
-        <div
-          className={applyStyle('Title_main', styles.Title_main)}
-          style={{
-            backgroundImage: showBackground,
-            backgroundSize: 'cover',
-          }}
-        >
+        <div>
+          <BgImage
+            defaultClass={applyStyle('Title_main', styles.Title_main)}
+            item={TitleUIConfigs.other[TitleSceneOtherKey.Title_img]}
+          />
           <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
-            {/* 开始游戏 */}
-            {renderButton(GameMenuKey.Game_start_button)}
-
-            {/* 继续游戏 */}
-            {renderButton(GameMenuKey.Game_continue_button)}
-
-            {/* 读取存档 */}
-            {renderButton(GameMenuKey.Game_load_button)}
-
-            {/* 选项 */}
-            {renderButton(GameMenuKey.Game_option_button)}
-
-            {/* 成就 */}
-            {renderButton(GameMenuKey.Game_achievement_button)}
-
-            {/* 故事线 */}
-            {renderButton(GameMenuKey.Game_storyline_button)}
-
-            {/* 图鉴 */}
-            {renderButton(GameMenuKey.Game_extra_button)}
-
-            {/* 收藏/美女图鉴 */}
-            {renderButton(GameMenuKey.Game_collection_button)}
+            {Object.keys(TitleUIConfigs.buttons).map((key) => {
+              let _key = key as TitleSceneButtonKey;
+              let buttonConfigItem = TitleUIConfigs.buttons[_key];
+              return (
+                <Button
+                  key={_key}
+                  item={buttonConfigItem}
+                  defaultClass={styles.Title_button}
+                  defaultTextClass={styles.Title_button_text}
+                  onClick={clickCallbackMap[_key]}
+                  onMouseEnter={playSeEnter}
+                />
+              );
+            })}
           </div>
         </div>
       )}

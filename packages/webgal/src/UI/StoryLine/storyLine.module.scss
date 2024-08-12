@@ -17,25 +17,23 @@ $default_storyLine_bg_y: 720px;
     //     display: none; /* 适用于 WebKit 内核浏览器 */
     // }
 
-    .storyLine_header {
-        padding: 10px 30px;
-        position: fixed;
+       
+    .goBack {
+        position: absolute;
         top: px2(35px);
         left: px2(25px);
         z-index: 100;
-        .goBack {
-            display: inline-block;
-            width: 100px;
-            height: 72px;
-            background-image: url('@/assets/imgs/back.png');
-            background-repeat: no-repeat;
-            background-size: contain;
-            cursor: pointer;
-            transition: all 0.3s;
-            &:hover {
-              transform: scale(1.2);
-              background-image: url("@/assets/imgs/back-active.png");
-            }
+        display: inline-block;
+        width: px2(49px);
+        height: px2(46px);
+        background-image: url('@/assets/imgs/back.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        transition: all 0.3s;
+        &:hover {
+            transform: scale(1.2);
+            background-image: url("@/assets/imgs/back-active.png");
         }
     }
 

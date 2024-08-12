@@ -14,6 +14,8 @@ import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { sceneNameType } from '@/Core/Modules/scene';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { px2 } from '@/Core/parser/utils';
+import { Button } from '../Components/Base';
+import { AchievementSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 
 /**
  * 成就页面
@@ -30,6 +32,9 @@ export const Achievement: FC = () => {
     allTotal: 0,
     currentProgress: '0%',
   });
+  const achivementUIConfigs = useSelector(
+    (state: RootState) => state.GUI.gameUIConfigs[Scene.achievement],
+  ) as AchievementSceneUIConfig;
 
   useEffect(() => {
     if (GUIState.showAchievement) {
@@ -107,11 +112,12 @@ export const Achievement: FC = () => {
       {GUIState.showAchievement && (
         <div className={styles.achievement}>
           {/* 头部 */}
-          <div className={styles.achievement_header}>
-            <span className={styles.goback} onClick={handleGoBack} onMouseEnter={playSeEnter}>
-              {/* 返回 */}
-            </span>
-          </div>
+          <Button
+            item={achivementUIConfigs.buttons.Achievement_back_button}
+            defaultClass={styles.goback}
+            onClick={handleGoBack}
+            onMouseEnter={playSeEnter}
+          />
 
           {/* 已获得成就  */}
           <div className={styles.achievement_content}>
@@ -130,7 +136,10 @@ export const Achievement: FC = () => {
             style={{
               width: px2(StageState.achieveBgX),
               backgroundImage: `url("${StageState.achieveBg}")`,
-              backgroundSize: StageState.achieveBgX && StageState.achieveBgY && `${px2(StageState.achieveBgX)}px ${px2(StageState.achieveBgY)}px`,
+              backgroundSize:
+                StageState.achieveBgX &&
+                StageState.achieveBgY &&
+                `${px2(StageState.achieveBgX)}px ${px2(StageState.achieveBgY)}px`,
             }}
           >
             {saveData.allUnlockAchieveList?.length > 0 && (

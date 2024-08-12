@@ -13,27 +13,22 @@ $default_storyLine_bg_y: 720px;
     z-index: 99;
     overflow: auto;
 
-    .achievement_header {
-        display: flex;
-        align-items: center;
-        position: fixed;
+    .goback {
+        position: absolute;
+        z-index: 101;
         top: px2(35px);
         left: px2(35px);
-        z-index: 101;
-
-        .goback {
-            display: inline-block;
-            width: 100px;
-            height: 72px;
-            background-image: url('@/assets/imgs/back.png');
-            background-repeat: no-repeat;
-            background-size: contain;
-            cursor: pointer;
-            transition: all 0.3s;
-            &:hover {
-              transform: scale(1.2);
-              background-image: url("@/assets/imgs/back-active.png");
-            }
+        display: inline-block;
+        width: px2(49px);
+        height: px2(46px);
+        background-image: url('@/assets/imgs/back.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        transition: all 0.3s;
+        &:hover {
+          transform: scale(1.2);
+          background-image: url("@/assets/imgs/back-active.png");
         }
     }
 

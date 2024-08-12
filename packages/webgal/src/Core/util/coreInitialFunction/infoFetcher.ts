@@ -67,6 +67,7 @@ export const infoFetcher = (url: string) => {
 
       gameConfig.forEach((e) => {
         const { command, args, options } = e;
+        console.log(44446666, command);
         switch (command) {
           case 'Title_img': {
             const titleUrl = assetSetter(args.join(''), fileType.background);
@@ -214,11 +215,13 @@ export const infoFetcher = (url: string) => {
           }
         }
 
+        console.log(444555, command);
         if (
           (TitleSceneButtonKey[command as TitleSceneButtonKey] || TitleSceneOtherKey[command as TitleSceneOtherKey]) &&
           command !== TitleSceneOtherKey.Title_bgm
         ) {
           const scene = Scene.title;
+          console.log(4444, command);
 
           parseUIIConfigOptions(gameUIConfigs, scene, e);
         } else if (
@@ -292,7 +295,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     args.forEach((e: any) => {
       if (e.key === 'hide') {
         parsedArgs.hide = e.value === true;
-      } else if (e.key.endsWith('Style')) {
+      } else if (e.key.toLowerCase().endsWith('style')) {
         const style = parseStyleString(e.value as string);
 
         if (e.key === 'style' && swapImageContent) {
@@ -309,8 +312,20 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
   if (SceneKeyMap[scene]) {
     // @ts-ignore
     newOptions[scene] = { ...newOptions[scene] };
+    console.log(666666, item.command, item.args);
+    item.options = item.options ?? [];
+
+    const hasStyle = item.options.some((e) => e.key === 'style');
+
+    if (!hasStyle) {
+      item.options.push({ key: 'style', value: '{}' });
+    }
+
     // @ts-ignore
     if (SceneKeyMap[scene].buttons[item.command]) {
+      console.log(55555, item.command, item.args);
+      // @ts-ignore
+      newOptions[scene].buttons = { ...newOptions[scene].buttons };
       // @ts-ignore
       newOptions[scene].buttons[item.command] = {
         key: item.command,
@@ -324,6 +339,11 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
       if (bgKey[item.command as keyof typeof bgKey]) {
         swapContentAndStyle = true;
       }
+
+      // @ts-ignore
+      newOptions[scene].other = { ...newOptions[scene].other };
+
+      console.log(777777, swapContentAndStyle, item.command, item.args, item.options);
 
       // @ts-ignore
       newOptions[scene].other[item.command] = {
