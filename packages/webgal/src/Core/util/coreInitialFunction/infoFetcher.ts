@@ -83,7 +83,7 @@ export const infoFetcher = (url: string) => {
             const hide = (options.find((o) => o.key === 'hide')?.value as boolean) || false;
             const styleStr = (options.find((o) => o.key === 'style')?.value as string) || '';
 
-            let styleObj: GameMenuItem['args']['style'] = { ...initState.gameMenus.Game_achievement_button.args.style };
+            let styleObj: GameMenuItem['args']['style'] = {};
 
             const styleRegex = /\{(.*?)\}/;
             const styleMatch = styleStr.match(styleRegex);

@@ -17,6 +17,7 @@ export function ModalRecharge() {
   const { gameInfo } = useSelector((state: RootState) => state.storeData);
   const callbackRef = useRef({
     successCallback: () => {},
+    closeCallback: () => {},
   });
   const [rechargeList, setRechargeList] = useState<IRechargeItem[][]>([]);
   const [selectedItem, setSelectedItem] = useState<IRechargeItem>();
@@ -64,7 +65,7 @@ export function ModalRecharge() {
       // @ts-ignore
       window.pubsub.publish('toaster', { show: true, text: res.message });
       // @ts-ignore
-      window.pubsub.publish('loading', { loading: true });
+      window.pubsub.publish('loading', { loading: false });
     }
   };
 
@@ -90,13 +91,14 @@ export function ModalRecharge() {
 
   useEffect(() => {
     // @ts-ignore
-    const dispose = window.pubsub.subscribe('rechargeModal', ({ successCallback }) => {
+    const dispose = window.pubsub.subscribe('rechargeModal', ({ successCallback, closeCallback }) => {
       setVisible(true);
       fetchRechargeList();
       if (successCallback) {
-        callbackRef.current = {
-          successCallback,
-        };
+        callbackRef.current.successCallback = successCallback;
+      }
+      if (closeCallback) {
+        callbackRef.current.closeCallback = closeCallback;
       }
     });
 
@@ -120,6 +122,7 @@ export function ModalRecharge() {
           onClick={() => {
             playSeClick();
             setVisible(false);
+            callbackRef.current.closeCallback();
           }}
         />
         <div className={styles.RechargeModal_rechargeModalCard}>
@@ -152,7 +155,7 @@ export function ModalRecharge() {
                   </div>
                   <div className={styles.RechargeModal_rechargeModalItemContent}>
                     <img
-                      src="http://dummyimage.com/100x100"
+                      src={item.icon || 'http://dummyimage.com/100x100'}
                       alt=""
                       className={styles.RechargeModal_rechargeModalItemImg}
                     />

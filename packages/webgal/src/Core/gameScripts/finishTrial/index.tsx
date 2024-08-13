@@ -54,6 +54,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     gameInfo?.isFree === 2 ||
     (gameInfo?.isFree === 1 && gameInfo?.tryPlay === 1 && gameInfo.canPlay)
   ) {
+    // if (false) {
     return {
       performName: getRandomPerformName(),
       duration: 0,
@@ -80,12 +81,19 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       // @ts-ignore
       window.pubsub.publish('toaster', { show: true, text: '余额不足, 请充值' });
       // @ts-ignore
-      window.pubsub.publish('rechargeModal', {});
+      window.pubsub.publish('rechargeModal', {
+        successCallback: () => {
+          // @ts-ignore
+          window.pubsub.publish('loading', { loading: true });
+          submitBuy();
+        },
+        // closeCallback: checkBuy,
+      });
     } else {
       // @ts-ignore
       window.pubsub.publish('toaster', { show: true, text: res.message });
     }
-  }
+  };
 
   const checkBuy = (refresh = false) => {
     timer.current = setTimeout(
@@ -115,6 +123,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
 
           // 已经付费
           if (info.isFree === 1 && info.tryPlay === 2 && info.canPlay) {
+            // if (false) {
             WebGAL.gameplay.performController.unmountPerform('finishTrial');
           } else {
             // eslint-disable-next-line react/no-deprecated

@@ -42,6 +42,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
   const item = webgalStore.getState().storeData.paymentConfigurationList.find((e) => e.product_id === productId);
   let name = '';
   let price = item?.sales_amount;
+  const shouldDisplayModal = { current: false };
 
   sentence.args.forEach((e) => {
     switch (e.key) {
@@ -90,7 +91,12 @@ export const payProduct = (sentence: ISentence): IPerform => {
             window.pubsub.publish('toaster', { show: true, text: '余额不足，请充值' });
             // @ts-ignore
             window.pubsub.publish('rechargeModal', {
-              successCallback: checkBuy,
+              successCallback: () => {
+                // @ts-ignore
+                window.pubsub.publish('loading', { loading: true });
+                confirmCallback();
+              },
+              closeCallback: checkBuy,
             });
           } else {
             // @ts-ignore
@@ -118,6 +124,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
               leftText: '否',
               rightText: '是',
               leftFunc: () => {
+                shouldDisplayModal.current = true;
                 // backToTitle();
               },
               rightFunc: confirmCallback,
@@ -153,7 +160,13 @@ export const payProduct = (sentence: ISentence): IPerform => {
       };
       WebGAL.gameplay.performController.arrangeNewPerform(perform, sentence, false);
     },
-    blockingNext: () => true,
+    blockingNext: () => {
+      if (shouldDisplayModal.current) {
+        shouldDisplayModal.current = false;
+        checkBuy();
+      }
+      return true;
+    },
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };

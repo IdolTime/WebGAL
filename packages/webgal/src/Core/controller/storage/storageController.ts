@@ -22,7 +22,7 @@ export const setStorage = debounce(() => {
 export const getStorage = debounce(() => {
   localforage.getItem(WebGAL.gameKey).then((newUserData) => {
     // @ts-ignore
-    !!newUserData.token && delete newUserData.token;
+    newUserData && !!newUserData.token && delete newUserData.token;
     // 如果没有数据或者属性不完全，重新初始化
     if (!newUserData || !checkUserDataProperty(newUserData)) {
       logger.warn('现在重置数据');
@@ -58,7 +58,7 @@ export const dumpToStorageFast = () => {
   localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
     localforage.getItem(WebGAL.gameKey).then((newUserData) => {
       // @ts-ignore
-      !!newUserData.token && delete newUserData.token;
+      newUserData && !!newUserData.token && delete newUserData.token;
       // 如果没有数据，初始化
       if (!newUserData) {
         setStorage();
