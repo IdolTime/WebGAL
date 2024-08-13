@@ -6,7 +6,7 @@ import {
   Style,
   UIItemConfig,
 } from '@/Core/UIConfigTypes';
-import React, { ChangeEvent, CSSProperties, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { parseStyleArg } from '@/Core/parser/utils';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
@@ -226,6 +226,8 @@ export const Button = ({
   type = 'button',
   checked = false,
   onChecked = () => {},
+  text = '',
+  style,
 }: {
   item: ButtonItem;
   defaultClass?: string;
@@ -238,9 +240,11 @@ export const Button = ({
   type?: 'button' | 'checkbox';
   checked?: boolean;
   onChecked?: (checked: boolean) => void;
+  text?: string;
+  style?: CSSProperties;
 }) => {
   if (item.args.hide) return null;
-  const style = parseStyleArg(item.args.style);
+  const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
   const src = item.args.style?.image || '';
   const hoverSrc = item.args.hoverStyle?.image || src;
@@ -254,10 +258,12 @@ export const Button = ({
         transform: 'translate(-50%, -50%)',
       }
     : {};
-  if (style.width) imgStyle.width = style.width;
-  if (style.height) imgStyle.height = style.height;
+  const _style = { ...parsedStyle, ...style };
+  if (_style.width) imgStyle.width = _style.width;
+  if (_style.height) imgStyle.height = _style.height;
   // if (!style.position) style.position = 'absolute';
-  if (src) style.backgroundImage = 'none';
+  if (src) _style.backgroundImage = 'none';
+  const buttonText = menu.content || text;
 
   const clickCallback = (event: React.MouseEvent<HTMLDivElement>) => {
     if (type === 'checkbox') {
@@ -275,7 +281,7 @@ export const Button = ({
       onClick={clickCallback}
       defaultClass={defaultClass}
       defaultHoverClass={defaultHoverClass}
-      style={style}
+      style={_style}
       hoverStyle={hoverStyle}
       key={key}
     >
@@ -283,7 +289,7 @@ export const Button = ({
       {!!hoverSrc && type === 'checkbox' && checked && (
         <CustomImage src={hoverSrc} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle} />
       )}
-      {!!menu.content && <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />}
+      {!!buttonText && <CustomText text={buttonText} defaultClass={defaultTextClass} style={textStyle} />}
     </CustomContainer>
   );
 };
@@ -419,6 +425,105 @@ export const OptionSliderCustome = ({
   );
 };
 
+export const Indicator = ({
+  item,
+  defaultClass,
+  key,
+  onMouseEnter,
+  activeIndex,
+  pageLength = 1,
+  indicatorDefaultClass,
+  activeIndecatorClass,
+  onClickIndicator = () => {},
+  onClickPrev = () => {},
+  onClickNext = () => {},
+  nextIconDefaultClass,
+  prevIconDefaultClass,
+}: {
+  item: IndicatorContainerItem;
+  defaultClass?: string;
+  indicatorDefaultClass?: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onClick?: () => void;
+  key?: string;
+  type?: 'button' | 'checkbox';
+  checked?: boolean;
+  onChecked?: (checked: boolean) => void;
+  activeIndex: number;
+  activeIndecatorClass?: string;
+  pageLength: number;
+  onClickIndicator?: (index: number) => void;
+  onClickPrev?: () => void;
+  onClickNext?: () => void;
+  nextIconDefaultClass?: string;
+  prevIconDefaultClass?: string;
+}) => {
+  if (item.args.hide) return null;
+  const style = parseStyleArg(item.args.style);
+
+  const indicatorList = useMemo(
+    () =>
+      Array.from({ length: pageLength }).map(
+        (_, index) =>
+          ({
+            content: item.args.indicatorStyle?.image ? '' : (index + 1).toString(),
+            key: '' as any,
+            args: {
+              hide: false,
+              style: item.args.indicatorStyle || {},
+              hoverStyle: item.args.indicatorHoverStyle,
+            },
+          } satisfies ButtonItem),
+      ),
+    [pageLength],
+  );
+
+  const prevIconSrc = item.args.indicatorLeftStyle?.image || '';
+  const nextIconSrc = item.args.indicatorRightStyle?.image || '';
+  const indicatorStyle: CSSProperties = {};
+
+  if (item.args.indicatorStyle?.image) {
+    indicatorStyle.border = 0;
+  }
+
+  return (
+    <CustomContainer defaultClass={defaultClass} style={style} key={key}>
+      {prevIconSrc ? (
+        <CustomImage
+          src={prevIconSrc}
+          onMouseEnter={onMouseEnter}
+          defaultClass={prevIconDefaultClass}
+          onClick={onClickPrev}
+        />
+      ) : (
+        <div className={prevIconDefaultClass} onMouseEnter={onMouseEnter} onClick={onClickPrev} />
+      )}
+      {indicatorList.map((x, index) => (
+        <Button
+          key={index.toString()}
+          item={x}
+          defaultClass={`${indicatorDefaultClass} ${index === activeIndex ? activeIndecatorClass : ''}`}
+          checked={index === activeIndex}
+          type="checkbox"
+          onChecked={() => {
+            onClickIndicator(index);
+          }}
+        />
+      ))}
+      {nextIconSrc ? (
+        <CustomImage
+          src={nextIconSrc}
+          onMouseEnter={onMouseEnter}
+          defaultClass={nextIconDefaultClass}
+          onClick={onClickNext}
+        />
+      ) : (
+        <div className={nextIconDefaultClass} onMouseEnter={onMouseEnter} onClick={onClickNext} />
+      )}
+    </CustomContainer>
+  );
+};
 function replaceOrAddRule(selector: string, ruleText: string) {
   const styleSheet = document.styleSheets[0];
 

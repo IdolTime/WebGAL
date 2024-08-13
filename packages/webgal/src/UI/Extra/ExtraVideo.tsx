@@ -14,6 +14,8 @@ import { ISaveData } from '@/store/userDataInterface';
 import { saveGame } from '@/Core/controller/storage/saveGame';
 import { setVisibility } from '@/store/GUIReducer';
 import { saveActions } from '@/store/savesReducer';
+import { ExtraSceneOtherKey, ExtraSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
+import { Button, Indicator } from '../Components/Base';
 
 let editNameVal = '';
 let editNameIndex = 0;
@@ -25,6 +27,8 @@ export const ExtraVideo: FC = () => {
   const dispatch = useDispatch();
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const page = [];
+  const extraUIConfigs = useSelector((state: RootState) => state.GUI.gameUIConfigs[Scene.extra]) as ExtraSceneUIConfig;
+
   for (let i = 1; i <= 20; i++) {
     let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
     if (i === userDataState.optionData.slPage) {
@@ -92,11 +96,7 @@ export const ExtraVideo: FC = () => {
             </div>
           </div>
           <div className={styles.Save_Load_content_miniRen}>
-            <img 
-              className={styles.Save_Load_content_miniRen_bg} 
-              alt="Save_img_preview" 
-              src={saveData.previewImage} 
-            />
+            <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
           </div>
           <div>
             <div
@@ -115,7 +115,7 @@ export const ExtraVideo: FC = () => {
     const saveElement = (
       <div
         onClick={() => {
-          dispatch(setshowFavorited(true))
+          dispatch(setshowFavorited(true));
           loadGame(i, true);
           playSeClick();
         }}
@@ -136,18 +136,36 @@ export const ExtraVideo: FC = () => {
     playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
-  }
+  };
 
   return (
     <>
+      <Button
+        item={extraUIConfigs.buttons.Extra_back_button}
+        defaultClass={`${styles.goback} ${styles.extraVideo_goback}`}
+        onClick={handleGoBack}
+        onMouseEnter={playSeEnter}
+      />
+      <Button
+        item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_title]}
+        defaultClass={styles.Save_Load_title}
+        defaultTextClass={styles.Load_title_text}
+        text={t('extra.title')}
+      />
       <div className={styles.Save_Load_main}>
-        <div className={styles.Save_Load_top}>
-          <div className={`${styles.goback} ${styles.extraVideo_goback}`} onClick={handleGoBack} onMouseEnter={playSeEnter}></div>
-          <div className={styles.Save_Load_title}>
-            <div className={styles.Load_title_text}>{t('extra.title')}</div>
-          </div>
-          <div className={styles.Save_Load_top_buttonList}>{page}</div>
-        </div>
+        <Indicator
+          item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
+          activeIndex={userDataState.optionData.slPage}
+          defaultClass={styles.Save_Load_top_buttonList}
+          pageLength={20}
+          indicatorDefaultClass={`${styles.Save_Load_top_button} ${styles.Load_top_button}`}
+          activeIndecatorClass={`${styles.Save_Load_top_button_on} ${styles.Load_top_button_on}`}
+          onClickIndicator={(i) => {
+            dispatch(setSlPage(i));
+            setStorage();
+            playSePageChange();
+          }}
+        />
         <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
           {showSaves}
         </div>
