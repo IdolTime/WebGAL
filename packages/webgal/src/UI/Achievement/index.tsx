@@ -150,7 +150,7 @@ export const Achievement: FC = () => {
     const textCss = !textStyle?.args?.hide 
     ? {
         ...textStyle?.args?.style,
-        color: textStyle?.args?.style.fontColor,
+        color: textStyle?.args?.style?.fontColor,
         transform: textStyle?.args.style?.scale ? `scale(${textStyle.args.style.scale})` : '',
       }
     : {}
