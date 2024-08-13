@@ -30,6 +30,7 @@ export function ModalRecharge() {
         window.pubsub.publish('toaster', { show: true, text: '充值成功' });
         // @ts-ignore
         window.pubsub.publish('loading', { loading: false });
+        callbackRef.current.successCallback();
         setVisible(false);
       } else if (res.data?.pay_status === 3) {
         // @ts-ignore

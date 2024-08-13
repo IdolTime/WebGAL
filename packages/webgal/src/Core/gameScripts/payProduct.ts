@@ -118,7 +118,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
               leftText: '否',
               rightText: '是',
               leftFunc: () => {
-                backToTitle();
+                // backToTitle();
               },
               rightFunc: confirmCallback,
             });

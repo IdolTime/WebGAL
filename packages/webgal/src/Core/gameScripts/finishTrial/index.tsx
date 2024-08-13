@@ -13,12 +13,13 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
-import { buyChapter, getGameInfo, getIsBuy } from '@/services/store';
+import { buyChapter, buyGame, getGameInfo, getIsBuy } from '@/services/store';
 import { backToTitle } from '../../controller/gamePlay/backToTitle';
 import { getRandomPerformName } from '../../Modules/perform/performController';
 import { SourceImg } from '@/UI/Components/SourceImg';
 import FinishTrialBg from '@/assets/imgs/finish-trial.png';
 import ModalClose from '@/assets/imgs/modal-close.png';
+import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
 
 import styles from './finishTrial.module.scss';
 
@@ -46,6 +47,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
   const gameInfo = webgalStore.getState().storeData.gameInfo;
   let hasTrial = gameInfo?.isFree === 1 && gameInfo?.tryPlay === 2;
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  const shouldDisplayModal = { current: false };
 
   if (
     (hasTrial && gameInfo?.canPlay) ||
@@ -65,14 +67,25 @@ export const finishTrial = (sentence: ISentence): IPerform => {
   }
 
   const submitBuy = async () => {
-    // @ts-ignore
-    window.pubsub.publish('showBuyGameModal', {
-      buyGameCallback: () => {},
-      startGameCallback: () => {
-        WebGAL.gameplay.performController.unmountPerform('finishTrial');
-      },
-    });
-  };
+    playSeClick();
+    const res = await buyGame();
+
+    if (res.code === 0 || res.code === 10053) {
+      // if (res.code === 0) {
+      // @ts-ignore
+      res.code === 0 && window.pubsub.publish('toaster', { show: true, image: BuyGameSuccess, animation: 'slideIn' });
+      WebGAL.gameplay.performController.unmountPerform('finishTrial');
+    } else if (res.code === 10014) {
+      // } else if (res.code === 10053) {
+      // @ts-ignore
+      window.pubsub.publish('toaster', { show: true, text: '余额不足, 请充值' });
+      // @ts-ignore
+      window.pubsub.publish('rechargeModal', {});
+    } else {
+      // @ts-ignore
+      window.pubsub.publish('toaster', { show: true, text: res.message });
+    }
+  }
 
   const checkBuy = (refresh = false) => {
     timer.current = setTimeout(
@@ -109,7 +122,16 @@ export const finishTrial = (sentence: ISentence): IPerform => {
               <div className={styles.FinishTrial_container}>
                 <div className={styles.FinishTrial_inner}>
                   <SourceImg src={FinishTrialBg} />
-                  <SourceImg src={ModalClose} className={styles.FinishTrial_close} />
+                  <SourceImg
+                    src={ModalClose}
+                    className={styles.FinishTrial_close}
+                    onMouseEnter={playSeEnter}
+                    onClick={() => {
+                      shouldDisplayModal.current = true;
+                      // eslint-disable-next-line react/no-deprecated
+                      ReactDOM.render(<div />, document.getElementById('chooseContainer'));
+                    }}
+                  />
                   <span className={styles.FinishTrial_price}>{info.salesAmount}</span>
                   <div className={styles.FinishTrial_btn} onClick={submitBuy} onMouseEnter={playSeEnter}>
                     <span className={styles.FinishTrial_btn_text}>继续游玩</span>
@@ -151,7 +173,13 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       };
       WebGAL.gameplay.performController.arrangeNewPerform(perform, sentence, false);
     },
-    blockingNext: () => true,
+    blockingNext: () => {
+      if (shouldDisplayModal.current) {
+        checkBuy();
+        shouldDisplayModal.current = false;
+      }
+      return true;
+    },
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };

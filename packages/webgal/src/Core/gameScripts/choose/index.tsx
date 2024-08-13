@@ -255,6 +255,8 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               });
             }
             return;
+          } else {
+            continueCallback();
           }
         };
         // : () => {};
@@ -368,7 +370,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               <span>
                 {e.text}
                 {!e.hasBought && e.shouldPay && (
-                  <span style={{ marginLeft: 8, fontSize: '0.7em' }}>(需要{e.amount}星光解锁)</span>
+                  <span style={{ marginLeft: 8, fontSize: '0.7em' }}>(需要{e.amount}星石解锁)</span>
                 )}
               </span>
             </div>
