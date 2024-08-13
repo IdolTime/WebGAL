@@ -1,22 +1,41 @@
-import { CSSProperties, FC, useEffect } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { loadGame } from '@/Core/controller/storage/loadGame';
 import styles from '../SaveAndLoad.module.scss';
-// import {saveGame} from '@/Core/controller/storage/saveGame';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
 import useTrans from '@/hooks/useTrans';
-import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
+import { LoadSceneUIConfig, ButtonItem, IndicatorContainerItem, Scene } from '@/Core/UIConfigTypes';
+import { Iargs } from './loadInterface'
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { px2 } from '@/Core/parser/utils';
+
+
+interface ISetBgStyle {
+  hasDisplay?: boolean;
+  id?: string;
+  imgType?: fileType;
+}
 
 export const Load: FC = () => {
+  const dispatch = useDispatch();
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const saveDataState = useSelector((state: RootState) => state.saveData);
-  const dispatch = useDispatch();
+  const loadUIConfigs = useSelector(
+    (state: RootState) => state.GUI.gameUIConfigs[Scene.load] as LoadSceneUIConfig
+  )
+
+  useEffect(() => {
+    console.log(loadUIConfigs);
+    debugger;
+  }, [])
+
+
   const page = [];
   for (let i = 1; i <= 20; i++) {
     let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
@@ -34,7 +53,14 @@ export const Load: FC = () => {
         key={'Load_element_page' + i}
         className={classNameOfElement}
       >
-        <div className={styles.Save_Load_top_button_text}>{i}</div>
+        <div 
+          className={styles.Save_Load_top_button_text}
+          style={
+            setBgStyle(
+              loadUIConfigs?.other?.Load_indicator as IndicatorContainerItem, 
+              { hasDisplay: false, imgType: fileType.ui}
+            )
+          }>{i}</div>
       </div>
     );
     page.push(element);
@@ -88,7 +114,13 @@ export const Load: FC = () => {
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
         className={styles.Save_Load_content_element}
-        style={{ animationDelay: `${animationIndex * 30}ms` }}
+        style={{ 
+          animationDelay: `${animationIndex * 30}ms`,
+          ...setBgStyle(
+            loadUIConfigs?.other?.Load_locked_item, 
+            { hasDisplay: true, imgType: fileType.ui}
+          )
+        }}
       >
         {saveElementContent}
       </div>
@@ -103,14 +135,105 @@ export const Load: FC = () => {
     dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   }
 
+  function getImgUrl(img: string, type: fileType) {
+    return assetSetter(img, type);
+  }
+
+  function setBgStyle(
+    loadUIConfig:  ButtonItem | IndicatorContainerItem, 
+    { 
+      hasDisplay = false,
+      id = '', 
+      imgType
+    }: ISetBgStyle
+  ) {
+    const styleObj: CSSProperties = {}
+    const args = loadUIConfig?.args
+    if (!args || args?.hide && !hasDisplay) return styleObj
+
+    if (args?.hide && hasDisplay) {
+      styleObj['display'] = 'none';
+    }
+
+    const style = args.style
+    const imageFormatsRegex = /\.(png|jpeg|jpg|webp|icon|fig)$/;
+
+    if (style?.image) {
+      if (imageFormatsRegex.test(style.image) && imgType) {
+        styleObj['backgroundImage'] = `url(${getImgUrl(style?.image, imgType)})`;
+        styleObj['position'] = style.position;
+        styleObj['backgroundSize'] = '100% 100%';
+        styleObj['backgroundRepeat'] = 'no-repeat';
+      } else {
+        const ele = document.getElementById(id)
+        if (ele) {
+          ele.innerText = style?.image;
+        }
+      }
+    }
+
+    if (style?.scale) {
+      styleObj['transform'] = `scale(${style.scale})`;
+    }
+
+    if (typeof style?.x === 'number') {
+      styleObj['top'] = `${px2(style.x)}px`;
+    }
+
+    if (typeof style?.y === 'number') {
+      styleObj['top'] = `${px2(style.y)}px`;
+    }
+
+    if (style?.width) {
+      styleObj['width'] = `${px2(style.width)}px`;
+    }
+
+    if (style?.height) {
+      styleObj['height'] = `${px2(style.height)}px`;
+    }
+
+    if (style?.height) {
+      styleObj['height'] = `${px2(style.height)}px`;
+    }
+
+    if (style?.fontColor) {
+      styleObj['color'] = style.fontColor;
+    }
+
+    if (style?.fontSize) {
+      styleObj['fontSize'] = style.fontSize;
+    }
+
+    return styleObj
+  }
+
   return (
-    <div className={styles.Save_Load_main}>
+    <div 
+      className={styles.Save_Load_main}
+      style={setBgStyle(loadUIConfigs?.other?.Load_bg, { hasDisplay: false, imgType: fileType.background })}
+    >
       <div className={styles.Save_Load_top}>
-        <div className={styles.goback} onClick={handleGoBack} onMouseEnter={playSeEnter}>
-          {/* 返回 */}
-        </div>
-        <div className={styles.Save_Load_title}>
-          <div className={styles.Load_title_text}>{t('loadSaving.title')}</div>
+        <div 
+          className={styles.goback}
+          style={setBgStyle(loadUIConfigs?.buttons?.Load_back_button, { hasDisplay: true, imgType: fileType.ui })}
+          onClick={handleGoBack} 
+          onMouseEnter={playSeEnter}
+        >{/* 返回 */}</div>
+        <div 
+          className={styles.Save_Load_title}
+          style={
+            setBgStyle(
+              loadUIConfigs?.other?.Load_title, 
+              { hasDisplay: true, id: loadUIConfigs?.other?.Load_title.key }
+            )
+          }
+        >
+          <div 
+            id={loadUIConfigs?.other?.Load_title.key} 
+            className={styles.Load_title_text}
+          >
+            {t('loadSaving.title')}
+          </div>
         </div>
         <div className={styles.Save_Load_top_buttonList}>{page}</div>
       </div>

@@ -279,9 +279,9 @@ export const Button = ({
       hoverStyle={hoverStyle}
       key={key}
     >
-      {!!src && <CustomImage src={src} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle} />}
+      {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />}
       {!!hoverSrc && type === 'checkbox' && checked && (
-        <CustomImage src={hoverSrc} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle} />
+        <CustomImage src={assetSetter(hoverSrc, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />
       )}
       {!!menu.content && <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />}
     </CustomContainer>

@@ -14,6 +14,11 @@ import { px2 } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
 
+// import { LoadSceneUIConfig, ButtonItem, IndicatorContainerItem, Scene } from '@/Core/UIConfigTypes';
+// import { Iargs } from './loadInterface'
+// import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+// import { px2 } from '@/Core/parser/utils';
+
 /**
  * 故事线页面
  * @constructor

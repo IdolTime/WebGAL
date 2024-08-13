@@ -78,7 +78,6 @@ export const infoFetcher = (url: string) => {
 
       gameConfig.forEach((e) => {
         const { command, args, options } = e;
-        console.log(44446666, command);
         switch (command) {
           case 'Title_img': {
             const titleUrl = assetSetter(args.join(''), fileType.background);
@@ -136,7 +135,6 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'Game_sound': {
-            console.log(args, options);
             if (options?.length > 0) {
               const newOptions = options.map((option) => {
                 if (typeof option.value === 'string') {
@@ -154,7 +152,6 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'Menu_sound': {
-            console.log(args, options);
             if (options?.length > 0) {
               const newOptions = options.map((option) => {
                 if (typeof option.value === 'string') {
@@ -240,7 +237,6 @@ export const infoFetcher = (url: string) => {
           command !== TitleSceneOtherKey.Title_bgm
         ) {
           const scene = Scene.title;
-          console.log(4444, command);
 
           parseUIIConfigOptions(gameUIConfigs, scene, e);
         } else if (
@@ -332,7 +328,6 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
   if (SceneKeyMap[scene]) {
     // @ts-ignore
     newOptions[scene] = { ...newOptions[scene] };
-    console.log(666666, item.command, item.args);
     item.options = item.options ?? [];
 
     const hasStyle = item.options.some((e) => e.key === 'style');
@@ -343,7 +338,6 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
 
     // @ts-ignore
     if (SceneKeyMap[scene].buttons[item.command]) {
-      console.log(55555, item.command, item.args);
       // @ts-ignore
       newOptions[scene].buttons = { ...newOptions[scene].buttons };
       // @ts-ignore
@@ -362,8 +356,6 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
 
       // @ts-ignore
       newOptions[scene].other = { ...newOptions[scene].other };
-
-      console.log(777777, swapContentAndStyle, item.command, item.args, item.options);
 
       // @ts-ignore
       newOptions[scene].other[item.command] = {
