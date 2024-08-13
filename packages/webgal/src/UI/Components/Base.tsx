@@ -257,7 +257,12 @@ export const Button = ({
   if (style.width) imgStyle.width = style.width;
   if (style.height) imgStyle.height = style.height;
   // if (!style.position) style.position = 'absolute';
-  if (src) style.backgroundImage = 'none';
+  // if (src) style.backgroundImage = 'none';
+  if (src) {
+    style.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
+    style.backgroundSize ='100% 100%';
+    style.backgroundRepeat = 'no-repeat';
+  }
 
   const clickCallback = (event: React.MouseEvent<HTMLDivElement>) => {
     if (type === 'checkbox') {
@@ -279,7 +284,7 @@ export const Button = ({
       hoverStyle={hoverStyle}
       key={key}
     >
-      {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />}
+      {/* {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />} */}
       {!!hoverSrc && type === 'checkbox' && checked && (
         <CustomImage src={assetSetter(hoverSrc, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />
       )}
