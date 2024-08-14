@@ -56,8 +56,9 @@
 
 .Options_light_slider {
   position: absolute;
-  top: px2(350px);
-  left: px2(460px);
+  transform: none !important;
+  // top: px2(350px);
+  // left: px2(460px);
   // left: px2(622px)；
   display: flex;
 

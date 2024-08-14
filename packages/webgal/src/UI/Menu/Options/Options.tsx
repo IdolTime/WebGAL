@@ -83,11 +83,28 @@ export const Options: FC = () => {
       />
 
       {/* 视频尺寸 */}
-      <OptionVideoSize label="视频尺寸" />
+      <OptionVideoSize />
 
       {/* 亮度 */}
-      <div className={styles.Options_light_slider}>
-        <span className={styles.label}>亮度</span>
+        <OptionSliderCustome
+          item={optionUIConfigs.other[OptionSceneOtherKey.Options_light_slider]}
+          defaultClass={styles.Options_light_slider}
+          initValue={userDataState.optionData.uiLight}
+          // uniqueID="亮度"
+          uniqueID="light"
+          min={configLight.min}
+          max={configLight.max}
+          onChange={(event) => {
+            let newValue = Number(event.target.value);
+            if (newValue < configLight.min) {
+              newValue = configLight.min;
+            }
+            useUILight(newValue);
+            dispatch(setOptionData({ key: 'uiLight', value: newValue }));
+            setStorage();
+          }}
+        />
+      {/* <div className={styles.Options_light_slider}>
         <OptionSlider
           initValue={userDataState.optionData.uiLight}
           uniqueID="light"
@@ -103,7 +120,7 @@ export const Options: FC = () => {
             setStorage();
           }}
         />
-      </div>
+      </div> */}
 
       <OptionSliderCustome
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_effect_volume_slider]}

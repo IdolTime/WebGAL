@@ -354,6 +354,9 @@ export enum OptionSceneOtherKey {
   Option_window_checkbox_label = 'Option_window_checkbox_label',
   Option_fullscreen_checkbox = 'Option_fullscreen_checkbox',
   Option_window_checkbox = 'Option_window_checkbox',
+  Option_videoSize1080_checkbox = 'Option_videoSize1080_checkbox',
+  Option_videoSize720_checkbox = 'Option_videoSize720_checkbox',
+  Options_light_slider = 'Options_light_slider'
 }
 
 export const optionSceneOtherConfig: Record<
@@ -561,11 +564,36 @@ export const optionSceneOtherConfig: Record<
       },
     },
   },
+  [OptionSceneOtherKey.Options_light_slider]: {
+    type: 'container',
+    label: '亮度',
+    children: {
+      [SliderItemKey.slider]: {
+        label: '亮度滑动条',
+        hasHoverStyle: false,
+      },
+      [SliderItemKey.sliderBg]: {
+        hasHoverStyle: false,
+        label: '亮度滑动条背景',
+      },
+      [SliderItemKey.sliderThumb]: {
+        hasHoverStyle: false,
+        label: '亮度滑动条拇指',
+      },
+    },
+  },
   [OptionSceneOtherKey.Option_fullscreen_checkbox]: {
     label: '全屏模式复选框',
   },
   [OptionSceneOtherKey.Option_window_checkbox]: {
     label: '窗口模式复选框',
+  },
+
+  [OptionSceneOtherKey.Option_videoSize1080_checkbox]: {
+    label: '视频尺寸1080P复选框',
+  },
+  [OptionSceneOtherKey.Option_videoSize720_checkbox]: {
+    label: '视频尺寸720P复选框',
   },
   [OptionSceneOtherKey.Option_text_speed_slider]: {
     type: 'container',
@@ -837,10 +865,13 @@ export interface OptionSceneUIConfig {
     [OptionSceneOtherKey.Option_fullscreen_checkbox]: ButtonItem;
     [OptionSceneOtherKey.Option_window_checkbox_label]: ContainerItem;
     [OptionSceneOtherKey.Option_window_checkbox]: ButtonItem;
+    [OptionSceneOtherKey.Option_videoSize1080_checkbox]: ButtonItem;
+    [OptionSceneOtherKey.Option_videoSize720_checkbox]: ButtonItem;
     [OptionSceneOtherKey.Option_global_volume_label]: ContainerItem;
     [OptionSceneOtherKey.Option_global_volume_slider]: SliderContainerItem;
     [OptionSceneOtherKey.Option_voice_slider]: SliderContainerItem;
     [OptionSceneOtherKey.Option_voice_volume_label]: ContainerItem;
+    [OptionSceneOtherKey.Options_light_slider]: SliderContainerItem;
   };
   buttons: { [key in OptionSceneButtonKey]: ButtonItem };
 }
@@ -1216,6 +1247,21 @@ export const sceneUIConfig: SceneUIConfig = {
         key: OptionSceneOtherKey.Option_window_checkbox,
         content: '',
         args: generateArgs(['hoverStyle']),
+      },
+      [OptionSceneOtherKey.Option_videoSize1080_checkbox]: {
+        key: OptionSceneOtherKey.Option_videoSize1080_checkbox,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [OptionSceneOtherKey.Option_videoSize720_checkbox]: {
+        key: OptionSceneOtherKey.Option_videoSize720_checkbox,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [OptionSceneOtherKey.Options_light_slider]: {
+        key: OptionSceneOtherKey.Options_light_slider,
+        content: '',
+        args: generateArgs(['sliderStyle', 'sliderBgStyle', 'sliderThumbStyle']),
       },
       [OptionSceneOtherKey.Option_global_volume_slider]: {
         key: OptionSceneOtherKey.Option_global_volume_slider,
