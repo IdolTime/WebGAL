@@ -4,45 +4,62 @@ import { webgalStore } from '@/store/store';
 import { setStage, addShowValueList } from '@/store/stageReducer';
 import { IShowValueListItem } from '@/store/stageInterface';
 
+const parseStyle = (styleString: string) => {
+  const styleRegex = /\{(.*?)\}/;
+  const styleMatch = styleString.match(styleRegex);
+  if (styleMatch) {
+    const styleStr = styleMatch[1];
+    const styleProps = styleStr.split(',');
+    const style: any = {}; // Change to specific type if possible
+
+    // Parse each style property
+    styleProps.forEach((prop) => {
+      const [key, value] = prop.split('=');
+      if (key && value) {
+        style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
+      }
+    });
+
+    return style;
+  }
+};
 
 /**
  * 语句执行的模板代码
  * @param sentence
  */
 export function showValue(sentence: ISentence): IPerform {
-
   const payload: IShowValueListItem = {
     isShowValueSWitch: false,
     showValueName: '',
     showValueAxisX: 0,
     showValueAxisY: 0,
+    showProgress: false,
+  };
+
+  if (sentence?.content) {
+    payload['showValueName'] = sentence.content;
   }
 
-	if (sentence?.content) {
-		webgalStore.dispatch(setStage({ key: 'showValueName', value: sentence.content }));
-    payload['showValueName'] = sentence.content
-	}
-
-	sentence.args.forEach((e) => {
+  sentence.args.forEach((e) => {
     if (e.key === 'switchValue') {
-			webgalStore.dispatch(
-				setStage({ key: 'isShowValueSWitch', value: e.value })
-			);
-			payload['isShowValueSWitch'] = !!e.value
+      payload['isShowValueSWitch'] = !!e.value;
     } else if (e.key === 'x') {
-			webgalStore.dispatch(
-				setStage({ key: 'showValueAxisX', value: Number(e.value) })
-			);
-      payload['showValueAxisX'] = Number(e.value)
+      payload['showValueAxisX'] = Number(e.value);
     } else if (e.key === 'y') {
-			webgalStore.dispatch(
-				setStage({ key: 'showValueAxisY', value: Number(e.value) })
-			);
-      payload['showValueAxisY'] = Number(e.value)
+      payload['showValueAxisY'] = Number(e.value);
+    } else if (e.key === 'showProgress') {
+      payload['showProgress'] = !!e.value;
+    } else if (e.key === 'progressBarBgStyle') {
+      payload['progressBarBgStyle'] = parseStyle(e.value as string);
+    } else if (e.key === 'progressBarStyle') {
+      payload['progressBarStyle'] = parseStyle(e.value as string);
+    } else if (e.key === 'maxValue') {
+      payload['maxValue'] = Number(e.value);
     }
   });
 
-  webgalStore.dispatch(addShowValueList(payload))
+  webgalStore.dispatch(addShowValueList(payload));
 
   return {
     performName: 'none',
@@ -54,4 +71,3 @@ export function showValue(sentence: ISentence): IPerform {
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
   };
 }
-

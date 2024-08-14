@@ -177,7 +177,7 @@ export interface IStageState {
   unlockAchieve: IUnlockAchieveItem;
   unlockAchieves: Array<IUnlockAchieveObj>;
   totalAchievements: number; // 总成就数量
-  unlockedAchievements: number; //已获得的成就数量
+  unlockedAchievements: number; // 已获得的成就数量
   achieveBgX: string;
   achieveBgY: string;
   isShowValueSWitch: boolean;
@@ -193,6 +193,14 @@ export interface IShowValueListItem {
   showValueName: string;
   showValueAxisX: number;
   showValueAxisY: number;
+  showProgress: boolean;
+  progressBarBgStyle?: {
+    image: string;
+  };
+  progressBarStyle?: {
+    image: string;
+  };
+  maxValue?: number;
 }
 
 export interface IShowValueItem {

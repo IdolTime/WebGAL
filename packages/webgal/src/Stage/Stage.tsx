@@ -16,7 +16,7 @@ import { isIOS } from '@/Core/initializeScript';
 import { WebGAL } from '@/Core/WebGAL';
 import { IGuiState } from '@/store/guiInterface';
 import { IStageState } from '@/store/stageInterface';
-import { VariableName } from '@/Stage/VariableName'
+import { VariableName } from '@/Stage/VariableName';
 // import OldStage from '@/Components/Stage/OldStage/OldStage';
 
 function inTextBox(event: React.MouseEvent) {
@@ -134,7 +134,7 @@ export const Stage: FC = () => {
         onMouseMove={(e) => !GUIState.showControls && updateControlsVisibility(e, stageState, GUIState, dispatch)}
       />
       <IntroContainer />
-      {stageState.isShowValueSWitch && <VariableName />}
+      <VariableName />
     </div>
   );
 };
