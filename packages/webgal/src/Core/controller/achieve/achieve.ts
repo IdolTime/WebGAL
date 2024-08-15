@@ -11,7 +11,7 @@ import { sceneNameType } from '@/Core/Modules/scene';
 /**
  * 进入成就页面
  */
-export const enterAchieve = () => {
+export const enterAchieve = async () => {
   webgalStore.dispatch(saveActions.setIsShowUnlock(false));
 
   // 重新获取初始场景
@@ -28,7 +28,7 @@ export const enterAchieve = () => {
     });
   });
 
-  webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showAchievement', visibility: true }));

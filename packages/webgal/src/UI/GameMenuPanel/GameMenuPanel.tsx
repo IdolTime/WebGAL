@@ -171,15 +171,15 @@ export const GameMenuPanel = () => {
       }
     }
 
-    // const nameMap = {
-    //   Esc_continueGame_button: '继续游戏',
-    //   Esc_backToLevel_button: '返回关卡',
-    //   Esc_setting_button: '设置', 
-    //   Esc_exitGame_button: '退出游戏',
-    // }
+    const nameMap = {
+      Esc_continueGame_button: '继续游戏',
+      Esc_backToLevel_button: '返回关卡',
+      Esc_setting_button: '设置', 
+      Esc_exitGame_button: '退出游戏',
+    }
     const btnTextElement = document.getElementById(`${id}-text`)
-    if (btnTextElement) {
-      btnTextElement.innerText = menu?.content?.replace(/\\n/g, "\n") ?? '';
+    if (btnTextElement && menu?.content) {
+      btnTextElement.innerText = menu.content?.replace(/\\n/g, "\n") ?? '';
     }
     
     return (
@@ -191,7 +191,9 @@ export const GameMenuPanel = () => {
         onClick={clickCallbackMap[key]}
         style={styleObj}
       >
-        <span className={styles.button_text} style={styleText} id={`${id}-text`} />
+        <span className={styles.button_text} style={styleText} id={`${id}-text`}>
+          {nameMap[key]}
+        </span>
       </span>
     )
   }

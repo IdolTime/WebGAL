@@ -28,12 +28,7 @@ export const Load: FC = () => {
   const saveDataState = useSelector((state: RootState) => state.saveData);
   const loadUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.load] as LoadSceneUIConfig
-  )
-
-  useEffect(() => {
-    console.log(loadUIConfigs);
-    debugger;
-  }, [])
+  );
 
 
   const page = [];
