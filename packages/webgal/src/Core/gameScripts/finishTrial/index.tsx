@@ -1,27 +1,13 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { changeScene } from '@/Core/controller/scene/changeScene';
-import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React, { useRef } from 'react';
 import { webgalStore } from '@/store/store';
-import { textFont } from '@/store/userDataInterface';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
-import { whenChecker } from '@/Core/controller/gamePlay/scriptExecutor';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
-import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
-import { buyChapter, buyGame, getGameInfo, getIsBuy } from '@/services/store';
-import { backToTitle } from '../../controller/gamePlay/backToTitle';
+import { buyGame, getGameInfo } from '@/services/store';
 import { getRandomPerformName } from '../../Modules/perform/performController';
-import { SourceImg } from '@/UI/Components/SourceImg';
-import FinishTrialBg from '@/assets/imgs/finish-trial.png';
-import ModalClose from '@/assets/imgs/modal-close.png';
 import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
-
-import styles from './finishTrial.module.scss';
 
 /**
  * 结束试玩
@@ -127,28 +113,43 @@ export const finishTrial = (sentence: ISentence): IPerform => {
             WebGAL.gameplay.performController.unmountPerform('finishTrial');
           } else {
             // eslint-disable-next-line react/no-deprecated
-            ReactDOM.render(
-              <div className={styles.FinishTrial_container}>
-                <div className={styles.FinishTrial_inner}>
-                  <SourceImg src={FinishTrialBg} />
-                  <SourceImg
-                    src={ModalClose}
-                    className={styles.FinishTrial_close}
-                    onMouseEnter={playSeEnter}
-                    onClick={() => {
-                      shouldDisplayModal.current = true;
-                      // eslint-disable-next-line react/no-deprecated
-                      ReactDOM.render(<div />, document.getElementById('chooseContainer'));
-                    }}
-                  />
-                  <span className={styles.FinishTrial_price}>{info.salesAmount}</span>
-                  <div className={styles.FinishTrial_btn} onClick={submitBuy} onMouseEnter={playSeEnter}>
-                    <span className={styles.FinishTrial_btn_text}>继续游玩</span>
-                  </div>
-                </div>
-              </div>,
-              document.getElementById('chooseContainer'),
-            );
+            // ReactDOM.render(
+            //   <div className={styles.FinishTrial_container}>
+            //     <div className={styles.FinishTrial_inner}>
+            //       <SourceImg src={FinishTrialBg} />
+            //       <SourceImg
+            //         src={ModalClose}
+            //         className={styles.FinishTrial_close}
+            //         onMouseEnter={playSeEnter}
+            //         onClick={() => {
+            //           shouldDisplayModal.current = true;
+            //           // eslint-disable-next-line react/no-deprecated
+            //           ReactDOM.render(<div />, document.getElementById('chooseContainer'));
+            //         }}
+            //       />
+            //       <span className={styles.FinishTrial_price}>{info.salesAmount}</span>
+            //       <div className={styles.FinishTrial_btn} onClick={submitBuy} onMouseEnter={playSeEnter}>
+            //         <span className={styles.FinishTrial_btn_text}>继续游玩</span>
+            //       </div>
+            //     </div>
+            //   </div>,
+            //   document.getElementById('chooseContainer'),
+            // );
+
+            const _info = webgalStore.getState().storeData.gameInfo;
+
+            showGlogalDialog({
+              title: `试玩结束`,
+              content: `可以花费${_info?.salesAmount}`,
+              suffixContent: '购买完整版继续游玩',
+              leftText: '否',
+              rightText: '是',
+              leftFunc: () => {
+                shouldDisplayModal.current = true;
+                // backToTitle();
+              },
+              rightFunc: submitBuy,
+            });
           }
         } else {
           retry();

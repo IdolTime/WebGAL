@@ -27,6 +27,100 @@
   position: relative;
 }
 
+.GlobalDialog_pay_container {
+  display: flex;
+  background: linear-gradient(180deg, #EAE7FE 0%, #F9EAFB 100%);
+  border-radius: px2(12px);
+  width: px2(960px);
+  position: relative;
+  flex-direction: column;
+}
+
+.GlobalDialog_pay_tip {
+  position: absolute;
+  width: px2(228px);
+  height: px2(47px);
+  left: 50%;
+  transform: translateX(-50%);
+  top: px2(-56px)
+}
+
+.GlobalDialog_pay_close {
+  position: absolute;
+  top: px2(-51px);
+  cursor: pointer;
+  right: 0;
+  width: px2(36px);
+  height: px2(36px);
+  background-image: url('@/assets/imgs/modal-close-2.png');
+}
+
+.GlobalDialog_pay_title {
+  width: px2(538px);
+  height: px2(42px);
+  line-height: px2(42px);
+  text-align: center;
+  background: linear-gradient(90deg, rgba(226, 150, 176, 0) 7.09%, #E296B0 38.86%, #E296B0 64.65%, rgba(226, 150, 176, 0) 100%);
+  font-weight: 600;
+  font-size: px2(18px);
+  color: #FFF8EA;
+  margin: px2(20px) auto px2(38px) auto;
+}
+
+.GlobalDialog_pay_content {
+  color: #707083;
+  font-size: px2(16px);
+  line-height: px2(20px);
+  font-family: "GenWanMin TW";
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.GlobalDialog_star_stone {
+  width: px2(20px);
+  height: px2(20px);
+  margin: 0 px2(8px);
+  background-image: url('@/assets/imgs/xingshiIcon.webp');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.GlobalDialog_pay_btns {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: px2(30px);
+  margin-bottom: px2(5px);
+  margin-top: px2(20px);
+  column-gap: 8px;
+  align-items: center;
+}
+
+.GlobalDialog_pay_btn {
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.GlobalDialog_pay_cancel {
+  width: px2(116.5px);
+  height: px2(46.5px);
+  background-image: url('@/assets/imgs/modal-cancel.png');
+}
+
+.GlobalDialog_pay_confirm {
+  width: px2(140.5px);
+  height: px2(70.5px);
+  background-image: url('@/assets/imgs/modal-confirm.png');
+}
+
 .glabalDialog_container {
   height: 80%;
   width: 100%;

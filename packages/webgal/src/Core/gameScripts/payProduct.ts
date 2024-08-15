@@ -120,7 +120,9 @@ export const payProduct = (sentence: ISentence): IPerform => {
             WebGAL.gameplay.performController.unmountPerform('payProduct');
           } else {
             showGlogalDialog({
-              title: `您已进入付费章节\n需要花费${price}解锁该章节吗？`,
+              title: `您已进入付费章节`,
+              content: `需要花费${price}`,
+              suffixContent: '解锁该章节吗？',
               leftText: '否',
               rightText: '是',
               leftFunc: () => {

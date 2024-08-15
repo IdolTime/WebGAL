@@ -55,9 +55,13 @@ export const startGame = () => {
   }
 
   if (gameInfo.isFree === 1 && gameInfo.tryPlay === 1 && !gameInfo.canPlay) {
+    // if (true) {
     const buyGameCallback = () => {
       showGlogalDialog({
-        title: '请购买游戏后开始游戏！',
+        type: 'pay',
+        title: '购买游戏',
+        content: '需要花费' + gameInfo.salesAmount,
+        suffixContent: '购买完整版游戏继续游玩',
         rightText: '确定',
         rightFunc: () => {
           // @ts-ignore

@@ -58,6 +58,178 @@
   }
 }
 
+.BuyGame_pay_container {
+  display: flex;
+  background: linear-gradient(180deg, #EAE7FE 0%, #F9EAFB 100%);
+  border-radius: px2(12px);
+  width: px2(960px);
+  position: relative;
+  flex-direction: column;
+}
+
+.BuyGame_pay_tip {
+  position: absolute;
+  width: px2(228px);
+  height: px2(47px);
+  left: 50%;
+  transform: translateX(-50%);
+  top: px2(-56px)
+}
+
+.BuyGame_pay_close {
+  position: absolute;
+  top: px2(-51px);
+  cursor: pointer;
+  right: 0;
+  width: px2(36px);
+  height: px2(36px);
+  background-image: url('@/assets/imgs/modal-close-2.png');
+}
+
+.BuyGame_pay_title {
+  width: px2(538px);
+  height: px2(42px);
+  line-height: px2(42px);
+  text-align: center;
+  background: linear-gradient(90deg, rgba(226, 150, 176, 0) 7.09%, #E296B0 38.86%, #E296B0 64.65%, rgba(226, 150, 176, 0) 100%);
+  font-weight: 600;
+  font-size: px2(18px);
+  color: #FFF8EA;
+  margin: px2(20px) auto px2(24px) auto;
+}
+
+.BuyGame_select_text {
+  color: #333;
+  text-align: center;
+  font-family: "GenWanMin TW";
+  font-size: px2(18px);
+  font-weight: 600;
+  line-height: px2(19px);
+  margin-bottom: px2(36px);
+}
+
+.BuyGame_info_block {
+  background: #E9DEF7;
+  padding: px2(16px) px2(40px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: px2(225px);
+}
+
+.BuyGame_info_row {
+  display: flex;
+  align-items: center;
+}
+
+.BuyGame_game_cover {
+  width: px2(235px);
+  height: px2(129px);
+  border-radius: px2(4px);
+  background-color: #D9CEEC;
+  padding: px2(6px);
+  margin-right: px2(16px);
+}
+
+.BuyGame_game_cover_inner {
+  width: px2(223px);
+  height: px2(117px);
+  border-radius: px2(4px);
+  overflow: hidden;
+}
+
+.BuyGame_game_cover_inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.BuyGame_info_name {
+  color: #707083;
+  font-family: "GenWanMin TW";
+  font-size: px2(16px);
+  font-weight: 600;
+  line-height: px2(20px);
+  margin-bottom: px2(18px);
+}
+
+.BuyGame_info_text {
+  color: #707083;
+  font-family: "GenWanMin TW";
+  font-size: px2(14px);
+  font-weight: 600;
+  line-height: px2(20px);
+}
+
+.BuyGame_info_tag {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: px2(6px);
+}
+
+.BuyGame_info_price {
+  width: px2(58px);
+  height: px2(28px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: px2(41px);
+  background: #F4EDFA;
+  text-align: center;
+  text-shadow: 0px 0px px2(3px) rgba(255, 255, 255, 0.45);
+  font-family: 'Noto Serif', 'Noto Serif CJK SC', 'Noto Serif CJK', 'Source Han Serif SC', ‘Source Han Serif’, source-han-serif-sc, serif;
+  font-style: italic;
+  font-size: px2(14px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-left: px2(6px);
+}
+
+.BuyGame_info_price_stone {
+  width: px2(20px);
+  height: px2(20px);
+  background-image: url('@/assets/imgs/xingshiIcon.webp');
+  margin-left: px2(5px);
+}
+
+.BuyGame_price_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 px2(30px) px2(10px) px2(40px);
+}
+
+.BuyGame_price_stone {
+  width: px2(20px);
+  height: px2(20px);
+  background-image: url('@/assets/imgs/xingshiIcon.webp');
+  margin-left: px2(8px);
+}
+
+.BuyGame_price_text {
+  color: #707083;
+  font-size: px2(14px);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.BuyGame_price_button {
+  width: px2(167.5px);
+  height: px2(70.5px);
+  background-image: url('@/assets/imgs/confirm-buy.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+
 @keyframes fadeIn {
   0% {
     opacity: 0;

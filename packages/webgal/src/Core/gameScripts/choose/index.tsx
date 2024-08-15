@@ -204,6 +204,18 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               hasBought = item.is_buy;
             }
 
+            const showDialog = () => {
+              showGlogalDialog({
+                title: `您已进入付费选项`,
+                content: `需要花费${e.amount}`,
+                suffixContent: '解锁该选项吗？',
+                leftText: '否',
+                rightText: '是',
+                leftFunc: () => {},
+                rightFunc: confirmCallback,
+              });
+            };
+
             if (hasBought) {
               if (loadingRef.current[e.productId || '']) {
                 continueCallback();
@@ -214,13 +226,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
                     if (res.data.is_buy) {
                       continueCallback();
                     } else {
-                      showGlogalDialog({
-                        title: `确认要花费${e.amount}星光\n解锁该隐藏选项吗？`,
-                        leftText: '否',
-                        rightText: '是',
-                        leftFunc: () => {},
-                        rightFunc: confirmCallback,
-                      });
+                      showDialog();
                     }
                   }
                 });
@@ -229,13 +235,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             }
 
             if (loadingRef.current[e.productId || ''] && !hasBought) {
-              showGlogalDialog({
-                title: `确认要花费${e.amount}星光\n解锁该隐藏选项吗？`,
-                leftText: '否',
-                rightText: '是',
-                leftFunc: () => {},
-                rightFunc: confirmCallback,
-              });
+              showDialog();
             } else {
               getIsBuy(e.productId ?? 0).then((res) => {
                 if (res.code === 0) {
@@ -243,13 +243,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
                   if (res.data.is_buy) {
                     continueCallback();
                   } else {
-                    showGlogalDialog({
-                      title: `确认要花费${e.amount}星光\n解锁该隐藏选项吗？`,
-                      leftText: '否',
-                      rightText: '是',
-                      leftFunc: () => {},
-                      rightFunc: confirmCallback,
-                    });
+                    showDialog();
                   }
                 }
               });
