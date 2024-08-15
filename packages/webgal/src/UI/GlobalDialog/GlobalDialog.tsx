@@ -63,7 +63,14 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
       <div className={styles.GlobalDialog_main}>
         <div className={styles.GlobalDialog_pay_container}>
           <div className={styles.GlobalDialog_pay_tip} />
-          <div className={styles.GlobalDialog_pay_close} />
+          <div
+            className={styles.GlobalDialog_pay_close}
+            onMouseEnter={playSeEnter}
+            onClick={() => {
+              playSeClick();
+              hideGlobalDialog();
+            }}
+          />
           <div className={styles.GlobalDialog_pay_title}>{props.title}</div>
           <div className={styles.GlobalDialog_pay_content}>
             {props.content}
