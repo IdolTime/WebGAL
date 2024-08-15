@@ -34,6 +34,7 @@
   width: px2(960px);
   position: relative;
   flex-direction: column;
+  margin-top: px2(40px);
 }
 
 .GlobalDialog_pay_tip {
@@ -42,7 +43,11 @@
   height: px2(47px);
   left: 50%;
   transform: translateX(-50%);
-  top: px2(-56px)
+  top: px2(-56px);
+  background-image: url('@/assets/imgs/modal-title.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .GlobalDialog_pay_close {
@@ -53,6 +58,9 @@
   width: px2(36px);
   height: px2(36px);
   background-image: url('@/assets/imgs/modal-close-2.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .GlobalDialog_pay_title {
