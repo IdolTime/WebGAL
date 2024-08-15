@@ -38,11 +38,11 @@ export const enterStoryLine = async () => {
           }
 
         // 开始第一条语句
-        await nextSentence();
+        nextSentence();
     }
     
     // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
     webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
     webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
-    await webgalStore.dispatch(setShowStoryLine(true));
+    webgalStore.dispatch(setShowStoryLine(true));
 }
