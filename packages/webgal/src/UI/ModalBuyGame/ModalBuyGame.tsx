@@ -23,6 +23,9 @@ export function ModalBuyGame() {
     playSeClick();
     const res = await buyGame();
 
+    // @ts-ignore
+    window.pubsub.publish('loading', { loading: false });
+
     if (res.code === 0 || res.code === 10053) {
       // if (res.code === 0) {
       // @ts-ignore
