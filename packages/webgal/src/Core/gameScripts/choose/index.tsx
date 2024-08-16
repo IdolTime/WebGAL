@@ -211,6 +211,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
                 suffixContent: '解锁该选项吗？',
                 leftText: '否',
                 rightText: '是',
+                type: 'pay',
                 leftFunc: () => {},
                 rightFunc: confirmCallback,
               });

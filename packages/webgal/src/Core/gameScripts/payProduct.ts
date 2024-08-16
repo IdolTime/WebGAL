@@ -125,6 +125,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
               suffixContent: '解锁该章节吗？',
               leftText: '否',
               rightText: '是',
+              type: 'pay',
               leftFunc: () => {
                 shouldDisplayModal.current = true;
                 // backToTitle();
