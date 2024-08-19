@@ -82,16 +82,12 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
               className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`}
               onClick={handleLeft}
               onMouseEnter={playSeEnter}
-            >
-              {props.leftText}
-            </div>
+            />
             <div
               className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`}
               onClick={handleRight}
               onMouseEnter={playSeEnter}
-            >
-              {props.rightText}
-            </div>
+            />
           </div>
         </div>
       </div>
