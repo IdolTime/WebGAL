@@ -227,6 +227,7 @@ export const Button = ({
   type = 'button',
   checked = false,
   onChecked = () => {},
+  defaultText = ''
 }: {
   item: ButtonItem;
   defaultClass?: string;
@@ -239,6 +240,7 @@ export const Button = ({
   type?: 'button' | 'checkbox';
   checked?: boolean;
   onChecked?: (checked: boolean) => void;
+  defaultText?: string
 }) => {
   if (item.args.hide) return null;
   const style = parseStyleArg(item.args.style);
@@ -296,7 +298,10 @@ export const Button = ({
           onMouseLeave={onMouseLeave}
         />
       )}
-      {!!menu.content && <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />}
+      {!!menu.content 
+        ? <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
+        : !src && defaultText
+      }
     </CustomContainer>
   );
 };

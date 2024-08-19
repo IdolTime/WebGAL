@@ -5,32 +5,48 @@ import { RootState } from '@/store/store';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { IPersonalInfo, IContent, ContentTypeEnum } from './configData'
 import BeautyGuideImageDialog from './BeautyGuideImageDialog';
+import { Button, BgImage } from '@/UI/Components/Base';
+import { 
+    CollectionSceneUIConfig, 
+    CollectionSceneOtherKey, 
+    Scene, 
+    CollectionInfoItem, 
+    CollectionInfo,
+    contentListItem
+} from '@/Core/UIConfigTypes';
+
 import styles from './BeautyGuideDetail.module.scss'
 
 
+
 interface IProps {
-    info: IPersonalInfo | null
+    info: CollectionInfo | null;
+    itemStyle: React.CSSProperties | null;
 }
 
 const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
     const dispatch = useDispatch();
     const { playSeClick, playSeEnter } = useSoundEffect();
     const GUIState = useSelector((state: RootState) => state.GUI);
-    const [currentContent, setCurrentContent] = useState<IContent | null>(null); // 当前内容区域
+    const [currentContent, setCurrentContent] = useState<contentListItem | null>(null); // 当前内容区域
     const [dialogImg, setDialogImg] = useState<string>(''); // 弹窗图片 
 
+    const collectionUIConfigs = useSelector(
+        (state: RootState) => state.GUI.gameUIConfigs[Scene.collection],
+    ) as CollectionSceneUIConfig;
+
     useEffect(() => {
-        const infoData = props.info as IPersonalInfo;
+        const infoData = props.info as CollectionInfo;
         if (infoData?.contentList && infoData?.contentList?.length > 0) {
             setCurrentContent(infoData.contentList[0]);
         }
     }, [props])
 
     const imgList = useMemo(() => {
-        let list: IContent[] = []
-        const infoData = props.info as IPersonalInfo;
+        let list: contentListItem[] = []
+        const infoData = props.info as CollectionInfo;
         if (infoData?.contentList && infoData?.contentList?.length > 0) {
-            list = infoData.contentList.filter(f => f.type === ContentTypeEnum.Image)
+            list = infoData.contentList.filter(f => f.type === 'image')
         }
 
         return list 
@@ -66,17 +82,25 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
     return (
         <>
             <div className={styles.beautyGuideDetail_main}>
+            <BgImage 
+                    item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_bg]} 
+                    defaultClass={styles.beautyGuide_detail_bg} 
+                />
                 <div className={styles.beautyGuideDetail_left}>
                     <div className={styles.header}>
-                        <span
-                            className={styles.goback}
+                        <Button
+                            item={collectionUIConfigs.buttons.Collection_back_button}
+                            defaultClass={styles.goback}
                             onClick={handleGoback}
                             onMouseEnter={playSeEnter}
-                        ></span>
-                        <span className={styles.title}>个人档案馆</span>
+                        />
+                        <Button
+                            item={collectionUIConfigs.other.Collection_detail_title}
+                            defaultClass={styles.title}
+                        />
                     </div>
                     <div className={styles.pictureUrl}>
-                        <img src={props.info?.pictureUrl ?? ''} alt="" />
+                        <img src={props.info?.image} alt="" />
                     </div>
                     <div className={styles.personal_info}>
 
@@ -85,30 +109,29 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
                         </h3>
 
                         <div className={styles.info}>
-                            <span>身高</span>
-                            <span>{props.info?.height ?? '-'}</span>
+                            <span style={props?.itemStyle?? {}}>身高</span>
+                            <span style={props?.itemStyle?? {}}>{props.info?.height ?? '-'}</span>
                         </div>
 
                         <div className={styles.info}>
-                            <span>体重</span>
-                            <span>{props.info?.weight ?? '-'}</span>
+                            <span style={props?.itemStyle?? {}}>体重</span>
+                            <span style={props?.itemStyle?? {}}>{props.info?.weight ?? '-'}</span>
                         </div>
 
                         <div className={styles.info}>
-                            <span>胸围</span>
-                            <span>{props.info?.bustSize ?? '-'}</span>
+                            <span style={props?.itemStyle?? {}}>胸围</span>
+                            <span style={props?.itemStyle?? {}}>{props.info?.bustSize ?? '-'}</span>
                         </div>
 
                         <div className={styles.info}>
-                            <span>腰围</span>
-                            <span>{props.info?.waistSize ?? '-'}</span>
+                            <span style={props?.itemStyle?? {}}>腰围</span>
+                            <span style={props?.itemStyle?? {}}>{props.info?.waistSize ?? '-'}</span>
                         </div>
 
                         <div className={styles.info}>
-                            <span>臀围</span>
-                            <span>{props.info?.hipSize ?? '-'}</span>
+                            <span style={props?.itemStyle?? {}}>臀围</span>
+                            <span style={props?.itemStyle?? {}}>{props.info?.hipSize ?? '-'}</span>
                         </div>
-
                     </div>
                 </div>
                 <div className={styles.beautyGuideDetail_right}>
@@ -136,7 +159,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
                         </div>
                         <div className={styles.thumbnailWrapper}>
                             <div>
-                                {props.info?.contentList?.map((item: IContent, index: number) => {
+                                {props.info?.contentList?.map((item: contentListItem, index: number) => {
                                     return (
                                         <div
                                             key={`thumbnail-${index}`}
@@ -145,7 +168,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
                                                 setCurrentContent(item)
                                             }}
                                         >
-                                            <img src={item.thumbnailUrl} alt="" />
+                                            <img src={item.url} alt="" />
                                             {item.type === ContentTypeEnum.Video && (
                                                 <div className={styles.video_mark}>
                                                    <svg 
@@ -174,7 +197,11 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
             </div>
 
             {GUIState.showBeautyGuideImageDialog && (
-                <BeautyGuideImageDialog imgUrl={dialogImg} imgList={imgList} />
+                <BeautyGuideImageDialog 
+                    imgUrl={dialogImg} 
+                    imgList={imgList} 
+                    show={GUIState.showBeautyGuideImageDialog} 
+                />
             )}
         </>
     )

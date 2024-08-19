@@ -40,6 +40,8 @@ import {
   titleSceneOtherConfig,
   TitleSceneOtherKey,
   TitleSceneUIConfig,
+  CollectionSceneButtonKey,
+  CollectionSceneOtherKey
 } from '@/Core/UIConfigTypes';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 
@@ -269,6 +271,12 @@ export const infoFetcher = (url: string) => {
         ) {
           const scene = Scene.extra;
           parseUIIConfigOptions(gameUIConfigs, scene, e);
+         }else if (
+          CollectionSceneButtonKey[command as CollectionSceneButtonKey] ||
+          CollectionSceneOtherKey[command as CollectionSceneOtherKey]
+        ) {
+          const scene = Scene.collection;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
         }
       });
 
@@ -319,6 +327,9 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
         }
 
         parsedArgs[e.key] = style;
+      } else if (e.key.includes('info') || e.key.includes('images')) {
+        const info = parseStyleString(e.value as string);
+        parsedArgs[e.key] = info;
       }
     });
 

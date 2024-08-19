@@ -21,7 +21,7 @@
     }
 
     .content {
-        background-color: aliceblue;
+        background-color: #eee;
         width: 1200px;
         height: 800px;
         z-index: 120;
@@ -32,6 +32,18 @@
         display: flex;
         flex-direction: column;
 
+        .content_bg {
+            position: absolute !important;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
         .imgWrapper {
             flex: 1;
             overflow: hidden;
@@ -39,7 +51,7 @@
             & > img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover;
+                object-fit: contain;
                 opacity: 0;
                 transition: opacity 0.3s;
                 animation: fade 1s forwards;
@@ -60,7 +72,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: rgb(32, 58, 77);
+                // background-color: rgb(32, 58, 77);
                 color: #fff;
                 font-size: 22px;
                 padding: 10px 20px;

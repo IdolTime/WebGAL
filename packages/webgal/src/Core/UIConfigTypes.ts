@@ -200,6 +200,19 @@ export enum ExtraSceneOtherKey {
   Extra_video_locked_item_bg = 'Extra_video_locked_item_bg',
 }
 
+
+export enum CollectionSceneOtherKey {
+  Collection_title = 'Collection_title',
+  Collection_bg = 'Collection_bg',
+  Collection_img1 = 'Collection_img1',
+  Collection_img2 = 'Collection_img2',
+  Collection_img3 = 'Collection_img3',
+  Collection_detail_bg = 'Collection_detail_bg',
+  Collection_detail_title = 'Collection_detail_title',
+  Collection_detail_dialog_bg = 'Collection_detail_dialog_bg',
+  Collection_detail_dialog_text = 'Collection_detail_dialog_text'
+}
+
 export const extraSceneOtherConfig: Record<
   ExtraSceneOtherKey,
   UIItemConfig & {
@@ -334,6 +347,24 @@ export const optionSceneButtonConfig: Record<OptionSceneButtonKey, UIItemConfig>
   [OptionSceneButtonKey.Option_back_button]: {
     label: '返回',
   },
+};
+
+export enum CollectionSceneButtonKey {
+  Collection_back_button = 'Collection_back_button',
+  Collection_detail_dialog_prev_button = 'Collection_detail_dialog_prev_button',
+  Collection_detail_dialog_next_button = 'Collection_detail_dialog_next_button'
+}
+
+export const collectionSceneButtonConfig: Record<CollectionSceneButtonKey, UIItemConfig> = {
+  [CollectionSceneButtonKey.Collection_back_button]: {
+    label: '返回',
+  },
+  [CollectionSceneButtonKey.Collection_detail_dialog_prev_button]: {
+    label: '详情弹窗上一个按钮元素',
+  },
+  [CollectionSceneButtonKey.Collection_detail_dialog_next_button]: {
+    label: '详情弹窗下一个按钮元素',
+  }
 };
 
 export enum OptionSceneOtherKey {
@@ -615,6 +646,53 @@ export const optionSceneOtherConfig: Record<
   },
 };
 
+export const collectionSceneOtherConfig: Record<CollectionSceneOtherKey,UIItemConfig & { children?: Record<string, UIItemConfig>}> = {
+  [CollectionSceneOtherKey.Collection_title]: {
+    type: 'image',
+    label: '标题',
+  },
+  [CollectionSceneOtherKey.Collection_bg]: {
+    label: '背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_img1]: {
+    label: '图鉴1',
+    type: 'image',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_img2]: {
+    label: '图鉴2',
+    type: 'image',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_img3]: {
+    label: '图鉴3',
+    type: 'image',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_detail_title]: {
+    type: 'image',
+    label: '图鉴详情界面标题'
+  },
+  [CollectionSceneOtherKey.Collection_detail_bg]: {
+    label: '图鉴详情界面背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_detail_dialog_bg]: {
+    type: 'bg',
+    label: '详情弹窗元素背景',
+    hasHoverStyle: false
+  },
+  [CollectionSceneOtherKey.Collection_detail_dialog_text]: {
+    label: '详情弹窗元素样式',
+    type: 'text',
+    hasHoverStyle: false,
+    hasXY: false
+  }
+}
+
 export enum AchievementSceneOtherKey {
   Achievement_title = 'Achievement_title',
 }
@@ -785,14 +863,16 @@ export type ButtonKey =
   | OptionSceneButtonKey
   | StorylineSceneButtonKey
   | AchievementSceneButtonKey
-  | ExtraSceneButtonKey;
+  | ExtraSceneButtonKey
+  | CollectionSceneButtonKey;
 export type OtherKey =
   | LoadSceneOtherKey
   | TitleSceneOtherKey
   | OptionSceneOtherKey
   | StorylineSceneOtherKey
   | AchievementSceneOtherKey
-  | ExtraSceneOtherKey;
+  | ExtraSceneOtherKey
+  | CollectionSceneOtherKey;
 type AllKey = ButtonKey | OtherKey;
 
 export interface ButtonItem {
@@ -802,6 +882,50 @@ export interface ButtonItem {
     hide: boolean;
     style: Style;
     hoverStyle?: Style;
+  };
+}
+
+export interface contentListItem {
+  type: 'image' | 'video';
+  url: string;
+  key: string
+}
+
+export interface CollectionInfo {
+  name?: string;
+  height?: number;
+  weight?: number;
+  bustSize?: number;
+  waistSize?: number;
+  hipSize?: number;
+  description?: string;
+  image?: string;
+  contentList?: contentListItem[]
+}
+
+export interface CollectionImages {
+  img1?: string;
+  img2?: string;
+  img3?: string;
+  img4?: string;
+  img5?: string;
+  img6?: string;
+  img7?: string;
+  img8?: string;
+  img9?: string;
+  img10?: string;
+}
+
+
+export interface CollectionInfoItem {
+  key: AllKey;
+  content: string;
+  args: {
+    hide: boolean;
+    style?: Style;
+    hoverStyle?: Style;
+    info?: CollectionInfo,
+    images?: CollectionImages
   };
 }
 
@@ -876,6 +1000,23 @@ export interface OptionSceneUIConfig {
   buttons: { [key in OptionSceneButtonKey]: ButtonItem };
 }
 
+export interface CollectionSceneUIConfig {
+  key: Scene.collection;
+  // other: { [key in CollectionSceneOtherKey]: ButtonItem };
+  other: {
+    [CollectionSceneOtherKey.Collection_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_title]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_img1]: CollectionInfoItem;
+    [CollectionSceneOtherKey.Collection_img2]: CollectionInfoItem;
+    [CollectionSceneOtherKey.Collection_img3]: CollectionInfoItem;
+    [CollectionSceneOtherKey.Collection_detail_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_title]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_dialog_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_dialog_text]: ButtonItem;
+  }
+  buttons: { [key in CollectionSceneButtonKey]: ButtonItem };
+}
+
 export enum Scene {
   title = 'title',
   load = 'load',
@@ -883,7 +1024,7 @@ export enum Scene {
   achievement = 'achievement',
   extra = 'extra',
   option = 'option',
-  // collection = 'collection',
+  collection = 'collection',
 }
 
 export const sceneNameMap: Record<Scene, string> = {
@@ -893,7 +1034,7 @@ export const sceneNameMap: Record<Scene, string> = {
   achievement: '成就界面',
   extra: '鉴赏界面',
   option: '选项界面',
-  // collection: '图鉴界面',
+  collection: '图鉴界面',
 };
 
 export interface SceneUIConfig {
@@ -903,7 +1044,7 @@ export interface SceneUIConfig {
   [Scene.achievement]?: AchievementSceneUIConfig;
   [Scene.extra]?: ExtraSceneUIConfig;
   [Scene.option]?: OptionSceneUIConfig;
-  // [Scene.collection]: CollectionSceneUIConfig
+  [Scene.collection]?: CollectionSceneUIConfig
 }
 
 export const SceneKeyMap = {
@@ -930,6 +1071,10 @@ export const SceneKeyMap = {
   [Scene.option]: {
     buttons: OptionSceneButtonKey,
     other: OptionSceneOtherKey,
+  },
+  [Scene.collection]: {
+    buttons: CollectionSceneButtonKey,
+    other: CollectionSceneOtherKey,
   },
 };
 
@@ -1282,7 +1427,73 @@ export const sceneUIConfig: SceneUIConfig = {
       },
     },
   },
-  // [Scene.collection]: collectionSceneConfig,
+  [Scene.collection]: {
+    key: Scene.collection,
+    other:  {
+      [CollectionSceneOtherKey.Collection_title]: {
+        key: CollectionSceneOtherKey.Collection_title,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [CollectionSceneOtherKey.Collection_bg]: {
+        key: CollectionSceneOtherKey.Collection_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_img1]: {
+        key: CollectionSceneOtherKey.Collection_img1,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_img2]: {
+        key: CollectionSceneOtherKey.Collection_img2,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_img3]: {
+        key: CollectionSceneOtherKey.Collection_img3,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_detail_title]: {
+        key: CollectionSceneOtherKey.Collection_detail_title,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [CollectionSceneOtherKey.Collection_detail_bg]: {
+        key: CollectionSceneOtherKey.Collection_detail_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_detail_dialog_bg]: {
+        key: CollectionSceneOtherKey.Collection_detail_dialog_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_detail_dialog_text]: {
+        key: CollectionSceneOtherKey.Collection_detail_dialog_text,
+        content: '',
+        args: generateArgs(),
+      }
+    },
+    buttons: {
+      [CollectionSceneButtonKey.Collection_back_button]: {
+        key: CollectionSceneButtonKey.Collection_back_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [CollectionSceneButtonKey.Collection_detail_dialog_prev_button]: {
+        key: CollectionSceneButtonKey.Collection_detail_dialog_prev_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [CollectionSceneButtonKey.Collection_detail_dialog_next_button]: {
+        key: CollectionSceneButtonKey.Collection_detail_dialog_next_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      }
+    }
+  },
 };
 
 export const sceneButtonConfig = {
@@ -1292,7 +1503,7 @@ export const sceneButtonConfig = {
   [Scene.achievement]: achievementSceneButtonConfig,
   [Scene.extra]: extraSceneButtonConfig,
   [Scene.option]: optionSceneButtonConfig,
-  // [Scene.collection]: collectionSceneButtonConfig
+  [Scene.collection]: collectionSceneButtonConfig
 };
 
 export const sceneOtherConfig = {
@@ -1302,7 +1513,7 @@ export const sceneOtherConfig = {
   [Scene.achievement]: achievementSceneOtherConfig,
   [Scene.extra]: extraSceneOtherConfig,
   [Scene.option]: optionSceneOtherConfig,
-  // [Scene.collection]: collectionSceneOtherConfig
+  [Scene.collection]: collectionSceneOtherConfig
 };
 
 export const bgKey = {
@@ -1310,4 +1521,7 @@ export const bgKey = {
   [LoadSceneOtherKey.Load_bg]: 1,
   [ExtraSceneOtherKey.Extra_bg]: 1,
   [OptionSceneOtherKey.Option_bg]: 1,
+  [CollectionSceneOtherKey.Collection_bg]: 1,
+  [CollectionSceneOtherKey.Collection_detail_bg]: 1,
+  [CollectionSceneOtherKey.Collection_detail_dialog_bg]: 1
 };
