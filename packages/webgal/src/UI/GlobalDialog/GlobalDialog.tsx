@@ -68,6 +68,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             onMouseEnter={playSeEnter}
             onClick={() => {
               playSeClick();
+              handleLeft();
               hideGlobalDialog();
             }}
           />
