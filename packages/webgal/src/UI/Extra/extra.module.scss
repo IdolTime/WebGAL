@@ -7,7 +7,6 @@
   left: 0;
   z-index: 14;
   background-image: linear-gradient(135deg, #93a5cf 0%, #e4efe9 100%);;
-  padding: 2em 2em 2em 2em;
   box-sizing: border-box;
 }
 
@@ -52,7 +51,7 @@
 
 .mainContainer {
   box-sizing: border-box;
-  padding: 0 2em 0 2em;
+  padding: 2em 4em;
   display: flex;
   height: px2(92%);
   flex-flow: column;

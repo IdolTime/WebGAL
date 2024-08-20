@@ -4,29 +4,22 @@
   width: 90%;
   position: absolute;
   cursor: default;
-}
-
-.Save_Load_top {
-  height: 10%;
-  width: 100%;
   display: flex;
-  //background-color: rgba(255, 255, 255, 1);
-  //box-shadow: 0 0 1.5em 0.1em rgba(0, 0, 0, 0.05);
-  animation: Elements_in ease-out 1s forwards;
-  //border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .goback {
   display: inline-block;
-  width: 100px;
-  height: 72px;
+  width: px2(49px);
+  height: px2(46px);
   background-image: url('@/assets/imgs/back.png');
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
+  animation: Elements_in ease-out 1s forwards;
   transition: all 0.3s;
-  position: fixed;
+  position: absolute;
   top: px2(15px);
   left: px2(25px);
   z-index: 101;
@@ -37,7 +30,7 @@
 }
 
 .extraVideo_goback {
-  top: px2(39px);
+  top: px2(21px);
   left: px2(35px);
 }
 
@@ -56,7 +49,7 @@
   align-items: center;
   position: absolute;
   left: 60px;
-  top:0;
+  top: 0;
   // z-index: -1;
   // opacity: 0.2;
   transform: translateY(-10px);
@@ -72,6 +65,7 @@
 
 
 .Load_title_text {
+  opacity: 0.2;
   font-weight: bold;
   // color: transparent;
   background: linear-gradient(135deg, #005CAF 0%, #2EA9DF 100%);
@@ -80,7 +74,6 @@
 }
 
 .Save_Load_top_buttonList {
-  height: 100%;
   display: flex;
   //padding: 0 0 0 2em;
 }
@@ -96,16 +89,11 @@
   align-items: center;
   border-bottom: 4px solid rgba(0, 0, 0, 0);
   transition: background-color 0.7s, border-bottom-width 0.7s;
-}
-
-.Save_Load_top_button_text {
-  text-align: center;
-  width: 100%;
-  padding: 0 0 3px 0;
   border-left: 2px solid rgba(0, 0, 0, 0.1);
+  justify-content: center;
 }
 
-.Save_Load_top_button:first-child > div {
+.Save_Load_top_button:first-child {
   border-left: 2px solid rgba(0, 0, 0, 0);
 }
 

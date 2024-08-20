@@ -2,7 +2,7 @@ import styles from './extra.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { ExtraVideo } from './ExtraVideo'
+import { ExtraVideo } from './ExtraVideo';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { useEffect } from 'react';
@@ -19,13 +19,13 @@ export function Extra() {
     if (showExtra) {
       dispatch(saveActions.setLoadVideo(true));
     }
-  }, [showExtra])
+  }, [showExtra]);
 
   const handleGoBack = () => {
     playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
-  }
+  };
 
   return (
     <>
