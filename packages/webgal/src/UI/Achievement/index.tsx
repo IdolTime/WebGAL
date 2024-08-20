@@ -86,8 +86,8 @@ export const Achievement: FC = () => {
 
     if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
       const achieveBg = sentenceList[0]?.content ?? '';
-      let achieveBgX = 1280,
-          achieveBgY = 720;
+      let achieveBgX = 1280;
+      let achieveBgY = 720;
       sentenceList[0]?.args?.forEach((arg) => {
         if (arg?.key === 'x') {
           achieveBgX = Number(arg?.value);
@@ -239,7 +239,7 @@ export const Achievement: FC = () => {
   return (
     <>
       {GUIState.showAchievement && (
-        <div className={styles.achievement}>
+        <div className={styles.achievement} id="camera">
           {/* 头部 */}
           <Button
             item={achivementUIConfigs.buttons.Achievement_back_button}

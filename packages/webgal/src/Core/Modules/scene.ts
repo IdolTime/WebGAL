@@ -25,7 +25,7 @@ export enum sceneNameType {
   /** 成就场景 */
   Achieve = 'achieve.txt',
   /** 故事线场景 */
-  Storyline = 'storyline.txt'
+  Storyline = 'storyline.txt',
 }
 
 /**
@@ -65,17 +65,16 @@ export class SceneManager {
       const sentenceList = this.sceneData.currentScene.sentenceList;
 
       if (scenaName === sceneNameType.Storyline) {
-        this.getAllStorylineList(sentenceList)
+        this.getAllStorylineList(sentenceList);
       }
 
       if (scenaName === sceneNameType.Achieve) {
-        this.getAllUnlockAchieveList(sentenceList)
+        this.getAllUnlockAchieveList(sentenceList);
       }
 
       r(this.sceneData.currentScene);
     });
   }
-
 
   // 得到所有解锁故事线数据
   private async getAllStorylineList(sentenceList: ISentence[]) {
@@ -83,30 +82,28 @@ export class SceneManager {
     const unlockStoryLineeMapper = new Map();
     const videoDataMapper = new Map();
 
-
     webgalStore.getState().saveData.unlockStorylineList.forEach((item: ISaveStoryLineData) => {
-      const { name, isUnlock = false } = item.storyLine as ISaveStoryLine || {};
+      const { name, isUnlock = false } = (item.storyLine as ISaveStoryLine) || {};
       unlockStoryLineeMapper.set(name, name);
-      videoDataMapper.set(name, item.videoData)
+      videoDataMapper.set(name, item.videoData);
     });
 
     const allStorylineData: ISaveStoryLineData[] = sentenceList
       .filter((e: ISentence) => e.command === commandType.unlockStoryline)
-      .map(e2 => {
-
+      .map((e2) => {
         const storyLine: ISaveStoryLine = {
           thumbnailUrl: e2?.content ?? '',
           name: '',
           x: 0,
           y: 0,
           isUnlock: false,
-          isHideName: false
-        }
+          isHideName: false,
+        };
         const payload: ISaveStoryLineData = {
           storyLine: {} as unknown as ISaveStoryLine,
-          videoData: null
+          videoData: null,
         };
- 
+
         e2.args.forEach((e3) => {
           if (e3.key === 'name') {
             storyLine['name'] = e3.value.toString();
@@ -120,23 +117,20 @@ export class SceneManager {
         });
 
         if (unlockStoryLineeMapper.get(storyLine['name']) && videoDataMapper.get(storyLine['name'])) {
-       
           storyLine['isUnlock'] = true;
-          payload['videoData'] = videoDataMapper.get(storyLine['name'])
+          payload['videoData'] = videoDataMapper.get(storyLine['name']);
         } else {
           storyLine['isUnlock'] = false;
         }
-        payload['storyLine'] = storyLine
+        payload['storyLine'] = storyLine;
         return payload;
-      })
+      });
 
-      webgalStore.dispatch(
-        saveActions.saveAllStorylineData(allStorylineData)
-      )
+    webgalStore.dispatch(saveActions.saveAllStorylineData(allStorylineData));
 
-      const newList = allStorylineData.filter(e => e.storyLine.isUnlock)
-      webgalStore.dispatch(saveActions.setStorylineListFromStorage(newList))
-      await dumpStorylineToStorage();
+    const newList = allStorylineData.filter((e) => e.storyLine.isUnlock);
+    webgalStore.dispatch(saveActions.setStorylineListFromStorage(newList));
+    await dumpStorylineToStorage();
   }
 
   // 所有解锁成就
@@ -181,25 +175,25 @@ export class SceneManager {
           payload['isShowUnlock'] = true;
           payload['saveTime'] = timesMapper?.get(payload?.unlockname);
         }
-  
-        return payload
-      })
-  
-      webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList))
-      const newList = allUnlockAchieveList.filter(e => e?.isShowUnlock)
-      webgalStore.dispatch(saveActions.setUnlockAchieveData(newList))
-      await dumpUnlickAchieveToStorage();
+
+        return payload;
+      });
+
+    webgalStore.dispatch(saveActions.saveAllUnlockAchieveList(allUnlockAchieveList));
+    const newList = allUnlockAchieveList.filter((e) => e?.isShowUnlock);
+    webgalStore.dispatch(saveActions.setUnlockAchieveData(newList));
+    await dumpUnlickAchieveToStorage();
+  }
+
+  private compareFilenames(filename1: string, filename2: string) {
+    // 提取文件名（不包含路径和后缀名）
+    const name1 = filename1.match(/\/?([^/]+)\.\w+$/);
+    const name2 = filename2.match(/\/?([^/]+)\.\w+$/);
+
+    if (name1 && name2) {
+      return name1[1] === name2[1];
     }
-    
-    private compareFilenames(filename1: string, filename2: string) {
-      // 提取文件名（不包含路径和后缀名）
-      const name1 = filename1.match(/\/?([^/]+)\.\w+$/);
-      const name2 = filename2.match(/\/?([^/]+)\.\w+$/);
-    
-      if (name1 && name2) {
-        return name1[1] === name2[1];
-      }
-    
-      return false;
-    }
+
+    return false;
+  }
 }

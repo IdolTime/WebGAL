@@ -14,7 +14,6 @@ import { px2 } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
 
-
 /**
  * 故事线页面
  * @constructor
@@ -64,7 +63,7 @@ export const StoryLine: FC = () => {
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine}>
+        <div className={styles.storyLine} id="camera">
           <Button
             item={storylineUIConfigs.buttons.Storyline_back_button}
             defaultClass={styles.goBack}
