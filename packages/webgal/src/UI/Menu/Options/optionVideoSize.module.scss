@@ -9,6 +9,22 @@
         color: #fff;
     }
 
+    .Options_checkbox {
+        position: relative !important;
+        top: px2(239px);
+        left: px2(517px);
+        width: px2(21px);
+        height: px2(21px);
+        background-image: url('@/assets/imgs/check.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
     .option_item {
         margin-left: px2(100px);
         position: relative;
