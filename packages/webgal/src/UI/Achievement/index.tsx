@@ -8,6 +8,7 @@ import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { saveActions } from '@/store/savesReducer';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { sceneNameType } from '@/Core/Modules/scene';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { px2 } from '@/Core/parser/utils';
@@ -17,10 +18,16 @@ import { GameMenuItem } from '@/store/guiInterface';
 import { sceneParser } from '@/Core/parser/sceneParser';
 
 interface IAchieveStageItem {
-  achieveBg?: string;
-  achieveBgX?: number;
-  achieveBgY?: number;
+  achieveBg: string;
+  achieveBgX: number;
+  achieveBgY: number;
 }
+
+const defaultAchieveStageItem: IAchieveStageItem = {
+  achieveBg: '',
+  achieveBgX: 1280,
+  achieveBgY: 720,
+};
 
 /**
  * 成就页面
@@ -38,7 +45,7 @@ export const Achievement: FC = () => {
   const [progressStyle, setProgressStyle] = useState<GameMenuItem | null>(null);
   const [notUnlockStyle, setNotUnlockStyle] = useState<GameMenuItem | null>(null);
 
-  const [achieveStage, setAchieveStage] = useState<IAchieveStageItem | null>(null);
+  const [achieveStage, setAchieveStage] = useState<IAchieveStageItem>(defaultAchieveStageItem);
 
   const [unlockedData, setUnlockedData] = useState({
     unlocked: 0,
@@ -79,13 +86,13 @@ export const Achievement: FC = () => {
 
     if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
       const achieveBg = sentenceList[0]?.content ?? '';
-      let achieveBgX;
-      let achieveBgY;
+      let achieveBgX = 1280,
+          achieveBgY = 720;
       sentenceList[0]?.args?.forEach((arg) => {
         if (arg?.key === 'x') {
-          achieveBgX = arg?.value;
+          achieveBgX = Number(arg?.value);
         } else if (arg?.key === 'y') {
-          achieveBgY = arg?.value;
+          achieveBgY = Number(arg?.value);
         }
       });
 
@@ -248,7 +255,8 @@ export const Achievement: FC = () => {
           <div
             className={styles.achievement_content_bg}
             style={{
-              width: px2(achieveStage?.achieveBgX ?? ''),
+              width: achieveStage?.achieveBgX ? px2(achieveStage.achieveBgX) : '100%',
+              height: achieveStage?.achieveBgY > 720 ? px2(achieveStage.achieveBgY) : '100%',
               backgroundImage: `url("${achieveStage?.achieveBg}")`,
               backgroundSize:
                 achieveStage?.achieveBgX &&
