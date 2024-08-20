@@ -7,53 +7,35 @@ import { sceneUIConfig } from '@/Core/UIConfigTypes';
 import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload, EnumAchievementUIKey } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initAchievementUI = {
-  Achievement_progress_bg: {
-    content: '',
-    args: {
-      hide: true,
-      style: {},
-      hoverStyle: {}
-    },
-  },
-  Achievement_progress_text: {
-    content: '',
-    args: {
-      hide: true,
-      style: {},
-      hoverStyle: {}
-    },
-  },
-  Achievement_progress: {
-    content: '',
-    args: {
-      hide: true,
-      style: {},
-      hoverStyle: {}
-    },
-  },
-  Achievement_notUnlock: {
-    content: '',
-    args: {
-      hide: true,
-      style: {},
-      hoverStyle: {}
-    },
-  },
-  Achievement_back_button: {
-    content: '',
-    args: {
-      hide: true,
-      style: {},
-      hoverStyle: {}
-    },
-  },
-  Achievement_title: {
-    content: '',
-    args: {
-      hide: true,
-      style: {},
-      hoverStyle: {}
+/**
+ * 成就UI的初始状态
+ */
+const initStateAchievement = {
+  content: '',
+  args: {
+    hide: true,
+    style: {},
+    hoverStyle: {}
+  }
+}
+
+/**
+ * ESC菜单按钮初始状态
+ */
+const initStateEscMenu = {
+  content: '',
+  args: {
+    hide: false,
+    style: {
+      x: 0,
+      y: 0,
+      scale: 1,
+      fontSize: 0,
+      fontColor: '',
+      btnImage: '',
+      btnPosition: '',
+      align: '',
+      fontFamily: '',
     },
   }
 }
@@ -90,77 +72,19 @@ export const initState: IGuiState = {
   openR18Modal: false,
   isShowGameMenu: false,
   escMenus: {
-    Esc_continueGame_button: {
-      content: '',
-      args: {
-        hide: false,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          fontSize: 0,
-          fontColor: '',
-          countdown: 0,
-          btnImage: '',
-          btnPosition: '',
-          align: '',
-          fontFamily: '',
-        },
-      },
-    },
-    Esc_backToLevel_button: {
-      content: '',
-      args: {
-        hide: false,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          fontSize: 0,
-          fontColor: '',
-          btnImage: '',
-          btnPosition: '',
-          align: '',
-          fontFamily: '',
-        },
-      },
-    },
-    Esc_setting_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          fontSize: 0,
-          fontColor: '',
-          btnImage: '',
-          btnPosition: '',
-          align: '',
-          fontFamily: '',
-        },
-      },
-    },
-    Esc_exitGame_button: {
-      content: '',
-      args: {
-        hide: false,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          fontSize: 20,
-          fontColor: '',
-          btnImage: '',
-          btnPosition: '',
-          align: '',
-          fontFamily: '',
-        },
-      },
-    },
+    Esc_continueGame_button: initStateEscMenu,
+    Esc_backToLevel_button: initStateEscMenu,
+    Esc_setting_button: initStateEscMenu,
+    Esc_exitGame_button: initStateEscMenu
   },
-  achievementUI: initAchievementUI
+  achievementUI: {
+    Achievement_progress_bg: initStateAchievement,
+    Achievement_progress_text: initStateAchievement,
+    Achievement_progress: initStateAchievement,
+    Achievement_notUnlock: initStateAchievement,
+    Achievement_back_button: initStateAchievement,
+    Achievement_title: initStateAchievement
+  }
 };
 
 /**

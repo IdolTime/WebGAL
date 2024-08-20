@@ -40,6 +40,8 @@ import {
   titleSceneOtherConfig,
   TitleSceneOtherKey,
   TitleSceneUIConfig,
+  CollectionSceneButtonKey,
+  CollectionSceneOtherKey
 } from '@/Core/UIConfigTypes';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 
@@ -78,7 +80,6 @@ export const infoFetcher = (url: string) => {
 
       gameConfig.forEach((e) => {
         const { command, args, options } = e;
-        console.log(44446666, command);
         switch (command) {
           case 'Title_img': {
             const titleUrl = assetSetter(args.join(''), fileType.background);
@@ -136,7 +137,6 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'Game_sound': {
-            console.log(args, options);
             if (options?.length > 0) {
               const newOptions = options.map((option) => {
                 if (typeof option.value === 'string') {
@@ -154,7 +154,6 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'Menu_sound': {
-            console.log(args, options);
             if (options?.length > 0) {
               const newOptions = options.map((option) => {
                 if (typeof option.value === 'string') {
@@ -240,7 +239,6 @@ export const infoFetcher = (url: string) => {
           command !== TitleSceneOtherKey.Title_bgm
         ) {
           const scene = Scene.title;
-          console.log(4444, command);
 
           parseUIIConfigOptions(gameUIConfigs, scene, e);
         } else if (
@@ -272,6 +270,12 @@ export const infoFetcher = (url: string) => {
           ExtraSceneOtherKey[command as ExtraSceneOtherKey]
         ) {
           const scene = Scene.extra;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+         }else if (
+          CollectionSceneButtonKey[command as CollectionSceneButtonKey] ||
+          CollectionSceneOtherKey[command as CollectionSceneOtherKey]
+        ) {
+          const scene = Scene.collection;
           parseUIIConfigOptions(gameUIConfigs, scene, e);
         }
       });
@@ -323,6 +327,9 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
         }
 
         parsedArgs[e.key] = style;
+      } else if (e.key.includes('info') || e.key.includes('images')) {
+        const info = parseStyleString(e.value as string);
+        parsedArgs[e.key] = info;
       }
     });
 
@@ -332,7 +339,6 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
   if (SceneKeyMap[scene]) {
     // @ts-ignore
     newOptions[scene] = { ...newOptions[scene] };
-    console.log(666666, item.command, item.args);
     item.options = item.options ?? [];
 
     const hasStyle = item.options.some((e) => e.key === 'style');
@@ -343,7 +349,6 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
 
     // @ts-ignore
     if (SceneKeyMap[scene].buttons[item.command]) {
-      console.log(55555, item.command, item.args);
       // @ts-ignore
       newOptions[scene].buttons = { ...newOptions[scene].buttons };
       // @ts-ignore
@@ -362,8 +367,6 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
 
       // @ts-ignore
       newOptions[scene].other = { ...newOptions[scene].other };
-
-      console.log(777777, swapContentAndStyle, item.command, item.args, item.options);
 
       // @ts-ignore
       newOptions[scene].other[item.command] = {

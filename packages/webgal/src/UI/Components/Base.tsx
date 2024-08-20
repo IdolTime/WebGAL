@@ -11,6 +11,7 @@ import { parseStyleArg } from '@/Core/parser/utils';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
 import BarSlider from '@/assets/imgs/bar-checked.png';
+import { debounce } from 'lodash';
 
 import './slider.scss';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -102,14 +103,14 @@ export const CustomImage = ({
   let className = defaultClass;
   let _style = style || {};
 
-  const _onMouseEnter = () => {
+  const _onMouseEnter = debounce(() => {
     if (hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  };
+  }, 100);
 
   const _onMouseLeave = () => {
     setHover(false);
@@ -119,7 +120,7 @@ export const CustomImage = ({
   };
 
   if (hover) {
-    className = `${defaultClass} ${defaultHoverClass}`;
+    className = `${defaultClass} ${defaultHoverClass} imageHoverAnimation`;
     _style = { ...style, ...hoverStyle };
   }
 
@@ -228,6 +229,7 @@ export const Button = ({
   onChecked = () => {},
   text = '',
   style,
+  defaultText = '',
 }: {
   item: ButtonItem;
   defaultClass?: string;
@@ -242,6 +244,7 @@ export const Button = ({
   onChecked?: (checked: boolean) => void;
   text?: string;
   style?: CSSProperties;
+  defaultText?: string;
 }) => {
   if (item.args.hide) return null;
   const parsedStyle = parseStyleArg(item.args.style);
@@ -262,8 +265,12 @@ export const Button = ({
   if (_style.width) imgStyle.width = _style.width;
   if (_style.height) imgStyle.height = _style.height;
   // if (!style.position) style.position = 'absolute';
-  if (src) _style.backgroundImage = 'none';
-  const buttonText = menu.content || text;
+  // if (src) style.backgroundImage = 'none';
+  if (src) {
+    _style.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
+    _style.backgroundSize = '100% 100%';
+    _style.backgroundRepeat = 'no-repeat';
+  }
 
   const clickCallback = (event: React.MouseEvent<HTMLDivElement>) => {
     if (type === 'checkbox') {
@@ -285,11 +292,22 @@ export const Button = ({
       hoverStyle={hoverStyle}
       key={key}
     >
-      {!!src && <CustomImage src={src} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle} />}
+      {/* {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />} */}
       {!!hoverSrc && type === 'checkbox' && checked && (
-        <CustomImage src={hoverSrc} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle} />
+        <CustomImage
+          nId={key}
+          src={assetSetter(hoverSrc, fileType.ui)}
+          hoverSrc={type !== 'checkbox' ? hoverSrc : ''}
+          style={imgStyle}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        />
       )}
-      {!!buttonText && <CustomText text={buttonText} defaultClass={defaultTextClass} style={textStyle} />}
+      {menu.content ? (
+        <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
+      ) : (
+        !src && defaultText
+      )}
     </CustomContainer>
   );
 };
@@ -364,10 +382,16 @@ export const OptionSliderCustome = ({
   uniqueID,
   initValue,
   onChange,
+  min,
+  max,
+  className,
 }: {
   defaultClass?: string;
   item: SliderContainerItem;
   key?: string;
+  min?: number;
+  max?: number;
+  className?: string;
 } & ISlider) => {
   const { playSeEnter } = useSoundEffect();
   useEffect(() => {
@@ -397,7 +421,13 @@ export const OptionSliderCustome = ({
   function calcSlideBg() {
     const inputBg = document.getElementById(`${uniqueID}-bg`);
     if (inputBg !== null) {
-      inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / 0.5 + 'px';
+      if (uniqueID === 'light') {
+        const normalizedValue = (Number(initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
+        const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * 2) + 'px'; // 将 0-1 映射到 0-684px 范围
+        inputBg.style.width = progressBarWidth;
+      } else {
+        inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / 0.5 + 'px';
+      }
     }
   }
 
@@ -413,6 +443,8 @@ export const OptionSliderCustome = ({
         className="Rang_input"
         id={uniqueID}
         type="range"
+        min={min || 0}
+        max={max || 100}
         onChange={onChange}
         onFocus={playSeEnter}
         onMouseEnter={playSeEnter}

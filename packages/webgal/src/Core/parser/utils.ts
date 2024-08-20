@@ -1,7 +1,9 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { Style } from '../UIConfigTypes';
+import { Style, CollectionImages, contentListItem } from '../UIConfigTypes';
 import { CSSProperties } from 'react';
+import { isEmpty } from 'lodash';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 /**
  * 规范函数的类型
@@ -95,4 +97,22 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
   }
 
   return style;
+}
+
+export function parseImagesArg(imgs?: CollectionImages): contentListItem[] {
+  if (!imgs || isEmpty(imgs)) {
+    return [];
+  }
+  const imgList: contentListItem[] = []
+  Object.keys(imgs).forEach((key) => {
+    // @ts-ignore
+    const src = imgs[key] as string;
+    imgList.push({
+      key,
+      type: 'image',
+      url: assetSetter(src, fileType.ui) as string
+    })
+  })
+
+  return imgList
 }

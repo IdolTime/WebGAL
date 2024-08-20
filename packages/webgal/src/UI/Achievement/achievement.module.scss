@@ -15,6 +15,7 @@ $default_pregress__bg_height: 300px;
     bottom: 0;
     z-index: 99;
     overflow: auto;
+    background: #000;
 
     .goback {
         position: absolute;
@@ -96,7 +97,7 @@ $default_pregress__bg_height: 300px;
     .achievement_content_bg {
         height: 100%;
         width: 100%;
-        overflow: hidden;
+        overflow: auto;
         background-repeat: no-repeat;
         position: relative;
         background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);

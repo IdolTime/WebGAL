@@ -14,6 +14,7 @@ import { px2 } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
 
+
 /**
  * 故事线页面
  * @constructor
@@ -27,6 +28,7 @@ export const StoryLine: FC = () => {
   const storylineUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
   ) as StorylineSceneUIConfig;
+
   useEffect(() => {
     getStorylineFromStorage();
     if (GUIState.showStoryLine) {
