@@ -37,7 +37,7 @@
 }
 
 .Options_checkbox {
-  position: absolute;
+  position: relative !important;
   top: px2(239px);
   left: px2(517px);
   width: px2(21px);
@@ -46,6 +46,10 @@
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .Options_main_slider {

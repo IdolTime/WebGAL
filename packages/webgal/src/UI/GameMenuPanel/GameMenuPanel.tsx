@@ -1,14 +1,14 @@
 import { useEffect, CSSProperties } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { componentsVisibility, MenuPanelTag, EecMenuKey } from '@/store/guiInterface';
-import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { RootState } from '@/store/store';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import useTrans from '@/hooks/useTrans';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
-import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 import styles from './gameMenuPanel.module.scss';
 
@@ -171,12 +171,12 @@ export const GameMenuPanel = () => {
       }
     }
 
-    const nameMap = {
-      Esc_continueGame_button: '继续游戏',
-      Esc_backToLevel_button: '返回关卡',
-      Esc_setting_button: '设置', 
-      Esc_exitGame_button: '退出游戏',
-    }
+    // const nameMap = {
+    //   Esc_continueGame_button: '继续游戏',
+    //   Esc_backToLevel_button: '返回关卡',
+    //   Esc_setting_button: '设置', 
+    //   Esc_exitGame_button: '退出游戏',
+    // }
     const btnTextElement = document.getElementById(`${id}-text`)
     if (btnTextElement && menu?.content) {
       btnTextElement.innerText = menu.content?.replace(/\\n/g, "\n") ?? '';
@@ -192,7 +192,7 @@ export const GameMenuPanel = () => {
         style={styleObj}
       >
         <span className={styles.button_text} style={styleText} id={`${id}-text`}>
-          {nameMap[key]}
+          {/* {nameMap[key]} */}
         </span>
       </span>
     )

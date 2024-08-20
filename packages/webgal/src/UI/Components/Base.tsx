@@ -39,14 +39,14 @@ export const CustomText = ({
   let className = defaultClass;
   let _style = style;
 
-  const _onMouseEnter = () => {
+  const _onMouseEnter = debounce(() => {
     if (hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  };
+  }, 100);
 
   const _onMouseLeave = () => {
     setHover(false);
@@ -171,14 +171,14 @@ export const CustomContainer = ({
   const [hover, setHover] = useState(false);
   let className = defaultClass;
   let _style = style;
-  const _onMouseEnter = () => {
+  const _onMouseEnter = debounce(() => {
     if (hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  };
+  }, 100);
   const _onMouseLeave = () => {
     setHover(false);
     if (onMouseLeave) {
