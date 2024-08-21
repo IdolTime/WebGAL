@@ -20,7 +20,7 @@ $default_storyLine_bg_y: 720px;
 
        
     .goBack {
-        position: absolute;
+        position: fixed;
         top: px2(35px);
         left: px2(25px);
         z-index: 100;

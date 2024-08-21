@@ -41,6 +41,9 @@ export enum commandType {
   unlockAchieve, // 解锁成就
   unlockStoryline, // 解锁故事线
   showValue, // 显示变量
+  payProduct, // 付费
+  finishTrial, // 结束试玩
+  moveCamera, // 移动镜头
 }
 
 /**

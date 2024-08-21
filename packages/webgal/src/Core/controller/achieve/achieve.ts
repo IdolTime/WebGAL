@@ -23,12 +23,11 @@ export const enterAchieve = async () => {
       if (scene) {
         // 开始第一条语句
         nextSentence();
-        WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Achieve, sceneUrl);
       }
     });
   });
 
-  // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showAchievement', visibility: true }));

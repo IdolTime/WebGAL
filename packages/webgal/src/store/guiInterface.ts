@@ -45,12 +45,15 @@ export interface IGuiState {
   };
   achievementUI: {
     [key in EnumAchievementUIKey]: GameMenuItem;
-  }
+  };
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI'>
+  Exclude<
+    keyof IGuiState,
+    'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI'
+  >
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
@@ -102,7 +105,7 @@ export interface GameMenuItem {
   args: {
     hide: boolean;
     style: IStyle;
-    hoverStyle?: IStyle
+    hoverStyle?: IStyle;
   };
 }
 
@@ -114,7 +117,7 @@ export enum EecMenuKey {
   /** 设置 */
   Esc_setting_button = 'Esc_setting_button',
   /** 退出游戏 */
-  Esc_exitGame_button = 'Esc_exitGame_button'
+  Esc_exitGame_button = 'Esc_exitGame_button',
 }
 
 export interface EscMenuItem {
@@ -137,7 +140,6 @@ export interface EscMenuItem {
   };
 }
 
-
 /**
  * 成就页面UI
  */
@@ -153,5 +155,5 @@ export enum EnumAchievementUIKey {
   /** 成就进度条 */
   Achievement_progress = 'Achievement_progress',
   /** 未解锁图标元素 */
-  Achievement_notUnlock = 'Achievement_notUnlock'
+  Achievement_notUnlock = 'Achievement_notUnlock',
 }

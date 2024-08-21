@@ -103,16 +103,16 @@ export function parseImagesArg(imgs?: CollectionImages): contentListItem[] {
   if (!imgs || isEmpty(imgs)) {
     return [];
   }
-  const imgList: contentListItem[] = []
+  const imgList: contentListItem[] = [];
   Object.keys(imgs).forEach((key) => {
     // @ts-ignore
     const src = imgs[key] as string;
     imgList.push({
       key,
       type: 'image',
-      url: assetSetter(src, fileType.ui) as string
-    })
-  })
+      url: assetSetter(src, fileType.ui) as string,
+    });
+  });
 
-  return imgList
+  return imgList;
 }

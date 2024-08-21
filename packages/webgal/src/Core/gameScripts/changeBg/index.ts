@@ -13,6 +13,7 @@ import { IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 
 /**
  * 进行背景图片的切换
@@ -35,13 +36,14 @@ export const changeBg = (sentence: ISentence): IPerform => {
     });
 
     return {
-      performName: 'none',
+      performName: getRandomPerformName(),
       duration: 0,
       isHoldOn: false,
       stopFunction: () => {},
       blockingNext: () => false,
       blockingAuto: () => true,
       stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+      goNextWhenOver: true,
     };
   }
 
@@ -57,13 +59,14 @@ export const changeBg = (sentence: ISentence): IPerform => {
       }
     });
     return {
-      performName: 'none',
+      performName: getRandomPerformName(),
       duration: 0,
       isHoldOn: false,
       stopFunction: () => {},
       blockingNext: () => false,
       blockingAuto: () => true,
       stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+      goNextWhenOver: true,
     };
   }
 
@@ -72,7 +75,7 @@ export const changeBg = (sentence: ISentence): IPerform => {
   let bgX = 0;
   let bgY = 0;
   sentence.args.forEach((e) => {
-    switch(e.key) {
+    switch (e.key) {
       case 'unlockname':
         name = e.value.toString();
         break;
