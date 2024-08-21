@@ -8,7 +8,7 @@
   bottom: 0;
   animation: change-img-anim 5s forwards;
   background-size: cover;
-  z-index: 14;
+  z-index: 999;
 }
 
 .overlay {
@@ -22,7 +22,7 @@
   background: #000;
   animation: fade-in 5s;
   opacity: 1;
-  z-index: 13;
+  z-index: 998;
 }
 
 @keyframes fade-in-out {

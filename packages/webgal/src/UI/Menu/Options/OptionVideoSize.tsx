@@ -38,7 +38,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
                 type="checkbox"
                 checked={userDataState.optionData.videoSize === videoSizeOption.Size1080P}
                 item={optionUIConfigs.other[OptionSceneOtherKey.Option_videoSize1080_checkbox]}
-                defaultClass={`${styles.Options_checkbox}`}
+                defaultClass={`${styles.Options_checkbox} ${styles.Options_checkbox_1080P} ${
+                    userDataState.optionData.videoSize === videoSizeOption.Size1080P ? styles.Options_checkbox_active : ''
+                  }`
+                }
                 onMouseEnter={playSeEnter}
                 onChecked={() => {
                     playSeClick();
@@ -53,7 +56,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
                 type="checkbox"
                 checked={userDataState.optionData.videoSize === videoSizeOption.Size720P}
                 item={optionUIConfigs.other[OptionSceneOtherKey.Option_videoSize720_checkbox]}
-                defaultClass={`${styles.Options_checkbox}`}
+                defaultClass={`${styles.Options_checkbox} ${styles.Options_checkbox_720P} ${
+                    userDataState.optionData.videoSize === videoSizeOption.Size720P ? styles.Options_checkbox_active : ''
+                  }`
+                }
                 onMouseEnter={playSeEnter}
                 onChecked={() => {
                     playSeClick();

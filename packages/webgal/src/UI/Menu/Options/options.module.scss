@@ -1,5 +1,7 @@
 @import 'src/assets/style/px2.scss';
 
+$default_options_sound_slider_width: 300px;
+
 .Options_main {
   position: absolute;
   cursor: default;
@@ -20,7 +22,7 @@
 }
 
 .Options_back {
-  position: absolute;
+  position: absolute !important;
   top: px2(93px);
   left: px2(142px);
   width: px2(49px);
@@ -39,7 +41,7 @@
 .Options_checkbox {
   position: relative !important;
   top: px2(239px);
-  left: px2(517px);
+  left: px2(441px);
   width: px2(21px);
   height: px2(21px);
   background-image: url('@/assets/imgs/check.png');
@@ -54,17 +56,18 @@
 
 .Options_main_slider {
   position: absolute;
-  top: px2(498px);
+  top: px2(510px);
   left: px2(622px);
+  width: px2($default_options_sound_slider_width);
 }
 
 .Options_light_slider {
-  position: absolute;
+  position: absolute !important;
   transform: none !important;
-  // top: px2(350px);
-  // left: px2(460px);
-  // left: px2(622px)；
+  top: px2(375px);
+  left: px2(622px);
   display: flex;
+  width: px2($default_options_sound_slider_width);
 
   .label {
     color: #fff;
@@ -75,12 +78,14 @@
 
 .Options_sound_slider {
   position: absolute;
-  top: px2(404px);
+  top: px2(445px);
   left: px2(622px);
+  width: px2($default_options_sound_slider_width);
 }
 
 .Options_checkbox_window {
-  left: px2(709px);
+  top: px2(218px);
+  left: px2(661px);
 }
 
 .Options_checkbox_active {

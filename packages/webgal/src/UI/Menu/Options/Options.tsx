@@ -104,23 +104,6 @@ export const Options: FC = () => {
             setStorage();
           }}
         />
-      {/* <div className={styles.Options_light_slider}>
-        <OptionSlider
-          initValue={userDataState.optionData.uiLight}
-          uniqueID="light"
-          min={configLight.min}
-          max={configLight.max}
-          onChange={(event) => {
-            let newValue = Number(event.target.value);
-            if (newValue < configLight.min) {
-              newValue = configLight.min;
-            }
-            useUILight(newValue);
-            dispatch(setOptionData({ key: 'uiLight', value: newValue }));
-            setStorage();
-          }}
-        />
-      </div> */}
 
       <OptionSliderCustome
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_effect_volume_slider]}

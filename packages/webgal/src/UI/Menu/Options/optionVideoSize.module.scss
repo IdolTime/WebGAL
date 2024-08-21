@@ -11,8 +11,8 @@
 
     .Options_checkbox {
         position: relative !important;
-        top: px2(239px);
-        left: px2(517px);
+        top: px2(266px);
+        // left: px2(517px);
         width: px2(21px);
         height: px2(21px);
         background-image: url('@/assets/imgs/check.png');
@@ -23,6 +23,18 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+      }
+
+      .Options_checkbox_1080P {
+        left: px2(441px);
+      }
+
+      .Options_checkbox_720P {
+        left: px2(640px);
+      }
+
+      .Options_checkbox_active {
+        background-image: url('@/assets/imgs/checked.png');
       }
 
     .option_item {

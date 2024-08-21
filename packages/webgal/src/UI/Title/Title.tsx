@@ -9,7 +9,6 @@ import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { setshowFavorited } from '@/store/GUIReducer';
-// import { resize } from '@/Core/util/resize';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { fullScreenOption } from '@/store/userDataInterface';
