@@ -16,13 +16,14 @@ export function useSetBg(stageState: IStageState) {
   useEffect(() => {
     const thisBgKey = 'bg-main';
     if (bgName !== '') {
+      const { bgX, bgY } = stageState;
       const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
       if (currentBg) {
         if (currentBg.sourceUrl !== bgName) {
           removeBg(currentBg);
         }
       }
-      WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName);
+      WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName, bgX, bgY);
       setEbg(bgName);
       logger.debug('重设背景');
       setTimeout(() => {

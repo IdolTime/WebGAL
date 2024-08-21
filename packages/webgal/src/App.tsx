@@ -120,7 +120,6 @@ function App() {
       <Loading />
       <Translation />
       <Stage />
-      <GameMenuPanel />
       <BottomControlPanel />
       <BottomControlPanelFilm />
       <Backlog />
@@ -135,6 +134,7 @@ function App() {
       <Achievement />
       <BeautyGuide />
       <ModalR18 />
+      <GameMenuPanel />
     </div>
   );
 }

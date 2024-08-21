@@ -1,5 +1,9 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
+import { Style, CollectionImages, contentListItem } from '../UIConfigTypes';
+import { CSSProperties } from 'react';
+import { isEmpty } from 'lodash';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 /**
  * 规范函数的类型
@@ -39,4 +43,76 @@ export function defineScripts<R extends Record<string, Omit<IConfigInterface, 's
   }
   return result;
 }
+
 export const px2 = (value: number | string) => (typeof value === 'string' ? Number(value) : value) / 0.5;
+
+// 解析样式的工具函数
+export function parseStyleArg(styleObj?: Style): CSSProperties {
+  const style: CSSProperties = {};
+
+  if (styleObj) {
+    if (styleObj.x !== undefined) {
+      style.left = px2(styleObj.x) + 'px';
+      style.position = 'absolute';
+      style.transform = 'translateX(-50%)';
+    }
+    if (styleObj.y !== undefined) {
+      style.top = px2(styleObj.y) + 'px';
+      style.position = 'absolute';
+      style.transform += ' translateY(-50%)';
+    }
+    if (styleObj.scale !== undefined) {
+      style.transform += ` scale(${styleObj.scale})`;
+    }
+    if (styleObj.fontSize !== undefined) {
+      style.fontSize = px2(styleObj.fontSize) + 'px';
+    }
+    if (styleObj.fontColor !== undefined) {
+      style.color = styleObj.fontColor;
+    }
+    if (styleObj.width !== undefined) {
+      style.width = px2(styleObj.width) + 'px';
+    }
+    if (styleObj.height !== undefined) {
+      style.height = px2(styleObj.height) + 'px';
+    }
+    if (styleObj.marginLeft !== undefined) {
+      style.marginLeft = px2(styleObj.marginLeft) + 'px';
+    }
+    if (styleObj.marginRight !== undefined) {
+      style.marginRight = px2(styleObj.marginRight) + 'px';
+    }
+    if (styleObj.gap !== undefined) {
+      style.gap = px2(styleObj.gap) + 'px';
+    }
+    if (styleObj.rowGap !== undefined) {
+      style.rowGap = px2(styleObj.rowGap) + 'px';
+    }
+    if (styleObj.columnGap !== undefined) {
+      style.columnGap = px2(styleObj.columnGap) + 'px';
+    }
+    if (styleObj.position) {
+      style.position = styleObj.position;
+    }
+  }
+
+  return style;
+}
+
+export function parseImagesArg(imgs?: CollectionImages): contentListItem[] {
+  if (!imgs || isEmpty(imgs)) {
+    return [];
+  }
+  const imgList: contentListItem[] = [];
+  Object.keys(imgs).forEach((key) => {
+    // @ts-ignore
+    const src = imgs[key] as string;
+    imgList.push({
+      key,
+      type: 'image',
+      url: assetSetter(src, fileType.ui) as string,
+    });
+  });
+
+  return imgList;
+}

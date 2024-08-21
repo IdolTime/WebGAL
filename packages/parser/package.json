@@ -1,6 +1,6 @@
 {
   "name": "idoltime-parser",
-  "version": "4.4.18",
+  "version": "4.4.19",
   "description": "idoltime script parser",
   "scripts": {
     "test": "vitest",

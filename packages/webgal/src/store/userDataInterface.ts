@@ -34,6 +34,11 @@ export enum fullScreenOption {
   off,
 }
 
+export enum videoSizeOption {
+  Size1080P = '1920x1080', 
+  Size720P = '1280x720'
+}
+
 /**
  * @interface IOptionData 用户设置数据接口
  */
@@ -52,6 +57,8 @@ export interface IOptionData {
   language: language;
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
+  uiLight: number; // 游戏UI亮度
+  videoSize: videoSizeOption
 }
 
 /**

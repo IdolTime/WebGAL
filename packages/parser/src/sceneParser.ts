@@ -55,6 +55,8 @@ export const sceneParser = (
 
   // 开始资源的预加载
   assetsList = uniqWith(assetsList); // 去重
+  const fileExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'mp4', 'webm', 'ogg', 'flv', 'wav', 'mp3', 'ogg'];
+  assetsList = assetsList.filter((asset) => fileExt.includes(asset.url.split('.').pop() as string));
   assetsPrefetcher(assetsList, sceneName);
 
   return {

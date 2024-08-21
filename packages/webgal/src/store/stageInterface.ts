@@ -125,12 +125,26 @@ export interface IUnlockAchieveItem {
   condition?: string;
 }
 
+export interface IScound {
+  key: string;
+  value: boolean | string;
+}
+
+export enum EnumScoundType {
+  Click = 'click',
+  Move = 'move',
+  Error = 'error',
+  Alert = 'alert',
+}
+
 /**
  * @interface IStageState 游戏舞台数据接口
  */
 export interface IStageState {
   oldBgName: string; // 旧背景的文件路径
   bgName: string; // 背景文件地址（相对或绝对）
+  bgX: number; // 背景x坐标
+  bgY: number; // 背景y坐标
   figName: string; // 立绘_中 文件地址（相对或绝对）
   figNameLeft: string; // 立绘_左 文件地址（相对或绝对）
   figNameRight: string; // 立绘_右 文件地址（相对或绝对）
@@ -153,6 +167,9 @@ export interface IStageState {
     volume: number; // 背景音乐 音量调整（0 - 100）
   };
   uiSe: string; // 用户界面音效 文件地址（相对或绝对）
+  gameSe: string; // 游戏内音效
+  gameScounds: IScound[]; // 游戏内音效
+  menuScounds: IScound[]; // 菜单内音效
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换
@@ -170,16 +187,16 @@ export interface IStageState {
   isDisableTextbox: boolean;
   replacedUIlable: Record<string, string>;
   storyLineBg: string; // 故事线背景
-  storyLineBgX: string;
-  storyLineBgY: string;
+  storyLineBgX: number;
+  storyLineBgY: number;
   achieveBg: string;
   // 解锁成就
   unlockAchieve: IUnlockAchieveItem;
   unlockAchieves: Array<IUnlockAchieveObj>;
   totalAchievements: number; // 总成就数量
   unlockedAchievements: number; // 已获得的成就数量
-  achieveBgX: string;
-  achieveBgY: string;
+  achieveBgX: number;
+  achieveBgY: number;
   isShowValueSWitch: boolean;
   showValueName: string;
   showValueAxisX: number;

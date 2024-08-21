@@ -8,8 +8,8 @@ import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
-// import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
-import { setshowFavorited } from '@/store/GUIReducer';
+import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
+import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
 import { updateShowValueList } from '@/store/stageReducer';
 
 /**
@@ -107,8 +107,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         const endPerform = () => {
-          // 是否为鉴赏视频
+          // 如果为鉴赏模式下播放视频，播放完后自动跳转到鉴赏模式页面
           if (isLoadVideo) {
+            webgalStore.dispatch(setVisibility({ component: 'showExtra', visibility: true }));
             return;
           }
 
@@ -149,15 +150,16 @@ export const playVideo = (sentence: ISentence): IPerform => {
           stopFunction: (noWait = false) => {
             // WebGAL.events.fullscreenDbClick.off(skipVideo);
 
-            if (!continueBgmValue) {
-              /**
-               * 恢复音量
-               */
-              const bgmElement: any = document.getElementById('currentBgm');
-              if (bgmElement) {
-                bgmElement.volume = bgmVol.toString();
-              }
-            }
+            // if (!continueBgmValue) {
+            /**
+             * 恢复音量
+             * 需求变更：bgm与视频同时播放，不被视频打断
+             */
+            // const bgmElement: any = document.getElementById('currentBgm');
+            // if (bgmElement) {
+            //   bgmElement.volume = bgmVol.toString();
+            // }
+            // }
 
             const vocalElement: any = document.getElementById('currentVocal');
             if (vocalElement) {
@@ -176,14 +178,15 @@ export const playVideo = (sentence: ISentence): IPerform => {
         resolve(perform);
         /**
          * 把bgm和语音的音量设为0
+         * 需求变更：bgm与视频同时播放，不被视频打断
          */
-        if (!continueBgmValue) {
-          const bgmVol2 = 0;
-          const bgmElement: any = document.getElementById('currentBgm');
-          if (bgmElement) {
-            bgmElement.volume = bgmVol2.toString();
-          }
-        }
+        // if (!continueBgmValue) {
+        // const bgmVol2 = 0;
+        // const bgmElement: any = document.getElementById('currentBgm');
+        // if (bgmElement) {
+        //   bgmElement.volume = bgmVol2.toString();
+        // }
+        // }
         const vocalVol2 = 0;
         const vocalElement: any = document.getElementById('currentVocal');
         if (vocalElement) {
@@ -212,6 +215,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
           const perform = choose(script, endPerform);
           WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
         }
+
+        setTimeout(() => {
+          // 延迟一秒 获取当前视频播放信息，用于故事线信息存储
+          getCurrentVideoStageDataForStoryLine();
+        }, 1000);
 
         WebGAL.videoManager.onEnded(url, () => {
           // getCurrentVideoStageDataForStoryLine();

@@ -13,6 +13,7 @@ import { IUserAnimation } from '@/Core/Modules/animations';
 import cloneDeep from 'lodash/cloneDeep';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 
 /**
  * 进行背景图片的切换
@@ -22,59 +23,71 @@ import { WebGAL } from '@/Core/WebGAL';
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   const dispatch = webgalStore.dispatch;
-   // 故事线背景
+  // 故事线背景
   if (webgalStore.getState().GUI.showStoryLine) {
-    dispatch(setStage({ key: 'storyLineBg', value: url }))
+    dispatch(setStage({ key: 'storyLineBg', value: url }));
     sentence.args.forEach((e) => {
       if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgX', value: `${e.value}` }))
+        dispatch(setStage({ key: 'storyLineBgX', value: e.value }));
       }
       if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgY', value: `${e.value}` }))
+        dispatch(setStage({ key: 'storyLineBgY', value: e.value }));
       }
     });
-    
+
     return {
-      performName: 'none',
+      performName: getRandomPerformName(),
       duration: 0,
       isHoldOn: false,
       stopFunction: () => {},
       blockingNext: () => false,
       blockingAuto: () => true,
       stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
+      goNextWhenOver: true,
+    };
   }
 
   // 成就背景
   if (webgalStore.getState().GUI.showAchievement) {
-    dispatch(setAchieveBg(url))
+    dispatch(setAchieveBg(url));
     sentence.args.forEach((e) => {
       if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgX', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'achieveBgX', value: e.value }));
       }
       if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgY', value: `${e.value}px` }))
+        dispatch(setStage({ key: 'achieveBgY', value: e.value }));
       }
     });
     return {
-      performName: 'none',
+      performName: getRandomPerformName(),
       duration: 0,
       isHoldOn: false,
       stopFunction: () => {},
       blockingNext: () => false,
       blockingAuto: () => true,
       stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    }
+      goNextWhenOver: true,
+    };
   }
 
   let name = '';
   let series = 'default';
+  let bgX = 0;
+  let bgY = 0;
   sentence.args.forEach((e) => {
-    if (e.key === 'unlockname') {
-      name = e.value.toString();
-    }
-    if (e.key === 'series') {
-      series = e.value.toString();
+    switch (e.key) {
+      case 'unlockname':
+        name = e.value.toString();
+        break;
+      case 'series':
+        series = e.value.toString();
+        break;
+      case 'x':
+        bgX = Number(e?.value ?? 0);
+        break;
+      case 'y':
+        bgY = Number(e?.value ?? 0);
+        break;
     }
   });
 
@@ -135,6 +148,9 @@ export const changeBg = (sentence: ISentence): IPerform => {
     WebGAL.animationManager.nextExitAnimationName.set('bg-main-off', getSentenceArgByKey(sentence, 'exit')!.toString());
     duration = getAnimateDuration(getSentenceArgByKey(sentence, 'exit')!.toString());
   }
+
+  if (bgX) dispatch(setStage({ key: 'bgX', value: bgX }));
+  if (bgY) dispatch(setStage({ key: 'bgY', value: bgY }));
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {

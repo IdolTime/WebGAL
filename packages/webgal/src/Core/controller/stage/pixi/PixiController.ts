@@ -12,6 +12,8 @@ import 'pixi-spine'; // Do this once at the very start of your code. This regist
 import { Spine } from 'pixi-spine';
 import { APNGLoader } from '@tbminiapp/pixi-apng-textures';
 import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import { AnimatedGIF } from '@pixi/gif';
+import { px2 } from '@/Core/parser/utils';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
 // import { Live2DModel, SoundManager } from 'pixi-live2d-display'; // 如果要使用 Live2D，取消这里的注释
 
@@ -380,8 +382,7 @@ export default class PixiStage {
    * @param key 背景的标识，一般和背景类型有关
    * @param url 背景图片url
    */
-  public addBg(key: string, url: string) {
-    // const loader = this.assetLoader;
+  public addBg(key: string, url: string, bgX?: number, bgY?: number) {
     const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
     const thisBgContainer = new WebGALPixiContainer();
@@ -396,6 +397,23 @@ export default class PixiStage {
       this.removeStageObjectByKey(key);
     }
 
+    // GIF转换
+    // @ts-ignore
+    const transformToGIFAnimation = (url: string, bgSprite: any, bgX?: number, bgY?: number) => {
+      fetch(url)
+        .then((res) => res.arrayBuffer())
+        .then(AnimatedGIF.fromBuffer)
+        .then((image) => {
+          // 设置 GIF 图像的宽度和高度
+          if (bgSprite) {
+            image.transform = bgSprite.transform;
+          }
+          if (bgX) image.width = px2(bgX);
+          if (bgY) image.height = px2(bgY);
+          thisBgContainer.addChild(image);
+        });
+    };
+
     // 挂载
     this.backgroundContainer.addChild(thisBgContainer);
     const bgUuid = uuid();
@@ -404,7 +422,7 @@ export default class PixiStage {
       key: key,
       pixiContainer: thisBgContainer,
       sourceUrl: url,
-      sourceType: 'img',
+      sourceType: url.includes('.gif') ? 'gif' : 'img',
       sourceExt: this.getExtName(url),
     });
 
@@ -426,6 +444,12 @@ export default class PixiStage {
         bgSprite.scale.x = targetScale;
         bgSprite.scale.y = targetScale;
         bgSprite.anchor.set(0.5);
+
+        if (url.includes('.gif')) {
+          transformToGIFAnimation(url, bgSprite, bgX, bgY);
+          return;
+        }
+
         bgSprite.position.y = this.stageHeight / 2;
         thisBgContainer.setBaseX(this.stageWidth / 2);
         thisBgContainer.setBaseY(this.stageHeight / 2);

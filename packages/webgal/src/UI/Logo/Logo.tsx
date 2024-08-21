@@ -24,7 +24,7 @@ const Logo: FC = () => {
       currentLogoIndex.set(currentLogoIndex.value + 1);
       currentTimeOutId.set(setTimeout(nextImg, animationDuration));
     } else {
-      currentLogoIndex.set(-1);
+      // currentLogoIndex.set(-1);
       if (GUIState?.isShowR18Modal) {
         dispatch(
           setVisibility({
@@ -33,6 +33,7 @@ const Logo: FC = () => {
           }),
         );
       }
+      currentLogoIndex.set(-1);
     }
   };
 

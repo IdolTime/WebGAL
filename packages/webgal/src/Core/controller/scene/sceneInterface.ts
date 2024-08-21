@@ -43,6 +43,7 @@ export enum commandType {
   showValue, // 显示变量名称
   payProduct, // 付费
   finishTrial, // 结束试玩
+  moveCamera, // 移动镜头
 }
 
 /**

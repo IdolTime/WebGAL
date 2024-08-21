@@ -13,7 +13,6 @@ import {
 } from '@/Core/controller/storage/savesController';
 import { ISaveStoryLineData, ISaveStoryLine } from '@/store/userDataInterface';
 
-
 export interface ISceneEntry {
   sceneName: string; // 场景名称
   sceneUrl: string; // 场景url
@@ -81,9 +80,9 @@ export class SceneManager {
               if (parsedScene.current) {
                 this.sceneData.currentScene = parsedScene.current;
               }
-              const sentenceList = this.sceneData?.currentScene?.sentenceList ?? []
+              const sentenceList = this.sceneData?.currentScene?.sentenceList ?? [];
               if (scenaName === sceneNameType.Storyline) {
-                this.getAllStorylineList(sentenceList)
+                this.getAllStorylineList(sentenceList);
               }
 
               if (scenaName === sceneNameType.Achieve) {
@@ -103,31 +102,6 @@ export class SceneManager {
         },
       );
 
-      const sentenceList = parsedScene.current?.sentenceList || [];
-
-      if (sentenceList.length && scenaName === sceneNameType.Start) {
-        // 是否有故事线配置项，如果没有则重置数据
-        // getStorylineFromStorage().then(() => {
-        //   const unlockStorylineIndex = sentenceList.findIndex(
-        //     (e: ISentence) => e.command === commandType.unlockStoryline,
-        //   );
-        //   if (unlockStorylineIndex === -1) {
-        //     webgalStore.dispatch(saveActions.resetStorylineList());
-        //     dumpStorylineToStorage();
-        //   }
-        // });
-
-        // 是否有解锁成就配置项，如果没有则重置数据
-        const unlockAchieveIndex = sentenceList.findIndex((e: ISentence) => e.command === commandType.unlockAchieve);
-        const isSome = this.compareFilenames(scenaName, sceneUrl);
-        if (unlockAchieveIndex === -1 && isSome) {
-          webgalStore.dispatch(saveActions.resetUnlockAchieveData());
-          dumpUnlickAchieveToStorage();
-        }
-      }
-
-   
-
       parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
     });
   }
@@ -138,30 +112,28 @@ export class SceneManager {
     const unlockStoryLineeMapper = new Map();
     const videoDataMapper = new Map();
 
-
     webgalStore.getState().saveData.unlockStorylineList.forEach((item: ISaveStoryLineData) => {
-      const { name, isUnlock = false } = item.storyLine as ISaveStoryLine || {};
+      const { name, isUnlock = false } = (item.storyLine as ISaveStoryLine) || {};
       unlockStoryLineeMapper.set(name, name);
-      videoDataMapper.set(name, item.videoData)
+      videoDataMapper.set(name, item.videoData);
     });
 
     const allStorylineData: ISaveStoryLineData[] = sentenceList
       .filter((e: ISentence) => e.command === commandType.unlockStoryline)
-      .map(e2 => {
-
+      .map((e2) => {
         const storyLine: ISaveStoryLine = {
           thumbnailUrl: e2?.content ?? '',
           name: '',
           x: 0,
           y: 0,
           isUnlock: false,
-          isHideName: false
-        }
+          isHideName: false,
+        };
         const payload: ISaveStoryLineData = {
           storyLine: {} as unknown as ISaveStoryLine,
-          videoData: null
+          videoData: null,
         };
- 
+
         e2.args.forEach((e3) => {
           if (e3.key === 'name') {
             storyLine['name'] = e3.value.toString();
@@ -175,27 +147,24 @@ export class SceneManager {
         });
 
         if (unlockStoryLineeMapper.get(storyLine['name']) && videoDataMapper.get(storyLine['name'])) {
-       
           storyLine['isUnlock'] = true;
-          payload['videoData'] = videoDataMapper.get(storyLine['name'])
+          payload['videoData'] = videoDataMapper.get(storyLine['name']);
         } else {
           storyLine['isUnlock'] = false;
         }
-        payload['storyLine'] = storyLine
+        payload['storyLine'] = storyLine;
         return payload;
-      })
+      });
 
-      webgalStore.dispatch(
-        saveActions.saveAllStorylineData(allStorylineData)
-      )
+    webgalStore.dispatch(saveActions.saveAllStorylineData(allStorylineData));
 
-      const newList = allStorylineData.filter(e => e.storyLine.isUnlock)
-      webgalStore.dispatch(saveActions.setStorylineListFromStorage(newList))
-      await dumpStorylineToStorage();
+    const newList = allStorylineData.filter((e) => e.storyLine.isUnlock);
+    webgalStore.dispatch(saveActions.setStorylineListFromStorage(newList));
+    await dumpStorylineToStorage();
   }
 
   // 所有解锁成就
-  public async getAllUnlockAchieveList(sentenceList: ISentence[]) {
+  private async getAllUnlockAchieveList(sentenceList: ISentence[]) {
     await getUnlickAchieveFromStorage();
     const unlockAchieveMapper = new Map();
     const timesMapper = new Map();
@@ -246,7 +215,7 @@ export class SceneManager {
     await dumpUnlickAchieveToStorage();
   }
 
-  public compareFilenames(filename1: string, filename2: string) {
+  private compareFilenames(filename1: string, filename2: string) {
     // 提取文件名（不包含路径和后缀名）
     const name1 = filename1.match(/\/?([^/]+)\.\w+$/);
     const name2 = filename2.match(/\/?([^/]+)\.\w+$/);

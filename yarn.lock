@@ -883,10 +883,15 @@
   resolved "https://registry.yarnpkg.com/@pixi/filter-zoom-blur/-/filter-zoom-blur-4.2.0.tgz#99665a4cf4e3fbae893a4bdc10ecde1701d06088"
   integrity sha512-mt/hD8LcvgJUjMNINhQVETEkrZvqvix+KyjXJCOnaHhbUHjfthtgx+N0jvs80miiShBIXSWjWNJgr1kY1rC0OA==
 
-"@pixi/graphics@6.4.2":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@pixi/graphics/-/graphics-6.4.2.tgz#a3dadc078432b67d4606b1f05c5ab3fce80db40b"
-  integrity sha512-bMIuOee3ONsibRzq9/YUOPfrJ9rD5UK4ifhHRcB5sXwyRXhVK2HNkT2H4+0JQ8o7TxqjJE8neb5en9hn3ZR3SQ==
+"@pixi/gif@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@pixi/gif/-/gif-1.1.3.tgz#1987ca2d51bf0b5dd522c38c4ea857b964bdb563"
+  integrity sha512-AAOSHI4D1CLWhfUNG+1+A1QkTKsoumGR3RVPFr4g4Z4sT8Gw4T3UQZLycJ+GD2NfqRcYKGLCgErjMtGMWTyg3g==
+
+"@pixi/graphics@6.5.10":
+  version "6.5.10"
+  resolved "https://registry.yarnpkg.com/@pixi/graphics/-/graphics-6.5.10.tgz#7a5a5d263a612629b8df59479b99ce938353ced2"
+  integrity sha512-KPHGJ910fi8bRQQ+VcTIgrK+bKIm8yAQaZKPqMtm14HzHPGcES6HkgeNY1sd7m8J4aS9btm5wOSyFu0p5IzTpA==
 
 "@pixi/interaction@6.4.2":
   version "6.4.2"
@@ -3236,7 +3241,7 @@ iconv-lite@0.4.24:
     safer-buffer ">= 2.1.2 < 3"
 
 "idoltime-parser@file:packages/parser":
-  version "4.4.18"
+  version "4.4.19"
   dependencies:
     chevrotain "^10.5.0"
     cloudlogjs "^1.0.11"

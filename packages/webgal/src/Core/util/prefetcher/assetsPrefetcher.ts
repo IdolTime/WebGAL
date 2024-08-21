@@ -97,27 +97,42 @@ const loadAssetWithRetry = (
       }
     };
 
+    const newLink = document.createElement('link');
+
     // @ts-ignore
     if (window.isSafari) {
       fetch(url)
+        // @ts-ignore
         .then((res) => {
-          if (res.status >= 400) {
+          if (!res.ok) {
             throw new Error('Error!');
-          } else {
-            onloadCallback();
           }
+
+          const ext = url.split('.').pop() || '';
+          const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
+          const videoExtensions = ['mp4', 'webm', 'ogg', 'flv'];
+          const audioExtensions = ['wav', 'mp3', 'ogg'];
+
+          if (imageExtensions.includes(ext)) {
+            return res.blob();
+          } else if (audioExtensions.includes(ext) || videoExtensions.includes(ext)) {
+            return res.arrayBuffer();
+          }
+
+          return res.blob();
         })
+        .then(onloadCallback)
         .catch(onerrorCallback);
     } else {
       const newLink = document.createElement('link');
       newLink.setAttribute('rel', 'prefetch');
       newLink.setAttribute('href', url);
       const head = document.getElementsByTagName('head');
+      newLink.onload = onloadCallback;
+      newLink.onerror = onerrorCallback;
       if (head.length) {
         head[0].appendChild(newLink);
       }
-      newLink.onload = onloadCallback;
-      newLink.onerror = onerrorCallback;
     }
   };
 

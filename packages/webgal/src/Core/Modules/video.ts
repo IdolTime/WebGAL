@@ -299,7 +299,7 @@ export class VideoManager {
         videoContainer.style.zIndex = '-99';
       }
 
-      if (videoItem.progressTimer) {
+      if (videoItem?.progressTimer) {
         clearTimeout(videoItem.progressTimer);
       }
 
@@ -308,7 +308,7 @@ export class VideoManager {
           try {
             const video = videoContainer?.getElementsByTagName('video');
             if (video?.length) {
-              videoItem.player.destroy();
+              videoItem.player?.destroy();
             }
           } catch (error) {
             console.warn(error);

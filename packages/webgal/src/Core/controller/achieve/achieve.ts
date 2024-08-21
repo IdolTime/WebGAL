@@ -11,7 +11,7 @@ import { sceneNameType } from '@/Core/Modules/scene';
 /**
  * 进入成就页面
  */
-export const enterAchieve = () => {
+export const enterAchieve = async () => {
   webgalStore.dispatch(saveActions.setIsShowUnlock(false));
 
   // 重新获取初始场景
@@ -23,7 +23,6 @@ export const enterAchieve = () => {
       if (scene) {
         // 开始第一条语句
         nextSentence();
-        WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Achieve, sceneUrl);
       }
     });
   });

@@ -3,8 +3,8 @@ const zhCn = {
   common: {
     yes: '是',
     no: '否',
-    confirm: '确认',
     cancel: '取消',
+    confirm: '确定',
   },
 
   menu: {
@@ -210,6 +210,9 @@ const zhCn = {
       backToTitle: '返回主页',
       collection: '收藏',
       collected: '已收藏',
+      continue: '继续',
+      backToLevel: '返回关卡',
+      backToHome: '返回主界面',
     },
   },
 

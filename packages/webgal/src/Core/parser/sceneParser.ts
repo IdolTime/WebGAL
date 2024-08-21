@@ -40,6 +40,7 @@ import { unlockAchieve } from '@/Core/gameScripts/achieve/unlockAchieve';
 import { showValue } from '@/Core/gameScripts/showValue';
 import { payProduct } from '@/Core/gameScripts/payProduct';
 import { finishTrial } from '@/Core/gameScripts/finishTrial';
+import { moveCamera } from '../gameScripts/moveCamera';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -78,6 +79,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   showValue: ScriptConfig(commandType.showValue, showValue, { next: true }),
   payProduct: ScriptConfig(commandType.payProduct, payProduct),
   finishTrial: ScriptConfig(commandType.finishTrial, finishTrial),
+  moveCamera: ScriptConfig(commandType.moveCamera, moveCamera),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 
@@ -92,6 +94,7 @@ export const ADD_NEXT_ARG_LIST = SCRIPT_CONFIG.filter((config) => config.next).m
  * @param sceneUrl 场景url
  * @return {IScene} 解析后的场景
  */
+// @ts-ignore
 export const WebgalParser = new SceneParser(assetsPrefetcher, assetSetter, ADD_NEXT_ARG_LIST, SCRIPT_CONFIG);
 
 export const sceneParser = (rawScene: string, sceneName: string, sceneUrl: string): IScene => {

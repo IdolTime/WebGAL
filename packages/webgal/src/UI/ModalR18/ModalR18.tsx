@@ -41,7 +41,11 @@ export const ModalR18: FC = () => {
   return (
     <>
       {GUIStore.isShowR18Modal && GUIStore.openR18Modal && (
-        <div className={styles.modalR18_main}>
+        <div 
+          className={
+            `${styles.modalR18_main} ${GUIStore.isShowR18Modal && GUIStore.openR18Modal ? 'animated fadeIn' : ''}`
+          } 
+        >
           <div className={styles.footer}>
             <div id="exitButton">
               <img

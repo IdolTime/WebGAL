@@ -1,3 +1,4 @@
+import { SceneUIConfig } from '@/Core/UIConfigTypes';
 import { IWebGalTextBoxTheme } from '@/Stage/themeInterface';
 
 /**
@@ -33,19 +34,27 @@ export interface IGuiState {
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
-  gameMenus: {
-    [key in GameMenuKey]: GameMenuItem;
-  };
+  gameUIConfigs: SceneUIConfig;
   showBeautyGuide: boolean; // 显示美女图鉴页面
   showBeautyGuideDetail: boolean; // 显示美女图鉴详情页面
   showBeautyGuideImageDialog: boolean; // 显示美女图鉴图片对话框
   isShowR18Modal: boolean; // 是否显示R18内容
   openR18Modal: boolean;
+  isShowGameMenu: boolean; // 是否显示游戏菜单
+  escMenus: {
+    [key in EecMenuKey]: EscMenuItem;
+  };
+  achievementUI: {
+    [key in EnumAchievementUIKey]: GameMenuItem;
+  };
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
-  Exclude<keyof IGuiState, 'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus'>
+  Exclude<
+    keyof IGuiState,
+    'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI'
+  >
 >;
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
@@ -80,7 +89,39 @@ export enum GameMenuKey {
   Game_continue_button = 'Game_continue_button', // 继续游戏
 }
 
+export interface IStyle {
+  x?: number;
+  y?: number;
+  scale?: number;
+  image?: string;
+  fontSize?: number;
+  fontColor?: string;
+  countdown?: number;
+  width?: number;
+  height?: number;
+}
+
 export interface GameMenuItem {
+  content: string;
+  args: {
+    hide: boolean;
+    style: IStyle;
+    hoverStyle?: IStyle;
+  };
+}
+
+export enum EecMenuKey {
+  /** 继续游戏 */
+  Esc_continueGame_button = 'Esc_continueGame_button',
+  /** 返回关卡 */
+  Esc_backToLevel_button = 'Esc_backToLevel_button',
+  /** 设置 */
+  Esc_setting_button = 'Esc_setting_button',
+  /** 退出游戏 */
+  Esc_exitGame_button = 'Esc_exitGame_button',
+}
+
+export interface EscMenuItem {
   content: string;
   args: {
     hide: boolean;
@@ -92,6 +133,28 @@ export interface GameMenuItem {
       fontSize?: number;
       fontColor?: string;
       countdown?: number;
+      btnImage?: string;
+      btnPosition: string;
+      align: string;
+      fontFamily: string;
     };
   };
+}
+
+/**
+ * 成就页面UI
+ */
+export enum EnumAchievementUIKey {
+  /** 成就返回键 */
+  Achievement_back_button = 'Achievement_back_button',
+  /** 成就标题 */
+  Achievement_title = 'Achievement_title',
+  /** 成就进度条背景 */
+  Achievement_progress_bg = 'Achievement_progress_bg',
+  /** 成就进度条文字 */
+  Achievement_progress_text = 'Achievement_progress_text',
+  /** 成就进度条 */
+  Achievement_progress = 'Achievement_progress',
+  /** 未解锁图标元素 */
+  Achievement_notUnlock = 'Achievement_notUnlock',
 }

@@ -25,6 +25,8 @@ import { commandType } from '@/Core/controller/scene/sceneInterface';
 export const initState: IStageState = {
   oldBgName: '',
   bgName: '', // 背景文件地址（相对或绝对）
+  bgX: 0, // 背景x坐标
+  bgY: 0, // 背景y坐标
   figName: '', // 立绘_中 文件地址（相对或绝对）
   figNameLeft: '', // 立绘_左 文件地址（相对或绝对）
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
@@ -45,6 +47,9 @@ export const initState: IStageState = {
     volume: 100, // 背景音乐 音量调整（0 - 100）
   },
   uiSe: '', // 用户界面音效 文件地址（相对或绝对）
+  gameSe: '', // 游戏内页面音效 文件地址（相对或绝对）
+  gameScounds: [], // 游戏内音效
+  menuScounds: [], // 菜单内音效
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果
@@ -61,8 +66,8 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   storyLineBg: '', // 故事线背景
-  storyLineBgX: '', // 故事线背景长度
-  storyLineBgY: '', // 故事线背景宽度
+  storyLineBgX: 1280, // 故事线背景长度
+  storyLineBgY: 720, // 故事线背景宽度
   achieveBg: '', // 成就背景
   unlockAchieve: {
     // 解锁成就
@@ -72,8 +77,8 @@ export const initState: IStageState = {
     x: 0,
     y: 0,
   },
-  achieveBgX: '',
-  achieveBgY: '',
+  achieveBgX: 1280,
+  achieveBgY: 720,
   unlockAchieves: [],
   totalAchievements: 0, // 总成就数量
   unlockedAchievements: 0, // 已获得的成就数量

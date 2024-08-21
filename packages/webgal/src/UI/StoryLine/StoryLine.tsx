@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
@@ -9,8 +9,10 @@ import { getStorylineFromStorage } from '@/Core/controller/storage/savesControll
 import styles from './storyLine.module.scss';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { px2 } from '@/Core/parser/utils';
+import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
+import { Button } from '../Components/Base';
 
 /**
  * 故事线页面
@@ -22,20 +24,22 @@ export const StoryLine: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
   const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
-
+  const storylineUIConfigs = useSelector(
+    (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
+  ) as StorylineSceneUIConfig;
 
   useEffect(() => {
-    getStorylineFromStorage()
+    getStorylineFromStorage();
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
     }
-  }, [GUIState.showStoryLine])
+  }, [GUIState.showStoryLine]);
 
   /**
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick()
+    playSeClick();
     backToTitle();
     dispatch(setShowStoryLine(false));
   };
@@ -48,6 +52,7 @@ export const StoryLine: FC = () => {
   const handlPlay = (e: React.MouseEvent, saveData: ISaveStoryLineData) => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
+    dispatch(saveActions.setIsShowUnlock(true));
     loadGameFromStageData(saveData.videoData as ISaveData);
   };
 
@@ -58,23 +63,23 @@ export const StoryLine: FC = () => {
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine}>
-          <div className={styles.storyLine_header}>
-            <span 
-              className={styles.goBack} 
-              onClick={handlGoBack}
-              onMouseEnter={playSeEnter}
-            >
-              {/* 返回 */}
-            </span>
-          </div>
+        <div className={styles.storyLine} id="camera">
+          <Button
+            item={storylineUIConfigs.buttons.Storyline_back_button}
+            defaultClass={styles.goBack}
+            onClick={handlGoBack}
+            onMouseEnter={playSeEnter}
+          />
           <div
             className={styles.storyLine_content}
             style={{
-              width: StageState.storyLineBgX ? px2(StageState.storyLineBgX) + 'px' : '100%',
-              height: Number(StageState.storyLineBgY) > 720 ? px2(StageState.storyLineBgY) + 'px' : '100%',
+              width: px2(StageState.storyLineBgX),
+              height: StageState.storyLineBgY > 720 ? px2(StageState.storyLineBgY) : '100%',
               backgroundImage: `url("${StageState.storyLineBg}")`,
-              backgroundSize: StageState.storyLineBgX && StageState.storyLineBgY && `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`            
+              backgroundSize:
+                StageState.storyLineBgX &&
+                StageState.storyLineBgY &&
+                `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`,
             }}
           >
             {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
@@ -89,8 +94,12 @@ export const StoryLine: FC = () => {
                   key={`storyLine-${index}`}
                   className={styles.storyLine_item}
                   style={
-                    thumbnailUrl 
-                      ? { top: `${y}px`, left: `${x}px`, backgroundImage: `url("${getImagePath(thumbnailUrl)}")` } 
+                    thumbnailUrl
+                      ? {
+                          top: `${px2(y)}px`,
+                          left: `${px2(x)}px`,
+                          backgroundImage: `url("${getImagePath(thumbnailUrl)}")`,
+                        }
                       : {}
                   }
                   onClick={(e) => handlPlay(e, item)}

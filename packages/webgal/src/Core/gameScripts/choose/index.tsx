@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React, { useRef } from 'react';
+import React, { CSSProperties, useRef } from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
@@ -15,7 +15,7 @@ import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
-import { current } from '@reduxjs/toolkit';
+import { parseStyleArg } from '@/Core/parser/utils';
 
 class ChooseOption {
   /**
@@ -134,6 +134,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  let isJumpRef = { current: false };
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };
@@ -146,7 +147,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         const enable = whenChecker(e.enableCondition);
         let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
         const onClick = () => {
-          if (!enable || timer.current) {
+          // if (!enable || timer.current) {
+          //   return;
+          // }
+          if (!enable && !isJumpRef.current) {
             return;
           }
           playSeClick();
@@ -163,6 +167,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             } else {
               jmp(e.jump);
             }
+            isJumpRef.current = false;
             WebGAL.gameplay.performController.unmountPerform('choose');
           };
 
@@ -255,38 +260,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           }
         };
         // : () => {};
-        const styleObj: Record<string, number | string> = {
+        let styleObj: CSSProperties = {
           fontFamily: font,
         };
 
         if (e.style) {
-          if (typeof e.style.x === 'number') {
-            styleObj.position = 'absolute';
-            styleObj['left'] = e.style.x * 1.33333 + 'px';
-            styleObj['transform'] = 'translateX(-50%)';
-          }
-          if (typeof e.style.y === 'number') {
-            styleObj.position = 'absolute';
-            styleObj['top'] = e.style.y * 1.33333 + 'px';
-            if (styleObj['transform']) {
-              styleObj['transform'] += ' translateY(-50%)';
-            } else {
-              styleObj['transform'] = 'translateY(-50%)';
-            }
-          }
-          if (typeof e.style.scale === 'number') {
-            if (styleObj['transform']) {
-              styleObj['transform'] += ' scale(' + e.style.scale + ')';
-            } else {
-              styleObj['transform'] = 'scale(' + e.style.scale + ')';
-            }
-          }
-          if (typeof e.style.fontSize === 'number') {
-            styleObj['fontSize'] = e.style.fontSize + 'px';
-          }
-          if (typeof e.style.fontColor === 'string' && e.style.fontColor[0] === '#') {
-            styleObj['color'] = e.style.fontColor;
-          }
+          styleObj = parseStyleArg(e.style);
         }
 
         if (typeof e.style?.countdown === 'number') {
@@ -299,6 +278,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             if (time <= 0 && timer.current) {
               clearTimeout(timer as any);
               timer.current = null;
+              isJumpRef.current = !enable;
               onClick();
             } else {
               timer.current = setTimeout(() => {
@@ -341,6 +321,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             let ele = document.getElementById(id);
             img.style.width = img.naturalWidth + 'px';
             img.style.height = img.naturalHeight + 'px';
+            img.style.position = 'absolute';
             img.alt = e.text;
 
             if (ele) {

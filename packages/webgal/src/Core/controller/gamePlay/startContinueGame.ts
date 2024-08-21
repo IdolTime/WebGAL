@@ -12,6 +12,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { hasFastSaveRecord, loadFastSaveGame } from '@/Core/controller/storage/fastSaveLoad';
 import { WebGAL } from '@/Core/WebGAL';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { useUILight } from '@/hooks/useUILight';
 
 /**
  * 从头开始游戏
@@ -36,6 +37,8 @@ export const startGame = () => {
     webgalStore.dispatch(saveActions.setIsShowUnlock(true));
     webgalStore.dispatch(saveActions.setShowStoryline(true));
     webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+    // 设置UI亮度
+    useUILight(webgalStore.getState().userData.optionData.uiLight);
   };
 
   if (webgalStore.getState().storeData.isEditorPreviewMode) {

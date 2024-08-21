@@ -3,8 +3,42 @@
  * @author Mahiru
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
-import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
+import { sceneUIConfig } from '@/Core/UIConfigTypes';
+import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload, EnumAchievementUIKey } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+/**
+ * 成就UI的初始状态
+ */
+const initStateAchievement = {
+  content: '',
+  args: {
+    hide: true,
+    style: {},
+    hoverStyle: {}
+  }
+}
+
+/**
+ * ESC菜单按钮初始状态
+ */
+const initStateEscMenu = {
+  content: '',
+  args: {
+    hide: false,
+    style: {
+      x: 0,
+      y: 0,
+      scale: 1,
+      fontSize: 0,
+      fontColor: '',
+      btnImage: '',
+      btnPosition: '',
+      align: '',
+      fontFamily: '',
+    },
+  }
+}
 
 /**
  * 初始GUI状态表
@@ -30,127 +64,28 @@ export const initState: IGuiState = {
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
-  gameMenus: {
-    Game_start_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-          countdown: 0,
-        },
-      },
-    },
-    Game_achievement_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-    Game_extra_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-    Game_storyline_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-    Game_collection_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-    Game_continue_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-    Game_load_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-    Game_option_button: {
-      content: '',
-      args: {
-        hide: true,
-        style: {
-          x: 0,
-          y: 0,
-          scale: 1,
-          image: '',
-          fontSize: 0,
-          fontColor: '',
-        },
-      },
-    },
-  },
+  gameUIConfigs: sceneUIConfig,
   // gameMenus: [],
   showBeautyGuide: false, // 是否显示美女图鉴页面
   showBeautyGuideDetail: false, // 是否显示美女图鉴详情页面
   showBeautyGuideImageDialog: false,
   isShowR18Modal: false, // 是否显示R18内容
   openR18Modal: false,
+  isShowGameMenu: false,
+  escMenus: {
+    Esc_continueGame_button: initStateEscMenu,
+    Esc_backToLevel_button: initStateEscMenu,
+    Esc_setting_button: initStateEscMenu,
+    Esc_exitGame_button: initStateEscMenu
+  },
+  achievementUI: {
+    Achievement_progress_bg: initStateAchievement,
+    Achievement_progress_text: initStateAchievement,
+    Achievement_progress: initStateAchievement,
+    Achievement_notUnlock: initStateAchievement,
+    Achievement_back_button: initStateAchievement,
+    Achievement_title: initStateAchievement
+  }
 };
 
 /**
@@ -197,11 +132,17 @@ const GUISlice = createSlice({
     setshowFavorited: (state, action: PayloadAction<boolean>) => {
       state.showFavorited = action.payload;
     },
-    setGameMenus: (state, action: PayloadAction<any>) => {
-      state.gameMenus = action.payload;
+    setGameUIConfigs: (state, action: PayloadAction<any>) => {
+      state.gameUIConfigs = action.payload;
     },
     setGameR18: (state, action: PayloadAction<boolean>) => {
       state.isShowR18Modal = action.payload;
+    },
+    setEscMenus: (state, action: PayloadAction<any>) => {
+      state.escMenus = action.payload;
+    },
+    setAchievementUI: (state, action: PayloadAction<any>) => {
+      state.achievementUI = action.payload;
     },
   },
 });
@@ -213,7 +154,9 @@ export const {
   setLogoImage,
   setShowStoryLine,
   setshowFavorited,
-  setGameMenus,
+  setGameUIConfigs,
   setGameR18,
+  setEscMenus,
+  setAchievementUI,
 } = GUISlice.actions;
 export default GUISlice.reducer;

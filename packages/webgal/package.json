@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@icon-park/react": "^1.4.2",
+    "@pixi/gif": "^1.1.3",
     "@reduxjs/toolkit": "^1.8.1",
     "@tbminiapp/pixi-apng-textures": "6.2.1-beta.9",
     "@wasm-audio-decoders/ogg-vorbis": "^0.1.15",
