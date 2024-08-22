@@ -241,12 +241,14 @@ export const Achievement: FC = () => {
       {GUIState.showAchievement && (
         <div className={styles.achievement} id="camera">
           {/* 头部 */}
-          <Button
-            item={achivementUIConfigs.buttons.Achievement_back_button}
-            defaultClass={styles.goback}
-            onClick={handleGoBack}
-            onMouseEnter={playSeEnter}
-          />
+          {!GUIState.showProgressAndAchievement && (
+            <Button
+              item={achivementUIConfigs.buttons.Achievement_back_button}
+              defaultClass={styles.goback}
+              onClick={handleGoBack}
+              onMouseEnter={playSeEnter}
+            />
+          )}
 
           {/* 已获得成就  */}
           {renderInfoAchievement()}
