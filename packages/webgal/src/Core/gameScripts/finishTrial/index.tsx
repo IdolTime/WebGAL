@@ -71,12 +71,8 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       window.pubsub.publish('toaster', { show: true, text: '余额不足, 请充值' });
       // @ts-ignore
       window.pubsub.publish('rechargeModal', {
-        successCallback: () => {
-          // @ts-ignore
-          window.pubsub.publish('loading', { loading: true });
-          submitBuy();
-        },
-        // closeCallback: checkBuy,
+        successCallback: checkBuy,
+        closeCallback: checkBuy,
       });
     } else {
       // @ts-ignore
