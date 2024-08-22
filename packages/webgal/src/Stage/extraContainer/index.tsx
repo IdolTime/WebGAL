@@ -42,8 +42,6 @@ export const ExtraContainer = () => {
     });
   }, [stageState.showValueList, barLayoutList]);
 
-  console.log(44444, stageState.showAffinityChangeList);
-
   return (
     <>
       {stageState.showValueList.map((item, i) => {
