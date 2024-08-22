@@ -50,7 +50,8 @@
         right: 0;
         z-index: 22;
         width: px2(301px);
-        height: px2(705px);
+        // height: px2(705px);
+        height: 100%;
         background-image: url('@/assets/imgs/menu-bg.png');
         background-repeat: no-repeat;
         background-size: contain;

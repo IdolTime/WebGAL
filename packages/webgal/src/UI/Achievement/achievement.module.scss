@@ -15,7 +15,9 @@ $default_pregress__bg_height: 300px;
     bottom: 0;
     z-index: 99;
     overflow: auto;
-    background: #000;
+    // background: #000;
+    animation: bg_animation .5s forwards;
+    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
 
     .goback {
         position: fixed;
@@ -44,8 +46,8 @@ $default_pregress__bg_height: 300px;
         z-index: 101;
 
         .achievement_current {
-            width: default_pregress_bg_width;
-            height: default_pregress__bg_height;
+            width: $default_pregress_bg_width;
+            height: $default_pregress__bg_height;
             border-radius: 50%;
             background-color: rgb(205, 179, 50);
             position: relative;
@@ -101,6 +103,7 @@ $default_pregress__bg_height: 300px;
         background-repeat: no-repeat;
         position: relative;
         background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
+        background-size: var(--screenWidth) var(--screenHeight);
     }
 
     .achievement_list {
@@ -224,3 +227,11 @@ $default_pregress__bg_height: 300px;
     }
 }
   
+@keyframes bg_animation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}

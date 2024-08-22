@@ -136,16 +136,19 @@ export const BeautyGuide: FC = () => {
                 />
                 </div>
                 <div className={styles.beautyGuide_content}>
-                    {collectionList.map((item: CollectionInfo, index: number) => (
-                        <div 
-                            key={`${item?.name}$-${index}`}
-                            className={styles.item} 
-                            onClick={() => handleDetail(item, index)} 
-                            onMouseEnter={playSeEnter}
-                        >
-                            <img src={item.image} />
-                        </div>
-                    ))}
+                    {collectionList.map((item: CollectionInfo, index: number) => {
+                        if (!item?.image) return null
+                        return (
+                            <div 
+                                key={`${item?.name}$-${index}`}
+                                className={styles.item} 
+                                onClick={() => handleDetail(item, index)} 
+                                onMouseEnter={playSeEnter}
+                            >
+                                <img src={item.image} />
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
         )}

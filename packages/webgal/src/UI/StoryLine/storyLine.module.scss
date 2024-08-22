@@ -10,7 +10,9 @@ $default_storyLine_bg_y: 720px;
     bottom: 0;
     z-index: 99;
     overflow: auto;
-    background: #000;
+    // background: #000;
+    animation: bg_animation .5s forwards;
+    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
     // -ms-overflow-style: none;  /* 适用于 Internet Explorer 和 Edge */
     // scrollbar-width: none;     /* 适用于 Firefox */
       
@@ -20,7 +22,7 @@ $default_storyLine_bg_y: 720px;
 
        
     .goBack {
-        position: fixed;
+        position: fixed !important;
         top: px2(35px);
         left: px2(25px);
         z-index: 100;
@@ -48,6 +50,7 @@ $default_storyLine_bg_y: 720px;
         // background-size: cover;
         position: relative;
         background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
+        background-size: var(--screenWidth) var(--screenHeight);
 
         .storyLine_item {
             width: px2(135px);
@@ -110,5 +113,14 @@ $default_storyLine_bg_y: 720px;
                 }
             }
         }
+    }
+}
+
+@keyframes bg_animation {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
     }
 }

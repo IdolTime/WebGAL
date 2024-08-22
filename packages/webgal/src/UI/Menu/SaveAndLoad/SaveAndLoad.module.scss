@@ -1,7 +1,7 @@
 @import 'src/assets/style/px2.scss';
 .Save_Load_main {
   height: 85%;
-  width: 90%;
+  width: 100%;
   position: absolute;
   cursor: default;
   display: flex;
@@ -40,18 +40,13 @@
   width: auto;
   font-size: 350%;
   min-width: 350px;
-  //margin: 0 0 0 0.8em;
-  //padding: 0 0.8em 0 0.8em;
   box-sizing: border-box;
-  //border-bottom: 4px solid #77428D;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: 60px;
-  top: 0;
-  // z-index: -1;
-  // opacity: 0.2;
+  left: px2(100px);
+  top: px2(8px);
   transform: translateY(-10px);
 }
 
@@ -75,6 +70,7 @@
 
 .Save_Load_top_buttonList {
   display: flex;
+  margin: px2(25px);
   //padding: 0 0 0 2em;
 }
 

@@ -86,8 +86,20 @@ export const Achievement: FC = () => {
 
     if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
       const achieveBg = sentenceList[0]?.content ?? '';
+      
+
       let achieveBgX = 1280;
       let achieveBgY = 720;
+
+      const gameSizeStr = window.localStorage.getItem('game-screen-size');
+      const sizeArr = gameSizeStr?.split('x') ?? []
+
+      if (sizeArr?.length > 0 && sizeArr[0] === '1920') {
+        achieveBgX = Number(sizeArr[0]);
+        achieveBgY = Number(sizeArr[1]);
+      }
+
+      
       sentenceList[0]?.args?.forEach((arg) => {
         if (arg?.key === 'x') {
           achieveBgX = Number(arg?.value);

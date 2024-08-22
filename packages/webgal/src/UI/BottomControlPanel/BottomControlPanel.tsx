@@ -237,7 +237,10 @@ export const BottomControlPanel = () => {
             onMouseDown={() => handleMouseDown('forward')}
           />
 
-          <span className={styles.autoplay} onMouseEnter={playSeEnter} onClick={handleSkip} />
+
+          {!webgalStore.getState().saveData.isLoadVideo && (
+            <span className={styles.autoplay} onMouseEnter={playSeEnter} onClick={handleSkip} /> 
+          )}
 
           {isShowCollectedBtn() && (
             <span
