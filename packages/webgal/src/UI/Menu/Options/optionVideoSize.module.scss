@@ -1,0 +1,74 @@
+@import 'src/assets/style/px2.scss';
+
+.OptionVideoSize_main {
+    display: flex;
+    align-items: center;
+
+    .label {
+        font-size: px2(22px);
+        color: #fff;
+    }
+
+    .Options_checkbox {
+        position: relative !important;
+        top: px2(266px);
+        top: var(--options_checkbox_1080P_top);
+        width: px2(21px);
+        height: px2(21px);
+        background-image: url('@/assets/imgs/check.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .Options_checkbox_1080P {
+        left: px2(441px);
+        left: var(--options_checkbox_1080P_left);
+      }
+
+      .Options_checkbox_720P {
+        left: px2(640px);
+        left: var(--options_checkbox_720P_left);
+      }
+
+      .Options_checkbox_active {
+        background-image: url('@/assets/imgs/checked.png');
+      }
+
+    .option_item {
+        margin-left: px2(100px);
+        position: relative;
+
+        & > span {
+            color: #fff;
+            font-size: px2(22px);
+            margin-right: px2(10px);
+        }
+
+        & > input {
+            width: px2(20px);
+            height: px2(20px);
+            cursor: pointer;
+        }
+
+        .option_item_checkbox {
+            position: absolute;
+            top: px2(6px);
+            left: px2(125px);
+            width: px2(21px);
+            height: px2(21px);
+            background-image: url('@/assets/imgs/check.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            cursor: pointer;
+
+            &_active {
+                background-image: url('@/assets/imgs/checked.png');
+            }
+        }
+    }
+}

@@ -11,7 +11,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import 'pixi-spine'; // Do this once at the very start of your code. This registers the loader!
 import { Spine } from 'pixi-spine';
 import { APNGLoader } from '@tbminiapp/pixi-apng-textures';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import { SCREEN_CONSTANTS, updateScreenSize } from '@/Core/util/constants';
 import { AnimatedGIF } from '@pixi/gif';
 import { px2 } from '@/Core/parser/utils';
 // import { figureCash } from '@/Core/gameScripts/vocal/conentsCash'; // 如果要使用 Live2D，取消这里的注释
@@ -85,8 +85,8 @@ export default class PixiStage {
 
   // 锁定变换对象（对象可能正在执行动画，不能应用变换）
   private lockTransformTarget: Array<string> = [];
-  private stageWidth = SCREEN_CONSTANTS.width;
-  private stageHeight = SCREEN_CONSTANTS.height;
+  private stageWidth = updateScreenSize().width || SCREEN_CONSTANTS.width;
+  private stageHeight = updateScreenSize().height || SCREEN_CONSTANTS.height;
   /**
    * 暂时没用上，以后可能用
    * @private
@@ -382,6 +382,7 @@ export default class PixiStage {
    * @param key 背景的标识，一般和背景类型有关
    * @param url 背景图片url
    */
+  // eslint-disable-next-line max-params
   public addBg(key: string, url: string, bgX?: number, bgY?: number) {
     const loader = this.assetLoader;
     // 准备用于存放这个背景的 Container
@@ -398,7 +399,7 @@ export default class PixiStage {
     }
 
     // GIF转换
-    // @ts-ignore
+    // eslint-disable-next-line max-params
     const transformToGIFAnimation = (url: string, bgSprite: any, bgX?: number, bgY?: number) => {
       fetch(url)
         .then((res) => res.arrayBuffer())

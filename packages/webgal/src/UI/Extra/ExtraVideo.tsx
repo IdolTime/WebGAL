@@ -150,7 +150,7 @@ export const ExtraVideo: FC = () => {
         item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_title]}
         defaultClass={styles.Save_Load_title}
         defaultTextClass={styles.Load_title_text}
-        text={t('extra.title')}
+        defaultText={t('extra.title')}
       />
       <div className={styles.Save_Load_main}>
         <Indicator

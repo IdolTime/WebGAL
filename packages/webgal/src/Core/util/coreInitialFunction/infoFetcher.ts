@@ -425,14 +425,12 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
       const strStyle = styleMatch[1];
       const styleProps = strStyle.split(',');
       const style: any = {};
-
       styleProps.forEach((prop) => {
         const [key, value] = prop.split('=');
         if (key && value) {
           style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
         }
       });
-
       return style;
     }
   }

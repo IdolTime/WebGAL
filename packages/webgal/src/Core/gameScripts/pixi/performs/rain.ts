@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { registerPerform } from '@/Core/util/pixiPerformManager/pixiPerformManager';
 
 import { WebGAL } from '@/Core/WebGAL';
-import { SCREEN_CONSTANTS } from '@/Core/util/constants';
+import { SCREEN_CONSTANTS, updateScreenSize } from '@/Core/util/constants';
 
 const pixiRain = (rainSpeed: number, number: number) => {
   // 动画参数
@@ -28,8 +28,8 @@ const pixiRain = (rainSpeed: number, number: number) => {
   // 监听动画更新
   function ticker(delta: number) {
     // 获取长宽，用于控制雪花出现位置
-    const stageWidth = SCREEN_CONSTANTS.width;
-    const stageHeight = SCREEN_CONSTANTS.height;
+    const stageWidth = updateScreenSize().width || SCREEN_CONSTANTS.width;
+    const stageHeight = updateScreenSize().height || SCREEN_CONSTANTS.height;
     for (let i = 0; i < number; i++) {
       // 创建对象
       const bunny = new PIXI.Sprite(texture);

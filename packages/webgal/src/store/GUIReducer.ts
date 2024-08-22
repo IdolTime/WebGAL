@@ -4,13 +4,7 @@
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
 import { sceneUIConfig } from '@/Core/UIConfigTypes';
-import {
-  IGuiState,
-  MenuPanelTag,
-  setAssetPayload,
-  setVisibilityPayload,
-  EnumAchievementUIKey,
-} from '@/store/guiInterface';
+import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**

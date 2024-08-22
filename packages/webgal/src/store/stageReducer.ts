@@ -21,8 +21,24 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { commandType } from '@/Core/controller/scene/sceneInterface';
 
-// 初始化舞台数据
+function initGameScreen() {
+  let defaultWidth = 1280;
+  let defaultHeight = 720;
+  const gameSizeStr = window.localStorage.getItem('game-screen-size');
+  const sizeArr = gameSizeStr?.split('x') ?? [];
 
+  if (sizeArr?.length > 0) {
+    defaultWidth = Number(sizeArr[0]);
+    defaultHeight = Number(sizeArr[1]);
+  }
+
+  return {
+    defaultWidth,
+    defaultHeight,
+  };
+}
+
+// 初始化舞台数据
 export const initState: IStageState = {
   oldBgName: '',
   bgName: '', // 背景文件地址（相对或绝对）
@@ -67,8 +83,8 @@ export const initState: IStageState = {
   isDisableTextbox: false,
   replacedUIlable: {},
   storyLineBg: '', // 故事线背景
-  storyLineBgX: 1280, // 故事线背景长度
-  storyLineBgY: 720, // 故事线背景宽度
+  storyLineBgX: initGameScreen().defaultWidth, // 故事线背景长度
+  storyLineBgY: initGameScreen().defaultHeight, // 故事线背景宽度
   achieveBg: '', // 成就背景
   unlockAchieve: {
     // 解锁成就
@@ -78,8 +94,8 @@ export const initState: IStageState = {
     x: 0,
     y: 0,
   },
-  achieveBgX: 1280,
-  achieveBgY: 720,
+  achieveBgX: initGameScreen().defaultWidth,
+  achieveBgY: initGameScreen().defaultHeight,
   unlockAchieves: [],
   totalAchievements: 0, // 总成就数量
   unlockedAchievements: 0, // 已获得的成就数量
