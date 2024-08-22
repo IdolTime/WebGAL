@@ -2,12 +2,6 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { addShowAffinityChangeList, setStage, updateShowAffinityChangeList } from '@/store/stageReducer';
-import { logger } from '@/Core/util/logger';
-import { getRandomPerformName } from '@/Core/Modules/perform/performController';
-import { PERFORM_CONFIG } from '@/config';
-import { WebGAL } from '@/Core/WebGAL';
-import { smoothScrollToElement } from '../util/smoothScrollToElement';
-import styles from './choose/choose.module.scss';
 import { assetSetter, fileType } from '../util/gameAssetsAccess/assetSetter';
 
 /**
@@ -16,7 +10,6 @@ import { assetSetter, fileType } from '../util/gameAssetsAccess/assetSetter';
  * @return {IPerform} 执行的演出
  */
 export const changeAffinity = (sentence: ISentence): IPerform => {
-  const performInitName: string = getRandomPerformName();
   let roleUrl = assetSetter(sentence.content, fileType.ui);
   let numberUrl = '';
   let key = Date.now();
@@ -27,20 +20,16 @@ export const changeAffinity = (sentence: ISentence): IPerform => {
     }
   });
 
-  addShowAffinityChangeList({
-    rolePicture: roleUrl,
-    numberPicture: numberUrl,
-    key,
-  });
-
-  setTimeout(() => {
-    const list = webgalStore.getState().stage.showAffinityChangeList;
-    const newList = list.filter((e) => e.key !== key);
-    updateShowAffinityChangeList(newList);
-  }, 3000);
+  webgalStore.dispatch(
+    addShowAffinityChangeList({
+      rolePicture: roleUrl,
+      numberPicture: numberUrl,
+      key,
+    }),
+  );
 
   return {
-    performName: performInitName,
+    performName: 'none',
     duration: 0,
     isHoldOn: false,
     stopFunction: () => {

@@ -25,26 +25,71 @@
     position: fixed;
     display: flex;
     align-items: center;
-    right: px2(40px);
+    right: px2(50px);
     top: 50%;
     transform: translate(0, -50%);
-    animation: zoomInSlideUp 2s ease-in-out forwards;
+    z-index: 5;
+    opacity: 0;
+    gap: px2(20px);
 }
 
-@keyframes zoomInSlideUp {
+@keyframes bounceIn {
+    from,
+    20%,
+    40%,
+    60%,
+    80%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+  
     0% {
-      transform: scale(0.5);
       opacity: 0;
-      transform: translate(0, -50%);
+      transform: scale3d(0, 0, 0) translate(0, -50%);
     }
-    50% {
-      transform: scale(1) translate(0, -50%);
+  
+    // 20% {
+    //   transform: scale3d(1.1, 1.1, 1.1) translate(0, -50%);
+    // }
+  
+    60% {
       opacity: 1;
+      transform: scale3d(1.1, 1.1, 1.1) translate(0, -50%);
     }
-    100% {
-      transform: scale(1);
+  
+    70% {
+      transform: scale3d(0.97, 0.97, 0.97) translate(0, -50%);
+    }
+
+    80% {
+        opacity: 1;
+        transform: scale3d(1, 1, 1) translate(0, -50%);
+    }
+  
+    to {
+      opacity: 1;
+      transform: scale3d(1, 1, 1) translate(0, -50%);
+    }
+  }
+  
+  .bounceIn {
+    animation-duration: 1s;
+    animation-name: bounceIn;
+  }
+
+  @keyframes fadeOutUp {
+    from {
+      opacity: 1;
+      transform: translate3d(0, -50%, 0);
+    }
+  
+    to {
       opacity: 0;
-      transform: translateY(-100%);
-      transform: scale(1) translate(0, -100%);
+      transform: translate3d(0, -400%, 0);
     }
+  }
+  
+  .fadeOutUp {
+    animation-duration: 2s;
+    animation-name: fadeOutUp;
   }

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setShowStoryLine } from '@/store/GUIReducer';
+import { setShowStoryLine, setVisibility } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
@@ -34,20 +34,15 @@ export const ProgressAchievement: FC = () => {
   ) as ProgressSceneUIConfig;
   const [tab, setTab] = useState<'chapter' | 'achievement' | 'affinity'>('chapter');
 
-  useEffect(() => {
-    getStorylineFromStorage();
-    if (GUIState.showStoryLine) {
-      dispatch(saveActions.setShowStoryline(false));
-    }
-  }, [GUIState.showStoryLine]);
-
   /**
    * 返回
    */
   const handlGoBack = () => {
     playSeClick();
     backToTitle();
-    dispatch(setShowStoryLine(false));
+    dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
+    dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
+    dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };
 
   return (

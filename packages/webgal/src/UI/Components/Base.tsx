@@ -104,7 +104,7 @@ export const CustomImage = ({
   let _style = style || {};
 
   const _onMouseEnter = debounce(() => {
-    if (hoverStyle) {
+    if (hoverSrc || hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
@@ -278,12 +278,12 @@ export const Button = ({
   if (_style.width) imgStyle.width = _style.width;
   if (_style.height) imgStyle.height = _style.height;
   // if (!style.position) style.position = 'absolute';
-  // if (src) style.backgroundImage = 'none';
-  if (src) {
-    _style.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
-    _style.backgroundSize = '100% 100%';
-    _style.backgroundRepeat = 'no-repeat';
-  }
+  if (src) _style.backgroundImage = 'none';
+  // if (src) {
+  //   _style.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
+  //   _style.backgroundSize = '100% 100%';
+  //   _style.backgroundRepeat = 'no-repeat';
+  // }
 
   const clickCallback = (event: React.MouseEvent<HTMLDivElement>) => {
     if (type === 'checkbox') {
@@ -305,7 +305,13 @@ export const Button = ({
       hoverStyle={hoverStyle}
       key={key}
     >
-      {/* {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />} */}
+      {!!src && (
+        <CustomImage
+          src={assetSetter(src, fileType.ui)}
+          hoverSrc={type !== 'checkbox' ? assetSetter(hoverSrc, fileType.ui) : ''}
+          style={imgStyle}
+        />
+      )}
       {!!hoverSrc && type === 'checkbox' && checked && (
         <CustomImage
           nId={key}

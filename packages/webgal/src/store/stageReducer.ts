@@ -227,7 +227,7 @@ const stageSlice = createSlice({
       state.showValueList = action.payload;
     },
     addShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem>) => {
-      state.showAffinityChangeList.push(action.payload);
+      state.showAffinityChangeList = [...state.showAffinityChangeList, action.payload];
     },
     updateShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem[]>) => {
       state.showAffinityChangeList = action.payload;

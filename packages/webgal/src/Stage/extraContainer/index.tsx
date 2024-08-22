@@ -4,6 +4,8 @@ import { RootState, webgalStore } from '@/store/store';
 import { useEffect, useMemo, useState } from 'react';
 import { px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { IShowAffinityChangeItem } from '@/store/stageInterface';
+import { updateShowAffinityChangeList } from '@/store/stageReducer';
 
 export const ExtraContainer = () => {
   const stageState = useSelector((state: RootState) => state.stage);
@@ -116,20 +118,7 @@ export const ExtraContainer = () => {
         return null;
       })}
       {stageState.showAffinityChangeList.map((item, i) => (
-        <div className={styles.affinityWrapper} key={i}>
-          <img
-            key={item.rolePicture + i.toString()}
-            src={item.rolePicture}
-            alt="affinity"
-            className={styles.affinityRole}
-          />
-          <img
-            key={item.numberPicture + i.toString()}
-            src={item.numberPicture}
-            alt="affinity number"
-            className={styles.affinityNumber}
-          />
-        </div>
+        <AffinityItem item={item} key={item.key} />
       ))}
     </>
   );
@@ -150,3 +139,50 @@ export const ExtraContainer = () => {
 
   // )
 };
+
+function AffinityItem({ item }: { item: IShowAffinityChangeItem }) {
+  const [firstAnimationEnded, setFirstAnimationEnded] = useState(false);
+  const [rolePicLayout, setRolePicLayout] = useState({ width: 0, height: 0 });
+  const [numberPicLayout, setNumberPicLayout] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (rolePicLayout.width && numberPicLayout.width) {
+      setTimeout(() => {
+        setFirstAnimationEnded(true);
+      }, 1000);
+
+      setTimeout(() => {
+        const list = webgalStore.getState().stage.showAffinityChangeList;
+        const newList = list.filter((e) => e.key !== item.key);
+        webgalStore.dispatch(updateShowAffinityChangeList(newList));
+      }, 3032);
+    }
+  }, [rolePicLayout, numberPicLayout]);
+
+  return (
+    <div
+      className={`${styles.affinityWrapper} ${rolePicLayout.width && numberPicLayout.width ? styles.bounceIn : ''} ${
+        firstAnimationEnded ? styles.fadeOutUp : ''
+      }`}
+    >
+      <img
+        src={item.rolePicture}
+        alt="affinity"
+        className={styles.affinityRole}
+        style={rolePicLayout.width ? rolePicLayout : undefined}
+        onLoad={(e) => {
+          setRolePicLayout({ width: px2(e.currentTarget.naturalWidth), height: px2(e.currentTarget.naturalHeight) });
+        }}
+      />
+      <img
+        src={item.numberPicture}
+        alt="affinity number"
+        className={styles.affinityNumber}
+        style={numberPicLayout.width ? numberPicLayout : undefined}
+        onLoad={(e) => {
+          setNumberPicLayout({ width: px2(e.currentTarget.naturalWidth), height: px2(e.currentTarget.naturalHeight) });
+        }}
+      />
+    </div>
+  );
+}
