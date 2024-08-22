@@ -17,6 +17,10 @@ $default_pregress__bg_height: 300px;
   overflow: auto;
   background: #000;
 
+  img {
+    max-width: none !important;
+  }
+
   .goback {
     position: fixed;
     z-index: 101;

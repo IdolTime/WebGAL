@@ -44,6 +44,8 @@ import {
   CollectionSceneOtherKey,
   ProgressSceneButtonKey,
   ProgressSceneOtherKey,
+  AffinitySceneButtonKey,
+  AffinitySceneOtherKey,
 } from '@/Core/UIConfigTypes';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 
@@ -289,6 +291,12 @@ export const infoFetcher = (url: string) => {
           ProgressSceneOtherKey[command as ProgressSceneOtherKey]
         ) {
           const scene = Scene.progressAndAchievement;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          AffinitySceneButtonKey[command as AffinitySceneButtonKey] ||
+          AffinitySceneOtherKey[command as AffinitySceneOtherKey]
+        ) {
+          const scene = Scene.affinity;
           parseUIIConfigOptions(gameUIConfigs, scene, e);
         }
       });

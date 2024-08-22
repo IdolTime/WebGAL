@@ -223,6 +223,8 @@ export const BgImage = ({ item, defaultClass, key }: { item: Item; defaultClass?
   const style = parseStyleArg(item.args.style);
   const src = assetSetter(item.args.style?.image || '', fileType.background);
 
+  console.log(4444444, item);
+
   if (!item.args.style?.image) return <div className={defaultClass} style={style} />;
 
   return <CustomImage key={key} defaultClass={defaultClass} src={src} style={style} />;
