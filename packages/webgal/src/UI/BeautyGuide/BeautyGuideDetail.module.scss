@@ -42,8 +42,8 @@
 
             .goback {
                 display: inline-block;
-                width: px2(50px);
-                height: px2(36px);
+                width: px2(53px);
+                height: px2(53px);
                 background-image: url('@/assets/imgs/back.png');
                 background-repeat: no-repeat;
                 background-size: contain;
@@ -51,7 +51,7 @@
                 transition: all 0.3s;
                 &:hover {
                   transform: scale(1.2);
-                  background-image: url("@/assets/imgs/back-active.png");
+                  background-image: url("@/assets/imgs/back-r.png");
                 }
             }
 
