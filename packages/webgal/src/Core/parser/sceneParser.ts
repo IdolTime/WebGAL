@@ -41,6 +41,7 @@ import { showValue } from '@/Core/gameScripts/showValue';
 import { payProduct } from '@/Core/gameScripts/payProduct';
 import { finishTrial } from '@/Core/gameScripts/finishTrial';
 import { moveCamera } from '../gameScripts/moveCamera';
+import { changeAffinity } from '../gameScripts/changeAffinity';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -80,6 +81,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   payProduct: ScriptConfig(commandType.payProduct, payProduct),
   finishTrial: ScriptConfig(commandType.finishTrial, finishTrial),
   moveCamera: ScriptConfig(commandType.moveCamera, moveCamera),
+  changeAffinity: ScriptConfig(commandType.changeAffinity, changeAffinity),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 

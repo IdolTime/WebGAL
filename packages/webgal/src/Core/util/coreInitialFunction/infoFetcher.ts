@@ -42,6 +42,8 @@ import {
   TitleSceneUIConfig,
   CollectionSceneButtonKey,
   CollectionSceneOtherKey,
+  ProgressSceneButtonKey,
+  ProgressSceneOtherKey,
 } from '@/Core/UIConfigTypes';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 
@@ -73,7 +75,7 @@ export const infoFetcher = (url: string) => {
       const gameUIConfigs = { ...GUIState.gameUIConfigs };
       // @ts-ignore
       const escMenus: Record<EecMenuKey, EscMenuItem> = {};
-      let isSHowEscMenu = false;
+      let isShowEscMenu = false;
       // @ts-ignore
       const achievementUI: Record<EnumAchievementUIKey, GameMenuItem> = {};
       let hasAchievement = false;
@@ -225,7 +227,7 @@ export const infoFetcher = (url: string) => {
               },
             };
 
-            isSHowEscMenu = true;
+            isShowEscMenu = true;
             break;
           }
 
@@ -282,11 +284,17 @@ export const infoFetcher = (url: string) => {
         ) {
           const scene = Scene.collection;
           parseUIIConfigOptions(gameUIConfigs, scene, e);
+        } else if (
+          ProgressSceneButtonKey[command as ProgressSceneButtonKey] ||
+          ProgressSceneOtherKey[command as ProgressSceneOtherKey]
+        ) {
+          const scene = Scene.progressAndAchievement;
+          parseUIIConfigOptions(gameUIConfigs, scene, e);
         }
       });
 
       dispatch(setGameUIConfigs(gameUIConfigs));
-      isSHowEscMenu && dispatch(setEscMenus(escMenus));
+      isShowEscMenu && dispatch(setEscMenus(escMenus));
       hasAchievement && dispatch(setAchievementUI(achievementUI));
     }
     window?.renderPromise?.();

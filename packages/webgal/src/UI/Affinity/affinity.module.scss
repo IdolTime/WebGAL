@@ -1,0 +1,24 @@
+@import 'src/assets/style/px2.scss';
+
+.affinity {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  overflow: auto;
+  background: #000;
+  // -ms-overflow-style: none;  /* 适用于 Internet Explorer 和 Edge */
+  // scrollbar-width: none;     /* 适用于 Firefox */
+
+  // &::-webkit-scrollbar {
+  //     display: none; /* 适用于 WebKit 内核浏览器 */
+  // }
+
+  .affinityList {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}

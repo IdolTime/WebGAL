@@ -26,6 +26,8 @@ export enum sceneNameType {
   Achieve = 'achieve.txt',
   /** 故事线场景 */
   Storyline = 'storyline.txt',
+  /** 好感度场景 */
+  Affinity = 'affinity.txt',
 }
 
 /**

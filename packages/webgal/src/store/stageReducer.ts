@@ -15,6 +15,7 @@ import {
   IUnlockAchieveObj,
   IShowValueItem,
   IShowValueListItem,
+  IShowAffinityChangeItem,
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -89,6 +90,7 @@ export const initState: IStageState = {
   showValueAxisY: 0,
   showValues: [],
   showValueList: [],
+  showAffinityChangeList: [],
 };
 
 /**
@@ -224,6 +226,12 @@ const stageSlice = createSlice({
     updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
       state.showValueList = action.payload;
     },
+    addShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem>) => {
+      state.showAffinityChangeList.push(action.payload);
+    },
+    updateShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem[]>) => {
+      state.showAffinityChangeList = action.payload;
+    },
   },
 });
 
@@ -237,6 +245,8 @@ export const {
   addShowValues,
   addShowValueList,
   updateShowValueList,
+  addShowAffinityChangeList,
+  updateShowAffinityChangeList,
 } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;

@@ -44,6 +44,7 @@ export enum commandType {
   payProduct, // 付费
   finishTrial, // 结束试玩
   moveCamera, // 移动镜头
+  changeAffinity, // 修改亲密度
 }
 
 /**

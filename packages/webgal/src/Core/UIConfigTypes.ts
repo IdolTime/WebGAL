@@ -1,3 +1,80 @@
+export interface InfoConfig {
+  name: {
+    type: 'string';
+    label: string;
+  };
+  height: {
+    type: 'number';
+    label: string;
+  };
+  weight: {
+    type: 'number';
+    label: string;
+  };
+  bustSize: {
+    type: 'number';
+    label: string;
+  };
+  waistSize: {
+    type: 'number';
+    label: string;
+  };
+  hipSize: {
+    type: 'number';
+    label: string;
+  };
+  description: {
+    type: 'string';
+    label: string;
+  };
+  image: {
+    type: 'string';
+    label: '图片';
+  };
+}
+export interface ICollectionImages {
+  img1: {
+    type: 'string';
+    label: string;
+  };
+  img2: {
+    type: 'string';
+    label: string;
+  };
+  img3: {
+    type: 'string';
+    label: string;
+  };
+  img4: {
+    type: 'string';
+    label: string;
+  };
+  img5: {
+    type: 'string';
+    label: string;
+  };
+  img6: {
+    type: 'string';
+    label: string;
+  };
+  img7: {
+    type: 'string';
+    label: string;
+  };
+  img8: {
+    type: 'string';
+    label: string;
+  };
+  img9: {
+    type: 'string';
+    label: string;
+  };
+  img10: {
+    type: 'string';
+    label: string;
+  };
+}
+
 export enum TitleSceneButtonKey {
   Game_start_button = 'Game_start_button', // 开始
   Game_achievement_button = 'Game_achievement_button', // 成就
@@ -7,6 +84,8 @@ export enum TitleSceneButtonKey {
   Game_option_button = 'Game_option_button', // 设置
   Game_load_button = 'Game_load_button', // 读取
   Game_continue_button = 'Game_continue_button', // 继续游戏
+  Game_progression_button = 'Game_progression_button', // 进度
+  Game_affinity_button = 'Game_affinity_button', // 好感度
 }
 
 export interface UIItemConfig {
@@ -39,6 +118,8 @@ export interface UIItemConfig {
       label: string;
     };
   };
+  info?: InfoConfig;
+  images?: ICollectionImages;
 }
 
 export enum IndicatorItemKey {
@@ -51,12 +132,30 @@ export enum CommonItemKey {
   content = 'content',
   background = 'background',
   extra = 'extra',
+  collectionInfoTitle = 'collection_info_title',
+  collectionInfoList = 'collection_info_list',
 }
 
 export enum SliderItemKey {
   slider = 'slider',
   sliderBg = 'sliderBg',
   sliderThumb = 'sliderThumb',
+}
+
+export enum collectionItemInfoKey {
+  collectionInfo = 'collection_info',
+  collectionImages = 'collection_images',
+  collectionVideos = 'collection_videos',
+}
+export interface CollectionItemKey {
+  key: AllKey;
+  content: '';
+  args: {
+    hide: boolean;
+    style?: Style;
+    info?: InfoConfig;
+    images?: ICollectionImages;
+  };
 }
 
 export interface ContainerItem {
@@ -135,6 +234,14 @@ export const titleSceneButtonConfig: Record<TitleSceneButtonKey, UIItemConfig> =
     hasHoverStyle: true,
     label: '继续游戏',
   },
+  [TitleSceneButtonKey.Game_progression_button]: {
+    hasHoverStyle: true,
+    label: '进度与成就',
+  },
+  [TitleSceneButtonKey.Game_affinity_button]: {
+    hasHoverStyle: true,
+    label: '好感度',
+  },
 };
 
 export enum LoadSceneButtonKey {
@@ -178,6 +285,23 @@ export enum ExtraSceneButtonKey {
   Extra_video_button = 'Extra_video_button',
 }
 
+export enum ProgressSceneButtonKey {
+  Progress_back_button = 'Progress_back_button',
+  Progress_chapter_button = 'Progress_chapter_button',
+  Progress_achievement_button = 'Progress_achievement_button',
+  Progress_affinity_button = 'Progress_affinity_button',
+}
+
+export enum AffinitySceneButtonKey {
+  Affinity_back_button = 'Affinity_back_button',
+}
+
+export const AffinitySceneButtonConfig: Record<AffinitySceneButtonKey, UIItemConfig> = {
+  [AffinitySceneButtonKey.Affinity_back_button]: {
+    label: '返回',
+  },
+};
+
 export const extraSceneButtonConfig: Record<ExtraSceneButtonKey, UIItemConfig> = {
   [ExtraSceneButtonKey.Extra_back_button]: {
     label: '返回',
@@ -190,6 +314,27 @@ export const extraSceneButtonConfig: Record<ExtraSceneButtonKey, UIItemConfig> =
   },
 };
 
+export const affinitySceneButtonConfig: Record<AffinitySceneButtonKey, UIItemConfig> = {
+  [AffinitySceneButtonKey.Affinity_back_button]: {
+    label: '返回',
+  },
+};
+
+export const progressSceneButtonConfig: Record<ProgressSceneButtonKey, UIItemConfig> = {
+  [ProgressSceneButtonKey.Progress_back_button]: {
+    label: '返回',
+  },
+  [ProgressSceneButtonKey.Progress_achievement_button]: {
+    label: '切换成就标签',
+  },
+  [ProgressSceneButtonKey.Progress_chapter_button]: {
+    label: '切换章节标签',
+  },
+  [ProgressSceneButtonKey.Progress_affinity_button]: {
+    label: '切换好感度标签',
+  },
+};
+
 export enum ExtraSceneOtherKey {
   Extra_title = 'Extra_title',
   Extra_bg = 'Extra_bg',
@@ -198,19 +343,6 @@ export enum ExtraSceneOtherKey {
   Extra_video_unlocked_item = 'Extra_video_unlocked_item',
   Extra_indicator = 'Extra_indicator',
   Extra_video_locked_item_bg = 'Extra_video_locked_item_bg',
-}
-
-
-export enum CollectionSceneOtherKey {
-  Collection_title = 'Collection_title',
-  Collection_bg = 'Collection_bg',
-  Collection_img1 = 'Collection_img1',
-  Collection_img2 = 'Collection_img2',
-  Collection_img3 = 'Collection_img3',
-  Collection_detail_bg = 'Collection_detail_bg',
-  Collection_detail_title = 'Collection_detail_title',
-  Collection_detail_dialog_bg = 'Collection_detail_dialog_bg',
-  Collection_detail_dialog_text = 'Collection_detail_dialog_text'
 }
 
 export const extraSceneOtherConfig: Record<
@@ -352,7 +484,19 @@ export const optionSceneButtonConfig: Record<OptionSceneButtonKey, UIItemConfig>
 export enum CollectionSceneButtonKey {
   Collection_back_button = 'Collection_back_button',
   Collection_detail_dialog_prev_button = 'Collection_detail_dialog_prev_button',
-  Collection_detail_dialog_next_button = 'Collection_detail_dialog_next_button'
+  Collection_detail_dialog_next_button = 'Collection_detail_dialog_next_button',
+}
+
+export enum CollectionSceneOtherKey {
+  Collection_title = 'Collection_title',
+  Collection_bg = 'Collection_bg',
+  Collection_img1 = 'Collection_img1',
+  Collection_img2 = 'Collection_img2',
+  Collection_img3 = 'Collection_img3',
+  Collection_detail_bg = 'Collection_detail_bg',
+  Collection_detail_title = 'Collection_detail_title',
+  Collection_detail_dialog_bg = 'Collection_detail_dialog_bg',
+  Collection_detail_dialog_text = 'Collection_detail_dialog_text',
 }
 
 export const collectionSceneButtonConfig: Record<CollectionSceneButtonKey, UIItemConfig> = {
@@ -364,7 +508,192 @@ export const collectionSceneButtonConfig: Record<CollectionSceneButtonKey, UIIte
   },
   [CollectionSceneButtonKey.Collection_detail_dialog_next_button]: {
     label: '详情弹窗下一个按钮元素',
-  }
+  },
+};
+
+export const collectionSceneOtherConfig: Record<
+  CollectionSceneOtherKey,
+  UIItemConfig & { children?: Record<string, UIItemConfig> }
+> = {
+  [CollectionSceneOtherKey.Collection_title]: {
+    type: 'image',
+    label: '标题',
+  },
+  [CollectionSceneOtherKey.Collection_bg]: {
+    label: '背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_img1]: {
+    label: '图鉴1',
+    type: 'container',
+    hasXY: false,
+    hasHoverStyle: false,
+    children: {
+      [collectionItemInfoKey.collectionInfo]: {
+        type: 'image',
+        hasText: true,
+        hasHoverStyle: false,
+        label: '图鉴信息',
+      },
+      [CommonItemKey.content]: {
+        type: 'text',
+        label: '详情界面信息',
+      },
+      [collectionItemInfoKey.collectionImages]: {
+        type: 'image',
+        label: '详情界面信息图片列表',
+        hasXY: false,
+        hasHoverStyle: false,
+      },
+    },
+  },
+  [CollectionSceneOtherKey.Collection_img2]: {
+    label: '图鉴2',
+    type: 'container',
+    hasXY: false,
+    hasHoverStyle: false,
+    children: {
+      [collectionItemInfoKey.collectionInfo]: {
+        type: 'image',
+        hasText: true,
+        hasHoverStyle: false,
+        label: '图鉴信息',
+      },
+      [CommonItemKey.content]: {
+        type: 'text',
+        label: '详情界面信息',
+      },
+      [collectionItemInfoKey.collectionImages]: {
+        type: 'image',
+        label: '详情界面信息图片列表',
+        hasXY: false,
+        hasHoverStyle: false,
+      },
+    },
+  },
+  [CollectionSceneOtherKey.Collection_img3]: {
+    type: 'container',
+    label: '图鉴3',
+    hasXY: false,
+    hasHoverStyle: false,
+    children: {
+      [collectionItemInfoKey.collectionInfo]: {
+        type: 'image',
+        hasText: true,
+        hasHoverStyle: false,
+        label: '图鉴信息',
+      },
+      [CommonItemKey.content]: {
+        type: 'text',
+        label: '详情界面信息',
+      },
+      [collectionItemInfoKey.collectionImages]: {
+        type: 'image',
+        label: '详情界面信息图片列表',
+        hasXY: false,
+        hasHoverStyle: false,
+      },
+    },
+  },
+  [CollectionSceneOtherKey.Collection_detail_title]: {
+    type: 'image',
+    label: '详情界面标题',
+  },
+  [CollectionSceneOtherKey.Collection_detail_bg]: {
+    label: '详情界面背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_detail_dialog_bg]: {
+    type: 'bg',
+    label: '详情弹窗元素背景',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_detail_dialog_text]: {
+    label: '详情弹窗元素样式',
+    type: 'text',
+    hasHoverStyle: false,
+    hasXY: false,
+  },
+};
+
+export enum ProgressSceneOtherKey {
+  Progress_title = 'Progress_title',
+  Progress_bg = 'Progress_bg',
+  Progress_content_container = 'Progress_content_container',
+}
+
+export const progressSceneOtherConfig: Record<ProgressSceneOtherKey, UIItemConfig> = {
+  [ProgressSceneOtherKey.Progress_title]: {
+    type: 'image',
+    label: '标题',
+  },
+  [ProgressSceneOtherKey.Progress_bg]: {
+    label: '背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [ProgressSceneOtherKey.Progress_content_container]: {
+    type: 'container',
+    label: '内容容器',
+    hasHoverStyle: false,
+  },
+};
+
+export enum AffinitySceneOtherKey {
+  Affinity_title = 'Affinity_title',
+  Affinity_bg = 'Affinity_bg',
+  Affinity_item_container = 'Affinity_item_container',
+  Affinity_locked_item = 'Affinity_locked_item',
+  Affinity_unlocked_item = 'Affinity_unlocked_item',
+}
+
+export const affinitySceneOtherConfig: Record<
+  AffinitySceneOtherKey,
+  UIItemConfig & { children?: Record<string, UIItemConfig> }
+> = {
+  [AffinitySceneOtherKey.Affinity_title]: {
+    type: 'image',
+    label: '标题',
+  },
+  [AffinitySceneOtherKey.Affinity_bg]: {
+    label: '背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [AffinitySceneOtherKey.Affinity_item_container]: {
+    type: 'container',
+    label: '好感度列表容器',
+    hasHoverStyle: false,
+    positionType: 'relative',
+    customStyle: {
+      gap: {
+        label: '间距',
+        type: 'number',
+      },
+    },
+  },
+  [AffinitySceneOtherKey.Affinity_unlocked_item]: {
+    label: '角色已解锁卡片',
+    type: 'container',
+    hasXY: false,
+    hasHoverStyle: false,
+    children: {
+      [CommonItemKey.content]: {
+        type: 'placeholder',
+        label: '卡片',
+      },
+      [CommonItemKey.extra]: {
+        type: 'text',
+        label: '好感度文字',
+      },
+    },
+  },
+  [AffinitySceneOtherKey.Affinity_locked_item]: {
+    label: '角色未解锁卡片',
+    hasXY: false,
+  },
 };
 
 export enum OptionSceneOtherKey {
@@ -387,7 +716,7 @@ export enum OptionSceneOtherKey {
   Option_window_checkbox = 'Option_window_checkbox',
   Option_videoSize1080_checkbox = 'Option_videoSize1080_checkbox',
   Option_videoSize720_checkbox = 'Option_videoSize720_checkbox',
-  Options_light_slider = 'Options_light_slider'
+  Options_light_slider = 'Options_light_slider',
 }
 
 export const optionSceneOtherConfig: Record<
@@ -619,7 +948,6 @@ export const optionSceneOtherConfig: Record<
   [OptionSceneOtherKey.Option_window_checkbox]: {
     label: '窗口模式复选框',
   },
-
   [OptionSceneOtherKey.Option_videoSize1080_checkbox]: {
     label: '视频尺寸1080P复选框',
   },
@@ -646,60 +974,42 @@ export const optionSceneOtherConfig: Record<
   },
 };
 
-export const collectionSceneOtherConfig: Record<CollectionSceneOtherKey,UIItemConfig & { children?: Record<string, UIItemConfig>}> = {
-  [CollectionSceneOtherKey.Collection_title]: {
-    type: 'image',
-    label: '标题',
-  },
-  [CollectionSceneOtherKey.Collection_bg]: {
-    label: '背景',
-    type: 'bg',
-    hasHoverStyle: false,
-  },
-  [CollectionSceneOtherKey.Collection_img1]: {
-    label: '图鉴1',
-    type: 'image',
-    hasHoverStyle: false,
-  },
-  [CollectionSceneOtherKey.Collection_img2]: {
-    label: '图鉴2',
-    type: 'image',
-    hasHoverStyle: false,
-  },
-  [CollectionSceneOtherKey.Collection_img3]: {
-    label: '图鉴3',
-    type: 'image',
-    hasHoverStyle: false,
-  },
-  [CollectionSceneOtherKey.Collection_detail_title]: {
-    type: 'image',
-    label: '图鉴详情界面标题'
-  },
-  [CollectionSceneOtherKey.Collection_detail_bg]: {
-    label: '图鉴详情界面背景',
-    type: 'bg',
-    hasHoverStyle: false,
-  },
-  [CollectionSceneOtherKey.Collection_detail_dialog_bg]: {
-    type: 'bg',
-    label: '详情弹窗元素背景',
-    hasHoverStyle: false
-  },
-  [CollectionSceneOtherKey.Collection_detail_dialog_text]: {
-    label: '详情弹窗元素样式',
-    type: 'text',
-    hasHoverStyle: false,
-    hasXY: false
-  }
-}
-
 export enum AchievementSceneOtherKey {
   Achievement_title = 'Achievement_title',
+  Achievement_progress_bg = 'Achievement_progress_bg',
+  Achievement_progress_text = 'Achievement_progress_text',
+  Achievement_progress = 'Achievement_progress',
+  Achievement_notUnlock = 'Achievement_notUnlock',
 }
 
 export const achievementSceneOtherConfig: Record<AchievementSceneOtherKey, UIItemConfig> = {
   [AchievementSceneOtherKey.Achievement_title]: {
     label: '标题',
+  },
+  [AchievementSceneOtherKey.Achievement_progress_bg]: {
+    label: '成就进度背景',
+    type: 'bg',
+    hasXY: false,
+    hasHoverStyle: false,
+  },
+  [AchievementSceneOtherKey.Achievement_progress_text]: {
+    label: '成就进度文字',
+    type: 'text',
+    hasXY: false,
+    hasHoverStyle: false,
+  },
+  [AchievementSceneOtherKey.Achievement_progress]: {
+    label: '成就进度条',
+    type: 'image',
+    hasXY: true,
+    hasHoverStyle: true,
+  },
+  [AchievementSceneOtherKey.Achievement_notUnlock]: {
+    label: '未解锁成就元素',
+    type: 'image',
+    hasXY: false,
+    hasHoverStyle: false,
+    hasText: false,
   },
 };
 
@@ -839,6 +1149,43 @@ export const titleSceneOtherConfig: Record<TitleSceneOtherKey, UIItemConfig> = {
   },
 };
 
+export interface Info {
+  name?: {
+    type: 'number';
+    label: string;
+  };
+  height?: {
+    type: 'number';
+    label: string;
+  };
+
+  weight?: {
+    type: 'number';
+    label: string;
+  };
+
+  bustSize?: {
+    type: 'number';
+    label: string;
+  };
+  waistSize?: {
+    type: 'number';
+    label: string;
+  };
+  hipSize: {
+    type: 'number';
+    label: string;
+  };
+  description: {
+    type: 'number';
+    label: string;
+  };
+  image: {
+    type: 'string';
+    label: 'string';
+  };
+}
+
 export interface Style {
   x?: number;
   y?: number;
@@ -864,7 +1211,9 @@ export type ButtonKey =
   | StorylineSceneButtonKey
   | AchievementSceneButtonKey
   | ExtraSceneButtonKey
-  | CollectionSceneButtonKey;
+  | CollectionSceneButtonKey
+  | ProgressSceneButtonKey
+  | AffinitySceneButtonKey;
 export type OtherKey =
   | LoadSceneOtherKey
   | TitleSceneOtherKey
@@ -872,7 +1221,9 @@ export type OtherKey =
   | StorylineSceneOtherKey
   | AchievementSceneOtherKey
   | ExtraSceneOtherKey
-  | CollectionSceneOtherKey;
+  | CollectionSceneOtherKey
+  | ProgressSceneOtherKey
+  | AffinitySceneOtherKey;
 type AllKey = ButtonKey | OtherKey;
 
 export interface ButtonItem {
@@ -888,7 +1239,7 @@ export interface ButtonItem {
 export interface contentListItem {
   type: 'image' | 'video';
   url: string;
-  key: string
+  key: string;
 }
 
 export interface CollectionInfo {
@@ -900,7 +1251,7 @@ export interface CollectionInfo {
   hipSize?: number;
   description?: string;
   image?: string;
-  contentList?: contentListItem[]
+  contentList?: contentListItem[];
 }
 
 export interface CollectionImages {
@@ -916,7 +1267,6 @@ export interface CollectionImages {
   img10?: string;
 }
 
-
 export interface CollectionInfoItem {
   key: AllKey;
   content: string;
@@ -924,8 +1274,8 @@ export interface CollectionInfoItem {
     hide: boolean;
     style?: Style;
     hoverStyle?: Style;
-    info?: CollectionInfo,
-    images?: CollectionImages
+    info?: CollectionInfo;
+    images?: CollectionImages;
   };
 }
 
@@ -933,6 +1283,28 @@ export interface TitleSceneUIConfig {
   key: Scene.title;
   other: { [key in TitleSceneOtherKey]: ButtonItem };
   buttons: { [key in TitleSceneButtonKey]: ButtonItem };
+}
+
+export interface ProgressSceneUIConfig {
+  key: Scene.progressAndAchievement;
+  other: {
+    [ProgressSceneOtherKey.Progress_bg]: ButtonItem;
+    [ProgressSceneOtherKey.Progress_title]: ButtonItem;
+    [ProgressSceneOtherKey.Progress_content_container]: ContainerItem;
+  };
+  buttons: { [key in ProgressSceneButtonKey]: ButtonItem };
+}
+
+export interface AffinitySceneUIConfig {
+  key: Scene.affinity;
+  other: {
+    [AffinitySceneOtherKey.Affinity_bg]: ButtonItem;
+    [AffinitySceneOtherKey.Affinity_title]: ButtonItem;
+    [AffinitySceneOtherKey.Affinity_locked_item]: ButtonItem;
+    [AffinitySceneOtherKey.Affinity_unlocked_item]: ContainerItem;
+    [AffinitySceneOtherKey.Affinity_item_container]: ContainerItem;
+  };
+  buttons: { [key in AffinitySceneButtonKey]: ButtonItem };
 }
 
 export interface LoadSceneUIConfig {
@@ -953,9 +1325,19 @@ export interface StorylineSceneUIConfig {
   buttons: { [key in StorylineSceneButtonKey]: ButtonItem };
 }
 
+/**
+ * 成就页面UI配置项
+ */
 export interface AchievementSceneUIConfig {
   key: Scene.achievement;
-  other: { [key in AchievementSceneOtherKey]: ButtonItem };
+  other: {
+    // [key in AchievementSceneOtherKey]: ButtonItem;
+    [AchievementSceneOtherKey.Achievement_title]: ButtonItem;
+    [AchievementSceneOtherKey.Achievement_progress_bg]: ButtonItem;
+    [AchievementSceneOtherKey.Achievement_progress_text]: ButtonItem;
+    [AchievementSceneOtherKey.Achievement_progress]: ButtonItem;
+    [AchievementSceneOtherKey.Achievement_notUnlock]: ButtonItem;
+  };
   buttons: { [key in AchievementSceneButtonKey]: ButtonItem };
 }
 
@@ -985,6 +1367,7 @@ export interface OptionSceneUIConfig {
     [OptionSceneOtherKey.Option_bg_music_volume_slider]: SliderContainerItem;
     [OptionSceneOtherKey.Option_effect_volume_label]: ContainerItem;
     [OptionSceneOtherKey.Option_effect_volume_slider]: SliderContainerItem;
+    [OptionSceneOtherKey.Options_light_slider]: SliderContainerItem;
     [OptionSceneOtherKey.Option_fullscreen_checkbox_label]: ContainerItem;
     [OptionSceneOtherKey.Option_fullscreen_checkbox]: ButtonItem;
     [OptionSceneOtherKey.Option_window_checkbox_label]: ContainerItem;
@@ -995,25 +1378,34 @@ export interface OptionSceneUIConfig {
     [OptionSceneOtherKey.Option_global_volume_slider]: SliderContainerItem;
     [OptionSceneOtherKey.Option_voice_slider]: SliderContainerItem;
     [OptionSceneOtherKey.Option_voice_volume_label]: ContainerItem;
-    [OptionSceneOtherKey.Options_light_slider]: SliderContainerItem;
   };
   buttons: { [key in OptionSceneButtonKey]: ButtonItem };
 }
 
+export interface InfonItem {
+  key: AllKey;
+  content: string;
+  args: {
+    hide: boolean;
+    style?: Style;
+    info?: InfoConfig;
+    images?: ICollectionImages;
+  };
+}
+
 export interface CollectionSceneUIConfig {
   key: Scene.collection;
-  // other: { [key in CollectionSceneOtherKey]: ButtonItem };
   other: {
     [CollectionSceneOtherKey.Collection_bg]: ButtonItem;
     [CollectionSceneOtherKey.Collection_title]: ButtonItem;
-    [CollectionSceneOtherKey.Collection_img1]: CollectionInfoItem;
-    [CollectionSceneOtherKey.Collection_img2]: CollectionInfoItem;
-    [CollectionSceneOtherKey.Collection_img3]: CollectionInfoItem;
-    [CollectionSceneOtherKey.Collection_detail_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_img1]: InfonItem;
+    [CollectionSceneOtherKey.Collection_img2]: InfonItem;
+    [CollectionSceneOtherKey.Collection_img3]: InfonItem;
     [CollectionSceneOtherKey.Collection_detail_title]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_bg]: ButtonItem;
     [CollectionSceneOtherKey.Collection_detail_dialog_bg]: ButtonItem;
     [CollectionSceneOtherKey.Collection_detail_dialog_text]: ButtonItem;
-  }
+  };
   buttons: { [key in CollectionSceneButtonKey]: ButtonItem };
 }
 
@@ -1025,6 +1417,8 @@ export enum Scene {
   extra = 'extra',
   option = 'option',
   collection = 'collection',
+  progressAndAchievement = 'progressAndAchievement',
+  affinity = 'affinity',
 }
 
 export const sceneNameMap: Record<Scene, string> = {
@@ -1035,6 +1429,8 @@ export const sceneNameMap: Record<Scene, string> = {
   extra: '鉴赏界面',
   option: '选项界面',
   collection: '图鉴界面',
+  progressAndAchievement: '进度与成就',
+  affinity: '亲密度',
 };
 
 export interface SceneUIConfig {
@@ -1044,7 +1440,9 @@ export interface SceneUIConfig {
   [Scene.achievement]?: AchievementSceneUIConfig;
   [Scene.extra]?: ExtraSceneUIConfig;
   [Scene.option]?: OptionSceneUIConfig;
-  [Scene.collection]?: CollectionSceneUIConfig
+  [Scene.collection]?: CollectionSceneUIConfig;
+  [Scene.progressAndAchievement]?: ProgressSceneUIConfig;
+  [Scene.affinity]?: AffinitySceneUIConfig;
 }
 
 export const SceneKeyMap = {
@@ -1075,6 +1473,14 @@ export const SceneKeyMap = {
   [Scene.collection]: {
     buttons: CollectionSceneButtonKey,
     other: CollectionSceneOtherKey,
+  },
+  [Scene.progressAndAchievement]: {
+    buttons: ProgressSceneButtonKey,
+    other: ProgressSceneOtherKey,
+  },
+  [Scene.affinity]: {
+    buttons: AffinitySceneButtonKey,
+    other: AffinitySceneOtherKey,
   },
 };
 
@@ -1148,6 +1554,16 @@ export const sceneUIConfig: SceneUIConfig = {
       },
       [TitleSceneButtonKey.Game_continue_button]: {
         key: TitleSceneButtonKey.Game_continue_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [TitleSceneButtonKey.Game_progression_button]: {
+        key: TitleSceneButtonKey.Game_progression_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [TitleSceneButtonKey.Game_affinity_button]: {
+        key: TitleSceneButtonKey.Game_affinity_button,
         content: '',
         args: generateArgs(['hoverStyle']),
       },
@@ -1226,6 +1642,26 @@ export const sceneUIConfig: SceneUIConfig = {
     other: {
       [AchievementSceneOtherKey.Achievement_title]: {
         key: AchievementSceneOtherKey.Achievement_title,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [AchievementSceneOtherKey.Achievement_progress_bg]: {
+        key: AchievementSceneOtherKey.Achievement_progress_bg,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [AchievementSceneOtherKey.Achievement_progress_text]: {
+        key: AchievementSceneOtherKey.Achievement_progress_text,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [AchievementSceneOtherKey.Achievement_progress]: {
+        key: AchievementSceneOtherKey.Achievement_progress,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [AchievementSceneOtherKey.Achievement_notUnlock]: {
+        key: AchievementSceneOtherKey.Achievement_notUnlock,
         content: '',
         args: generateArgs(['hoverStyle']),
       },
@@ -1378,6 +1814,11 @@ export const sceneUIConfig: SceneUIConfig = {
         content: '',
         args: generateArgs(['sliderStyle', 'sliderBgStyle', 'sliderThumbStyle']),
       },
+      [OptionSceneOtherKey.Options_light_slider]: {
+        key: OptionSceneOtherKey.Options_light_slider,
+        content: '',
+        args: generateArgs(['sliderStyle', 'sliderBgStyle', 'sliderThumbStyle']),
+      },
       [OptionSceneOtherKey.Option_text_speed_slider]: {
         key: OptionSceneOtherKey.Option_text_speed_slider,
         content: '',
@@ -1393,6 +1834,7 @@ export const sceneUIConfig: SceneUIConfig = {
         content: '',
         args: generateArgs(['hoverStyle']),
       },
+
       [OptionSceneOtherKey.Option_videoSize1080_checkbox]: {
         key: OptionSceneOtherKey.Option_videoSize1080_checkbox,
         content: '',
@@ -1402,11 +1844,6 @@ export const sceneUIConfig: SceneUIConfig = {
         key: OptionSceneOtherKey.Option_videoSize720_checkbox,
         content: '',
         args: generateArgs(['hoverStyle']),
-      },
-      [OptionSceneOtherKey.Options_light_slider]: {
-        key: OptionSceneOtherKey.Options_light_slider,
-        content: '',
-        args: generateArgs(['sliderStyle', 'sliderBgStyle', 'sliderThumbStyle']),
       },
       [OptionSceneOtherKey.Option_global_volume_slider]: {
         key: OptionSceneOtherKey.Option_global_volume_slider,
@@ -1429,31 +1866,32 @@ export const sceneUIConfig: SceneUIConfig = {
   },
   [Scene.collection]: {
     key: Scene.collection,
-    other:  {
-      [CollectionSceneOtherKey.Collection_title]: {
-        key: CollectionSceneOtherKey.Collection_title,
-        content: '',
-        args: generateArgs(['hoverStyle']),
-      },
+    other: {
       [CollectionSceneOtherKey.Collection_bg]: {
         key: CollectionSceneOtherKey.Collection_bg,
         content: '',
         args: generateArgs(),
       },
+      [CollectionSceneOtherKey.Collection_title]: {
+        key: CollectionSceneOtherKey.Collection_title,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+
       [CollectionSceneOtherKey.Collection_img1]: {
         key: CollectionSceneOtherKey.Collection_img1,
         content: '',
-        args: generateArgs(),
+        args: generateArgs(['info', 'images']),
       },
       [CollectionSceneOtherKey.Collection_img2]: {
         key: CollectionSceneOtherKey.Collection_img2,
         content: '',
-        args: generateArgs(),
+        args: generateArgs(['info', 'images']),
       },
       [CollectionSceneOtherKey.Collection_img3]: {
         key: CollectionSceneOtherKey.Collection_img3,
         content: '',
-        args: generateArgs(),
+        args: generateArgs(['info', 'images']),
       },
       [CollectionSceneOtherKey.Collection_detail_title]: {
         key: CollectionSceneOtherKey.Collection_detail_title,
@@ -1465,6 +1903,7 @@ export const sceneUIConfig: SceneUIConfig = {
         content: '',
         args: generateArgs(),
       },
+
       [CollectionSceneOtherKey.Collection_detail_dialog_bg]: {
         key: CollectionSceneOtherKey.Collection_detail_dialog_bg,
         content: '',
@@ -1473,8 +1912,8 @@ export const sceneUIConfig: SceneUIConfig = {
       [CollectionSceneOtherKey.Collection_detail_dialog_text]: {
         key: CollectionSceneOtherKey.Collection_detail_dialog_text,
         content: '',
-        args: generateArgs(),
-      }
+        args: generateArgs(['hoverStyle']),
+      },
     },
     buttons: {
       [CollectionSceneButtonKey.Collection_back_button]: {
@@ -1491,8 +1930,87 @@ export const sceneUIConfig: SceneUIConfig = {
         key: CollectionSceneButtonKey.Collection_detail_dialog_next_button,
         content: '',
         args: generateArgs(['hoverStyle']),
-      }
-    }
+      },
+    },
+  },
+  [Scene.progressAndAchievement]: {
+    key: Scene.progressAndAchievement,
+    other: {
+      [ProgressSceneOtherKey.Progress_title]: {
+        key: ProgressSceneOtherKey.Progress_title,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [ProgressSceneOtherKey.Progress_bg]: {
+        key: ProgressSceneOtherKey.Progress_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [ProgressSceneOtherKey.Progress_content_container]: {
+        key: ProgressSceneOtherKey.Progress_content_container,
+        content: '',
+        args: generateArgs(),
+      },
+    },
+    buttons: {
+      [ProgressSceneButtonKey.Progress_back_button]: {
+        key: ProgressSceneButtonKey.Progress_back_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [ProgressSceneButtonKey.Progress_achievement_button]: {
+        key: ProgressSceneButtonKey.Progress_achievement_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [ProgressSceneButtonKey.Progress_chapter_button]: {
+        key: ProgressSceneButtonKey.Progress_chapter_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [ProgressSceneButtonKey.Progress_affinity_button]: {
+        key: ProgressSceneButtonKey.Progress_affinity_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+    },
+  },
+  [Scene.affinity]: {
+    key: Scene.affinity,
+    other: {
+      [AffinitySceneOtherKey.Affinity_title]: {
+        key: AffinitySceneOtherKey.Affinity_title,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [AffinitySceneOtherKey.Affinity_item_container]: {
+        key: AffinitySceneOtherKey.Affinity_item_container,
+        content: '',
+        args: generateArgs(),
+      },
+      [AffinitySceneOtherKey.Affinity_bg]: {
+        key: AffinitySceneOtherKey.Affinity_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [AffinitySceneOtherKey.Affinity_locked_item]: {
+        key: AffinitySceneOtherKey.Affinity_locked_item,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+      [AffinitySceneOtherKey.Affinity_unlocked_item]: {
+        key: AffinitySceneOtherKey.Affinity_unlocked_item,
+        content: '',
+        args: generateArgs(['contentStyle', 'extraStyle', 'contentHoverStyle', 'extraHoverStyle']),
+      },
+    },
+    buttons: {
+      [AffinitySceneButtonKey.Affinity_back_button]: {
+        key: AffinitySceneButtonKey.Affinity_back_button,
+        content: '',
+        args: generateArgs(['hoverStyle']),
+      },
+    },
   },
 };
 
@@ -1503,7 +2021,9 @@ export const sceneButtonConfig = {
   [Scene.achievement]: achievementSceneButtonConfig,
   [Scene.extra]: extraSceneButtonConfig,
   [Scene.option]: optionSceneButtonConfig,
-  [Scene.collection]: collectionSceneButtonConfig
+  [Scene.collection]: collectionSceneButtonConfig,
+  [Scene.progressAndAchievement]: progressSceneButtonConfig,
+  [Scene.affinity]: affinitySceneButtonConfig,
 };
 
 export const sceneOtherConfig = {
@@ -1513,7 +2033,9 @@ export const sceneOtherConfig = {
   [Scene.achievement]: achievementSceneOtherConfig,
   [Scene.extra]: extraSceneOtherConfig,
   [Scene.option]: optionSceneOtherConfig,
-  [Scene.collection]: collectionSceneOtherConfig
+  [Scene.collection]: collectionSceneOtherConfig,
+  [Scene.progressAndAchievement]: progressSceneOtherConfig,
+  [Scene.affinity]: affinitySceneOtherConfig,
 };
 
 export const bgKey = {
@@ -1523,5 +2045,6 @@ export const bgKey = {
   [OptionSceneOtherKey.Option_bg]: 1,
   [CollectionSceneOtherKey.Collection_bg]: 1,
   [CollectionSceneOtherKey.Collection_detail_bg]: 1,
-  [CollectionSceneOtherKey.Collection_detail_dialog_bg]: 1
+  [CollectionSceneOtherKey.Collection_detail_dialog_bg]: 1,
+  [ProgressSceneOtherKey.Progress_bg]: 1,
 };

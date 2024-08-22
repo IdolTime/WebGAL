@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
-import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
+import { enterStoryLine } from '@/Core/controller/gamePlay/enterSubPage';
 import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -67,6 +67,14 @@ const Title: FC = () => {
       playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
+    },
+    [TitleSceneButtonKey.Game_progression_button]: () => {
+      playSeClick();
+      dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: true }));
+    },
+    [TitleSceneButtonKey.Game_affinity_button]: () => {
+      playSeClick();
+      dispatch(setVisibility({ component: 'showAffinity', visibility: true }));
     },
   };
 

@@ -19,7 +19,7 @@ import StoryLine from '@/UI/StoryLine/StoryLine';
 import { Achievement } from '@/UI/Achievement';
 import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from './store/userDataReducer';
 import { getEditorGameDetail, getGameInfo, getPaymentConfigList } from './services/store';
 import { setGameInfo, setIsEditorPreviewMode, setPaymentConfigurationList } from './store/storeReducer';
@@ -28,10 +28,14 @@ import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { Toaster } from './UI/Toaster/Toaster';
 import { ModalBuyGame } from './UI/ModalBuyGame/ModalBuyGame';
 import { ModalRecharge } from './UI/ModalRecharge';
+import { ProgressAchievement } from '@/UI/ProgressAchievement/ProgressAchievement';
+import { RootState } from './store/store';
+import { Affinity } from './UI/Affinity/Affinity';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useDispatch();
+  const GUIState = useSelector((state: RootState) => state.GUI);
 
   useEffect(() => {
     initializeScript();
@@ -131,10 +135,12 @@ function App() {
       <PanicOverlay />
       <DevPanel />
       <StoryLine />
-      <Achievement />
+      {!GUIState.showProgressAndAchievement && <Achievement />}
       <BeautyGuide />
       <ModalR18 />
       <GameMenuPanel />
+      <ProgressAchievement />
+      {!GUIState.showProgressAndAchievement && <Affinity />}
     </div>
   );
 }

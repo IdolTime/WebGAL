@@ -203,6 +203,7 @@ export interface IStageState {
   showValueAxisY: number;
   showValues: Array<IShowValueItem>;
   showValueList: Array<IShowValueListItem>;
+  showAffinityChangeList: IShowAffinityChangeItem[];
 }
 
 export interface IShowValueListItem {
@@ -218,6 +219,12 @@ export interface IShowValueListItem {
     image: string;
   };
   maxValue?: number;
+}
+
+export interface IShowAffinityChangeItem {
+  rolePicture: string;
+  numberPicture: string;
+  key: number;
 }
 
 export interface IShowValueItem {

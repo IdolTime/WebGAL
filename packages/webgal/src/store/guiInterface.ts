@@ -30,7 +30,6 @@ export interface IGuiState {
   showPanicOverlay: boolean;
   isEnterGame: boolean;
   isShowLogo: boolean;
-  isShowGameMenu: boolean; // 是否显示游戏菜单
   showStoryLine: boolean; // 故事线
   showAchievement: boolean;
   showFavorited: boolean; // 显示收藏
@@ -41,6 +40,8 @@ export interface IGuiState {
   isShowR18Modal: boolean; // 是否显示R18内容
   openR18Modal: boolean;
   isShowGameMenu: boolean; // 是否显示游戏菜单
+  showProgressAndAchievement: boolean; // 是否显示进度与成就页面
+  showAffinity: boolean; // 是否显示亲密度页面
   escMenus: {
     [key in EecMenuKey]: EscMenuItem;
   };

@@ -1,12 +1,13 @@
-import styles from './variableName.module.scss';
+import styles from './extraContainer.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { useEffect, useMemo, useState } from 'react';
 import { px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
-export const VariableName = () => {
+export const ExtraContainer = () => {
   const stageState = useSelector((state: RootState) => state.stage);
+  const guiState = useSelector((state: RootState) => state.GUI);
   const [barBgLayoutList, setBarBgLayoutList] = useState<{ width: number; height: number }[]>([]);
   const [barLayoutList, setBarLayoutList] = useState<{ width: number; height: number }[]>([]);
 
@@ -39,6 +40,8 @@ export const VariableName = () => {
     });
   }, [stageState.showValueList, barLayoutList]);
 
+  console.log(44444, stageState.showAffinityChangeList);
+
   return (
     <>
       {stageState.showValueList.map((item, i) => {
@@ -51,9 +54,9 @@ export const VariableName = () => {
               key={item.showValueName + i.toString()}
               className={styles.variableNameWrapper}
               style={{
-                position: 'fixed',
-                left: item.showValueAxisX + 'px',
-                top: item.showValueAxisY + 'px',
+                position: guiState.showProgressAndAchievement ? 'absolute' : 'fixed',
+                left: px2(item.showValueAxisX) + 'px',
+                top: px2(item.showValueAxisY) + 'px',
                 backgroundColor: item.showProgress ? 'transparent' : '#08c',
               }}
             >
@@ -112,6 +115,22 @@ export const VariableName = () => {
 
         return null;
       })}
+      {stageState.showAffinityChangeList.map((item, i) => (
+        <div className={styles.affinityWrapper} key={i}>
+          <img
+            key={item.rolePicture + i.toString()}
+            src={item.rolePicture}
+            alt="affinity"
+            className={styles.affinityRole}
+          />
+          <img
+            key={item.numberPicture + i.toString()}
+            src={item.numberPicture}
+            alt="affinity number"
+            className={styles.affinityNumber}
+          />
+        </div>
+      ))}
     </>
   );
 

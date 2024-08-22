@@ -150,6 +150,7 @@ export const CustomImage = ({
 };
 
 export const CustomContainer = ({
+  item,
   children,
   defaultClass,
   defaultHoverClass,
@@ -158,7 +159,9 @@ export const CustomContainer = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  id,
 }: {
+  item?: ContainerItem;
   children: ReactNode;
   defaultClass?: string;
   defaultHoverClass?: string;
@@ -167,12 +170,21 @@ export const CustomContainer = ({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onClick?: (e: any) => void;
+  id?: string;
 }) => {
   const [hover, setHover] = useState(false);
   let className = defaultClass;
   let _style = style;
+  let _hoverStyle = hoverStyle;
+
+  if (item) {
+    if (item.args.hide) return null;
+    if (!_style) _style = parseStyleArg(item.args.style);
+    if (!_hoverStyle) _hoverStyle = parseStyleArg(item.args.hoverStyle);
+  }
+
   const _onMouseEnter = debounce(() => {
-    if (hoverStyle) {
+    if (_hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
@@ -186,8 +198,8 @@ export const CustomContainer = ({
     }
   };
   if (hover) {
-    className = `${defaultClass} ${defaultHoverClass}`;
-    _style = { ...style, ...hoverStyle };
+    className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
+    _style = { ..._style, ..._hoverStyle };
   }
 
   return (
@@ -197,6 +209,7 @@ export const CustomContainer = ({
       onMouseLeave={_onMouseLeave}
       onClick={onClick}
       style={_style}
+      id={id}
     >
       {children}
     </div>
