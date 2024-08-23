@@ -307,16 +307,9 @@ export const Button = ({
     >
       {!!src && (
         <CustomImage
-          src={assetSetter(src, fileType.ui)}
-          hoverSrc={type !== 'checkbox' ? assetSetter(hoverSrc, fileType.ui) : ''}
-          style={imgStyle}
-        />
-      )}
-      {!!hoverSrc && type === 'checkbox' && checked && (
-        <CustomImage
           nId={key}
-          src={assetSetter(hoverSrc, fileType.ui)}
-          hoverSrc={type !== 'checkbox' ? hoverSrc : ''}
+          src={assetSetter(checked ? hoverSrc : src, fileType.ui)}
+          hoverSrc={hoverSrc ? assetSetter(hoverSrc, fileType.ui) : ''}
           style={imgStyle}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}

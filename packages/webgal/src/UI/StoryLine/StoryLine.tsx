@@ -64,12 +64,14 @@ export const StoryLine: FC = () => {
     <>
       {GUIState.showStoryLine && (
         <div className={styles.storyLine} id="camera">
-          <Button
-            item={storylineUIConfigs.buttons.Storyline_back_button}
-            defaultClass={styles.goBack}
-            onClick={handlGoBack}
-            onMouseEnter={playSeEnter}
-          />
+          {!GUIState.showProgressAndAchievement && (
+            <Button
+              item={storylineUIConfigs.buttons.Storyline_back_button}
+              defaultClass={styles.goBack}
+              onClick={handlGoBack}
+              onMouseEnter={playSeEnter}
+            />
+          )}
           <div
             className={styles.storyLine_content}
             style={{

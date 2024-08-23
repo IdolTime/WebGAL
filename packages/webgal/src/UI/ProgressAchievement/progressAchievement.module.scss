@@ -7,6 +7,8 @@
   right: 0;
   bottom: 0;
   z-index: 99;
+  overflow: auto;
+  
   // -ms-overflow-style: none;  /* 适用于 Internet Explorer 和 Edge */
   // scrollbar-width: none;     /* 适用于 Firefox */
 
@@ -30,11 +32,93 @@
   }
 
   .contentContainer {
-    z-index: 100;
+    position: absolute;
+    z-index: 101;
+    left: px2(102px);
+    top: px2(12px);
+    height: px2(708px);
+    width: px2(3024px);
+
+    *::-webkit-scrollbar {
+      width: px2(17px) !important;  /* 滚动条宽度 */
+      height: px2(17px) !important;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      border-radius: 0;
+      background: #DB9A9A;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
   }
 
   img {
     max-width: none !important;
+  }
+
+  .chapterTag {
+    cursor: pointer;
+    width: px2(126px);
+    height: px2(195px);
+    background-image: url('@/assets/imgs/chapter.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 0;
+    position: absolute;
+    top: px2(109px);
+    left: px2(22px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-image: url('@/assets/imgs/chapter-click.png');
+    }
+  }
+
+  .affinityTag {
+    cursor: pointer;
+    width: px2(151px);
+    height: px2(202px);
+    background-image: url('@/assets/imgs/affinity.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 0;
+    position: absolute;
+    top: px2(308px);
+    left: px2(30px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-image: url('@/assets/imgs/affinity-click.png');
+    }
+  }
+  
+  .achievementTag {
+    cursor: pointer;
+    width: px2(155px);
+    height: px2(186px);
+    background-image: url('@/assets/imgs/achievement.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 0;
+    position: absolute;
+    top: px2(514px);
+    left: px2(46px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-image: url('@/assets/imgs/affinity-click.png');
+    }
   }
 
   .goBack {
@@ -56,4 +140,8 @@
       background-image: url("@/assets/imgs/back-r.png");
     }
   }
+}
+
+.progressAchievement::-webkit-scrollbar {
+  display: none;
 }

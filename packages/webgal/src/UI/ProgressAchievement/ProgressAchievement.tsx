@@ -15,9 +15,10 @@ import { BgImage, Button, CustomContainer } from '../Components/Base';
 import { Achievement } from '../Achievement';
 
 import styles from './progressAchievement.module.scss';
-import { enterAffinity } from '@/Core/controller/gamePlay/enterSubPage';
+import { enterAffinity, enterStoryLine } from '@/Core/controller/gamePlay/enterSubPage';
 import { enterAchieve } from '@/Core/controller/achieve/achieve';
 import { Affinity } from '../Affinity/Affinity';
+import StoryLine from '../StoryLine/StoryLine';
 
 /**
  * 进度与成就页面
@@ -27,12 +28,14 @@ export const ProgressAchievement: FC = () => {
   const { playSeClick, playSeEnter } = useSoundEffect();
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
-  const StageState = useSelector((state: RootState) => state.stage);
-  const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
   const progressUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.progressAndAchievement],
   ) as ProgressSceneUIConfig;
   const [tab, setTab] = useState<'chapter' | 'achievement' | 'affinity'>('chapter');
+
+  useEffect(() => {
+    enterStoryLine();
+  }, []);
 
   /**
    * 返回
@@ -58,7 +61,9 @@ export const ProgressAchievement: FC = () => {
           />
           <Button
             item={progressUIConfigs.buttons.Progress_chapter_button}
-            defaultClass={styles.btn}
+            defaultClass={styles.chapterTag}
+            type="checkbox"
+            checked={tab === 'chapter'}
             onClick={() => {
               playSeClick();
               setTab('chapter');
@@ -67,7 +72,9 @@ export const ProgressAchievement: FC = () => {
           />
           <Button
             item={progressUIConfigs.buttons.Progress_achievement_button}
-            defaultClass={styles.btn}
+            defaultClass={styles.achievementTag}
+            type="checkbox"
+            checked={tab === 'achievement'}
             onClick={() => {
               playSeClick();
               enterAchieve();
@@ -77,7 +84,9 @@ export const ProgressAchievement: FC = () => {
           />
           <Button
             item={progressUIConfigs.buttons.Progress_affinity_button}
-            defaultClass={styles.btn}
+            defaultClass={styles.affinityTag}
+            type="checkbox"
+            checked={tab === 'affinity'}
             onClick={() => {
               playSeClick();
               enterAffinity();
@@ -89,7 +98,7 @@ export const ProgressAchievement: FC = () => {
             defaultClass={styles.contentContainer}
             item={progressUIConfigs.other[ProgressSceneOtherKey.Progress_content_container]}
           >
-            {tab === 'chapter' && <h2>章节</h2>}
+            {tab === 'chapter' && <StoryLine />}
             {tab === 'achievement' && <Achievement />}
             {tab === 'affinity' && <Affinity />}
           </CustomContainer>
