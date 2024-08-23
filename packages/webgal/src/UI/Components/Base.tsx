@@ -120,7 +120,7 @@ export const CustomImage = ({
   };
 
   if (hover) {
-    className = `${defaultClass} ${defaultHoverClass} imageHoverAnimation`;
+    className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
     _style = { ...style, ...hoverStyle };
   }
 

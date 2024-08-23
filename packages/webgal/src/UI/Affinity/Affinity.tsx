@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
-import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface';
+import { ISaveStoryLineData, ISaveData, ISaveAffinity } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
 import { getStorylineFromStorage } from '@/Core/controller/storage/savesController';
@@ -15,6 +15,7 @@ import { BgImage, Button, CustomContainer } from '../Components/Base';
 
 import styles from './affinity.module.scss';
 import { ExtraContainer } from '@/Stage/extraContainer';
+import { SourceImg } from '../Components/SourceImg';
 
 /**
  * 好感度页面
@@ -24,6 +25,7 @@ export const Affinity: FC = () => {
   const { playSeClick, playSeEnter } = useSoundEffect();
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const unlockAffinityList = useSelector((state: RootState) => state.saveData.unlockAffinityData);
   const affinityUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.affinity],
   ) as AffinitySceneUIConfig;
@@ -41,7 +43,6 @@ export const Affinity: FC = () => {
   const handlGoBack = () => {
     playSeClick();
     backToTitle();
-    dispatch(setShowStoryLine(false));
   };
 
   return (
@@ -60,6 +61,22 @@ export const Affinity: FC = () => {
             onMouseEnter={playSeEnter}
           />
           <BgImage item={affinityUIConfigs.other[AffinitySceneOtherKey.Affinity_bg]} defaultClass={styles.affinityBg} />
+          {unlockAffinityList?.map((item: ISaveAffinity, index) => {
+            const { name, url, x, y, isUnlocked } = item;
+
+            if (!isUnlocked) {
+              return null;
+            }
+
+            return (
+              <SourceImg
+                key={index}
+                src={assetSetter(url, fileType.ui)}
+                alt={name}
+                style={{ position: 'absolute', left: px2(x), top: px2(y) }}
+              />
+            );
+          })}
           <ExtraContainer />
           {/* <CustomContainer
             item={affinityUIConfigs.other[AffinitySceneOtherKey.Affinity_item_container]}

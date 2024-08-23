@@ -122,7 +122,7 @@
   }
 
   .goBack {
-    position: absolute;
+    position: fixed !important;
     top: px2(35px);
     left: px2(25px);
     z-index: 100;

@@ -3,8 +3,8 @@ import { WebGAL } from '@/Core/WebGAL';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer';
-import { ISaveData, ISaveStoryLineData } from '@/store/userDataInterface';
-import { IUnlockAchieveItem } from '@/store/stageInterface'
+import { ISaveAffinity, ISaveData, ISaveStoryLineData } from '@/store/userDataInterface';
+import { IUnlockAchieveItem } from '@/store/stageInterface';
 
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   for (let i = startIndex; i <= endIndex; i++) {
@@ -21,8 +21,8 @@ export async function getSavesFromStorage(startIndex: number, endIndex: number) 
   for (let i = startIndex; i <= endIndex; i++) {
     const save = await localforage.getItem(`${WebGAL.gameKey}-saves${i}`);
     // localforage.getItem(`${WebGAL.gameKey}-saves${i}`).then((save) => {
-      webgalStore.dispatch(saveActions.saveGame({ index: i, saveData: save as ISaveData }));
-      logger.info(`存档${i}读取自本地存储`);
+    webgalStore.dispatch(saveActions.saveGame({ index: i, saveData: save as ISaveData }));
+    logger.info(`存档${i}读取自本地存储`);
     // });
   }
 }
@@ -49,6 +49,18 @@ export async function getStorylineFromStorage() {
   const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
   webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
   logger.info(`故事线 >> 读取自本地存储`);
+}
+
+export async function dumpUnlockAffinityToStorage() {
+  const data = webgalStore.getState().saveData.unlockAffinityData;
+  await localforage.setItem(`${WebGAL.gameKey}-unlock-affinity`, { data });
+  logger.info(`解锁亲密度 >> 写入本地存储`);
+}
+
+export async function getUnlockAffinityFromStorage() {
+  const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-affinity`);
+  webgalStore.dispatch(saveActions.updateAffinityData((res?.data ?? []) as ISaveAffinity[]));
+  logger.info(`解锁亲密度 >> 读取本地存储`);
 }
 
 export async function dumpUnlickAchieveToStorage() {

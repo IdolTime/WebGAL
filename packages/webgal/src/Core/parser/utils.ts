@@ -4,6 +4,8 @@ import { Style, CollectionImages, contentListItem } from '../UIConfigTypes';
 import { CSSProperties } from 'react';
 import { isEmpty } from 'lodash';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { WebGAL } from '@/Core/WebGAL';
+import { sceneNameType } from '../Modules/scene';
 
 /**
  * 规范函数的类型
@@ -54,12 +56,12 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
     if (styleObj.x !== undefined) {
       style.left = px2(styleObj.x) + 'px';
       style.position = 'absolute';
-      style.transform = 'translateX(-50%)';
+      // style.transform = 'translateX(-50%)';
     }
     if (styleObj.y !== undefined) {
       style.top = px2(styleObj.y) + 'px';
       style.position = 'absolute';
-      style.transform += ' translateY(-50%)';
+      // style.transform += ' translateY(-50%)';
     }
     if (styleObj.scale !== undefined) {
       style.transform += ` scale(${styleObj.scale})`;
@@ -115,4 +117,20 @@ export function parseImagesArg(imgs?: CollectionImages): contentListItem[] {
   });
 
   return imgList;
+}
+
+export function isInGame(): boolean {
+  const currentScene = WebGAL.sceneManager.sceneData.currentScene?.sceneName;
+  const configScenes: Record<string, 1> = {
+    [sceneNameType.Affinity]: 1,
+    [sceneNameType.Achieve]: 1,
+    [sceneNameType.Storyline]: 1,
+    'config.txt': 1,
+  };
+
+  if (!currentScene || configScenes[currentScene]) {
+    return false;
+  }
+
+  return true;
 }

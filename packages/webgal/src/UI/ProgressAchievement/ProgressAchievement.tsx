@@ -65,6 +65,7 @@ export const ProgressAchievement: FC = () => {
             type="checkbox"
             checked={tab === 'chapter'}
             onClick={() => {
+              enterStoryLine();
               playSeClick();
               setTab('chapter');
             }}

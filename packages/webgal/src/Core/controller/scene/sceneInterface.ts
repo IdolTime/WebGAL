@@ -45,6 +45,7 @@ export enum commandType {
   finishTrial, // 结束试玩
   moveCamera, // 移动镜头
   changeAffinity, // 更改亲密度
+  unlockAffinity, // 解锁亲密度
 }
 
 /**

@@ -10,6 +10,7 @@ import {
   dumpStorylineToStorage,
   dumpUnlickAchieveToStorage,
   getUnlickAchieveFromStorage,
+  getUnlockAffinityFromStorage,
 } from '@/Core/controller/storage/savesController';
 import { ISaveStoryLineData, ISaveStoryLine } from '@/store/userDataInterface';
 
@@ -85,10 +86,10 @@ export class SceneManager {
               const sentenceList = this.sceneData?.currentScene?.sentenceList ?? [];
               if (scenaName === sceneNameType.Storyline) {
                 this.getAllStorylineList(sentenceList);
-              }
-
-              if (scenaName === sceneNameType.Achieve) {
+              } else if (scenaName === sceneNameType.Achieve) {
                 this.getAllUnlockAchieveList(sentenceList);
+              } else if (scenaName === sceneNameType.Affinity) {
+                getUnlockAffinityFromStorage();
               }
 
               if (loading) {

@@ -37,7 +37,7 @@ export const enterAffinity = async () => {
   const rawScene = await sceneFetcher(sceneUrl);
   webgalStore.dispatch(setVisibility({ component: 'showAffinity', visibility: true }));
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
-  await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Storyline, sceneUrl);
+  await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Affinity, sceneUrl);
 
   nextSentence();
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));

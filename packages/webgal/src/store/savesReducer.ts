@@ -1,14 +1,14 @@
-import { ISaveData, ISaveStoryLineData, IUnlockAchieveAllItem } from './userDataInterface';
+import { ISaveAffinity, ISaveData, ISaveStoryLineData, IUnlockAchieveAllItem } from './userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { IUnlockAchieveItem } from './stageInterface'
+import { IUnlockAchieveItem } from './stageInterface';
 import { getUnlickAchieveFromStorage, dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 
 export interface ISavesData {
   saveData: Array<ISaveData>; // 用户存档数据
   quickSaveData: ISaveData | null;
-  unlockStorylineList: Array<ISaveStoryLineData>
+  unlockStorylineList: Array<ISaveStoryLineData>;
   saveVideoData: ISaveData | null;
   unlockAchieveData: Array<IUnlockAchieveItem>; // 解锁成就数据
   isShowUnlock: boolean; // 是否显示解锁成就
@@ -18,6 +18,7 @@ export interface ISavesData {
   isLoadVideo: boolean;
   allUnlockAchieveList: IUnlockAchieveItem[];
   allStorylineData: Array<ISaveStoryLineData>;
+  unlockAffinityData: ISaveAffinity[];
 }
 
 const initState: ISavesData = {
@@ -32,7 +33,8 @@ const initState: ISavesData = {
   isLoadVideo: false,
   isUnlockStoryline: false,
   allUnlockAchieveList: [],
-  allStorylineData: []
+  allStorylineData: [],
+  unlockAffinityData: [],
 };
 
 interface ISaveStoryLine {
@@ -47,7 +49,7 @@ interface SaveAction {
 
 interface SaveUnlockAchieve {
   index: number;
-  data: IUnlockAchieveItem
+  data: IUnlockAchieveItem;
 }
 
 const saveDataSlice = createSlice({
@@ -74,20 +76,20 @@ const saveDataSlice = createSlice({
       state.unlockStorylineList = action.payload;
     },
     addStorylineList: (state, action: PayloadAction<ISaveStoryLineData>) => {
-      state.unlockStorylineList.push(action.payload)
+      state.unlockStorylineList.push(action.payload);
     },
     replaceStorylineList: (state, action: PayloadAction<ISaveStoryLine>) => {
       // state.unlockStorylineList[action.payload.index].storyLine = action.payload.data.storyLine;
       state.unlockStorylineList[action.payload.index] = {
         ...state.unlockStorylineList[action.payload.index],
         storyLine: action.payload.data.storyLine,
-      }
+      };
     },
     setSaveVideoData: (state, action: PayloadAction<ISaveData>) => {
       state.saveVideoData = action.payload;
     },
     setUnlockAchieveData: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
-      state.unlockAchieveData = [...action.payload]
+      state.unlockAchieveData = [...action.payload];
     },
     resetStorylineList: (state) => {
       state.unlockStorylineList = [];
@@ -96,10 +98,7 @@ const saveDataSlice = createSlice({
       state.unlockAchieveData = [];
     },
     addUnlockAchieveData: (state, action: PayloadAction<IUnlockAchieveItem>) => {
-      const data = [
-        ...state.unlockAchieveData,
-        action.payload,
-      ]
+      const data = [...state.unlockAchieveData, action.payload];
       state.unlockAchieveData = data;
     },
     replaceUnlockAchieveData: (state, action: PayloadAction<SaveUnlockAchieve>) => {
@@ -118,14 +117,17 @@ const saveDataSlice = createSlice({
       state.unlockAchieveListAll = action.payload;
     },
     setLoadVideo: (state, action: PayloadAction<boolean>) => {
-      state.isLoadVideo = action.payload
+      state.isLoadVideo = action.payload;
     },
     saveAllUnlockAchieveList: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
-      state.allUnlockAchieveList = action.payload
+      state.allUnlockAchieveList = action.payload;
     },
     saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
-      state.allStorylineData = action.payload
-    }
+      state.allStorylineData = action.payload;
+    },
+    updateAffinityData: (state, action: PayloadAction<ISaveAffinity[]>) => {
+      state.unlockAffinityData = action.payload;
+    },
   },
 });
 

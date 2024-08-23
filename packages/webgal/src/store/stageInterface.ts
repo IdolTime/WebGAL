@@ -257,3 +257,11 @@ export interface IUnlockAchieveObj {
   condition?: string;
   saveTime?: string;
 }
+
+export interface IUnlockAffinityObj {
+  name?: string;
+  url?: string;
+  x?: number;
+  y?: number;
+  saveTime?: string;
+}

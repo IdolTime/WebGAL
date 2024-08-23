@@ -35,8 +35,8 @@ export enum fullScreenOption {
 }
 
 export enum videoSizeOption {
-  Size1080P = '1920x1080', 
-  Size720P = '1280x720'
+  Size1080P = '1920x1080',
+  Size720P = '1280x720',
 }
 
 /**
@@ -58,7 +58,7 @@ export interface IOptionData {
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
   uiLight: number; // 游戏UI亮度
-  videoSize: videoSizeOption
+  videoSize: videoSizeOption;
 }
 
 /**
@@ -134,12 +134,20 @@ export interface IUserDataStore {
 export type UserDataStore = IUserDataStore;
 
 export interface ISaveStoryLine {
-  thumbnailUrl:  string; // 缩略图地址
+  thumbnailUrl: string; // 缩略图地址
   name: string; // 解锁名称
   x: number; // 解锁按钮 X坐标
   y: number; // 解锁按钮 Y坐标
   isUnlock: boolean; // 是否已解锁, 如果已经解锁才展示
   isHideName: boolean; // 是否隐藏名称
+}
+
+export interface ISaveAffinity {
+  url: string; // 图片地址
+  name: string; // 解锁名称
+  x: number; // 解锁按钮 X坐标
+  y: number; // 解锁按钮 Y坐标
+  isUnlocked: boolean; // 是否已解锁, 如果已经解锁才展示
 }
 
 export interface ISaveStoryLineData {
