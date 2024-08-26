@@ -75,8 +75,6 @@ export const BeautyGuide: FC = () => {
         }
       });
 
-      console.log(33333, styleObj, list);
-
       setDetailsStyle(styleObj);
       setCollectionList(list);
     }
