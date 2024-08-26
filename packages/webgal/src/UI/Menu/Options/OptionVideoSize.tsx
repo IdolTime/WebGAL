@@ -158,10 +158,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
         rootEle.style.setProperty('--options_checkbox_720P_top', `${266 * MSTop}px`);
         rootEle.style.setProperty('--options_checkbox_720P_left', `${640 * MS}px`);
 
-        rootEle.style.setProperty('--options_light_slider_top', `${445 * MS}px`);
+        rootEle.style.setProperty('--options_light_slider_top', `${375 * MS}px`);
         rootEle.style.setProperty('--options_light_slider_left', `${622 * MS}px`);
 
-        rootEle.style.setProperty('--options_sound_slider_top', `${375 * MS}px`);
+        rootEle.style.setProperty('--options_sound_slider_top', `${445 * MS}px`);
         rootEle.style.setProperty('--options_sound_slider_left', `${622 * MS}px`);
 
         rootEle.style.setProperty('--options_light_main_top', `${510 * MS}px`);

@@ -84,6 +84,9 @@ export interface SliderContainerItem {
     sliderStyle?: Style;
     sliderBgStyle?: Style;
     sliderThumbStyle?: Style;
+    slider?: Style;
+    sliderBg?: Style;
+    sliderThumb?: Style;
   };
 }
 

@@ -81,6 +81,7 @@ const saveDataSlice = createSlice({
       state.unlockStorylineList[action.payload.index] = {
         ...state.unlockStorylineList[action.payload.index],
         storyLine: action.payload.data.storyLine,
+        videoData: action.payload.data.videoData
       }
     },
     setSaveVideoData: (state, action: PayloadAction<ISaveData>) => {

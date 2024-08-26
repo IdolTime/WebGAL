@@ -84,6 +84,7 @@ export const CustomImage = ({
   onMouseLeave,
   onClick,
   nId,
+  draggable
 }: {
   src: string;
   hoverSrc?: string;
@@ -95,6 +96,7 @@ export const CustomImage = ({
   onMouseLeave?: () => void;
   onClick?: () => void;
   nId?: string;
+  draggable?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
   const [_, _forceRender] = useState(0);
@@ -136,6 +138,7 @@ export const CustomImage = ({
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      draggable={draggable}
       style={_style}
       onClick={onClick}
       onLoad={(e) => {
@@ -210,9 +213,9 @@ export const BgImage = ({ item, defaultClass, key }: { item: Item; defaultClass?
   const style = parseStyleArg(item.args.style);
   const src = assetSetter(item.args.style?.image || '', fileType.background);
 
-  if (!item.args.style?.image) return <div className={defaultClass} style={style} />;
+  if (!item.args.style?.image) return <div className={defaultClass} style={style} draggable="false" />;
 
-  return <CustomImage key={key} defaultClass={defaultClass} src={src} style={style} />;
+  return <CustomImage key={key} defaultClass={defaultClass} src={src} style={style} draggable={false} />;
 };
 
 export const Button = ({
@@ -407,7 +410,7 @@ export const OptionSliderCustome = ({
   }, [initValue]);
 
   useEffect(() => {
-    const thumbStyle = parseStyleArg(item.args.sliderThumbStyle);
+    const thumbStyle = parseStyleArg(item.args.sliderThumb);
     const thumStyleString = cssPropertiesToString(thumbStyle);
 
     if (!thumStyleString) return;
@@ -416,7 +419,7 @@ export const OptionSliderCustome = ({
 
     replaceOrAddRule(`#${uniqueID}::-moz-range-thumb`, `#${uniqueID}::-moz-range-thumb { ${thumStyleString} }`);
     replaceOrAddRule(`#${uniqueID}::-ms-thumb`, `#${uniqueID}::-ms-thumb { ${thumStyleString} }`);
-  }, [item.args.sliderThumbStyle, uniqueID]);
+  }, [item.args.sliderThumb, uniqueID]);
 
   function calcSlideBg() {
     const inputBg = document.getElementById(`${uniqueID}-bg`);
@@ -431,11 +434,34 @@ export const OptionSliderCustome = ({
     }
   }
 
+  const bgNone = {
+    background: 'none'
+  }
+
   const style = parseStyleArg(item.args.style);
-  const barStyle = parseStyleArg(item.args.sliderStyle);
-  const barBgStyle = parseStyleArg(item.args.sliderBgStyle);
-  const barSrc = item.args.sliderStyle?.image || BarSlider;
-  const barBgSrc = item.args.sliderBgStyle?.image || BarBg;
+
+  const barStyle = 
+    item.args?.slider?.image
+      ? {...parseStyleArg(item.args?.slider), ...bgNone}
+      : parseStyleArg(item.args?.slider);
+
+  const barBgStyle = 
+    item.args?.sliderBg?.image
+      ? { ...parseStyleArg(item.args?.sliderBg), ...bgNone }
+      : parseStyleArg(item.args?.sliderBg);
+
+  const barSrc = 
+    item.args?.slider?.image 
+      ? assetSetter(item.args.slider.image, fileType.ui) 
+      : BarSlider;
+
+  const barBgSrc = 
+    item.args?.sliderBg?.image 
+      ? assetSetter(item.args.sliderBg.image, fileType.ui) 
+      : BarBg;
+
+  console.log(item, barStyle, barBgStyle, barSrc, barBgSrc);
+  debugger;
 
   return (
     <CustomContainer style={style} defaultClass={`Option_WebGAL_slider ${defaultClass}`}>
@@ -450,8 +476,8 @@ export const OptionSliderCustome = ({
         onMouseEnter={playSeEnter}
       />
       <div className="Slider_group">
-        <CustomImage src={barSrc} style={barStyle} defaultClass="Slider_bg" nId={`${uniqueID}-bg`} />
-        <CustomImage src={barBgSrc} style={barBgStyle} defaultClass="Slider_bg_under" />
+        <CustomImage src={barSrc} style={barStyle} defaultClass="Slider_bg" nId={`${uniqueID}-bg`} draggable={false}  />
+        <CustomImage src={barBgSrc} style={barBgStyle} defaultClass="Slider_bg_under" draggable={false} />
       </div>
     </CustomContainer>
   );

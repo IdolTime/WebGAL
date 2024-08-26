@@ -64,15 +64,17 @@ input[type=range]::-moz-range-thumb {
   .Slider_group {
     position: absolute;
     left: 0;
-    top: 50%;
+    top: 0;
     transform: translateY(-50%);
+    width: 100%;
+    height: 100%;
   }
   .Slider_bg{
     position: absolute;
     left: 0;
-    top: px2(1px);
+    top: 0;
     width: px2(342px);
-    height: px2(4px);
+    height: px2(6px);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
