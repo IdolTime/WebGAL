@@ -1,6 +1,6 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { Style, CollectionImages, contentListItem } from '../UIConfigTypes';
+import { Style, CollectionImages, contentListItem, CollectionVideos } from '../UIConfigTypes';
 import { CSSProperties } from 'react';
 import { isEmpty } from 'lodash';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -115,4 +115,22 @@ export function parseImagesArg(imgs?: CollectionImages): contentListItem[] {
   });
 
   return imgList;
+}
+
+export function parseVideosArg(videos?: CollectionVideos): contentListItem[] {
+  if (!videos || isEmpty(videos)) {
+    return [];
+  }
+
+  const videoList: contentListItem[] = [];
+  Object.keys(videos).forEach((key) => {
+    // @ts-ignore
+    const src = videos[key] as string;
+    videoList.push({
+      key,
+      type: 'video',
+      url: assetSetter(src, fileType.video) as string,
+    });
+  });
+  return videoList;
 }

@@ -327,7 +327,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
         }
 
         parsedArgs[e.key] = style;
-      } else if (e.key.includes('info') || e.key.includes('images')) {
+      } else if (e.key.includes('info') || e.key.includes('images') || e.key === 'videos') {
         const info = parseStyleString(e.value as string);
         parsedArgs[e.key] = info;
       }
