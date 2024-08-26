@@ -41,7 +41,7 @@ $default_options_sound_slider_width: 300px;
 }
 
 .Options_checkbox {
-  position: relative !important;
+  position: relative;
   top: px2(239px);
   left: px2(441px);
   top: var(--options_checkbox_top);
@@ -91,6 +91,13 @@ $default_options_sound_slider_width: 300px;
   top: var(--options_sound_slider_top);
   left: var(--options_sound_slider_left);
   width: px2($default_options_sound_slider_width);
+
+  position: absolute !important;
+  transform: none !important;
+  // top: px2(375px);
+  // left: px2(622px);
+  // top: var( --options_light_slider_top);
+  // left: var(--options_light_slider_left);
 }
 
 .Options_checkbox_window {

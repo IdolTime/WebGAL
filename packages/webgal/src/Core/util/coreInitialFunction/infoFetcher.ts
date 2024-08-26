@@ -18,7 +18,7 @@ import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
 import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { GameMenuItem, GameMenuKey, EecMenuKey, EscMenuItem, EnumAchievementUIKey } from '@/store/guiInterface';
+import { GameMenuItem, EecMenuKey, EscMenuItem, EnumAchievementUIKey } from '@/store/guiInterface';
 import { setStage } from '@/store/stageReducer';
 import {
   AchievementSceneButtonKey,
@@ -37,11 +37,10 @@ import {
   StorylineSceneOtherKey,
   Style,
   TitleSceneButtonKey,
-  titleSceneOtherConfig,
   TitleSceneOtherKey,
-  TitleSceneUIConfig,
   CollectionSceneButtonKey,
-  CollectionSceneOtherKey
+  CollectionSceneOtherKey,
+  SliderItemKey
 } from '@/Core/UIConfigTypes';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 
@@ -50,6 +49,12 @@ declare global {
     renderPromise?: Function;
   }
 }
+
+const sliderKeyArr = [
+  SliderItemKey.slider, 
+  SliderItemKey.sliderBg, 
+  SliderItemKey.sliderThumb
+];
 
 const boolMap = new Map<string | boolean, boolean>([
   ['true', true],
@@ -319,7 +324,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     args.forEach((e: any) => {
       if (e.key === 'hide') {
         parsedArgs.hide = e.value === true;
-      } else if (e.key.toLowerCase().endsWith('style')) {
+      } else if (e.key.toLowerCase().endsWith('style') || sliderKeyArr.includes(e.key)) {
         const style = parseStyleString(e.value as string);
 
         if (e.key === 'style' && swapImageContent) {
