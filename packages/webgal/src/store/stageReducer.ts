@@ -49,6 +49,13 @@ export const initState: IStageState = {
   figNameRight: '', // 立绘_右 文件地址（相对或绝对）
   freeFigure: [],
   figureAssociatedAnimation: [],
+  popUpImageName: '', // 弹窗图片_中 文件地址（相对或绝对）
+  popUpImageNameLeft: '', // 弹窗图片_左 文件地址（相对或绝对）
+  popUpImageNameRight: '', // 弹窗图片_右 文件地址（相对或绝对）
+  freePopUpImage: [], // 弹窗图片
+  popUpImageAssociatedAnimation: [],  // 弹窗图片动画
+  popImgLive2dMotion: [],
+  popImgLive2dExpression: [],
   showText: '', // 文字
   showTextSize: -1,
   showName: '', // 人物名
@@ -219,6 +226,32 @@ const stageSlice = createSlice({
       } else {
         // Update the existing expression
         state.live2dExpression[index].expression = expression;
+      }
+    },
+    setPopUpImageLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {
+      const { target, motion } = action.payload;
+
+      const index = state.popImgLive2dMotion.findIndex((e) => e.target === target);
+
+      if (index < 0) {
+        // Add a new motion
+        state.popImgLive2dMotion.push({ target, motion });
+      } else {
+        // Update the existing motion
+        state.popImgLive2dMotion[index].motion = motion;
+      }
+    },
+    setPopUpImageLive2dExpression: (state, action: PayloadAction<ILive2DExpression>) => {
+      const { target, expression } = action.payload;
+
+      const index = state.popImgLive2dExpression.findIndex((e) => e.target === target);
+
+      if (index < 0) {
+        // Add a new expression
+        state.popImgLive2dExpression.push({ target, expression });
+      } else {
+        // Update the existing expression
+        state.popImgLive2dExpression[index].expression = expression;
       }
     },
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {

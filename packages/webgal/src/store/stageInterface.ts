@@ -151,6 +151,13 @@ export interface IStageState {
   // 自由立绘
   freeFigure: Array<IFreeFigure>;
   figureAssociatedAnimation: Array<IFigureAssociatedAnimation>;
+  popUpImageName: string; // 弹窗图片_中 文件地址（相对或绝对）
+  popUpImageNameLeft: string; // 弹窗图片_左 文件地址（相对或绝对）
+  popUpImageNameRight: string; // 弹窗图片_右 文件地址（相对或绝对）
+  freePopUpImage: Array<IFreeFigure>; // 弹窗图片
+  popUpImageAssociatedAnimation: Array<IFigureAssociatedAnimation>;  // 弹窗图片动画
+  popImgLive2dMotion: ILive2DMotion[];
+  popImgLive2dExpression: ILive2DExpression[];
   showText: string; // 文字
   showTextSize: number; // 文字
   dialogueMode: string;
