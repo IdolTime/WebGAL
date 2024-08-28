@@ -24,7 +24,7 @@ export const contentParser = (
     case commandType.changeFigure:
       return assetSetter(contentRaw, fileType.figure);
     case commandType.popUpImage:
-        return assetSetter(contentRaw, fileType.figure);
+      return assetSetter(contentRaw, fileType.image);
     case commandType.bgm:
       return assetSetter(contentRaw, fileType.bgm);
     case commandType.callScene:

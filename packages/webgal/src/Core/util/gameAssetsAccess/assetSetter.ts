@@ -14,6 +14,8 @@ export enum fileType {
   vocal,
   video,
   ui,
+  image,
+  font
 }
 
 /**
@@ -50,6 +52,12 @@ export const assetSetter = (fileName: string, assetType: fileType): string => {
         break;
       case fileType.ui:
         returnFilePath = `./game/ui/${fileName}`;
+        break;
+      case fileType.image:
+        returnFilePath = `./game/image/${fileName}`;
+        break;
+      case fileType.font:
+        returnFilePath = `./game/font/${fileName}`;
         break;
       default:
         returnFilePath = ``;

@@ -54,7 +54,7 @@ export const assetsScanner = (
       name: content,
       url: content,
       lineNumber: 0,
-      type: fileType.figure,
+      type: fileType.image,
     });
   }
   if (command === commandType.miniAvatar) {
