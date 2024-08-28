@@ -46,7 +46,7 @@ export enum commandType {
   moveCamera, // 移动镜头
   changeAffinity, // 修改亲密度
   unlockAffinity, // 解锁亲密度
-  popUpImage,
+  popUpImage, // 弹窗图片
 }
 
 /**

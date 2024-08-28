@@ -49,6 +49,14 @@ export const assetsScanner = (
       type: fileType.figure,
     });
   }
+  if (command === commandType.popUpImage) {
+    returnAssetsList.push({
+      name: content,
+      url: content,
+      lineNumber: 0,
+      type: fileType.image,
+    });
+  }
   if (command === commandType.miniAvatar) {
     returnAssetsList.push({
       name: content,

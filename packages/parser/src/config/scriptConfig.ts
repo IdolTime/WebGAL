@@ -39,7 +39,7 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'moveCamera', scriptType: commandType.moveCamera },
   { scriptString: 'changeAffinity', scriptType: commandType.changeAffinity },
   { scriptString: 'unlockAffinity', scriptType: commandType.unlockAffinity },
-  { scriptString: 'popUpImage', scriptType: commandType.popUpImage },
+  { scriptString: 'popUpImage', scriptType: commandType.popUpImage },  
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,
