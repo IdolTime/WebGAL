@@ -68,8 +68,8 @@ function App() {
               if (res.data.authorId !== authorInfo.userId) {
                 dispatch(setIsEditorPreviewMode(false));
                 setLoggedIn(false);
-                alert('不可预览非本人的游戏');
-                return;
+                // alert('不可预览非本人的游戏');
+                // return;
               }
             }
           });

@@ -14,6 +14,8 @@ export enum fileType {
   vocal,
   video,
   ui,
+  image,
+  font,
 }
 
 /**
