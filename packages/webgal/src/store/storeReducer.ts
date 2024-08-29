@@ -9,6 +9,7 @@ export const initState: IStoreData = {
   paymentConfigurationList: [],
   gameInfo: null,
   isEditorPreviewMode: false,
+  userInfo: null,
 };
 
 const storeDataSlice = createSlice({
@@ -26,8 +27,11 @@ const storeDataSlice = createSlice({
     setIsEditorPreviewMode(state, action: PayloadAction<boolean>) {
       state.isEditorPreviewMode = action.payload;
     },
+    setUserInfo(state, action: PayloadAction<any>) {
+      state.userInfo = action.payload;
+    },
   },
 });
 
-export const { setPaymentConfigurationList, setGameInfo, setIsEditorPreviewMode } = storeDataSlice.actions;
+export const { setPaymentConfigurationList, setGameInfo, setIsEditorPreviewMode, setUserInfo } = storeDataSlice.actions;
 export default storeDataSlice.reducer;

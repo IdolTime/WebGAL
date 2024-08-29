@@ -5,7 +5,7 @@ import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinu
 import { enterStoryLine } from '@/Core/controller/gamePlay/enterSubPage';
 import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { setshowFavorited } from '@/store/GUIReducer';
@@ -16,6 +16,7 @@ import { keyboard } from '@/hooks/useHotkey';
 import { enterAchieve } from '@/Core/controller/achieve/achieve';
 import { BgImage, Button } from '../Components/Base';
 import { Scene, TitleSceneButtonKey, TitleSceneOtherKey, TitleSceneUIConfig } from '@/Core/UIConfigTypes';
+import { platform_isCanStart } from '@/Core/platformMessage';
 
 /**
  * 标题页
@@ -30,6 +31,50 @@ const Title: FC = () => {
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
+
+  const sdk_loadUserInfo = () => {
+    const token = localStorage.getItem('sdk-token');
+    // @ts-ignore
+    window.globalThis.getUserInfo(token).then((res: any) => {
+      console.log('getUserInfo success : ', res);
+      const gameInfo: any = webgalStore.getState().storeData.gameInfo;
+      const { acoinBalance } = res.data;
+      const { paymentAmount, id } = gameInfo;
+      if (acoinBalance < paymentAmount) {
+        // 充值
+        // @ts-ignore
+        window.globalThis.openRechargeDialog(token).then((res: any) => {
+          console.log('openRechargeDialog success : ', res);
+        });
+      } else {
+        // 购买
+        // @ts-ignore
+        window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
+          console.log('openBuyGameDialog success : ', res);
+          // todo 买游戏上报
+        });
+      }
+    });
+  };
+
+  const loadUserInfo = () => {
+    if (window !== window.top) {
+      platform_isCanStart();
+    } else {
+      sdk_loadUserInfo();
+    }
+  };
+
+  const loadGameDetail = (cb: Function) => {
+    const gameInfo: any = webgalStore.getState().storeData.gameInfo;
+    // 买过了
+    if (gameInfo.isBuy) {
+      cb();
+    } else {
+      loadUserInfo();
+    }
+  };
+
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
       startGame();
@@ -108,7 +153,24 @@ const Title: FC = () => {
                   item={buttonConfigItem}
                   defaultClass={styles.Title_button}
                   defaultTextClass={styles.Title_button_text}
-                  onClick={clickCallbackMap[_key]}
+                  onClick={() => {
+                    const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
+                    if (isPreviewMode) {
+                      clickCallbackMap[_key]();
+                    } else {
+                      const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};
+                      const { paymentMode } = gameInfo;
+                      // 付费
+                      if (paymentMode === 'paid') {
+                        loadGameDetail(() => {
+                          clickCallbackMap[_key]();
+                        });
+                      } else {
+                        // 免费
+                        clickCallbackMap[_key]();
+                      }
+                    }
+                  }}
                   onMouseEnter={playSeEnter}
                 />
               );

@@ -2,6 +2,9 @@ import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect, useState } from 'react';
 import { initializeScript } from './Core/initializeScript';
+import { initGCPSDK } from './Core/initGCPSDK';
+import { platform_getGameDetail, platform_getUserInfo } from '@/Core/platformMessage';
+import { webgalStore } from '@/store/store';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
@@ -22,7 +25,7 @@ import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from './store/userDataReducer';
 import { getEditorGameDetail, getGameInfo, getPaymentConfigList } from './services/store';
-import { setGameInfo, setIsEditorPreviewMode, setPaymentConfigurationList } from './store/storeReducer';
+import { setGameInfo, setIsEditorPreviewMode, setUserInfo } from './store/storeReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { Toaster } from './UI/Toaster/Toaster';
@@ -37,77 +40,114 @@ function App() {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
 
-  useEffect(() => {
-    initializeScript();
-    const token = localStorage.getItem('editor-token');
-    const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
-    if (tokenFromQuery || token) {
-      setLoggedIn(true);
-      dispatch(setToken(tokenFromQuery || ''));
-      let refObject = {
-        current: {
-          gameReady: false,
-          previewMode: false,
-          previewModeValue: false,
-        },
-      };
-      const checkCallback = () => {
-        if (refObject.current.gameReady && !refObject.current.previewMode) return;
-        /**
-         * 启动Pixi
-         */
-        WebGAL.gameplay.pixiStage = new PixiStage();
-        if (refObject.current.previewModeValue) {
-          getEditorGameDetail().then((res) => {
+  const initLoginInfo = (token?: string) => {
+    setLoggedIn(true);
+    dispatch(setToken(token || ''));
+    let refObject = {
+      current: {
+        gameReady: false,
+        previewMode: false,
+        previewModeValue: false,
+      },
+    };
+
+    const loadGameDetail = () => {
+      if (window !== window.top) {
+        platform_getGameDetail();
+      } else {
+        const gameId = new URLSearchParams(window.location.search).get('gameId');
+        // @ts-ignore
+        window.globalThis.getGameDetail(gameId, token).then((res: any) => {
+          // @ts-ignore
+          window.pubsub.publish('gameInfoReady');
+          webgalStore.dispatch(setGameInfo(res.data));
+        });
+      }
+    };
+
+    const checkCallback = () => {
+      if (refObject.current.gameReady && !refObject.current.previewMode) return;
+      /**
+       * 启动Pixi
+       */
+      WebGAL.gameplay.pixiStage = new PixiStage();
+      if (refObject.current.previewModeValue) {
+        if (window !== window.top) {
+          // @ts-ignore
+          window.pubsub.publish('gameInfoReady');
+        } else {
+          // @ts-ignore
+          window.globalThis.getUserInfo(token).then((res: any) => {
             // @ts-ignore
             window.pubsub.publish('gameInfoReady');
-            const authorInfoStr = localStorage.getItem('editorUserInfo') || '{}';
-            const authorInfo = JSON.parse(authorInfoStr);
-
-            if (res.code === 0) {
-              if (res.data.authorId !== authorInfo.userId) {
-                dispatch(setIsEditorPreviewMode(false));
-                setLoggedIn(false);
-                alert('不可预览非本人的游戏');
-                return;
-              }
-            }
           });
-        } else {
-          getGameInfo().then((res) => {
-            if (res.code === 0) {
-              // @ts-ignore
-              window.pubsub.publish('gameInfoReady');
-            } else {
-              // @ts-ignore
-              window.pubsub.publish('gameInfoReady');
-              showGlogalDialog({
-                title: '获取游戏信息失败\n请刷新页面！',
-                rightText: '确定',
-                rightFunc: () => {
-                  window.location.reload();
-                },
-              });
-            }
-          });
-          getPaymentConfigList();
         }
-      };
-      // @ts-ignore
-      window.pubsub.subscribe('gameReady', () => {
-        refObject.current.gameReady = true;
-        checkCallback();
-      });
+      } else {
+        // getPaymentConfigList();
+        loadGameDetail();
+      }
+    };
+    // @ts-ignore
+    window.pubsub.subscribe('gameReady', () => {
+      refObject.current.gameReady = true;
+      checkCallback();
+    });
 
-      // @ts-ignore
-      window.pubsub.subscribe('isPreviewMode', (value) => {
-        refObject.current.previewMode = true;
-        refObject.current.previewModeValue = value;
-        dispatch(setIsEditorPreviewMode(value));
-        checkCallback();
-      });
+    // @ts-ignore
+    window.pubsub.subscribe('isPreviewMode', (value) => {
+      refObject.current.previewMode = true;
+      refObject.current.previewModeValue = value;
+      dispatch(setIsEditorPreviewMode(value));
+      checkCallback();
+    });
+  };
+
+  const platform_init = () => {
+    window.addEventListener('message', (message: any) => {
+      const data = message.data;
+      const { method } = message.data.data;
+      if (method === 'IS_CAN_START') {
+        // todo 购买上报
+      }
+      if (method === 'GET_USER_INFO') {
+        webgalStore.dispatch(setUserInfo(data.data.response.data));
+        initLoginInfo();
+      }
+      if (method === 'GET_GAME_DETAIL') {
+        // @ts-ignore
+        window.pubsub.publish('gameInfoReady');
+        webgalStore.dispatch(setGameInfo(data.data.response.data));
+      }
+    });
+    // 登录
+    platform_getUserInfo();
+  };
+
+  const sdk_init = () => {
+    initGCPSDK();
+    const token = localStorage.getItem('sdk-token');
+    if (token) {
+      initLoginInfo(token);
+      return;
+    }
+    // @ts-ignore
+    window.globalThis.openLoginDialog().then((res) => {
+      initLoginInfo(res.token);
+      localStorage.setItem('sdk-token', res.token);
+      localStorage.setItem('sdk-userId', res.userId);
+      window.location.reload();
+    });
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      initializeScript();
+    }, 1000);
+    // alert('请先登录');
+    if (window !== window.top) {
+      platform_init();
     } else {
-      alert('请先登录');
+      sdk_init();
     }
   }, []);
 

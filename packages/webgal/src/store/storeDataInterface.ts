@@ -20,4 +20,5 @@ export interface IStoreData {
   paymentConfigurationList: IPaymentConfigurationList;
   gameInfo: IGameInfo | null;
   isEditorPreviewMode: boolean;
+  userInfo: any;
 }
