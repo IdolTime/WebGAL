@@ -60,7 +60,7 @@ $default_options_slider_width: 342px;
 
 .Options_main_slider {
   position: absolute !important;
-  transform: translateY(-50%) !important;
+  transform: translateY(0%) !important;
   top: px2(510px);
   left: px2(622px);
   top: var( --options_light_main_top);
@@ -70,7 +70,7 @@ $default_options_slider_width: 342px;
 
 .Options_light_slider {
   position: absolute !important;
-  transform: translateY(-50%) !important;
+  transform: translateY(0%) !important;
   top: px2(375px);
   left: px2(622px);
   top: var( --options_light_slider_top);
@@ -93,7 +93,7 @@ $default_options_slider_width: 342px;
   left: var(--options_sound_slider_left);
   width: px2($default_options_slider_width);
   position: absolute !important;
-  transform: translateY(-50%) !important;
+  transform: translateY(0%) !important;
   // top: px2(375px);
   // left: px2(622px);
   // top: var( --options_light_slider_top);
