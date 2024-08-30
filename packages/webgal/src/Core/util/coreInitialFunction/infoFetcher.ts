@@ -199,7 +199,7 @@ export const infoFetcher = (url: string) => {
 
             options?.forEach((item) => {
               // eslint-disable-next-line max-nested-callbacks
-              (item.value as string)?.split(',').forEach((pair) => {
+              typeof item?.value === 'string' && (item.value as string)?.split(',')?.forEach((pair: string) => {
                 const [key, value] = pair?.split('=') || [];
                 if (key === 'name') {
                   name = value;

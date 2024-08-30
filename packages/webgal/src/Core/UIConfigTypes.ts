@@ -861,6 +861,7 @@ export interface Style {
   height?: number;
   marginLeft?: number;
   marginRight?: number;
+  alignPosition?: string;
 }
 
 export type ButtonKey =

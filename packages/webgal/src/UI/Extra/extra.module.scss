@@ -42,7 +42,7 @@
   font-family: "思源宋体", serif;
   height: 100%;
   line-height: 100%;
-  font-size: px2(162.5%);
+  font-size: 162.5%;
   font-weight: bold;
   color: transparent;
   background: linear-gradient(150deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 75%, #51A8DD 100%);
@@ -51,9 +51,9 @@
 
 .mainContainer {
   box-sizing: border-box;
-  padding: 2em 4em;
+  padding: 6em 0;
   display: flex;
-  height: px2(92%);
+  height: 100%;
   flex-flow: column;
 }
 

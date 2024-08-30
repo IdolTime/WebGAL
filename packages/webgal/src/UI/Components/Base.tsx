@@ -1,3 +1,13 @@
+import React, 
+  { 
+    ChangeEvent,
+    CSSProperties, 
+    ReactNode, 
+    useEffect, 
+    useMemo, 
+    useRef, 
+    useState 
+  } from 'react';
 import {
   ButtonItem,
   ContainerItem,
@@ -6,7 +16,6 @@ import {
   Style,
   UIItemConfig,
 } from '@/Core/UIConfigTypes';
-import React, { ChangeEvent, CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { parseStyleArg } from '@/Core/parser/utils';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
@@ -396,6 +405,7 @@ export const OptionSliderCustome = ({
   max?: number;
   className?: string;
 } & ISlider) => {
+  if (item.args.hide) return null;
   const { playSeEnter } = useSoundEffect();
   useEffect(() => {
     setTimeout(() => {
@@ -459,9 +469,6 @@ export const OptionSliderCustome = ({
     item.args?.sliderBg?.image 
       ? assetSetter(item.args.sliderBg.image, fileType.ui) 
       : BarBg;
-
-  console.log(item, barStyle, barBgStyle, barSrc, barBgSrc);
-  debugger;
 
   return (
     <CustomContainer style={style} defaultClass={`Option_WebGAL_slider ${defaultClass}`}>

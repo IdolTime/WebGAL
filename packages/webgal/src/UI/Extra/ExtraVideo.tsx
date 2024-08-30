@@ -152,8 +152,23 @@ export const ExtraVideo: FC = () => {
         defaultTextClass={styles.Load_title_text}
         defaultText={t('extra.title')}
       />
-      <div className={styles.Save_Load_main}>
-        <Indicator
+      
+      <Indicator
+        item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
+        activeIndex={userDataState.optionData.slPage}
+        defaultClass={`${styles.Save_Load_top_buttonList} ${styles.extra_video_top_buttonList}`}
+        pageLength={20}
+        indicatorDefaultClass={`${styles.Save_Load_top_button} ${styles.Load_top_button}`}
+        activeIndecatorClass={`${styles.Save_Load_top_button_on} ${styles.Load_top_button_on}`}
+        onClickIndicator={(i) => {
+          dispatch(setSlPage(i));
+          setStorage();
+          playSePageChange();
+        }}
+      />
+
+      <div className={`${styles.Save_Load_main} ${styles.extra_video_main}`}>
+        {/* <Indicator
           item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
           activeIndex={userDataState.optionData.slPage}
           defaultClass={styles.Save_Load_top_buttonList}
@@ -165,7 +180,7 @@ export const ExtraVideo: FC = () => {
             setStorage();
             playSePageChange();
           }}
-        />
+        /> */}
         <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
           {showSaves}
         </div>

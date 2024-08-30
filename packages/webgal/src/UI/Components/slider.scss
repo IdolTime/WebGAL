@@ -60,14 +60,15 @@ input[type=range]::-moz-range-thumb {
   .Rang_input {
     cursor: pointer;
     position: absolute;
+    z-index: 1;
   }
   .Slider_group {
     position: absolute;
     left: 0;
     top: 0;
-    transform: translateY(-50%);
+    transform: translateY(50%);
     width: 100%;
-    height: 100%;
+    // height: 100%;
   }
   .Slider_bg{
     position: absolute;

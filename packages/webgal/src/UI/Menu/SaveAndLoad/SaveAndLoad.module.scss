@@ -9,6 +9,10 @@
   flex-direction: column;
 }
 
+.extra_video_main {
+  justify-content: center;
+}
+
 .goback {
   display: inline-block;
   width: px2(49px);
@@ -72,6 +76,16 @@
   display: flex;
   margin: px2(25px);
   //padding: 0 0 0 2em;
+}
+
+.extra_video_top_buttonList {
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 .Save_Load_top_button {

@@ -1,6 +1,6 @@
 @import 'src/assets/style/px2.scss';
 
-$default_options_sound_slider_width: 300px;
+$default_options_slider_width: 342px;
 
 .Options_main {
   position: absolute;
@@ -59,23 +59,24 @@ $default_options_sound_slider_width: 300px;
 }
 
 .Options_main_slider {
-  position: absolute;
+  position: absolute !important;
+  transform: translateY(-50%) !important;
   top: px2(510px);
   left: px2(622px);
   top: var( --options_light_main_top);
   left: var(--options_light_main_left);
-  width: px2($default_options_sound_slider_width);
+  width: px2($default_options_slider_width);
 }
 
 .Options_light_slider {
   position: absolute !important;
-  transform: none !important;
+  transform: translateY(-50%) !important;
   top: px2(375px);
   left: px2(622px);
   top: var( --options_light_slider_top);
   left: var(--options_light_slider_left);
   display: flex;
-  width: px2($default_options_sound_slider_width);
+  width: px2($default_options_slider_width);
 
   .label {
     color: #fff;
@@ -90,10 +91,9 @@ $default_options_sound_slider_width: 300px;
   left: px2(622px);
   top: var(--options_sound_slider_top);
   left: var(--options_sound_slider_left);
-  width: px2($default_options_sound_slider_width);
-
+  width: px2($default_options_slider_width);
   position: absolute !important;
-  transform: none !important;
+  transform: translateY(-50%) !important;
   // top: px2(375px);
   // left: px2(622px);
   // top: var( --options_light_slider_top);

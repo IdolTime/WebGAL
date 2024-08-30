@@ -94,6 +94,14 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
     if (styleObj.position) {
       style.position = styleObj.position;
     }
+    if (styleObj.alignPosition !== undefined) {
+      if (styleObj.alignPosition === 'top-center') {
+        style.top = '0';
+      } else if (styleObj.alignPosition === 'bottom-center') {
+        style.top = 'auto';
+        style.bottom = '0';
+      }
+    }
   }
 
   return style;
