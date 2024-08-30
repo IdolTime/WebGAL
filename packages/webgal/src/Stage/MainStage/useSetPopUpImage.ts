@@ -7,13 +7,13 @@ import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { fetchFileAsArrayBuffer } from '@/Core/util/fetchFileAsArrayBuffer';
 
 export function useSetPopUpImage(stageState: IStageState) {
-  const { 
-    popUpImageName, 
-    popUpImageNameLeft, 
-    popUpImageNameRight, 
-    freePopUpImage, 
-    popImgLive2dMotion, 
-    popImgLive2dExpression 
+  const {
+    popUpImageName,
+    popUpImageNameLeft,
+    popUpImageNameRight,
+    freePopUpImage,
+    popImgLive2dMotion,
+    popImgLive2dExpression,
   } = stageState;
 
   /**
@@ -187,6 +187,9 @@ export function useSetPopUpImage(stageState: IStageState) {
           existFigure.key === 'popImg-left' ||
           existFigure.key === 'popImg-center' ||
           existFigure.key === 'popImg-right' ||
+          existFigure.key === 'fig-left' ||
+          existFigure.key === 'fig-center' ||
+          existFigure.key === 'fig-right' ||
           existFigure.key.endsWith('-off')
         ) {
           // 什么也不做

@@ -180,6 +180,9 @@ export function useSetFigure(stageState: IStageState) {
     if (currentFigures) {
       for (const existFigure of currentFigures) {
         if (
+          existFigure.key === 'popImg-left' ||
+          existFigure.key === 'popImg-center' ||
+          existFigure.key === 'popImg-right' ||
           existFigure.key === 'fig-left' ||
           existFigure.key === 'fig-center' ||
           existFigure.key === 'fig-right' ||
