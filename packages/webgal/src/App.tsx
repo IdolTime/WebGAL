@@ -66,8 +66,8 @@ function App() {
 
             if (res.code === 0) {
               if (res.data.authorId !== authorInfo.userId) {
-                dispatch(setIsEditorPreviewMode(false));
-                setLoggedIn(false);
+                // dispatch(setIsEditorPreviewMode(false));
+                // setLoggedIn(false);
                 // alert('不可预览非本人的游戏');
                 // return;
               }

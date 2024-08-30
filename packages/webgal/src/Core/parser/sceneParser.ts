@@ -84,7 +84,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   finishTrial: ScriptConfig(commandType.finishTrial, finishTrial),
   moveCamera: ScriptConfig(commandType.moveCamera, moveCamera),
   changeAffinity: ScriptConfig(commandType.changeAffinity, changeAffinity),
-  unlockAffinity: ScriptConfig(commandType.changeAffinity, unlockAffinity),
+  unlockAffinity: ScriptConfig(commandType.unlockAffinity, unlockAffinity),
   popUpImage: ScriptConfig(commandType.popUpImage, popUpImage),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });

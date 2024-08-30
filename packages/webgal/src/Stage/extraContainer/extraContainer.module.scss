@@ -28,7 +28,7 @@
     right: px2(50px);
     top: 50%;
     transform: translate(0, -50%);
-    z-index: 5;
+    z-index: 99999;
     opacity: 0;
     gap: px2(20px);
 }

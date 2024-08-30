@@ -33,10 +33,6 @@ export const ProgressAchievement: FC = () => {
   ) as ProgressSceneUIConfig;
   const [tab, setTab] = useState<'chapter' | 'achievement' | 'affinity'>('chapter');
 
-  useEffect(() => {
-    enterStoryLine();
-  }, []);
-
   /**
    * 返回
    */

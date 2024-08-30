@@ -46,6 +46,7 @@ export async function dumpStorylineToStorage() {
 }
 
 export async function getStorylineFromStorage() {
+  console.trace(1111);
   const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
   webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
   logger.info(`故事线 >> 读取自本地存储`);
