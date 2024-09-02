@@ -240,7 +240,6 @@
   span {
     font-size: px2(18px);
     font-weight: 500;
-    margin-right: px2(32px);
   }
 }
 
@@ -248,23 +247,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: px2(115.5px);
-  height: px2(44.1px);
+  width: px2(189.5px);
+  height: px2(73.5px);
   text-align: center;
-  line-height: px2(44.1px);
-  font-size: px2(18.2px);
-  font-family: Inter;
   color: #fff;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/game-menu-button-bg.png');
+  background-image: url('@/assets/imgs/confirm-recharge.png');
   cursor: pointer;
   transition: transform 0.33s ease-in-out;
   &:hover {
-    background-image: url('@/assets/imgs/game-menu-button-bg-active.png');
-    color: #fff;
-    transform: scale(1.1, 1.1);
+    opacity: 0.7;
   }
 }
 

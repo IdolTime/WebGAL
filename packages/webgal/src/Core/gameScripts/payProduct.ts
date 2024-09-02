@@ -16,6 +16,7 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
 import { backToTitle } from '../controller/gamePlay/backToTitle';
 import { getRandomPerformName } from '../Modules/perform/performController';
+import { sleep } from '../util/sleep';
 
 /**
  * 购买章节
@@ -78,9 +79,11 @@ export const payProduct = (sentence: ISentence): IPerform => {
       // @ts-ignore
       // window.pubsub.publish('loading', { loading: true });
       buyChapter(productId ?? 0)
-        .then((res) => {
+        .then(async (res) => {
           // @ts-ignore
           window.pubsub.publish('loading', { loading: false });
+
+          await sleep(2000);
 
           if (res.code === 0) {
             // @ts-ignore

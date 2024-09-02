@@ -177,9 +177,7 @@ export function ModalRecharge() {
           <div className={styles.RechargeModal_modalFooterLeft}>虚拟商品，一经售出不子退款</div>
           <div className={styles.RechargeModal_modalFooterRight}>
             <span>支付${selectedItem?.price}</span>
-            <div className={styles.RechargeModal_modalFooterConfirm} onClick={submitRecharge}>
-              立即充值
-            </div>
+            <div className={styles.RechargeModal_modalFooterConfirm} onClick={submitRecharge} />
           </div>
         </div>
       </div>

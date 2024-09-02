@@ -8,7 +8,7 @@ axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
 // 设置 Authorization header
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = webgalStore.getState().userData.token; // 获取 token
+    const token = new URLSearchParams(window.location.search).get('token') || webgalStore.getState().userData.token; // 获取 token
     const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
     const editorToken = localStorage.getItem('editor-token'); // 获取 editor token
 

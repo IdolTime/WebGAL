@@ -9,6 +9,7 @@ import { SourceImg } from '../Components/SourceImg';
 import { buyGame } from '@/services/store';
 import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
 import { px2 } from '@/Core/parser/utils';
+import { sleep } from '@/Core/util/sleep';
 
 export function ModalBuyGame() {
   const [visible, setVisible] = useState(false);
@@ -25,6 +26,8 @@ export function ModalBuyGame() {
 
     // @ts-ignore
     window.pubsub.publish('loading', { loading: false });
+
+    await sleep(2000);
 
     if (res.code === 0 || res.code === 10053) {
       // if (res.code === 0) {

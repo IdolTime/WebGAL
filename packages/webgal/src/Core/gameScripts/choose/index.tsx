@@ -16,6 +16,7 @@ import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
 import { parseStyleArg } from '@/Core/parser/utils';
+import { sleep } from '@/Core/util/sleep';
 
 class ChooseOption {
   /**
@@ -176,9 +177,11 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               // @ts-ignore
               window.pubsub.publish('loading', { loading: true });
               buyChapter(e.productId ?? 0)
-                .then((res) => {
+                .then(async (res) => {
                   // @ts-ignore
                   window.pubsub.publish('loading', { loading: false });
+
+                  await sleep(2000);
 
                   if (res.code === 0) {
                     // @ts-ignore

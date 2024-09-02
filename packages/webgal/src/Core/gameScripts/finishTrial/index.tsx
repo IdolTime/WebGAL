@@ -8,6 +8,7 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyGame, getGameInfo } from '@/services/store';
 import { getRandomPerformName } from '../../Modules/perform/performController';
 import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
+import { sleep } from '@/Core/util/sleep';
 
 /**
  * 结束试玩
@@ -59,6 +60,8 @@ export const finishTrial = (sentence: ISentence): IPerform => {
 
     // @ts-ignore
     window.pubsub.publish('loading', { loading: false });
+
+    await sleep(2000);
 
     if (res.code === 0 || res.code === 10053) {
       // if (res.code === 0) {
