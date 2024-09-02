@@ -40,7 +40,7 @@ function App() {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
 
-  const initLoginInfo = (token?: string) => {
+  const initLoginInfo = (token?: any) => {
     setLoggedIn(true);
     dispatch(setToken(token || ''));
     let refObject = {
@@ -52,17 +52,40 @@ function App() {
     };
 
     const loadGameDetail = () => {
-      if (window !== window.top) {
+      // @ts-ignore
+      const is_terre = window.top?.origin.indexOf('localhost') > -1;
+      if (window !== window.top && !is_terre) {
         platform_getGameDetail();
-      } else {
-        const gameId = new URLSearchParams(window.location.search).get('gameId');
-        // @ts-ignore
-        window.globalThis.getGameDetail(gameId, token).then((res: any) => {
-          // @ts-ignore
-          window.pubsub.publish('gameInfoReady');
-          webgalStore.dispatch(setGameInfo(res.data));
-        });
+        return;
       }
+      if (is_terre) {
+        getGameInfo().then((res) => {
+          if (res.code === 0) {
+            // @ts-ignore
+            window.pubsub.publish('gameInfoReady');
+          } else {
+            // @ts-ignore
+            window.pubsub.publish('gameInfoReady');
+            showGlogalDialog({
+              title: '获取游戏信息失败\n请刷新页面！',
+              rightText: '确定',
+              rightFunc: () => {
+                window.location.reload();
+              },
+            });
+          }
+        });
+        getPaymentConfigList();
+        return;
+      }
+
+      const gameId = new URLSearchParams(window.location.search).get('gameId');
+      // @ts-ignore
+      window.globalThis.getGameDetail(gameId, token).then((res: any) => {
+        // @ts-ignore
+        window.pubsub.publish('gameInfoReady');
+        webgalStore.dispatch(setGameInfo(res.data));
+      });
     };
 
     const checkCallback = () => {
@@ -72,18 +95,39 @@ function App() {
        */
       WebGAL.gameplay.pixiStage = new PixiStage();
       if (refObject.current.previewModeValue) {
-        if (window !== window.top) {
+        // @ts-ignore
+        const is_terre = window.top?.origin.indexOf('localhost') > -1;
+        // 平台-iframe
+        if (window !== window.top && !is_terre) {
           // @ts-ignore
           window.pubsub.publish('gameInfoReady');
-        } else {
-          // @ts-ignore
-          window.globalThis.getUserInfo(token).then((res: any) => {
+          return;
+        }
+        // 编辑器-iframe
+        if (is_terre) {
+          getEditorGameDetail().then((res) => {
             // @ts-ignore
             window.pubsub.publish('gameInfoReady');
+            const authorInfoStr = localStorage.getItem('editorUserInfo') || '{}';
+            const authorInfo = JSON.parse(authorInfoStr);
+
+            if (res.code === 0) {
+              if (res.data.authorId !== authorInfo.userId) {
+                // dispatch(setIsEditorPreviewMode(false));
+                // setLoggedIn(false);
+                // alert('不可预览非本人的游戏');
+                // return;
+              }
+            }
           });
+          return;
         }
+        // @ts-ignore
+        window.globalThis.getUserInfo(token).then((res: any) => {
+          // @ts-ignore
+          window.pubsub.publish('gameInfoReady');
+        });
       } else {
-        // getPaymentConfigList();
         loadGameDetail();
       }
     };
@@ -143,12 +187,18 @@ function App() {
     setTimeout(() => {
       initializeScript();
     }, 1000);
-    // alert('请先登录');
-    if (window !== window.top) {
+    // @ts-ignore
+    const is_terre = window.top?.origin.indexOf('localhost') > -1;
+    if (window !== window.top && !is_terre) {
       platform_init();
-    } else {
-      sdk_init();
+      return;
     }
+    if (is_terre) {
+      const token = localStorage.getItem('editor-token');
+      initLoginInfo(token);
+      return;
+    }
+    sdk_init();
   }, []);
 
   useFullScreen();
