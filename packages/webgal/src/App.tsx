@@ -53,7 +53,7 @@ function App() {
 
     const loadGameDetail = () => {
       // @ts-ignore
-      const is_terre = window.top?.origin.indexOf('localhost') > -1;
+      const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
       if (window !== window.top && !is_terre) {
         platform_getGameDetail();
         return;
@@ -96,7 +96,7 @@ function App() {
       WebGAL.gameplay.pixiStage = new PixiStage();
       if (refObject.current.previewModeValue) {
         // @ts-ignore
-        const is_terre = window.top?.origin.indexOf('localhost') > -1;
+        const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
         // 平台-iframe
         if (window !== window.top && !is_terre) {
           // @ts-ignore
@@ -188,7 +188,7 @@ function App() {
       initializeScript();
     }, 1000);
     // @ts-ignore
-    const is_terre = window.top?.origin.indexOf('localhost') > -1;
+    const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
     if (window !== window.top && !is_terre) {
       platform_init();
       return;

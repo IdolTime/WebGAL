@@ -156,7 +156,7 @@ const Title: FC = () => {
                   onClick={() => {
                     const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
                     // @ts-ignore
-                    const is_terre = window.top?.origin.indexOf('localhost') > -1;
+                    const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
                     if (isPreviewMode || is_terre) {
                       clickCallbackMap[_key]();
                     } else {
