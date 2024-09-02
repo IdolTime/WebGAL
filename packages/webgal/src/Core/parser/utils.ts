@@ -82,6 +82,12 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
     if (styleObj.marginRight !== undefined) {
       style.marginRight = px2(styleObj.marginRight) + 'px';
     }
+    if (styleObj.marginTop !== undefined) {
+      style.marginTop = px2(styleObj.marginTop) + 'px';
+    }
+    if (styleObj.marginBottom !== undefined) {
+      style.marginBottom = px2(styleObj.marginBottom) + 'px';
+    }
     if (styleObj.gap !== undefined) {
       style.gap = px2(styleObj.gap) + 'px';
     }
@@ -101,6 +107,12 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
         style.top = 'auto';
         style.bottom = '0';
       }
+    }
+    if (styleObj.fontColor === undefined && styleObj.customColor !== undefined) {
+      style.color = styleObj.customColor;
+    }
+    if (styleObj.fontColor === undefined && styleObj.customFontSize !== undefined) {
+      style.fontSize = px2(styleObj.customFontSize) + 'px';
     }
   }
 

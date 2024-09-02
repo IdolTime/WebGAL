@@ -14,15 +14,31 @@ import {
   CollectionInfo,
   contentListItem,
 } from '@/Core/UIConfigTypes';
+import { parseStyleArg, parseImagesArg, parseVideosArg } from '@/Core/parser/utils';
+import {
+  ButtonItem,
+  ContainerItem,
+  IndicatorContainerItem,
+  SliderContainerItem,
+  Style,
+  UIItemConfig,
+} from '@/Core/UIConfigTypes';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 import styles from './BeautyGuideDetail.module.scss';
 import FlvPlayer from '../FlvPlayer';
 import FlvJs from 'flv.js';
+import { Display } from '../Menu/Options/Display/Display';
 
+
+type Item = ButtonItem | ContainerItem;
 interface IProps {
   info: CollectionInfo | null;
-  itemStyle: React.CSSProperties | null;
+  infoItemStyle: React.CSSProperties | null;
+  detailRightDescBgStyle: Item;
 }
+
+type alignType = 'column' | 'column-reverse';
 
 const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
   const dispatch = useDispatch();
@@ -31,6 +47,11 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
   const [currentContent, setCurrentContent] = useState<contentListItem | null>(null); // 当前内容区域
   const [dialogImg, setDialogImg] = useState<string>(''); // 弹窗图片
   const videoPlayerRef = React.useRef<FlvJs.FlvPlayer>(null);
+  const [alignDirection, setAlignDirection] = useState<alignType>('column');
+  const [alignContent, setAlignContent] = useState<string>('center');
+
+  const [thumbnailData, setThumbnailData] = useState<contentListItem[]>([]);
+
 
   const collectionUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.collection],
@@ -39,8 +60,37 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
   useEffect(() => {
     const infoData = props.info as CollectionInfo;
     if (infoData?.contentList && infoData?.contentList?.length > 0) {
+      setThumbnailData(infoData.contentList)
       setCurrentContent(infoData.contentList[0]);
+    } else {
+     const style = collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]?.args?.style ?? {}
+      // 缩略图占位 thumbnailItem
+      const element: contentListItem[] = []
+      const imgUrl = style?.image ? assetSetter(style.image, fileType.background) : ''
+      for (let index = 0; index < 5; index++) {
+        element.push({
+          key: 'placeholder',
+          type: 'placeholder',
+          url: imgUrl
+        }) 
+      }
+      setThumbnailData(element)
     }
+
+    if (props.detailRightDescBgStyle) {
+      if (props.detailRightDescBgStyle?.args?.style) {
+        const style = props.detailRightDescBgStyle?.args?.style;
+        // console.log(style);
+
+        if (style?.alignPosition?.includes('top')) {
+          setAlignDirection('column-reverse')
+          setAlignContent('flex-start')
+        }
+      }
+    }
+
+
+   
   }, [props]);
 
   /**
@@ -80,51 +130,88 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
           item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_bg]}
           defaultClass={styles.beautyGuide_detail_bg}
         />
+        <Button
+          item={collectionUIConfigs.buttons.Collection_back_button}
+          defaultClass={styles.goback}
+          onClick={handleGoback}
+          onMouseEnter={playSeEnter}
+        />
         <div className={styles.beautyGuideDetail_left}>
-          <div className={styles.header}>
-            <Button
-              item={collectionUIConfigs.buttons.Collection_back_button}
-              defaultClass={styles.goback}
-              onClick={handleGoback}
-              onMouseEnter={playSeEnter}
-            />
+          {/* <div className={styles.header}>
             <Button item={collectionUIConfigs.other.Collection_detail_title} defaultClass={styles.title} />
-          </div>
-          <div className={styles.pictureUrl}>
-            <img src={props.info?.image} alt="" />
-          </div>
-          <div className={styles.personal_info}>
-            <h3 className={styles.name}>{props.info?.name ?? ''}</h3>
-
-            <div className={styles.info}>
-              <span style={props?.itemStyle ?? {}}>身高</span>
-              <span style={props?.itemStyle ?? {}}>{props.info?.height ?? '-'}</span>
+          </div> */}
+          <div 
+            className={styles.left_box}
+            style={
+              parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_left_bg]?.args?.style)
+            }
+          >
+            <BgImage
+              item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_left_bg]}
+              defaultClass={styles.beautyGuide_detail_left_bg}
+            />
+          
+            <div className={styles.pictureUrl}>
+              <img src={props.info?.image} alt="" />
             </div>
+            <div className={styles.personal_info}>
+              <h3 className={styles.name}>{props.info?.name ?? ''}</h3>
 
-            <div className={styles.info}>
-              <span style={props?.itemStyle ?? {}}>体重</span>
-              <span style={props?.itemStyle ?? {}}>{props.info?.weight ?? '-'}</span>
-            </div>
+              <div className={styles.info}>
+                <span style={props?.infoItemStyle ?? {}}>身高</span>
+                <span style={props?.infoItemStyle ?? {}}>{props.info?.height ?? '-'}</span>
+              </div>
 
-            <div className={styles.info}>
-              <span style={props?.itemStyle ?? {}}>胸围</span>
-              <span style={props?.itemStyle ?? {}}>{props.info?.bustSize ?? '-'}</span>
-            </div>
+              <div className={styles.info}>
+                <span style={props?.infoItemStyle ?? {}}>体重</span>
+                <span style={props?.infoItemStyle ?? {}}>{props.info?.weight ?? '-'}</span>
+              </div>
 
-            <div className={styles.info}>
-              <span style={props?.itemStyle ?? {}}>腰围</span>
-              <span style={props?.itemStyle ?? {}}>{props.info?.waistSize ?? '-'}</span>
-            </div>
+              <div className={styles.info}>
+                <span style={props?.infoItemStyle ?? {}}>胸围</span>
+                <span style={props?.infoItemStyle ?? {}}>{props.info?.bustSize ?? '-'}</span>
+              </div>
 
-            <div className={styles.info}>
-              <span style={props?.itemStyle ?? {}}>臀围</span>
-              <span style={props?.itemStyle ?? {}}>{props.info?.hipSize ?? '-'}</span>
+              <div className={styles.info}>
+                <span style={props?.infoItemStyle ?? {}}>腰围</span>
+                <span style={props?.infoItemStyle ?? {}}>{props.info?.waistSize ?? '-'}</span>
+              </div>
+
+              <div className={styles.info}>
+                <span style={props?.infoItemStyle ?? {}}>臀围</span>
+                <span style={props?.infoItemStyle ?? {}}>{props.info?.hipSize ?? '-'}</span>
+              </div>
             </div>
           </div>
         </div>
-        <div className={styles.beautyGuideDetail_right}>
-          <div className={styles.contentWrapper}>
-            <div className={styles.content}>
+        <div 
+          className={styles.beautyGuideDetail_right}
+          style={{ 
+            flexDirection: alignDirection, 
+            justifyContent: alignDirection === 'column-reverse' ? 'flex-start' : 'center' 
+          }}
+        >
+          <div 
+            className={styles.contentWrapper}
+            style={{ display: 
+              collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_content_bg]?.args?.hide 
+              ? 'none' : 'block'
+            }}
+          >
+            <div 
+              // className={styles.content}
+              className={
+                `${styles.content} 
+                ${collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_content_bg]?.args?.style.image ? styles.hideBgc : ''}`
+              }
+              style={
+                parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_content_bg]?.args?.style)
+              }
+            >
+              <BgImage
+                item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_content_bg]}
+                defaultClass={styles.content_bg}
+              />
               {currentContent && (
                 <>
                   {currentContent.type === 'video' && (
@@ -153,15 +240,20 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
             </div>
             <div className={styles.thumbnailWrapper}>
               <div>
-                {props.info?.contentList?.map((item: contentListItem, index: number) => {
+                {thumbnailData?.map((item: contentListItem, index: number) => {
                   return (
                     <div
                       key={`thumbnail-${index}`}
                       className={styles.thumbnail_box}
+                      style={
+                        parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]?.args?.style)
+                      }
                       onClick={() => {
+                        if (item.type === ContentTypeEnum.Placeholder) return
                         setCurrentContent(item);
                       }}
                     >
+                      {item.type === ContentTypeEnum.Placeholder && <img src={item.url} alt="" />}
                       {item.type === ContentTypeEnum.Image && <img src={item.url} alt="" />}
                       {item.type === ContentTypeEnum.Video && <FlvPlayer url={item.url} controls={false} loop muted />}
                       {item.type === ContentTypeEnum.Video && (
@@ -187,7 +279,24 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
               </div>
             </div>
           </div>
-          <div className={styles.desc_text}>
+          <div 
+            className={
+              `${styles.desc_text} 
+              ${collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.style.image ? styles.hideBgc : ''}`
+            }
+            style={
+              {
+                ...parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.style),
+                display: 
+                  collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.hide 
+                    ? 'none' : 'block',
+              }
+            }
+          >
+            <BgImage
+              item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}
+              defaultClass={styles.desc_bg}
+            />
             <span>{props.info?.description ?? ''}</span>
           </div>
         </div>
@@ -196,7 +305,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
       {GUIState.showBeautyGuideImageDialog && (
         <BeautyGuideImageDialog
           imgUrl={dialogImg}
-          contentList={props.info?.contentList || []}
+          contentList={thumbnailData || []}
           show={GUIState.showBeautyGuideImageDialog}
         />
       )}

@@ -4,18 +4,16 @@ import { RootState } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BeautyGuideDetail from './BeautyGuideDetail';
-import { IPersonalInfo, personalInfoList } from './configData';
 import {
   CollectionSceneUIConfig,
   CollectionSceneOtherKey,
   Scene,
   CollectionInfoItem,
   CollectionInfo,
-  CollectionImages,
   contentListItem,
 } from '@/Core/UIConfigTypes';
-import { GameMenuItem } from '@/store/guiInterface';
-import { sceneParser } from '@/Core/parser/sceneParser';
+// import { GameMenuItem } from '@/store/guiInterface';
+// import { sceneParser } from '@/Core/parser/sceneParser';
 import { Button, BgImage } from '@/UI/Components/Base';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { parseStyleArg, parseImagesArg, parseVideosArg } from '@/Core/parser/utils';
@@ -40,6 +38,8 @@ export const BeautyGuide: FC = () => {
   const [detailsStyle, setDetailsStyle] = useState<Record<string, CSSProperties>>({});
   const [currentDetailStyle, setCurrentDetailStyle] = useState<CSSProperties | null>(null);
 
+  const [imgStyle, setImgStyle] = useState<Record<string, CSSProperties>>({});
+
   useEffect(() => {
     if (GUIState.showBeautyGuide) {
       const list: CollectionInfo[] = [];
@@ -58,9 +58,13 @@ export const BeautyGuide: FC = () => {
           // @ts-ignore
           const contentList: contentListItem[] = parseImagesArg(images);
           const videoList = parseVideosArg(videos);
+
+          const img = info?.image && assetSetter(info?.image, fileType.ui) || 
+                      infoVal?.args?.style?.image && assetSetter(infoVal?.args?.style?.image, fileType.ui) || '';
+
           list.push({
             name: info?.name,
-            image: info?.image ? assetSetter(info?.image, fileType.ui) : '',
+            image: img,
             height: info?.height,
             weight: info?.weight,
             bustSize: info?.bustSize,
@@ -76,6 +80,7 @@ export const BeautyGuide: FC = () => {
       });
 
       setDetailsStyle(styleObj);
+      setImgStyle(styleObj)
       setCollectionList(list);
     }
   }, [GUIState.showBeautyGuide]);
@@ -137,7 +142,7 @@ export const BeautyGuide: FC = () => {
                   onClick={() => handleDetail(item, index)}
                   onMouseEnter={playSeEnter}
                 >
-                  <img src={item.image} />
+                  <img src={item.image} style={imgStyle[`Collection_img${index + 1}`]} />
                 </div>
               );
             })}
@@ -145,7 +150,13 @@ export const BeautyGuide: FC = () => {
         </div>
       )}
 
-      {GUIState.showBeautyGuideDetail && <BeautyGuideDetail info={personalInfo} itemStyle={currentDetailStyle} />}
+      {GUIState.showBeautyGuideDetail && 
+        <BeautyGuideDetail 
+          info={personalInfo} 
+          infoItemStyle={currentDetailStyle} 
+          detailRightDescBgStyle={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}  
+        />
+      }
     </>
   );
 };

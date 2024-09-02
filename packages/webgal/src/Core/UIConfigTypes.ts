@@ -18,6 +18,14 @@ export interface UIItemConfig {
   hasText?: boolean;
   positionType?: 'absolute' | 'relative';
   customStyle?: {
+    marginTop?: {
+      type: 'number';
+      label: string;
+    };
+    marginBottom?: {
+      type: 'number';
+      label: string;
+    };
     marginLeft?: {
       type: 'number';
       label: string;
@@ -214,6 +222,10 @@ export enum CollectionSceneOtherKey {
   Collection_detail_title = 'Collection_detail_title',
   Collection_detail_dialog_bg = 'Collection_detail_dialog_bg',
   Collection_detail_dialog_text = 'Collection_detail_dialog_text',
+  Collection_detail_left_bg = "Collection_detail_left_bg",
+  Collection_detail_right_content_bg = 'Collection_detail_right_content_bg',
+  Collection_detail_right_thumbnail_bg = 'Collection_detail_right_thumbnail_bg',
+  Collection_detail_right_desc_bg = 'Collection_detail_right_desc_bg',
 }
 
 export const extraSceneOtherConfig: Record<
@@ -697,6 +709,26 @@ export const collectionSceneOtherConfig: Record<
     hasHoverStyle: false,
     hasXY: false,
   },
+  [CollectionSceneOtherKey.Collection_detail_left_bg]: {
+    label: '图鉴详情界面左侧内容背景',
+    type: 'bg',
+    hasHoverStyle: false,
+  },
+  [CollectionSceneOtherKey.Collection_detail_right_content_bg]: {
+    label: '详情界面右侧内容背景',
+    type: 'bg',
+    hasHoverStyle: false
+  },
+  [CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]: {
+    label: '详情界面右侧缩略图背景',
+    type: 'bg',
+    hasHoverStyle: false
+  },
+  [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: {
+    label: '详情界面右侧说明背景',
+    type: 'bg',
+    hasHoverStyle: false
+  }
 };
 
 export enum AchievementSceneOtherKey {
@@ -859,9 +891,13 @@ export interface Style {
   columnGap?: number;
   width?: number;
   height?: number;
+  marginTop?: number;
+  marginBottom?: number;
   marginLeft?: number;
   marginRight?: number;
   alignPosition?: string;
+  customColor?: string;
+  customFontSize?: number;
 }
 
 export type ButtonKey =
@@ -893,7 +929,7 @@ export interface ButtonItem {
 }
 
 export interface contentListItem {
-  type: 'image' | 'video';
+  type: 'image' | 'video' | 'placeholder';
   url: string;
   key: string;
 }
@@ -1033,6 +1069,10 @@ export interface CollectionSceneUIConfig {
     [CollectionSceneOtherKey.Collection_detail_title]: ButtonItem;
     [CollectionSceneOtherKey.Collection_detail_dialog_bg]: ButtonItem;
     [CollectionSceneOtherKey.Collection_detail_dialog_text]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_left_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_right_content_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]: ButtonItem;
+    [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: ButtonItem;
   };
   buttons: { [key in CollectionSceneButtonKey]: ButtonItem };
 }
@@ -1495,6 +1535,26 @@ export const sceneUIConfig: SceneUIConfig = {
         content: '',
         args: generateArgs(),
       },
+      [CollectionSceneOtherKey.Collection_detail_left_bg]: {
+        key: CollectionSceneOtherKey.Collection_detail_left_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_detail_right_content_bg]: {
+        key: CollectionSceneOtherKey.Collection_detail_right_content_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]: {
+        key: CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg,
+        content: '',
+        args: generateArgs(),
+      },
+      [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: {
+        key: CollectionSceneOtherKey.Collection_detail_right_desc_bg,
+        content: '',
+        args: generateArgs(),
+      }
     },
     buttons: {
       [CollectionSceneButtonKey.Collection_back_button]: {
@@ -1544,4 +1604,8 @@ export const bgKey = {
   [CollectionSceneOtherKey.Collection_bg]: 1,
   [CollectionSceneOtherKey.Collection_detail_bg]: 1,
   [CollectionSceneOtherKey.Collection_detail_dialog_bg]: 1,
+  [CollectionSceneOtherKey.Collection_detail_left_bg]: 1,
+  [CollectionSceneOtherKey.Collection_detail_right_content_bg]: 1,
+  [CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]: 1,
+  [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: 1
 };

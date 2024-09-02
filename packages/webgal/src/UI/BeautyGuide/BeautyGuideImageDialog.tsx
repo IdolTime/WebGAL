@@ -95,10 +95,15 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
       <div className={styles.mark} onClick={handleCloseDialog} />
       <div
         className={styles.content}
-        style={{
-          width: bgStyle?.width ? px2(bgStyle.width) : undefined,
-          height: bgStyle?.height ? px2(bgStyle.height) : undefined,
-        }}
+        // style={{
+        //   width: bgStyle?.width ? px2(bgStyle.width) : undefined,
+        //   height: bgStyle?.height ? px2(bgStyle.height) : undefined,
+        // }}
+        style={
+          parseStyleArg(
+            collectionUIConfigs?.other[CollectionSceneOtherKey.Collection_detail_dialog_bg]?.args?.style,
+          )
+        }
       >
         <BgImage
           item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_dialog_bg]}
@@ -123,8 +128,11 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
           <Button
             defaultText="上一张"
             item={collectionUIConfigs.buttons.Collection_detail_dialog_prev_button}
-            defaultClass={`${styles.btn} 
-                            ${currentImgIndex < 1 ? styles.btn_prev_disabled : ''}`}
+            defaultClass={`
+              ${styles.btn} 
+              ${currentImgIndex < 1 ? styles.btn_prev_disabled : ''}
+              ${collectionUIConfigs.buttons.Collection_detail_dialog_prev_button.args.style.image ? styles.hideButtonBgc : ''}`
+            }
             onClick={handlePrev}
             onMouseEnter={playSeEnter}
           />
@@ -143,8 +151,11 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
           <Button
             defaultText="下一张"
             item={collectionUIConfigs.buttons.Collection_detail_dialog_next_button}
-            defaultClass={`${styles.btn} 
-                            ${currentImgIndex + 1 >= props.contentList.length ? styles.btn_next_disabled : ''}`}
+            defaultClass={`
+              ${styles.btn} 
+              ${currentImgIndex + 1 >= props.contentList.length ? styles.btn_next_disabled : ''}
+              ${collectionUIConfigs.buttons.Collection_detail_dialog_prev_button.args.style.image ? styles.hideButtonBgc : ''}`
+            }
             onClick={handleNext}
             onMouseEnter={playSeEnter}
           />
