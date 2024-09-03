@@ -2,6 +2,7 @@ import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
+import { masoupuSdkInit } from '@/Core/masoupuSdk';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
@@ -21,6 +22,7 @@ import { GameMenuPanel } from '@/UI/GameMenuPanel/GameMenuPanel';
 
 function App() {
   useEffect(() => {
+    masoupuSdkInit();
     initializeScript();
   }, []);
 

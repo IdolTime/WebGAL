@@ -4,6 +4,7 @@ import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { enterStoryLine } from '@/Core/controller/gamePlay/storyLine';
 import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
+import { masoupuSdkCheck } from '@/Core/masoupuSdk';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
@@ -100,7 +101,11 @@ const Title: FC = () => {
                   item={buttonConfigItem}
                   defaultClass={styles.Title_button}
                   defaultTextClass={styles.Title_button_text}
-                  onClick={clickCallbackMap[_key]}
+                  onClick={() => {
+                    masoupuSdkCheck(() => {
+                      clickCallbackMap[_key]();
+                    });
+                  }}
                   onMouseEnter={playSeEnter}
                 />
               );

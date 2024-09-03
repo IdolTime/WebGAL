@@ -4,14 +4,14 @@ import { logger } from '../logger';
 import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
 import { getStorage } from '../../controller/storage/storageController';
 import { webgalStore } from '@/store/store';
-import { 
-  setGuiAsset, 
-  setLogoImage, 
-  setGameUIConfigs, 
-  initState, 
-  setGameR18, 
+import {
+  setGuiAsset,
+  setLogoImage,
+  setGameUIConfigs,
+  initState,
+  setGameR18,
   setEscMenus,
-  setAchievementUI 
+  setAchievementUI
 } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
@@ -51,8 +51,8 @@ declare global {
 }
 
 const sliderKeyArr = [
-  SliderItemKey.slider, 
-  SliderItemKey.sliderBg, 
+  SliderItemKey.slider,
+  SliderItemKey.sliderBg,
   SliderItemKey.sliderThumb
 ];
 
@@ -185,6 +185,11 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_Id': {
+            WebGAL.gameId = args[0];
+            break;
+          }
+
           case EecMenuKey.Esc_continueGame_button:
           case EecMenuKey.Esc_backToLevel_button:
           case EecMenuKey.Esc_setting_button:
@@ -229,7 +234,7 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
-          case EnumAchievementUIKey.Achievement_progress_bg: 
+          case EnumAchievementUIKey.Achievement_progress_bg:
           case EnumAchievementUIKey.Achievement_progress_text:
           case EnumAchievementUIKey.Achievement_notUnlock:
           case EnumAchievementUIKey.Achievement_progress: {
@@ -404,14 +409,14 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
       const strStyle = styleMatch[1];
       const styleProps = strStyle.split(',');
       const style: any = {};
-  
+
       styleProps.forEach((prop) => {
         const [key, value] = prop.split('=');
         if (key && value) {
           style[key.trim()] = isNaN(Number(value.trim())) ? value.trim() : Number(value.trim());
         }
       });
-  
+
       return style;
     }
   }
