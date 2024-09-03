@@ -102,9 +102,13 @@ const Title: FC = () => {
                   defaultClass={styles.Title_button}
                   defaultTextClass={styles.Title_button_text}
                   onClick={() => {
-                    masoupuSdkCheck(() => {
+                    if (window.location.href.indexOf('file://') > -1) {
+                      masoupuSdkCheck(() => {
+                        clickCallbackMap[_key]();
+                      });
+                    } else {
                       clickCallbackMap[_key]();
-                    });
+                    }
                   }}
                   onMouseEnter={playSeEnter}
                 />

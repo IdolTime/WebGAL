@@ -410,10 +410,9 @@
       window.enterPromise();
       delete window.enterPromise;
     }
-
-    window.onload = () => {
-      enter()
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+      enter();
+    });
   </script>
 </body>
 
