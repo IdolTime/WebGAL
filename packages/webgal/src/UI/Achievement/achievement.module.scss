@@ -114,8 +114,8 @@ $default_pregress__bg_height: 300px;
             position: absolute;
             top: 0;
             left: 0;
-            min-height: 100px;
-            min-width: 100px;
+            height: 100px;
+            width: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -140,6 +140,7 @@ $default_pregress__bg_height: 300px;
                 transform: scale(1.2);
                 transition: all 0.3s;
                 cursor: pointer;
+                z-index: 999;
                 .ripple {
                     animation: ripple-effect 0.5s linear;
                 }
