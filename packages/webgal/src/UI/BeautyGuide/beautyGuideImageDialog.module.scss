@@ -1,4 +1,4 @@
-
+@import 'src/assets/style/px2.scss';
 .beautyGuideImageDialog {
     position: absolute;
     top: 0;
@@ -21,8 +21,8 @@
     }
 
     .content {
-        width: 1200px;
-        height: 800px;
+        width: px2(1080px); //1200px;
+        height: px2(667px); //800px;
         z-index: 120;
         position: absolute;
         top: 50%;
@@ -31,6 +31,8 @@
         display: flex;
         flex-direction: column;
         background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+        border-radius: px2(25px);
+        overflow: hidden;
 
         .content_bg {
             position: absolute !important;
@@ -47,6 +49,7 @@
         .imgWrapper {
             flex: 1;
             overflow: hidden;
+            padding: px2(20px);
 
             & > img {
                 width: 100%;
@@ -67,6 +70,7 @@
             align-items: center;
             justify-content: space-between;
             margin: 20px 30px;
+            min-height: px2(40px);
 
             .btn {
                 display: flex;
@@ -77,6 +81,7 @@
                 font-size: 22px;
                 padding: 10px 20px;
                 border-radius: 10px;
+                transform: translateX(0) translateY(0) !important;
                 &:hover {
                     cursor: pointer;
                 }
@@ -93,6 +98,9 @@
             .btn_txt {
                 color: #000;
                 font-size: 25px;
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
             }
             .hideButtonBgc {
                 background: none;
