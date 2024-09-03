@@ -204,7 +204,7 @@ export interface IStageState {
   unlockedAchievements: number; // 已获得的成就数量
   achieveBgX: number;
   achieveBgY: number;
-  isShowValueSWitch: boolean;
+  isShowValueSwitch: boolean;
   showValueName: string;
   showValueAxisX: number;
   showValueAxisY: number;
@@ -214,7 +214,7 @@ export interface IStageState {
 }
 
 export interface IShowValueListItem {
-  isShowValueSWitch: boolean;
+  isShowValueSwitch: boolean;
   showValueName: string;
   showValueAxisX: number;
   showValueAxisY: number;

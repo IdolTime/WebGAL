@@ -30,7 +30,7 @@ const parseStyle = (styleString: string) => {
  */
 export function showValue(sentence: ISentence): IPerform {
   const payload: IShowValueListItem = {
-    isShowValueSWitch: false,
+    isShowValueSwitch: false,
     showValueName: '',
     showValueAxisX: 0,
     showValueAxisY: 0,
@@ -43,7 +43,7 @@ export function showValue(sentence: ISentence): IPerform {
 
   sentence.args.forEach((e) => {
     if (e.key === 'switchValue') {
-      payload['isShowValueSWitch'] = !!e.value;
+      payload['isShowValueSwitch'] = !!e.value;
     } else if (e.key === 'x') {
       payload['showValueAxisX'] = Number(e.value);
     } else if (e.key === 'y') {

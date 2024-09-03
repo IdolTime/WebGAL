@@ -146,7 +146,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
+        let className = styles.Choose_item;
         const onClick = () => {
           // if (!enable || timer.current) {
           //   return;
@@ -269,6 +269,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
         if (e.style) {
           styleObj = parseStyleArg(e.style);
+        }
+
+        if (!enable) {
+          styleObj.cursor = 'not-allowed';
         }
 
         if (typeof e.style?.countdown === 'number') {

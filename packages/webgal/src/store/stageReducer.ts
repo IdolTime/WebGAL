@@ -107,7 +107,7 @@ export const initState: IStageState = {
   totalAchievements: 0, // 总成就数量
   unlockedAchievements: 0, // 已获得的成就数量
   // isShowUnlockAchieve: false,
-  isShowValueSWitch: false,
+  isShowValueSwitch: false,
   showValueName: '',
   showValueAxisX: 0,
   showValueAxisY: 0,
@@ -270,7 +270,15 @@ const stageSlice = createSlice({
       state.showValues.push(action.payload);
     },
     addShowValueList: (state, action: PayloadAction<IShowValueListItem>) => {
-      state.showValueList = [...state.showValueList, action.payload];
+      const index = state.showValueList.findIndex((e) => e.showValueName === action.payload.showValueName);
+
+      if (index > -1) {
+        const list = [...state.showValueList];
+        list[index] = action.payload;
+        state.showValueList = list;
+      } else {
+        state.showValueList = [...state.showValueList, action.payload];
+      }
     },
     updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
       state.showValueList = action.payload;
