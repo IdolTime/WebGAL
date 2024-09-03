@@ -309,6 +309,7 @@ export const Achievement: FC = () => {
                                     : '',
                                 )
                           }")`,
+                          transform: ` scale(${notUnlockStyle?.args?.style?.scale})`,
                           ...notUnlockCss,
                         }}
                       >
