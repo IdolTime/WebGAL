@@ -255,7 +255,7 @@ export const Achievement: FC = () => {
           {/* 头部 */}
           <Button
             item={achivementUIConfigs.buttons.Achievement_back_button}
-            defaultClass={styles.goback}
+            defaultClass={`${styles.goback} interactive`}
             onClick={handleGoBack}
             onMouseEnter={playSeEnter}
           />

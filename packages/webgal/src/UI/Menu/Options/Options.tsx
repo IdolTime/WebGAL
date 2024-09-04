@@ -46,7 +46,7 @@ export const Options: FC = () => {
       <BgImage item={optionUIConfigs.other[OptionSceneOtherKey.Option_bg]} defaultClass={styles.Options_bg} />
       <Button
         item={optionUIConfigs.buttons[OptionSceneButtonKey.Option_back_button]}
-        defaultClass={styles.Options_back}
+        defaultClass={`${styles.Options_back} interactive`}
         onMouseEnter={playSeEnter}
         onClick={() => {
           playSeClick();
@@ -58,7 +58,7 @@ export const Options: FC = () => {
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_fullscreen_checkbox]}
         defaultClass={`${styles.Options_checkbox} ${
           userDataState.optionData.fullScreen ? '' : styles.Options_checkbox_active
-        }`}
+        } interactive`}
         onMouseEnter={playSeEnter}
         type="checkbox"
         onChecked={() => {
@@ -72,7 +72,7 @@ export const Options: FC = () => {
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_window_checkbox]}
         defaultClass={`${styles.Options_checkbox} ${styles.Options_checkbox_window} ${
           userDataState.optionData.fullScreen ? styles.Options_checkbox_active : ''
-        }`}
+        } interactive`}
         onMouseEnter={playSeEnter}
         type="checkbox"
         onChecked={() => {
@@ -86,28 +86,28 @@ export const Options: FC = () => {
       <OptionVideoSize />
 
       {/* 亮度 */}
-        <OptionSliderCustome
-          item={optionUIConfigs.other[OptionSceneOtherKey.Options_light_slider]}
-          defaultClass={styles.Options_light_slider}
-          initValue={userDataState.optionData.uiLight}
-          // uniqueID="亮度"
-          uniqueID="light"
-          min={configLight.min}
-          max={configLight.max}
-          onChange={(event) => {
-            let newValue = Number(event.target.value);
-            if (newValue < configLight.min) {
-              newValue = configLight.min;
-            }
-            useUILight(newValue);
-            dispatch(setOptionData({ key: 'uiLight', value: newValue }));
-            setStorage();
-          }}
-        />
+      <OptionSliderCustome
+        item={optionUIConfigs.other[OptionSceneOtherKey.Options_light_slider]}
+        defaultClass={`${styles.Options_light_slider} interactive`}
+        initValue={userDataState.optionData.uiLight}
+        // uniqueID="亮度"
+        uniqueID="light"
+        min={configLight.min}
+        max={configLight.max}
+        onChange={(event) => {
+          let newValue = Number(event.target.value);
+          if (newValue < configLight.min) {
+            newValue = configLight.min;
+          }
+          useUILight(newValue);
+          dispatch(setOptionData({ key: 'uiLight', value: newValue }));
+          setStorage();
+        }}
+      />
 
       <OptionSliderCustome
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_effect_volume_slider]}
-        defaultClass={styles.Options_sound_slider}
+        defaultClass={`${styles.Options_sound_slider} interactive`}
         initValue={userDataState.optionData.seVolume}
         // uniqueID="音效"
         uniqueID="seVolume"
@@ -121,7 +121,7 @@ export const Options: FC = () => {
       <OptionSliderCustome
         initValue={userDataState.optionData.volumeMain}
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_global_volume_slider]}
-        defaultClass={styles.Options_main_slider}
+        defaultClass={`${styles.Options_main_slider} interactive`}
         // uniqueID="全局音量"
         uniqueID="volumeMain"
         onChange={(event) => {

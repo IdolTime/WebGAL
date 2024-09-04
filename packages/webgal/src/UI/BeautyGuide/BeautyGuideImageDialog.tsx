@@ -92,7 +92,7 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
 
   return (
     <div className={styles.beautyGuideImageDialog}>
-      <div className={styles.mark} onClick={handleCloseDialog} />
+      <div className={`${styles.mark} interactive`} onClick={handleCloseDialog} />
       <div
         className={styles.content}
         // style={{
@@ -131,7 +131,7 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
             defaultClass={`
               ${styles.btn} 
               ${currentImgIndex < 1 ? styles.btn_prev_disabled : ''}
-              ${collectionUIConfigs.buttons.Collection_detail_dialog_prev_button.args.style.image ? styles.hideButtonBgc : ''}`
+              ${collectionUIConfigs.buttons.Collection_detail_dialog_prev_button.args.style.image ? styles.hideButtonBgc : ''} interactive`
             }
             onClick={handlePrev}
             onMouseEnter={playSeEnter}
@@ -154,7 +154,7 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
             defaultClass={`
               ${styles.btn} 
               ${currentImgIndex + 1 >= props.contentList.length ? styles.btn_next_disabled : ''}
-              ${collectionUIConfigs.buttons.Collection_detail_dialog_prev_button.args.style.image ? styles.hideButtonBgc : ''}`
+              ${collectionUIConfigs.buttons.Collection_detail_dialog_prev_button.args.style.image ? styles.hideButtonBgc : ''} interactive`
             }
             onClick={handleNext}
             onMouseEnter={playSeEnter}

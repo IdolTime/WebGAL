@@ -132,7 +132,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
         />
         <Button
           item={collectionUIConfigs.buttons.Collection_back_button}
-          defaultClass={styles.goback}
+          defaultClass={`${styles.goback} interactive`}
           onClick={handleGoback}
           onMouseEnter={playSeEnter}
         />
@@ -228,7 +228,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
 
                   {currentContent.type === 'image' && (
                     <img
-                      className={styles.content_img}
+                      className={`${styles.content_img} interactive`}
                       src={currentContent.url}
                       onClick={() => {
                         handleImageDialogOpen(currentContent.url);

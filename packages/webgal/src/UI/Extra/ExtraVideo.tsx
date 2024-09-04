@@ -121,7 +121,7 @@ export const ExtraVideo: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
-        className={styles.Save_Load_content_element}
+        className={`${styles.Save_Load_content_element} interactive`}
         style={{ animationDelay: `${animationIndex * 30}ms` }}
       >
         {saveElementContent}
@@ -142,7 +142,7 @@ export const ExtraVideo: FC = () => {
     <>
       <Button
         item={extraUIConfigs.buttons.Extra_back_button}
-        defaultClass={`${styles.goback} ${styles.extraVideo_goback}`}
+        defaultClass={`${styles.goback} ${styles.extraVideo_goback} interactive`}
         onClick={handleGoBack}
         onMouseEnter={playSeEnter}
       />
@@ -152,13 +152,13 @@ export const ExtraVideo: FC = () => {
         defaultTextClass={styles.Load_title_text}
         defaultText={t('extra.title')}
       />
-      
+
       <Indicator
         item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
         activeIndex={userDataState.optionData.slPage}
-        defaultClass={`${styles.Save_Load_top_buttonList} ${styles.extra_video_top_buttonList}`}
+        defaultClass={`${styles.Save_Load_top_buttonList} ${styles.extra_video_top_buttonList} interactive`}
         pageLength={20}
-        indicatorDefaultClass={`${styles.Save_Load_top_button} ${styles.Load_top_button}`}
+        indicatorDefaultClass={`${styles.Save_Load_top_button} ${styles.Load_top_button} interactive`}
         activeIndecatorClass={`${styles.Save_Load_top_button_on} ${styles.Load_top_button_on}`}
         onClickIndicator={(i) => {
           dispatch(setSlPage(i));

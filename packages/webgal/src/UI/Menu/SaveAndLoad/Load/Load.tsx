@@ -10,10 +10,9 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 import { LoadSceneUIConfig, ButtonItem, IndicatorContainerItem, Scene } from '@/Core/UIConfigTypes';
-import { Iargs } from './loadInterface'
+import { Iargs } from './loadInterface';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { px2 } from '@/Core/parser/utils';
-
 
 interface ISetBgStyle {
   hasDisplay?: boolean;
@@ -26,10 +25,7 @@ export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const saveDataState = useSelector((state: RootState) => state.saveData);
-  const loadUIConfigs = useSelector(
-    (state: RootState) => state.GUI.gameUIConfigs[Scene.load] as LoadSceneUIConfig
-  );
-
+  const loadUIConfigs = useSelector((state: RootState) => state.GUI.gameUIConfigs[Scene.load] as LoadSceneUIConfig);
 
   const page = [];
   for (let i = 1; i <= 20; i++) {
@@ -46,16 +42,17 @@ export const Load: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'Load_element_page' + i}
-        className={classNameOfElement}
+        className={`${classNameOfElement} interactive`}
       >
-        <div 
+        <div
           className={styles.Save_Load_top_button_text}
-          style={
-            setBgStyle(
-              loadUIConfigs?.other?.Load_indicator as IndicatorContainerItem, 
-              { hasDisplay: false, imgType: fileType.ui}
-            )
-          }>{i}</div>
+          style={setBgStyle(loadUIConfigs?.other?.Load_indicator as IndicatorContainerItem, {
+            hasDisplay: false,
+            imgType: fileType.ui,
+          })}
+        >
+          {i}
+        </div>
       </div>
     );
     page.push(element);
@@ -108,13 +105,10 @@ export const Load: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
-        className={styles.Save_Load_content_element}
-        style={{ 
+        className={`${styles.Save_Load_content_element} interactive`}
+        style={{
           animationDelay: `${animationIndex * 30}ms`,
-          ...setBgStyle(
-            loadUIConfigs?.other?.Load_locked_item, 
-            { hasDisplay: true, imgType: fileType.ui}
-          )
+          ...setBgStyle(loadUIConfigs?.other?.Load_locked_item, { hasDisplay: true, imgType: fileType.ui }),
         }}
       >
         {saveElementContent}
@@ -128,29 +122,25 @@ export const Load: FC = () => {
   const handleGoBack = () => {
     playSeClick();
     dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-  }
+  };
 
   function getImgUrl(img: string, type: fileType) {
     return assetSetter(img, type);
   }
 
   function setBgStyle(
-    loadUIConfig:  ButtonItem | IndicatorContainerItem, 
-    { 
-      hasDisplay = false,
-      id = '', 
-      imgType
-    }: ISetBgStyle
+    loadUIConfig: ButtonItem | IndicatorContainerItem,
+    { hasDisplay = false, id = '', imgType }: ISetBgStyle,
   ) {
-    const styleObj: CSSProperties = {}
-    const args = loadUIConfig?.args
-    if (!args || args?.hide && !hasDisplay) return styleObj
+    const styleObj: CSSProperties = {};
+    const args = loadUIConfig?.args;
+    if (!args || (args?.hide && !hasDisplay)) return styleObj;
 
     if (args?.hide && hasDisplay) {
       styleObj['display'] = 'none';
     }
 
-    const style = args.style
+    const style = args.style;
     const imageFormatsRegex = /\.(png|jpeg|jpg|webp|icon|fig)$/;
 
     if (style?.image) {
@@ -160,7 +150,7 @@ export const Load: FC = () => {
         styleObj['backgroundSize'] = '100% 100%';
         styleObj['backgroundRepeat'] = 'no-repeat';
       } else {
-        const ele = document.getElementById(id)
+        const ele = document.getElementById(id);
         if (ele) {
           ele.innerText = style?.image;
         }
@@ -199,34 +189,31 @@ export const Load: FC = () => {
       styleObj['fontSize'] = style.fontSize;
     }
 
-    return styleObj
+    return styleObj;
   }
 
   return (
-    <div 
+    <div
       className={styles.Save_Load_main}
       style={setBgStyle(loadUIConfigs?.other?.Load_bg, { hasDisplay: false, imgType: fileType.background })}
     >
       <div className={styles.Save_Load_top}>
-        <div 
-          className={styles.goback}
+        <div
+          className={`${styles.goback} interactive`}
           style={setBgStyle(loadUIConfigs?.buttons?.Load_back_button, { hasDisplay: true, imgType: fileType.ui })}
-          onClick={handleGoBack} 
+          onClick={handleGoBack}
           onMouseEnter={playSeEnter}
-        >{/* 返回 */}</div>
-        <div 
-          className={styles.Save_Load_title}
-          style={
-            setBgStyle(
-              loadUIConfigs?.other?.Load_title, 
-              { hasDisplay: true, id: loadUIConfigs?.other?.Load_title.key }
-            )
-          }
         >
-          <div 
-            id={loadUIConfigs?.other?.Load_title.key} 
-            className={styles.Load_title_text}
-          >
+          {/* 返回 */}
+        </div>
+        <div
+          className={styles.Save_Load_title}
+          style={setBgStyle(loadUIConfigs?.other?.Load_title, {
+            hasDisplay: true,
+            id: loadUIConfigs?.other?.Load_title.key,
+          })}
+        >
+          <div id={loadUIConfigs?.other?.Load_title.key} className={styles.Load_title_text}>
             {t('loadSaving.title')}
           </div>
         </div>

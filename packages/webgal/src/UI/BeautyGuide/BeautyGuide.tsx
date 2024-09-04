@@ -126,7 +126,7 @@ export const BeautyGuide: FC = () => {
           <div className={styles.beautyGuide_header}>
             <Button
               item={collectionUIConfigs.buttons.Collection_back_button}
-              defaultClass={styles.goback}
+              defaultClass={`${styles.goback} interactive`}
               onClick={handleGoback}
               onMouseEnter={playSeEnter}
             />
@@ -138,7 +138,7 @@ export const BeautyGuide: FC = () => {
               return (
                 <div
                   key={`${item?.name}$-${index}`}
-                  className={styles.item}
+                  className={`${styles.item} interactive`}
                   onClick={() => handleDetail(item, index)}
                   onMouseEnter={playSeEnter}
                 >

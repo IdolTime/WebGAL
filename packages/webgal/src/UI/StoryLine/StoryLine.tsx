@@ -66,7 +66,7 @@ export const StoryLine: FC = () => {
         <div className={styles.storyLine} id="camera">
           <Button
             item={storylineUIConfigs.buttons.Storyline_back_button}
-            defaultClass={styles.goBack}
+            defaultClass={`${styles.goBack} interactive`}
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />
@@ -92,7 +92,7 @@ export const StoryLine: FC = () => {
               return (
                 <div
                   key={`storyLine-${index}`}
-                  className={styles.storyLine_item}
+                  className={`${styles.storyLine_item} interactive`}
                   style={
                     thumbnailUrl
                       ? {

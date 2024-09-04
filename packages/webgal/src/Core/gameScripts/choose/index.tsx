@@ -104,7 +104,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
+        let className = enable ? `${styles.Choose_item} interactive` : styles.Choose_item_disabled;
         const onClick = () => {
           // if (!enable || timer.current) {
           //   return;
