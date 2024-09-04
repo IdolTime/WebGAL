@@ -1,34 +1,38 @@
-import { IEffect, IStageState } from '@/store/stageInterface';
 import { useEffect } from 'react';
-import { logger } from '@/Core/util/logger';
-import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
-import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
-import { generateUniversalSoftOffAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftOff';
-
-import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
+import { IEffect, IStageState } from '@/store/stageInterface';
 import { WebGAL } from '@/Core/WebGAL';
+import { logger } from '@/Core/util/logger';
+import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
+import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { fetchFileAsArrayBuffer } from '@/Core/util/fetchFileAsArrayBuffer';
 
-export function useSetFigure(stageState: IStageState) {
-  const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
+export function useSetPopUpImage(stageState: IStageState) {
+  const {
+    popUpImageName,
+    popUpImageNameLeft,
+    popUpImageNameRight,
+    freePopUpImage,
+    popImgLive2dMotion,
+    popImgLive2dExpression,
+  } = stageState;
 
   /**
    * 同步 motion
    */
   useEffect(() => {
-    for (const motion of live2dMotion) {
+    for (const motion of popImgLive2dMotion) {
       WebGAL.gameplay.pixiStage?.changeModelMotionByKey(motion.target, motion.motion);
     }
-  }, [live2dMotion]);
+  }, [popImgLive2dMotion]);
 
   /**
    * 同步 expression
    */
   useEffect(() => {
-    for (const expression of live2dExpression) {
+    for (const expression of popImgLive2dExpression) {
       WebGAL.gameplay.pixiStage?.changeModelExpressionByKey(expression.target, expression.expression);
     }
-  }, [live2dExpression]);
+  }, [popImgLive2dExpression]);
 
   /**
    * 设置立绘
@@ -37,79 +41,79 @@ export function useSetFigure(stageState: IStageState) {
     /**
      * 特殊处理：中间立绘
      */
-    const thisFigKey = 'fig-center';
-    const softInAniKey = 'fig-center-softin';
-    if (figName !== '') {
+    const thisFigKey = 'popImg-center';
+    const softInAniKey = 'popImg-center-softin';
+    if (popUpImageName !== '') {
       const currentFigCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigCenter) {
-        if (currentFigCenter.sourceUrl !== figName) {
+        if (currentFigCenter.sourceUrl !== popUpImageName) {
           removeFig(currentFigCenter, softInAniKey, stageState.effects);
         }
       }
-      addFigure(undefined, thisFigKey, figName, 'center');
-      logger.debug('中立绘已重设');
+      addFigure(undefined, thisFigKey, popUpImageName, 'center');
+      logger.debug('中弹窗图片已重设');
       setTimeout(() => {
         const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
         WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
       }, 32);
     } else {
-      logger.debug('移除中立绘');
+      logger.debug('移除中弹窗图片');
       const currentFigCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigCenter) {
-        if (currentFigCenter.sourceUrl !== figName) {
+        if (currentFigCenter.sourceUrl !== popUpImageName) {
           removeFig(currentFigCenter, softInAniKey, stageState.effects);
         }
       }
     }
-  }, [figName]);
+  }, [popUpImageName]);
 
   useEffect(() => {
     /**
      * 特殊处理：左侧立绘
      */
-    const thisFigKey = 'fig-left';
-    const softInAniKey = 'fig-left-softin';
-    if (figNameLeft !== '') {
+    const thisFigKey = 'popImg-left';
+    const softInAniKey = 'popImg-left-softin';
+    if (popUpImageNameLeft !== '') {
       const currentFigLeft = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigLeft) {
-        if (currentFigLeft.sourceUrl !== figNameLeft) {
+        if (currentFigLeft.sourceUrl !== popUpImageNameLeft) {
           removeFig(currentFigLeft, softInAniKey, stageState.effects);
         }
       }
-      addFigure(undefined, thisFigKey, figNameLeft, 'left');
-      logger.debug('左立绘已重设');
+      addFigure(undefined, thisFigKey, popUpImageNameLeft, 'left');
+      logger.debug('左弹窗图片已重设');
       setTimeout(() => {
         const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
         WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
       }, 32);
     } else {
-      logger.debug('移除左立绘');
+      logger.debug('移除左弹窗图片');
       const currentFigLeft = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigLeft) {
-        if (currentFigLeft.sourceUrl !== figNameLeft) {
+        if (currentFigLeft.sourceUrl !== popUpImageNameLeft) {
           removeFig(currentFigLeft, softInAniKey, stageState.effects);
         }
       }
     }
-  }, [figNameLeft]);
+  }, [popUpImageNameLeft]);
 
   useEffect(() => {
     /**
      * 特殊处理：右侧立绘
      */
-    const thisFigKey = 'fig-right';
-    const softInAniKey = 'fig-right-softin';
-    if (figNameRight !== '') {
+    const thisFigKey = 'popImg-right';
+    const softInAniKey = 'popImg-right-softin';
+    if (popUpImageNameRight !== '') {
       const currentFigRight = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigRight) {
-        if (currentFigRight.sourceUrl !== figNameRight) {
+        if (currentFigRight.sourceUrl !== popUpImageNameRight) {
           removeFig(currentFigRight, softInAniKey, stageState.effects);
         }
       }
-      addFigure(undefined, thisFigKey, figNameRight, 'right');
-      logger.debug('右立绘已重设');
+      addFigure(undefined, thisFigKey, popUpImageNameRight, 'right');
+      logger.debug('右弹窗图片已重设');
       setTimeout(() => {
         const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
         WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -118,31 +122,31 @@ export function useSetFigure(stageState: IStageState) {
     } else {
       const currentFigRight = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigRight) {
-        if (currentFigRight.sourceUrl !== figNameRight) {
+        if (currentFigRight.sourceUrl !== popUpImageNameRight) {
           removeFig(currentFigRight, softInAniKey, stageState.effects);
         }
       }
     }
-  }, [figNameRight]);
+  }, [popUpImageNameRight]);
 
   useEffect(() => {
     // 自由立绘
-    for (const fig of freeFigure) {
+    for (const popImg of freePopUpImage) {
       /**
        * 特殊处理：自由立绘
        */
-      const thisFigKey = `${fig.key}`;
-      const softInAniKey = `${fig.key}-softin`;
+      const thisFigKey = `${popImg.key}`;
+      const softInAniKey = `${popImg.key}-softin`;
       /**
        * 非空
        */
-      if (fig.name !== '') {
+      if (popImg.name !== '') {
         const currentFigThisKey = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
         if (currentFigThisKey) {
-          if (currentFigThisKey.sourceUrl !== fig.name) {
+          if (currentFigThisKey.sourceUrl !== popImg.name) {
             removeFig(currentFigThisKey, softInAniKey, stageState.effects);
-            addFigure(undefined, thisFigKey, fig.name, fig.basePosition);
-            logger.debug(`${fig.key}立绘已重设`);
+            addFigure(undefined, thisFigKey, popImg.name, popImg.basePosition);
+            logger.debug(`${popImg.key}弹窗图片已重设`);
             setTimeout(() => {
               const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
               WebGAL.gameplay.pixiStage!.registerPresetAnimation(
@@ -155,8 +159,8 @@ export function useSetFigure(stageState: IStageState) {
             }, 32);
           }
         } else {
-          addFigure(undefined, thisFigKey, fig.name, fig.basePosition);
-          logger.debug(`${fig.key}立绘已重设`);
+          addFigure(undefined, thisFigKey, popImg.name, popImg.basePosition);
+          logger.debug(`${popImg.key}弹窗图片已重设`);
           setTimeout(() => {
             const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
             WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -166,7 +170,7 @@ export function useSetFigure(stageState: IStageState) {
       } else {
         const currentFigThisKey = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
         if (currentFigThisKey) {
-          if (currentFigThisKey.sourceUrl !== fig.name) {
+          if (currentFigThisKey.sourceUrl !== popImg.name) {
             removeFig(currentFigThisKey, softInAniKey, stageState.effects);
           }
         }
@@ -191,7 +195,7 @@ export function useSetFigure(stageState: IStageState) {
           // 什么也不做
         } else {
           const existKey = existFigure.key;
-          const existFigInState = freeFigure.findIndex((fig) => fig.key === existKey);
+          const existFigInState = freePopUpImage.findIndex((popImg) => popImg.key === existKey);
           if (existFigInState < 0) {
             const softInAniKey = `${existFigure.key}-softin`;
             removeFig(existFigure, softInAniKey, stageState.effects);
@@ -199,14 +203,14 @@ export function useSetFigure(stageState: IStageState) {
         }
       }
     }
-  }, [freeFigure]);
+  }, [freePopUpImage]);
 }
 
 function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect[]) {
   WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(enterTikerKey);
   // 快进，跳过退出动画
   if (WebGAL.gameplay.isFast) {
-    logger.info('快速模式，立刻关闭立绘');
+    logger.info('快速模式，立刻关闭弹窗图片');
     WebGAL.gameplay.pixiStage?.removeStageObjectByKey(figObj.key);
     return;
   }

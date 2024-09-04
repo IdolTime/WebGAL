@@ -43,6 +43,7 @@ import { finishTrial } from '@/Core/gameScripts/finishTrial';
 import { moveCamera } from '../gameScripts/moveCamera';
 import { changeAffinity } from '../gameScripts/changeAffinity';
 import { unlockAffinity } from '../gameScripts/unlockAffinity';
+import { popUpImage } from '@/Core/gameScripts/popUpImage';
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -83,7 +84,8 @@ export const SCRIPT_TAG_MAP = defineScripts({
   finishTrial: ScriptConfig(commandType.finishTrial, finishTrial),
   moveCamera: ScriptConfig(commandType.moveCamera, moveCamera),
   changeAffinity: ScriptConfig(commandType.changeAffinity, changeAffinity),
-  unlockAffinity: ScriptConfig(commandType.changeAffinity, unlockAffinity),
+  unlockAffinity: ScriptConfig(commandType.unlockAffinity, unlockAffinity),
+  popUpImage: ScriptConfig(commandType.popUpImage, popUpImage),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 

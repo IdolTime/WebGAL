@@ -5,7 +5,7 @@ import { setShowStoryLine } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData, ISaveAffinity } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
-import { getStorylineFromStorage } from '@/Core/controller/storage/savesController';
+import { getStorylineFromStorage, getUnlockAffinityFromStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -23,7 +23,6 @@ import { SourceImg } from '../Components/SourceImg';
  */
 export const Affinity: FC = () => {
   const { playSeClick, playSeEnter } = useSoundEffect();
-  const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const unlockAffinityList = useSelector((state: RootState) => state.saveData.unlockAffinityData);
   const affinityUIConfigs = useSelector(
@@ -31,11 +30,10 @@ export const Affinity: FC = () => {
   ) as AffinitySceneUIConfig;
 
   useEffect(() => {
-    getStorylineFromStorage();
-    if (GUIState.showStoryLine) {
-      dispatch(saveActions.setShowStoryline(false));
+    if (GUIState.showAffinity) {
+      getUnlockAffinityFromStorage();
     }
-  }, [GUIState.showStoryLine]);
+  }, [GUIState.showAffinity]);
 
   /**
    * 返回

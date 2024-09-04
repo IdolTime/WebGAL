@@ -16,6 +16,7 @@ import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
 import { parseStyleArg } from '@/Core/parser/utils';
+import { sleep } from '@/Core/util/sleep';
 
 class ChooseOption {
   /**
@@ -145,7 +146,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        let className = enable ? styles.Choose_item : styles.Choose_item_disabled;
+        let className = styles.Choose_item;
         const onClick = () => {
           // if (!enable || timer.current) {
           //   return;
@@ -176,9 +177,11 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               // @ts-ignore
               window.pubsub.publish('loading', { loading: true });
               buyChapter(e.productId ?? 0)
-                .then((res) => {
+                .then(async (res) => {
                   // @ts-ignore
                   window.pubsub.publish('loading', { loading: false });
+
+                  await sleep(2000);
 
                   if (res.code === 0) {
                     // @ts-ignore
@@ -266,6 +269,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
         if (e.style) {
           styleObj = parseStyleArg(e.style);
+        }
+
+        if (!enable) {
+          styleObj.cursor = 'not-allowed';
         }
 
         if (typeof e.style?.countdown === 'number') {

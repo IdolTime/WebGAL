@@ -28,7 +28,7 @@ export const ExtraContainer = () => {
 
   useEffect(() => {
     stageState.showValueList.forEach((e, i) => {
-      if (e.isShowValueSWitch && barLayoutList[i]) {
+      if (e.isShowValueSwitch && barLayoutList[i]) {
         const value = dataMap.get(e.showValueName);
 
         if (e.showProgress && typeof value === 'number') {
@@ -45,7 +45,7 @@ export const ExtraContainer = () => {
   return (
     <>
       {stageState.showValueList.map((item, i) => {
-        if (item.isShowValueSWitch) {
+        if (item.isShowValueSwitch) {
           const barBgLayout = barBgLayoutList[i] || { width: 0, height: 0 };
           const barLayout = barLayoutList[i] || { width: 0, height: 0 };
 
@@ -60,7 +60,7 @@ export const ExtraContainer = () => {
                 backgroundColor: item.showProgress ? 'transparent' : '#08c',
               }}
             >
-              {!item.showProgress && (dataMap.get(item.showValueName) || '')}
+              {!item.showProgress && (String(dataMap.get(item.showValueName)) || '')}
               {item.showProgress && item.progressBarBgStyle && (
                 <img
                   src={assetSetter(item.progressBarBgStyle.image, fileType.ui)}
@@ -122,7 +122,7 @@ export const ExtraContainer = () => {
   );
 
   // return (
-  //     stageState.isShowValueSWitch  ? (
+  //     stageState.isShowValueSwitch  ? (
   //         <div
   //             className={styles.variableNameWrapper}
   //             style={{
