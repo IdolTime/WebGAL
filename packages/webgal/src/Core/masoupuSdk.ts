@@ -16,8 +16,8 @@ export const masoupuSdkCheck = (cb: Function) => {
     window.globalThis.getGameDetail(WebGAL.gameId, token).then((res: any) => {
       const gameInfo = res.data;
       const { acoinBalance } = res.data;
-      const { paymentAmount, id } = gameInfo;
-      if (gameInfo.isBuy) {
+      const { paymentAmount, id, paymentMode } = gameInfo;
+      if (gameInfo.isBuy || paymentMode === 'free') {
         cb();
         return;
       }
