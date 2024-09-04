@@ -11,11 +11,7 @@ import {
   initState,
   setGameR18,
   setEscMenus,
-<<<<<<< HEAD
-  setAchievementUI
-=======
   setAchievementUI,
->>>>>>> video_game
 } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
