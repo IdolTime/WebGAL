@@ -11,7 +11,11 @@ import {
   initState,
   setGameR18,
   setEscMenus,
+<<<<<<< HEAD
   setAchievementUI
+=======
+  setAchievementUI,
+>>>>>>> video_game
 } from '@/store/GUIReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
@@ -40,9 +44,10 @@ import {
   TitleSceneOtherKey,
   CollectionSceneButtonKey,
   CollectionSceneOtherKey,
-  SliderItemKey
+  SliderItemKey,
 } from '@/Core/UIConfigTypes';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
+import { createCursorAnimation } from '@/Core/parser/utils';
 
 declare global {
   interface Window {
@@ -50,11 +55,7 @@ declare global {
   }
 }
 
-const sliderKeyArr = [
-  SliderItemKey.slider,
-  SliderItemKey.sliderBg,
-  SliderItemKey.sliderThumb
-];
+const sliderKeyArr = [SliderItemKey.slider, SliderItemKey.sliderBg, SliderItemKey.sliderThumb];
 
 const boolMap = new Map<string | boolean, boolean>([
   ['true', true],
@@ -80,7 +81,7 @@ export const infoFetcher = (url: string) => {
       const escMenus: Record<EecMenuKey, EscMenuItem> = {};
       let isSHowEscMenu = false;
       // @ts-ignore
-      const achievementUI: Record<EnumAchievementUIKey, GameMenuItem> = {}
+      const achievementUI: Record<EnumAchievementUIKey, GameMenuItem> = {};
       let hasAchievement = false;
 
       gameConfig.forEach((e) => {
@@ -100,17 +101,24 @@ export const infoFetcher = (url: string) => {
           }
 
           case 'Game_cursor': {
-            const cursorUrlList = args.map((url) => assetSetter(url, fileType.background));
-            if (cursorUrlList?.length) {
-              const cursorStyle = cursorUrlList.map((url) => `url('${url}'), auto`).join(', ');
-              const styleElement = document.createElement('style');
-              styleElement.innerHTML = `
-                html, body, div, span { cursor: ${cursorStyle} !important; }
-                html:hover, body:hover, div:hover, span:hover { cursor: ${cursorStyle} !important; }
-              `;
+            let normalCursorString = '{}';
+            let activeCursorString = '{}';
 
-              document.head.appendChild(styleElement);
-            }
+            options.forEach((option) => {
+              if (option.key === 'normal') {
+                normalCursorString = option.value as string;
+              } else if (option.key === 'active') {
+                activeCursorString = option.value as string;
+              }
+            });
+
+            const normalCursor = JSON.parse(normalCursorString);
+            const activeCursor = JSON.parse(activeCursorString);
+
+            // 调用函数创建动画
+            createCursorAnimation(normalCursor, 'normal');
+            createCursorAnimation(activeCursor, 'active');
+
             break;
           }
 
@@ -203,18 +211,19 @@ export const infoFetcher = (url: string) => {
             const numberArray = ['x', 'y', 'scale', 'fontSize'];
 
             options?.forEach((item) => {
-              // eslint-disable-next-line max-nested-callbacks
-              typeof item?.value === 'string' && (item.value as string)?.split(',')?.forEach((pair: string) => {
-                const [key, value] = pair?.split('=') || [];
-                if (key === 'name') {
-                  name = value;
-                } else if (key === 'hide') {
-                  hide = boolMap?.get(value) ?? false;
-                } else {
-                  // @ts-ignore
-                  styleObj[key] = numberArray.includes(key) ? Number(value) : value;
-                }
-              });
+              typeof item?.value === 'string' &&
+                // eslint-disable-next-line max-nested-callbacks
+                (item.value as string)?.split(',')?.forEach((pair: string) => {
+                  const [key, value] = pair?.split('=') || [];
+                  if (key === 'name') {
+                    name = value;
+                  } else if (key === 'hide') {
+                    hide = boolMap?.get(value) ?? false;
+                  } else {
+                    // @ts-ignore
+                    styleObj[key] = numberArray.includes(key) ? Number(value) : value;
+                  }
+                });
             });
 
             const oldStyle: EscMenuItem['args']['style'] = { ...initState.escMenus[EecMenuKey[command]].args.style };
@@ -238,7 +247,7 @@ export const infoFetcher = (url: string) => {
           case EnumAchievementUIKey.Achievement_progress_text:
           case EnumAchievementUIKey.Achievement_notUnlock:
           case EnumAchievementUIKey.Achievement_progress: {
-            achievementUI[EnumAchievementUIKey[command]] = getStyle(EnumAchievementUIKey[command], args, options)
+            achievementUI[EnumAchievementUIKey[command]] = getStyle(EnumAchievementUIKey[command], args, options);
             hasAchievement = true;
             break;
           }
@@ -281,7 +290,7 @@ export const infoFetcher = (url: string) => {
         ) {
           const scene = Scene.extra;
           parseUIIConfigOptions(gameUIConfigs, scene, e);
-         }else if (
+        } else if (
           CollectionSceneButtonKey[command as CollectionSceneButtonKey] ||
           CollectionSceneOtherKey[command as CollectionSceneOtherKey]
         ) {
@@ -390,14 +399,17 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
   return newOptions;
 }
 
-
 function getStyle(uiKey: string, args: string[], options: { key: string; value: any }[]) {
   const hide = (options.find((o) => o.key === 'hide')?.value as boolean) || false;
   const styleStr = (options.find((o) => o.key === 'style')?.value as string) || '';
   const hoverStyleStr = (options.find((o) => o.key === 'hoverStyle')?.value as string) || '';
 
-  let styleObj: GameMenuItem['args']['style'] = { ...initState.achievementUI[uiKey as EnumAchievementUIKey].args.style };
-  let hoverStyleObj: GameMenuItem['args']['hoverStyle'] = { ...initState.achievementUI[uiKey as EnumAchievementUIKey].args.hoverStyle };
+  let styleObj: GameMenuItem['args']['style'] = {
+    ...initState.achievementUI[uiKey as EnumAchievementUIKey].args.style,
+  };
+  let hoverStyleObj: GameMenuItem['args']['hoverStyle'] = {
+    ...initState.achievementUI[uiKey as EnumAchievementUIKey].args.hoverStyle,
+  };
 
   styleObj = parseStyle(styleStr);
   hoverStyleObj = parseStyle(hoverStyleStr);
@@ -426,7 +438,7 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
     args: {
       hide,
       style: styleObj,
-      hoverStyle: hoverStyleObj
+      hoverStyle: hoverStyleObj,
     },
   };
 }

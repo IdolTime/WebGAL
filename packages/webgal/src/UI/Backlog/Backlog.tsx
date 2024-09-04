@@ -58,7 +58,7 @@ export const Backlog = () => {
                   e.stopPropagation();
                 }}
                 onMouseEnter={playSeEnter}
-                className={styles.backlog_item_button_element}
+                className={`${styles.backlog_item_button_element} interactive`}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
               </div>
@@ -77,7 +77,7 @@ export const Backlog = () => {
                     }
                   }}
                   onMouseEnter={playSeEnter}
-                  className={styles.backlog_item_button_element}
+                  className={`${styles.backlog_item_button_element} interactive`}
                 >
                   <VolumeNotice theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
                 </div>
@@ -140,7 +140,7 @@ export const Backlog = () => {
         >
           <div className={styles.backlog_top}>
             <CloseSmall
-              className={styles.backlog_top_icon}
+              className={`${styles.backlog_top_icon} interactive`}
               onClick={() => {
                 playSeClick();
                 dispatch(setVisibility({ component: 'showBacklog', visibility: false }));

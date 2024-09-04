@@ -220,18 +220,18 @@ export const BottomControlPanel = () => {
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div className={styles.main} style={{ visibility: GUIStore.controlsVisibility ? 'visible' : 'hidden' }}>
           <span
-            className={styles.fallBack}
+            className={`${styles.fallBack} interactive`}
             onMouseEnter={playSeEnter}
             onClick={() => {
               handleBack();
             }}
             onMouseDown={() => handleMouseDown('fallBack')}
           />
-          <span className={styles.pause} onMouseEnter={playSeEnter} onClick={handlePause}>
+          <span className={`${styles.pause} interactive`} onMouseEnter={playSeEnter} onClick={handlePause}>
             <img src={isPause ? gamingStopIcon : gamingContinueIcon} className={styles.icon} />
           </span>
           <span
-            className={styles.advance}
+            className={`${styles.advance} interactive`}
             onMouseEnter={playSeEnter}
             onClick={handleForward}
             onMouseDown={() => handleMouseDown('forward')}
@@ -239,12 +239,12 @@ export const BottomControlPanel = () => {
 
 
           {!webgalStore.getState().saveData.isLoadVideo && (
-            <span className={styles.autoplay} onMouseEnter={playSeEnter} onClick={handleSkip} /> 
+            <span className={`${styles.autoplay} interactive`} onMouseEnter={playSeEnter} onClick={handleSkip} /> 
           )}
 
           {isShowCollectedBtn() && (
             <span
-              className={styles.singleButton}
+              className={`${styles.singleButton} interactive`}
               style={{ fontSize }}
               onClick={handleCollectVideo}
               onMouseEnter={playSeEnter}

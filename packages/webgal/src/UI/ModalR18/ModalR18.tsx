@@ -41,13 +41,13 @@ export const ModalR18: FC = () => {
   return (
     <>
       {GUIStore.isShowR18Modal && GUIStore.openR18Modal && (
-        <div 
-          className={
-            `${styles.modalR18_main} ${GUIStore.isShowR18Modal && GUIStore.openR18Modal ? 'animated fadeIn' : ''}`
-          } 
+        <div
+          className={`${styles.modalR18_main} ${
+            GUIStore.isShowR18Modal && GUIStore.openR18Modal ? 'animated fadeIn' : ''
+          }`}
         >
           <div className={styles.footer}>
-            <div id="exitButton">
+            <div id="exitButton" className="interactive">
               <img
                 src={isHoverExitButton ? ExitButtonHover : ExitButtonDefault}
                 onClick={handleDisagree}
@@ -69,7 +69,7 @@ export const ModalR18: FC = () => {
                 style={exitButtonLayout}
               />
             </div>
-            <div id="confirmButton">
+            <div id="confirmButton" className="interactive">
               <img
                 src={isHoverConfirmButton ? ConfirmButtonHover : ConfirmButtonDefault}
                 onClick={handleAgree}

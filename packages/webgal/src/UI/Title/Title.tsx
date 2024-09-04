@@ -99,7 +99,7 @@ const Title: FC = () => {
                 <Button
                   key={_key}
                   item={buttonConfigItem}
-                  defaultClass={styles.Title_button}
+                  defaultClass={`${styles.Title_button} interactive`}
                   defaultTextClass={styles.Title_button_text}
                   onClick={() => {
                     if (window.location.href.indexOf('file://') > -1) {

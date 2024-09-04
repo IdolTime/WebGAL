@@ -154,3 +154,48 @@ export function parseVideosArg(videos?: CollectionVideos): contentListItem[] {
   });
   return videoList;
 }
+
+// 创建动态光标的CSS动画
+export function createCursorAnimation(cursor: { imgs: string[]; interval: number }, type: 'normal' | 'active') {
+  const styleSheet = document.createElement('style');
+  let keyframes = `
+    @keyframes ${type === 'normal' ? '' : 'active-'}cursor-animation {
+  `;
+
+  if (!cursor.imgs || cursor.imgs.length === 0) {
+    return;
+  }
+
+  cursor.imgs.forEach((_img, index) => {
+    const img = assetSetter(_img, fileType.ui);
+    const percentage = (index / cursor.imgs.length) * 100;
+    keyframes += `
+      ${percentage}% { cursor: url(${img}), pointer; }
+    `;
+  });
+
+  keyframes += `
+    100% { cursor: url(${assetSetter(cursor.imgs[0], fileType.ui)}), pointer; }
+    }
+  `;
+
+  const styleArr = [keyframes];
+
+  if (type === 'normal') {
+    styleArr.push(
+      `#root { animation: cursor-animation ${cursor.interval * cursor.imgs.length}ms infinite steps(${
+        cursor.imgs.length
+      }); }`,
+    );
+  } else {
+    styleArr.push(
+      `.interactive { animation: active-cursor-animation ${cursor.interval * cursor.imgs.length}ms infinite steps(${
+        cursor.imgs.length
+      }); }`,
+    );
+  }
+
+  styleSheet.innerHTML = styleArr.join('\n');
+
+  document.head.appendChild(styleSheet);
+}

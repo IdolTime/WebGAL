@@ -173,6 +173,9 @@ code {
   z-index: 5;
 }
 
-#root{
+#root {
   /*will-change: transform;*/
+  * {
+    cursor: inherit;
+  }
 }

@@ -186,8 +186,8 @@ export const GameMenuPanel = () => {
       <span 
         id={id}
         key={key}
-        className={applyStyle('button', className)}
-        onMouseEnter={playSeEnter} 
+        className={`${applyStyle('button', className)} interactive`}
+        onMouseEnter={playSeEnter}
         onClick={clickCallbackMap[key]}
         style={styleObj}
       >

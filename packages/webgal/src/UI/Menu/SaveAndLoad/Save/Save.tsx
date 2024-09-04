@@ -31,7 +31,7 @@ export const Save: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'Save_element_page' + i}
-        className={classNameOfElement}
+        className={`${classNameOfElement} interactive`}
       >
         <div className={styles.Save_Load_top_button_text}>{i}</div>
       </div>
@@ -98,7 +98,7 @@ export const Save: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'saveElement_' + i}
-        className={styles.Save_Load_content_element}
+        className={`${styles.Save_Load_content_element} interactive`}
         style={{ animationDelay: `${animationIndex * 30}ms` }}
       >
         {saveElementContent}
