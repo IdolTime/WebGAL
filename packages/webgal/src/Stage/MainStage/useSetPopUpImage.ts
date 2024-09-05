@@ -240,7 +240,8 @@ function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
   } else if (url.endsWith('.skel')) {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addSpineFigure(...args);
-  } else if (url.endsWith('.png')) {
+  } else if (url.endsWith('.png') || url.endsWith('.webp')) {
+
     fetchFileAsArrayBuffer(url).then((arrayBuffer) => {
       // @ts-ignore
       return WebGAL.gameplay.pixiStage?.addFigure(...args, isAnimatedPNG(arrayBuffer));
