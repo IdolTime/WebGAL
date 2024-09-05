@@ -242,7 +242,7 @@ export function popUpImage(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setPopUpImageLive2dExpression({ target: key, expression }));
     }
-    dispatch(setStage({ key: dispatchMap[pos], value: content }));
+    dispatch(setStage({ key: dispatchMap[pos], value: assetSetter(content, fileType.image) }));
   }
 
   return {
