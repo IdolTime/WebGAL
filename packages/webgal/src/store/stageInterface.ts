@@ -173,6 +173,8 @@ export interface IStageState {
     enter: number; // 背景音乐 淡入或淡出的毫秒数
     volume: number; // 背景音乐 音量调整（0 - 100）
   };
+  currentPlayAudio: null | HTMLAudioElement; // 当前播放的音频
+  hasCustomClickSe: boolean; // 是否有自定义音效
   uiSe: string; // 用户界面音效 文件地址（相对或绝对）
   gameSe: string; // 游戏内音效
   gameScounds: IScound[]; // 游戏内音效

@@ -33,6 +33,7 @@ const initStateEscMenu = {
       fontSize: 0,
       fontColor: '',
       btnImage: '',
+      btnSound: '',
       btnPosition: '',
       align: '',
       fontFamily: '',

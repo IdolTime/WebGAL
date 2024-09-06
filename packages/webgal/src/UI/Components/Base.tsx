@@ -262,7 +262,12 @@ export const Button = ({
   if (item.args.hide) return null;
   const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
+  const { playSeClick } = useSoundEffect();
   const src = item.args.style?.image || '';
+  const customClickSound = 
+    item.args?.btnSound?.clickSound 
+      ? assetSetter(item.args.btnSound.clickSound, fileType.bgm) 
+      : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
@@ -290,6 +295,7 @@ export const Button = ({
       onChecked(!checked);
     }
     if (onClick) {
+      playSeClick(customClickSound);
       onClick();
     }
   };
