@@ -57,6 +57,7 @@ const saveDataSlice = createSlice({
   initialState: cloneDeep(initState),
   reducers: {
     setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
+      // @ts-ignore
       state.quickSaveData = action.payload;
     },
     resetFastSave: (state) => {
@@ -67,26 +68,31 @@ const saveDataSlice = createSlice({
       state.saveData = [];
     },
     saveGame: (state, action: PayloadAction<SaveAction>) => {
+      // @ts-ignore
       state.saveData[action.payload.index] = action.payload.saveData;
     },
     replaceSaveGame: (state, action: PayloadAction<ISaveData[]>) => {
+      // @ts-ignore
       state.saveData = action.payload;
     },
     setStorylineListFromStorage: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
+      // @ts-ignore
       state.unlockStorylineList = action.payload;
     },
     addStorylineList: (state, action: PayloadAction<ISaveStoryLineData>) => {
+      // @ts-ignore
       state.unlockStorylineList.push(action.payload);
     },
     replaceStorylineList: (state, action: PayloadAction<ISaveStoryLine>) => {
-      // state.unlockStorylineList[action.payload.index].storyLine = action.payload.data.storyLine;
       state.unlockStorylineList[action.payload.index] = {
         ...state.unlockStorylineList[action.payload.index],
         storyLine: action.payload.data.storyLine,
+        // @ts-ignore
         videoData: action.payload.data.videoData
       };
     },
     setSaveVideoData: (state, action: PayloadAction<ISaveData>) => {
+      // @ts-ignore
       state.saveVideoData = action.payload;
     },
     setUnlockAchieveData: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
@@ -123,7 +129,8 @@ const saveDataSlice = createSlice({
     saveAllUnlockAchieveList: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
       state.allUnlockAchieveList = action.payload;
     },
-    saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
+    saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData>) => {
+      // @ts-ignore
       state.allStorylineData = action.payload;
     },
     updateAffinityData: (state, action: PayloadAction<ISaveAffinity[]>) => {
