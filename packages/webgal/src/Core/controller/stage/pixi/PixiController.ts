@@ -536,8 +536,15 @@ export default class PixiStage {
           const scaleY = this.stageHeight / originalHeight;
           const targetScale = Math.min(scaleX, scaleY);
           const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
-          figureSprite.scale.x = targetScale;
-          figureSprite.scale.y = targetScale;
+
+          if (key.startsWith('popImg-') || key !== 'bg-popImg') {
+            figureSprite.scale.x = 2;
+            figureSprite.scale.y = 2;
+          } else {
+            figureSprite.scale.x = targetScale;
+            figureSprite.scale.y = targetScale;
+          }
+         
           figureSprite.anchor.set(0.5);
           figureSprite.position.y = this.stageHeight / 2;
           const targetWidth = originalWidth * targetScale;
@@ -546,15 +553,31 @@ export default class PixiStage {
           if (targetHeight < this.stageHeight) {
             thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
           }
-          if (presetPosition === 'center') {
-            thisFigureContainer.setBaseX(this.stageWidth / 2);
+
+          if (key.startsWith('popImg-')) {
+
+            const axesX = originalWidth / 2 + 270;
+            const axesY = originalHeight * 2 + 55;
+
+            thisFigureContainer.setBaseX(axesX);
+            thisFigureContainer.setBaseY(axesY);
+
+            // CG图片尺寸统一为680X420
+            figureSprite.x = 680;
+            figureSprite.y = 420;
+
+          } else {
+            if (presetPosition === 'center') {
+              thisFigureContainer.setBaseX(this.stageWidth / 2);
+            }
+            if (presetPosition === 'left') {
+              thisFigureContainer.setBaseX(targetWidth / 2);
+            }
+            if (presetPosition === 'right') {
+              thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+            }
           }
-          if (presetPosition === 'left') {
-            thisFigureContainer.setBaseX(targetWidth / 2);
-          }
-          if (presetPosition === 'right') {
-            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-          }
+
           if (isApng) {
             const sprite = figureSprite as PIXI.AnimatedSprite;
             // 自定义播放速度的函数
