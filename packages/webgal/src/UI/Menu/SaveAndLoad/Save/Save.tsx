@@ -139,7 +139,6 @@ export const Save: FC = () => {
         item={LoadUIConfigs.buttons.Load_back_button}
         defaultClass={styles.Common_back}
         onClick={() => {
-          playSeClick();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
         onMouseEnter={playSeEnter}

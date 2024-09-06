@@ -164,7 +164,6 @@ export const Achievement: FC = () => {
    * 返回
    */
   const handleGoBack = () => {
-    playSeClick();
     backToTitle();
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };

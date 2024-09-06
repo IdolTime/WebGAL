@@ -39,12 +39,10 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
   const modalType = props.type ?? 'normal';
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
-    playSeClick();
     props.leftFunc?.();
     hideGlobalDialog();
   };
   const handleRight = () => {
-    playSeClick();
     props.rightFunc();
     hideGlobalDialog();
   };

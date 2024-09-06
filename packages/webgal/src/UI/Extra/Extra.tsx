@@ -33,7 +33,6 @@ export function Extra() {
   }, [showExtra]);
 
   const handleGoBack = () => {
-    playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
   };

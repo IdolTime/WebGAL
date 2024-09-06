@@ -147,6 +147,11 @@ export enum collectionItemInfoKey {
   collectionImages = 'collection_images',
   collectionVideos = 'collection_videos',
 }
+
+export interface IBtnSoundConfig {
+  clickSound?: string;
+  hoverSound?: string;
+}
 export interface CollectionItemKey {
   key: AllKey;
   content: '';
@@ -155,6 +160,7 @@ export interface CollectionItemKey {
     style?: Style;
     info?: InfoConfig;
     images?: ICollectionImages;
+    btnSound?: IBtnSoundConfig;
   };
 }
 
@@ -171,6 +177,7 @@ export interface ContainerItem {
     backgroundHoverStyle?: Style;
     extraStyle?: Style;
     extraHoverStyle?: Style;
+    btnSound?: IBtnSoundConfig;
   };
 }
 
@@ -183,6 +190,7 @@ export interface SliderContainerItem {
     sliderStyle?: Style;
     sliderBgStyle?: Style;
     sliderThumbStyle?: Style;
+    btnSound?: IBtnSoundConfig;
   };
 }
 
@@ -198,6 +206,7 @@ export interface IndicatorContainerItem {
     indicatorLeftHoverStyle?: Style;
     indicatorRightStyle?: Style;
     indicatorRightHoverStyle?: Style;
+    btnSound?: IBtnSoundConfig;
   };
 }
 
@@ -1177,6 +1186,7 @@ export interface ButtonItem {
     hide: boolean;
     style: Style;
     hoverStyle?: Style;
+    btnSound?: IBtnSoundConfig;
   };
 }
 
@@ -1220,6 +1230,7 @@ export interface CollectionInfoItem {
     hoverStyle?: Style;
     info?: CollectionInfo;
     images?: CollectionImages;
+    btnSound?: IBtnSoundConfig;
   };
 }
 
@@ -1334,6 +1345,7 @@ export interface InfonItem {
     style?: Style;
     info?: InfoConfig;
     images?: ICollectionImages;
+    btnSound?: IBtnSoundConfig;
   };
 }
 

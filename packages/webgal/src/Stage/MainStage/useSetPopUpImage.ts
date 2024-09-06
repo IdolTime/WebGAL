@@ -6,6 +6,8 @@ import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { fetchFileAsArrayBuffer } from '@/Core/util/fetchFileAsArrayBuffer';
 
+import defaultBg from '@/assets/imgs/popupImageBorder.png';
+
 export function useSetPopUpImage(stageState: IStageState) {
   const {
     popUpImageName,
@@ -43,7 +45,11 @@ export function useSetPopUpImage(stageState: IStageState) {
      */
     const thisFigKey = 'popImg-center';
     const softInAniKey = 'popImg-center-softin';
+    const thisBgKey = 'bg-popImg'
     if (popUpImageName !== '') {
+
+      addFigure('image', thisBgKey, defaultBg, 'center');
+
       const currentFigCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisFigKey);
       if (currentFigCenter) {
         if (currentFigCenter.sourceUrl !== popUpImageName) {
@@ -234,7 +240,8 @@ function addFigure(type?: 'image' | 'live2D' | 'spine', ...args: any[]) {
   } else if (url.endsWith('.skel')) {
     // @ts-ignore
     return WebGAL.gameplay.pixiStage?.addSpineFigure(...args);
-  } else if (url.endsWith('.png')) {
+  } else if (url.endsWith('.png') || url.endsWith('.webp')) {
+
     fetchFileAsArrayBuffer(url).then((arrayBuffer) => {
       // @ts-ignore
       return WebGAL.gameplay.pixiStage?.addFigure(...args, isAnimatedPNG(arrayBuffer));

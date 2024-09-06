@@ -244,7 +244,9 @@ export function popUpImage(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setPopUpImageLive2dExpression({ target: key, expression }));
     }
-    dispatch(setStage({ key: dispatchMap[pos], value: assetSetter(content, fileType.image) }));
+    // 合并冲突，这里有转换：packages/parser/src/scriptParser/contentParser.ts  第27行代码，这里先注释下
+    // dispatch(setStage({ key: dispatchMap[pos], value: assetSetter(content, fileType.image) }));
+    dispatch(setStage({ key: dispatchMap[pos], value: content }));
   }
 
   return {

@@ -40,7 +40,6 @@ export const StoryLine: FC = () => {
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick();
     backToTitle();
     dispatch(setShowStoryLine(false));
   };

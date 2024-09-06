@@ -188,7 +188,6 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
         }`}
         onMouseEnter={playSeEnter}
         onChecked={() => {
-          playSeClick();
           window.localStorage.setItem('game-screen-size', sizeOptions[0]);
           updateScreenSize(sizeOptions[0]);
           setCurrentValue(sizeOptions[0]);
@@ -209,7 +208,6 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
         }`}
         onMouseEnter={playSeEnter}
         onChecked={() => {
-          playSeClick();
           window.localStorage.setItem('game-screen-size', sizeOptions[1]);
           updateScreenSize(sizeOptions[1]);
           setCurrentValue(sizeOptions[1]);

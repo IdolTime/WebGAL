@@ -42,8 +42,9 @@ const useSoundEffect = () => {
 
     dispatch(setStage({ key: 'uiSe', value: mouse_enter }));
   };
-  const playSeClick = () => {
-    dispatch(setStage({ key: 'uiSe', value: click_se }));
+  const playSeClick = (customSe?: string) => {
+    dispatch(setStage({ key: 'uiSe', value: customSe || click_se }));
+    dispatch(setStage({ key: 'hasCustomClickSe', value: true }));
   };
   const playSeSwitch = () => {
     dispatch(setStage({ key: 'uiSe', value: switch_1 }));

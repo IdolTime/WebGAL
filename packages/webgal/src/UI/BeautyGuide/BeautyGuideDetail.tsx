@@ -56,7 +56,6 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
      *  返回
      */
     const handleGoback = () => {
-        playSeClick();
         dispatch(
             setVisibility({
                 component: 'showBeautyGuideDetail',

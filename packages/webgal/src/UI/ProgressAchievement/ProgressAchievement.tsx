@@ -37,7 +37,6 @@ export const ProgressAchievement: FC = () => {
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick();
     backToTitle();
     dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
     dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
@@ -69,7 +68,6 @@ export const ProgressAchievement: FC = () => {
             checked={tab === 'chapter'}
             onClick={() => {
               enterStoryLine();
-              playSeClick();
               setTab('chapter');
             }}
             onMouseEnter={playSeEnter}
@@ -80,7 +78,6 @@ export const ProgressAchievement: FC = () => {
             type="checkbox"
             checked={tab === 'achievement'}
             onClick={() => {
-              playSeClick();
               enterAchieve();
               setTab('achievement');
             }}
@@ -92,7 +89,6 @@ export const ProgressAchievement: FC = () => {
             type="checkbox"
             checked={tab === 'affinity'}
             onClick={() => {
-              playSeClick();
               enterAffinity();
               setTab('affinity');
             }}

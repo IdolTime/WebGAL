@@ -100,11 +100,26 @@ export const AudioContainer = () => {
 
   useEffect(() => {
     if (uiSoundEffects === '') return;
+    const currentPlayAudioElement = webgalStore.getState().stage.currentPlayAudio;
+    const hasCustomClickSe = webgalStore.getState().stage.hasCustomClickSe;
+    
+    if (currentPlayAudioElement && hasCustomClickSe && currentPlayAudioElement?.id === 'uiSe-clickSe') {
+      currentPlayAudioElement?.pause();
+      currentPlayAudioElement.volume = 0;
+      currentPlayAudioElement?.remove?.()
+      webgalStore.dispatch(setStage({ key: 'currentPlayAudio', value: null }));
+    }
 
-    const setEffects = async () => {
+    const setEffects = async () => {     
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
       uiSeAudioElement.src = url;
+      if (hasCustomClickSe) {
+        uiSeAudioElement.id = `uiSe-clickSe`
+        webgalStore.dispatch(setStage({ key: 'currentPlayAudio', value: uiSeAudioElement }));
+        webgalStore.dispatch(setStage({ key: 'hasCustomClickSe', value: false }));
+      }
+      
       uiSeAudioElement.load();
       uiSeAudioElement.loop = false;
       // 设置音量
@@ -116,10 +131,10 @@ export const AudioContainer = () => {
         uiSeAudioElement.volume = isNaN(seVol) ? mainVol / 100 : seVol / 100;
       }
       // 播放UI音效
-      uiSeAudioElement.play();
+      uiSeAudioElement?.play?.();
       uiSeAudioElement.addEventListener('ended', () => {
         // Processing after sound effects are played
-        uiSeAudioElement.remove();
+        uiSeAudioElement?.remove?.();
       });
       webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
     };

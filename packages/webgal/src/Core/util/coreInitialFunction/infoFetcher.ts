@@ -338,6 +338,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     };
 
     const parsedArgs: any = { hide: false, style: {} };
+    const parsedKeys = ['info', 'images', 'btnSound'];
 
     args.forEach((e: any) => {
       if (e.key === 'hide') {
@@ -350,7 +351,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
         }
 
         parsedArgs[e.key] = style;
-      } else if (e.key.includes('info') || e.key.includes('images')) {
+      } else if (parsedKeys.includes(e.key)) {
         const info = parseStyleString(e.value as string);
         parsedArgs[e.key] = info;
       }

@@ -68,7 +68,6 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
      * 上一张图片
      */
     const handlePrev = () => {
-        playSeClick();
         const index = currentImgIndex - 1;
         if (index < 0) {
             return;
@@ -81,7 +80,6 @@ const BeautyGuideImageDialog: FC<IProps> = (props: IProps) => {
      * 下一张图片
      */
     const handleNext = () => {
-        playSeClick();
         const index = currentImgIndex + 1;
         if (index > props.imgList.length - 1) {
             return;

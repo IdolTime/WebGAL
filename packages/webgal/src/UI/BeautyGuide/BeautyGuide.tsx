@@ -83,7 +83,6 @@ export const BeautyGuide: FC = () => {
    *  返回
    */
   const handleGoback = () => {
-    playSeClick();
     setPersonalInfo(null);
     dispatch(
       setVisibility({

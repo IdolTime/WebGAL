@@ -26,7 +26,6 @@ export const Options: FC = () => {
         item={OptionUIConfigs.buttons[OptionSceneButtonKey.Option_back_button]}
         defaultClass={styles.Save_back}
         onClick={() => {
-          playSeClick();
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
         onMouseEnter={playSeEnter}
