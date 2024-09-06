@@ -9,6 +9,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import useTrans from '@/hooks/useTrans';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { px2 } from '@/Core/parser/utils';
 
 import styles from './gameMenuPanel.module.scss';
 
@@ -116,18 +117,18 @@ export const GameMenuPanel = () => {
       }
 
       if (typeof style.x === 'number' && style.btnPosition === 'custom') {
-        styleObj.position = 'absolute';
-        styleObj['left'] = `${style.x}px`;
-        styleObj['transform'] = 'translateX(-50%)';
+        styleObj.position = 'fixed', // 'absolute';
+        styleObj['left'] = px2(style.x) + 'px';
+        // styleObj['transform'] = 'translateX(-50%)';
       }
       if (typeof style.y === 'number' && style.btnPosition == 'custom') {
-        styleObj.position = 'absolute';
-        styleObj['top'] = `${style.y}px`;
-        if (styleObj['transform']) {
-          styleObj['transform'] += ' translateY(-50%)';
-        } else {
-          styleObj['transform'] = 'translateY(-50%)';
-        }
+        styleObj.position = 'fixed'; // 'absolute';
+        styleObj['top'] = px2(style.y) + 'px';
+        // if (styleObj['transform']) {
+          // styleObj['transform'] += ' translateY(-50%)';
+        // } else {
+          // styleObj['transform'] = 'translateY(-50%)';
+        // }
       }
       if (typeof style.scale === 'number') {
         if (styleObj['transform']) {
@@ -137,7 +138,7 @@ export const GameMenuPanel = () => {
         }
       }
       if (typeof style.fontSize === 'number' && style.fontSize) {
-        styleText['fontSize'] = style.fontSize + 'px';
+        styleText['fontSize'] = px2(style.fontSize) + 'px';
       }
       if (typeof style.fontColor === 'string' && style.fontColor[0] === '#') {
         styleObj['color'] = style.fontColor;
