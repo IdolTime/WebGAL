@@ -100,7 +100,9 @@ export function popUpImage(sentence: ISentence): IPerform {
   const id = key ? key : `fig-${pos}`;
 
   const currentPopUpImageAssociatedAnimation = webgalStore.getState().stage.popUpImageAssociatedAnimation;
-  const filteredPopUpImageAssociatedAnimation = currentPopUpImageAssociatedAnimation.filter((item) => item.targetId !== id);
+  const filteredPopUpImageAssociatedAnimation = currentPopUpImageAssociatedAnimation.filter(
+    (item) => item.targetId !== id,
+  );
   const newFigureAssociatedAnimationItem = {
     targetId: id,
     animationFlag: animationFlag,

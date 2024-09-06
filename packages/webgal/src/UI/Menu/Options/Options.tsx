@@ -9,25 +9,29 @@ import { fullScreenOption } from '@/store/userDataInterface';
 import { OptionSlider } from '@/UI/Menu/Options/OptionSlider';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setVisibility } from '@/store/GUIReducer';
+import { OptionSceneButtonKey, OptionSceneOtherKey, OptionSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
+import { Button } from '@/UI/Components/Base';
 
 export const Options: FC = () => {
   useEffect(getStorage, []);
   const { playSeClick, playSeEnter } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const dispatch = useDispatch();
+  const GUIState = useSelector((state: RootState) => state.GUI);
+  const OptionUIConfigs = GUIState.gameUIConfigs[Scene.option] as OptionSceneUIConfig;
 
   return (
     <div className={styles.Options_main}>
-      <div className={styles.Options_top}>
-        <div
-          className={styles.Save_back}
-          onClick={() => {
-            playSeClick();
-            dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-          }}
-          onMouseEnter={playSeEnter}
-        />
-      </div>
+      <Button
+        item={OptionUIConfigs.buttons[OptionSceneButtonKey.Option_back_button]}
+        defaultClass={styles.Save_back}
+        onClick={() => {
+          playSeClick();
+          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+        }}
+        onMouseEnter={playSeEnter}
+      />
+      <Button item={OptionUIConfigs.other[OptionSceneOtherKey.Option_title]} defaultClass={styles.Options_top} />
       <div className={styles.Options_page_container}>
         {/* 基础设置 */}
         <div className={styles.Options_left}>

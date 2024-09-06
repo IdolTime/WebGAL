@@ -246,10 +246,12 @@ export const Achievement: FC = () => {
     );
   };
 
+  const hasBGImage = achieveStage?.achieveBg;
+
   return (
     <>
       {GUIState.showAchievement && (
-        <div className={styles.achievement} id="camera">
+        <div className={styles.achievement} style={hasBGImage ? { backgroundImage: 'none' } : {}} id="camera">
           {/* 头部 */}
           {!GUIState.showProgressAndAchievement && (
             <Button

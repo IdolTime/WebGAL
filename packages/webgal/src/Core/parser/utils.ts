@@ -134,3 +134,83 @@ export function isInGame(): boolean {
 
   return true;
 }
+
+const loadAssetWithRealTimeSpeed = (
+  url: string,
+  retries: number,
+  initialDelay: number,
+  onSuccess: () => void,
+  onError: () => void,
+  onProgress: (downloaded: number, total: number, speed: number) => void,
+  // eslint-disable-next-line max-params
+) => {
+  const attemptLoad = (retryCount: number, delay: number) => {
+    const startTime = Date.now();
+    let lastUpdateTime = startTime;
+    let receivedLength = 0;
+    let totalLength = 0;
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch: ${url}`);
+        }
+        const contentLength = response.headers.get('content-length');
+        totalLength = contentLength ? parseInt(contentLength, 10) : 0;
+        return response.body?.getReader();
+      })
+      .then((reader) => {
+        const updateInterval = 1000; // 每秒更新一次速度
+        const intervalId = setInterval(() => {
+          const now = Date.now();
+          const timeElapsed = (now - lastUpdateTime) / 1000;
+          const currentSpeed = receivedLength / timeElapsed / 1024; // KB/s
+
+          onProgress(receivedLength, totalLength, currentSpeed);
+
+          lastUpdateTime = now;
+        }, updateInterval);
+
+        const read = () => {
+          reader
+            ?.read()
+            .then(({ done, value }) => {
+              if (done) {
+                clearInterval(intervalId); // 清除定时器
+                onSuccess(); // 下载完成
+                return;
+              }
+
+              if (value) {
+                receivedLength += value.length;
+              }
+
+              read(); // 继续读取流数据
+            })
+            .catch(() => {
+              clearInterval(intervalId); // 清除定时器
+              if (retryCount > 0) {
+                console.log(`Retrying: ${url}, attempts left: ${retryCount}`);
+                setTimeout(() => {
+                  attemptLoad(retryCount - 1, delay * 2);
+                }, delay);
+              } else {
+                onError(); // 下载失败
+              }
+            });
+        };
+        read();
+      })
+      .catch(() => {
+        if (retryCount > 0) {
+          setTimeout(() => {
+            attemptLoad(retryCount - 1, delay * 2);
+          }, delay);
+        } else {
+          onError();
+        }
+      });
+  };
+
+  attemptLoad(retries, initialDelay);
+};

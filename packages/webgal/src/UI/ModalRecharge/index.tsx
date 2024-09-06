@@ -21,6 +21,7 @@ export function ModalRecharge() {
   });
   const [rechargeList, setRechargeList] = useState<IRechargeItem[][]>([]);
   const [selectedItem, setSelectedItem] = useState<IRechargeItem>();
+  const clickedTimeRef = useRef(0);
 
   const checkPayStatus = async (orderNo: string) => {
     const res = await getRechargeStatus(orderNo);
@@ -119,10 +120,29 @@ export function ModalRecharge() {
           src={ModalClose}
           className={styles.Recharge_modal_close}
           onMouseEnter={playSeEnter}
-          onClick={() => {
-            playSeClick();
-            setVisible(false);
-            callbackRef.current.closeCallback();
+          onMouseDown={(e) => {
+            const node = e.currentTarget as HTMLDivElement;
+            node.className = `${styles.Recharge_modal_close} btn-clicked`;
+            clickedTimeRef.current = Date.now();
+          }}
+          onMouseUp={(e) => {
+            const duration = Date.now() - clickedTimeRef.current;
+            let node = e.currentTarget;
+
+            setTimeout(
+              () => {
+                node.className = styles.Recharge_modal_close;
+                // @ts-ignore
+                node = null;
+
+                setTimeout(() => {
+                  playSeClick();
+                  setVisible(false);
+                  callbackRef.current.closeCallback();
+                }, 320);
+              },
+              duration - 350 > 0 ? 0 : 350 - duration,
+            );
           }}
         />
         <div className={styles.RechargeModal_rechargeModalCard}>
@@ -177,7 +197,30 @@ export function ModalRecharge() {
           <div className={styles.RechargeModal_modalFooterLeft}>虚拟商品，一经售出不子退款</div>
           <div className={styles.RechargeModal_modalFooterRight}>
             <span>支付${selectedItem?.price}</span>
-            <div className={styles.RechargeModal_modalFooterConfirm} onClick={submitRecharge} />
+            <div
+              className={styles.RechargeModal_modalFooterConfirm}
+              onMouseEnter={playSeEnter}
+              onMouseDown={(e) => {
+                const node = e.currentTarget as HTMLDivElement;
+                node.className = `${styles.RechargeModal_modalFooterConfirm} btn-clicked`;
+                clickedTimeRef.current = Date.now();
+              }}
+              onMouseUp={(e) => {
+                const duration = Date.now() - clickedTimeRef.current;
+                let node = e.currentTarget;
+
+                setTimeout(
+                  () => {
+                    node.className = styles.RechargeModal_modalFooterConfirm;
+                    // @ts-ignore
+                    node = null;
+
+                    setTimeout(submitRecharge, 320);
+                  },
+                  duration - 350 > 0 ? 0 : 350 - duration,
+                );
+              }}
+            />
           </div>
         </div>
       </div>

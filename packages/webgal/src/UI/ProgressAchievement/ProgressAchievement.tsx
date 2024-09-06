@@ -42,7 +42,14 @@ export const ProgressAchievement: FC = () => {
     dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
     dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
+    dispatch(setVisibility({ component: 'showStoryLine', visibility: false }));
   };
+
+  useEffect(() => {
+    if (GUIState.showProgressAndAchievement) {
+      enterStoryLine();
+    }
+  }, [GUIState.showProgressAndAchievement]);
 
   return (
     <>

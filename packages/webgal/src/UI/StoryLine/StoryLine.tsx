@@ -13,6 +13,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { px2 } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
+import { SourceImg } from '../Components/SourceImg';
 
 /**
  * 故事线页面
@@ -60,10 +61,19 @@ export const StoryLine: FC = () => {
     return assetSetter(url, fileType.ui);
   }
 
+  const hasBGImage = !!StageState.storyLineBg;
+  const bgStyle =
+    typeof StageState.storyLineBgX === 'number' && typeof StageState.storyLineBgY === 'number'
+      ? {
+          width: px2(StageState.storyLineBgX),
+          height: px2(StageState.storyLineBgY),
+        }
+      : {};
+
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine} id="camera">
+        <div className={styles.storyLine} style={hasBGImage ? { backgroundImage: 'none' } : {}} id="camera">
           {!GUIState.showProgressAndAchievement && (
             <Button
               item={storylineUIConfigs.buttons.Storyline_back_button}
@@ -72,48 +82,36 @@ export const StoryLine: FC = () => {
               onMouseEnter={playSeEnter}
             />
           )}
-          <div
-            className={styles.storyLine_content}
-            style={{
-              width: px2(StageState.storyLineBgX),
-              height: StageState.storyLineBgY > 720 ? px2(StageState.storyLineBgY) : '100%',
-              backgroundImage: `url("${StageState.storyLineBg}")`,
-              backgroundSize:
-                StageState.storyLineBgX &&
-                StageState.storyLineBgY &&
-                `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`,
-            }}
-          >
-            {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
-              const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
+          <SourceImg src={StageState.storyLineBg} style={bgStyle} />
+          {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
+            const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
 
-              if (!isUnlock) {
-                return null;
-              }
+            if (!isUnlock) {
+              return null;
+            }
 
-              return (
-                <div
-                  key={`storyLine-${index}`}
-                  className={styles.storyLine_item}
-                  style={
-                    thumbnailUrl
-                      ? {
-                          top: `${px2(y)}px`,
-                          left: `${px2(x)}px`,
-                          backgroundImage: `url("${getImagePath(thumbnailUrl)}")`,
-                        }
-                      : {}
-                  }
-                  onClick={(e) => handlPlay(e, item)}
-                >
-                  <div className={styles.info_card}>
-                    <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
-                    {isHideName ? null : <span className={styles.name}>{name}</span>}
-                  </div>
+            return (
+              <div
+                key={`storyLine-${index}`}
+                className={styles.storyLine_item}
+                style={
+                  thumbnailUrl
+                    ? {
+                        top: `${px2(y)}px`,
+                        left: `${px2(x)}px`,
+                      }
+                    : {}
+                }
+                onClick={(e) => handlPlay(e, item)}
+              >
+                <SourceImg src={getImagePath(thumbnailUrl)} />
+                <div className={styles.info_card}>
+                  <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
+                  {isHideName ? null : <span className={styles.name}>{name}</span>}
                 </div>
-              );
-            }) ?? null}
-          </div>
+              </div>
+            );
+          }) ?? null}
         </div>
       )}
     </>

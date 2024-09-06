@@ -11,6 +11,8 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 import { px2 } from '@/Core/parser/utils';
+import { LoadSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
+import { Button } from '@/UI/Components/Base';
 
 export const Save: FC = () => {
   const { playSeClick, playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -18,6 +20,9 @@ export const Save: FC = () => {
   const savesDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
   const page = [];
+  const GUIState = useSelector((state: RootState) => state.GUI);
+  const LoadUIConfigs = GUIState.gameUIConfigs[Scene.load] as LoadSceneUIConfig;
+
   for (let i = 1; i <= 4; i++) {
     const element = (
       <div
@@ -130,16 +135,16 @@ export const Save: FC = () => {
 
   return (
     <div className={styles.Save_Load_main}>
-      <div className={`${styles.Common_title} ${styles.Save_title}`}>
-        <div
-          className={styles.Common_back}
-          onClick={() => {
-            playSeClick();
-            dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-          }}
-          onMouseEnter={playSeEnter}
-        />
-      </div>
+      <Button
+        item={LoadUIConfigs.buttons.Load_back_button}
+        defaultClass={styles.Common_back}
+        onClick={() => {
+          playSeClick();
+          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+        }}
+        onMouseEnter={playSeEnter}
+      />
+      <div className={`${styles.Common_title} ${styles.Save_title}`} />
       <div className={styles.Save_Load_content} id={'Save_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
       </div>

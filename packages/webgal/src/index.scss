@@ -176,3 +176,8 @@ code {
 #root{
   /*will-change: transform;*/
 }
+
+.btn-clicked {
+  transform: scale(0.85);
+  transition: all 0.33s ease-in-out;
+}
