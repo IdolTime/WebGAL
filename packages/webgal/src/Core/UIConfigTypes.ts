@@ -935,6 +935,7 @@ export interface contentListItem {
 }
 
 export interface CollectionInfo {
+  avatar?: string;
   name?: string;
   height?: number;
   weight?: number;

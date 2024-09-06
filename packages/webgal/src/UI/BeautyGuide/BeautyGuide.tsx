@@ -59,10 +59,11 @@ export const BeautyGuide: FC = () => {
           const contentList: contentListItem[] = parseImagesArg(images);
           const videoList = parseVideosArg(videos);
 
-          const img = info?.image && assetSetter(info?.image, fileType.ui) || 
-                      infoVal?.args?.style?.image && assetSetter(infoVal?.args?.style?.image, fileType.ui) || '';
+          const img = info?.image && assetSetter(info?.image, fileType.ui) || '';
+          const avatarImg = infoVal?.args?.style?.image && assetSetter(infoVal?.args?.style?.image, fileType.ui) || '';
 
           list.push({
+            avatar: avatarImg,
             name: info?.name,
             image: img,
             height: info?.height,
@@ -134,7 +135,7 @@ export const BeautyGuide: FC = () => {
           </div>
           <div className={styles.beautyGuide_content}>
             {collectionList.map((item: CollectionInfo, index: number) => {
-              if (!item?.image) return null;
+              if (!item?.avatar) return null;
               return (
                 <div
                   key={`${item?.name}$-${index}`}
@@ -142,7 +143,7 @@ export const BeautyGuide: FC = () => {
                   onClick={() => handleDetail(item, index)}
                   onMouseEnter={playSeEnter}
                 >
-                  <img src={item.image} style={imgStyle[`Collection_img${index + 1}`]} />
+                  <img src={item.avatar} style={imgStyle[`Collection_img${index + 1}`]} />
                 </div>
               );
             })}
@@ -154,7 +155,9 @@ export const BeautyGuide: FC = () => {
         <BeautyGuideDetail 
           info={personalInfo} 
           infoItemStyle={currentDetailStyle} 
-          detailRightDescBgStyle={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}  
+          detailRightDescBgStyle={
+            collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]
+          }
         />
       }
     </>

@@ -139,6 +139,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
     const MS: 2 | 3 = currentValue === videoSizeOption.Size1080P ? 3 : 2;
     const MSTop: 2 | 3.2 = currentValue === videoSizeOption.Size1080P ? 3.2 : 2;
 
+    const scaleFactor = currentValue === videoSizeOption.Size1080P ? 0.3333 : 0.5;
+
+    rootEle.style.setProperty('--scale-factor', `${scaleFactor}`);
+
     rootEle.style.setProperty('--options_checkbox_top', `${239 * MS}px`);
     rootEle.style.setProperty('--options_checkbox_left', `${441 * MS}px`);
 
