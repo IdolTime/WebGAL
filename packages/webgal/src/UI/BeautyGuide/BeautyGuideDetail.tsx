@@ -158,28 +158,28 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
               <h3 className={styles.name}>{props.info?.name ?? ''}</h3>
 
               <div className={styles.info}>
-                <span style={props?.infoItemStyle ?? {}}>身高</span>
-                <span style={props?.infoItemStyle ?? {}}>{props.info?.height ?? '-'}</span>
+                <span>身高</span>
+                <span>{props.info?.height ?? '-'}</span>
               </div>
 
               <div className={styles.info}>
-                <span style={props?.infoItemStyle ?? {}}>体重</span>
-                <span style={props?.infoItemStyle ?? {}}>{props.info?.weight ?? '-'}</span>
+                <span>体重</span>
+                <span>{props.info?.weight ?? '-'}</span>
               </div>
 
               <div className={styles.info}>
-                <span style={props?.infoItemStyle ?? {}}>胸围</span>
-                <span style={props?.infoItemStyle ?? {}}>{props.info?.bustSize ?? '-'}</span>
+                <span>胸围</span>
+                <span>{props.info?.bustSize ?? '-'}</span>
               </div>
 
               <div className={styles.info}>
-                <span style={props?.infoItemStyle ?? {}}>腰围</span>
-                <span style={props?.infoItemStyle ?? {}}>{props.info?.waistSize ?? '-'}</span>
+                <span>腰围</span>
+                <span>{props.info?.waistSize ?? '-'}</span>
               </div>
 
               <div className={styles.info}>
-                <span style={props?.infoItemStyle ?? {}}>臀围</span>
-                <span style={props?.infoItemStyle ?? {}}>{props.info?.hipSize ?? '-'}</span>
+                <span>臀围</span>
+                <span>{props.info?.hipSize ?? '-'}</span>
               </div>
             </div>
           </div>

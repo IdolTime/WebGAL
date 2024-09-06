@@ -21,6 +21,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
 import BarSlider from '@/assets/imgs/bar-checked.png';
 import { debounce } from 'lodash';
+import { SCREEN_CONSTANTS, updateScreenSize } from '@/Core/util/constants';
 
 import './slider.scss';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -435,11 +436,13 @@ export const OptionSliderCustome = ({
     const inputBg = document.getElementById(`${uniqueID}-bg`);
     if (inputBg !== null) {
       if (uniqueID === 'light') {
+        const num = updateScreenSize().width == 2560 ? 2 : 3
         const normalizedValue = (Number(initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
-        const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * 2) + 'px'; // 将 0-1 映射到 0-684px 范围
+        const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * num) + 'px'; // 将 0-1 映射到 0-684px 范围
         inputBg.style.width = progressBarWidth;
       } else {
-        inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / 0.5 + 'px';
+        const scale = updateScreenSize().width == 2560 ? 0.5 : 0.3333
+        inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / scale + 'px';
       }
     }
   }

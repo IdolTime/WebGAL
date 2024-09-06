@@ -12,6 +12,8 @@
   <title>IdolTime</title>
   <style>
     :root {
+        --scale-factor: 0.5;
+
         --screenWidth: 2560px;
         --screenHeight: 1440px;
 
@@ -286,6 +288,8 @@
       const rootEle = document.documentElement;
         const MS = 3;
         const MSTop = 3.2;
+
+        rootEle.style.setProperty('--scale-factor', 0.3333);
 
         rootEle.style.setProperty('--options_checkbox_top', `${239 * MS}px`);
         rootEle.style.setProperty('--options_checkbox_left', `${441 * MS}px`);

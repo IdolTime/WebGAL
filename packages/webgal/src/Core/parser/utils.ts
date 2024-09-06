@@ -3,6 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { Style, CollectionImages, contentListItem, CollectionVideos } from '../UIConfigTypes';
 import { CSSProperties } from 'react';
 import { isEmpty } from 'lodash';
+import { SCREEN_CONSTANTS, updateScreenSize } from '@/Core/util/constants';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 /**
@@ -44,7 +45,10 @@ export function defineScripts<R extends Record<string, Omit<IConfigInterface, 's
   return result;
 }
 
-export const px2 = (value: number | string) => (typeof value === 'string' ? Number(value) : value) / 0.5;
+export const px2 = (value: number | string) => {
+  const num = updateScreenSize().width == 2560 ? 0.5 : 0.33333
+  return (typeof value === 'string' ? Number(value) : value) / num;
+}
 
 // 解析样式的工具函数
 export function parseStyleArg(styleObj?: Style): CSSProperties {

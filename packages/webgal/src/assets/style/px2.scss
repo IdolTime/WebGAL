@@ -1,3 +1,4 @@
 @function px2($value) {
-  @return calc($value / 0.5)
+  $scale: var(--scale-factor); // 获取缩放比例变量
+  @return calc($value / $scale)
 }
