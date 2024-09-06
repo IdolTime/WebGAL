@@ -27,7 +27,7 @@ export const enterAchieve = async () => {
     });
   });
 
-  webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showAchievement', visibility: true }));
