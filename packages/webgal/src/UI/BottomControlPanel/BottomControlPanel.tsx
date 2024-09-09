@@ -12,6 +12,7 @@ import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import { useRef } from 'react';
 // import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
 // import { useEffect } from 'react';
 // import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
@@ -22,6 +23,7 @@ export const BottomControlPanel = () => {
   const { i18n } = useTranslation();
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const lang = i18n.language;
+  const clickedTimeRef = useRef(0);
   const isFr = lang === 'fr';
   let size = 42;
   let fontSize = '150%';
@@ -133,6 +135,24 @@ export const BottomControlPanel = () => {
               switchAuto();
               playSeClick();
             }}
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.singleButton} ${styles.singleButton_auto} btn-clicked`;
+              clickedTimeRef.current = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTimeRef.current;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = `${styles.singleButton} ${styles.singleButton_auto}`;
+                  // @ts-ignore
+                  node = null;
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
+            }}
             onMouseEnter={playSeEnter}
           >
             <span className={styles.autoIcon} />
@@ -144,6 +164,24 @@ export const BottomControlPanel = () => {
             onClick={() => {
               switchFast();
               playSeClick();
+            }}
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.singleButton} ${styles.singleButton_fast} btn-clicked`;
+              clickedTimeRef.current = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTimeRef.current;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = `${styles.singleButton} ${styles.singleButton_fast}`;
+                  // @ts-ignore
+                  node = null;
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
             }}
             onMouseEnter={playSeEnter}
           >
@@ -161,6 +199,24 @@ export const BottomControlPanel = () => {
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
               playSeClick();
+            }}
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.singleButton} btn-clicked`;
+              clickedTimeRef.current = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTimeRef.current;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = `${styles.singleButton}`;
+                  // @ts-ignore
+                  node = null;
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
             }}
             onMouseEnter={playSeEnter}
           >

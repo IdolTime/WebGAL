@@ -5,6 +5,18 @@ import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import React from 'react';
+import { Button } from '../Components/Base';
+import { TitleSceneButtonKey } from '@/Core/UIConfigTypes';
+
+const defaultItem = {
+  key: TitleSceneButtonKey.Game_start_button,
+  content: '',
+  args: {
+    hide: false,
+    style: {},
+    hoverStyle: {},
+  },
+};
 
 export default function GlobalDialog() {
   const isGlobalDialogShow = useSelector((state: RootState) => state.GUI.showGlobalDialog);
@@ -27,12 +39,10 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
   const modalType = props.type ?? 'normal';
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
-    playSeClick();
     props.leftFunc?.();
     hideGlobalDialog();
   };
   const handleRight = () => {
-    playSeClick();
     props.rightFunc();
     hideGlobalDialog();
   };
@@ -46,13 +56,21 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             <div className={styles.title}>{props.title}</div>
             <div className={styles.button_list}>
               {!!props.leftText && (
-                <div className={styles.button} onClick={handleLeft} onMouseEnter={playSeEnter}>
-                  {props.leftText}
-                </div>
+                <Button
+                  item={defaultItem}
+                  defaultClass={styles.button}
+                  onClick={handleLeft}
+                  onMouseEnter={playSeEnter}
+                  defaultText={props.leftText}
+                />
               )}
-              <div className={styles.button} onClick={handleRight} onMouseEnter={playSeEnter}>
-                {props.rightText}
-              </div>
+              <Button
+                item={defaultItem}
+                defaultClass={styles.button}
+                onClick={handleRight}
+                onMouseEnter={playSeEnter}
+                defaultText={props.rightText}
+              />
             </div>
           </div>
         </div>
@@ -63,8 +81,9 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
       <div className={styles.GlobalDialog_main}>
         <div className={styles.GlobalDialog_pay_container}>
           <div className={styles.GlobalDialog_pay_tip} />
-          <div
-            className={styles.GlobalDialog_pay_close}
+          <Button
+            defaultClass={styles.GlobalDialog_pay_close}
+            item={defaultItem}
             onMouseEnter={playSeEnter}
             onClick={() => {
               playSeClick();
@@ -79,13 +98,15 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             {props.suffixContent}
           </div>
           <div className={styles.GlobalDialog_pay_btns}>
-            <div
-              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`}
+            <Button
+              item={defaultItem}
+              defaultClass={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`}
               onClick={handleLeft}
               onMouseEnter={playSeEnter}
             />
-            <div
-              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`}
+            <Button
+              item={defaultItem}
+              defaultClass={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`}
               onClick={handleRight}
               onMouseEnter={playSeEnter}
             />

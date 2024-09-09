@@ -134,7 +134,7 @@ function App() {
       <GlobalDialog />
       <PanicOverlay />
       <DevPanel />
-      <StoryLine />
+      {!GUIState.showProgressAndAchievement && <StoryLine />}
       {!GUIState.showProgressAndAchievement && <Achievement />}
       <BeautyGuide />
       <ModalR18 />

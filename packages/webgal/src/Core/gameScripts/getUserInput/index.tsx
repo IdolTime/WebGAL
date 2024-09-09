@@ -27,6 +27,8 @@ export const getUserInput = (sentence: ISentence): IPerform => {
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
   const font = fontFamily === textFont.song ? '"思源宋体", serif' : '"WebgalUI", serif';
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
+  let clickedTime = Date.now();
+
   const chooseElements = (
     <div style={{ fontFamily: font }} className={styles.glabalDialog_container}>
       <div className={styles.glabalDialog_container_inner}>
@@ -34,16 +36,33 @@ export const getUserInput = (sentence: ISentence): IPerform => {
         <input id="user-input" className={styles.Choose_item} />
         <div
           onMouseEnter={playSeEnter}
-          onClick={() => {
-            const userInput: HTMLInputElement = document.getElementById('user-input') as HTMLInputElement;
-            if (userInput) {
-              webgalStore.dispatch(
-                setStageVar({ key: varKey, value: (userInput?.value ?? '') === '' ? ' ' : userInput?.value ?? '' }),
-              );
-            }
-            playSeClick();
-            WebGAL.gameplay.performController.unmountPerform('userInput');
-            nextSentence();
+          onMouseDown={(e) => {
+            const node = e.currentTarget as HTMLDivElement;
+            node.className = `${styles.button} btn-clicked`;
+            clickedTime = Date.now();
+          }}
+          onMouseUp={(e) => {
+            const duration = Date.now() - clickedTime;
+            let node = e.currentTarget;
+
+            setTimeout(
+              () => {
+                node.className = styles.button;
+                // @ts-ignore
+                node = null;
+
+                const userInput: HTMLInputElement = document.getElementById('user-input') as HTMLInputElement;
+                if (userInput) {
+                  webgalStore.dispatch(
+                    setStageVar({ key: varKey, value: (userInput?.value ?? '') === '' ? ' ' : userInput?.value ?? '' }),
+                  );
+                }
+                playSeClick();
+                WebGAL.gameplay.performController.unmountPerform('userInput');
+                nextSentence();
+              },
+              duration - 350 > 0 ? 0 : 350 - duration,
+            );
           }}
           className={styles.button}
         >

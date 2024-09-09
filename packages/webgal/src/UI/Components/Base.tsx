@@ -158,6 +158,8 @@ export const CustomContainer = ({
   hoverStyle,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
   onClick,
   id,
 }: {
@@ -169,6 +171,8 @@ export const CustomContainer = ({
   hoverStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
   onClick?: (e: any) => void;
   id?: string;
 }) => {
@@ -210,6 +214,8 @@ export const CustomContainer = ({
       onClick={onClick}
       style={_style}
       id={id}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
     >
       {children}
     </div>
@@ -260,17 +266,19 @@ export const Button = ({
   defaultText?: string;
 }) => {
   if (item.args.hide) return null;
+  const [clicked, setClicked] = useState(false);
   const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
   const { playSeClick } = useSoundEffect();
   const src = item.args.style?.image || '';
-  const customClickSound = 
-    item.args?.btnSound?.clickSound 
-      ? assetSetter(item.args.btnSound.clickSound, fileType.bgm) 
-      : '';
+  const customClickSound = item.args?.btnSound?.clickSound
+    ? assetSetter(item.args.btnSound.clickSound, fileType.bgm)
+    : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
+  const clickTimerRef = useRef<any>();
+  const clickedTimeRef = useRef(0);
   const textStyle: CSSProperties = src
     ? {
         position: 'absolute',
@@ -290,8 +298,9 @@ export const Button = ({
   //   _style.backgroundRepeat = 'no-repeat';
   // }
 
-  const clickCallback = (event: React.MouseEvent<HTMLDivElement>) => {
+  const clickCallback = () => {
     if (type === 'checkbox') {
+      playSeClick(customClickSound);
       onChecked(!checked);
     }
     if (onClick) {
@@ -300,12 +309,39 @@ export const Button = ({
     }
   };
 
+  const interactable = typeof onClick === 'function' && typeof onMouseEnter === 'function';
+
   return (
     <CustomContainer
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onClick={clickCallback}
-      defaultClass={defaultClass}
+      onMouseDown={
+        interactable
+          ? () => {
+              clearTimeout(clickTimerRef.current);
+              setClicked(true);
+              clickedTimeRef.current = Date.now();
+            }
+          : undefined
+      }
+      onMouseUp={
+        interactable
+          ? () => {
+              const duration = Date.now() - clickedTimeRef.current;
+
+              setTimeout(
+                () => {
+                  setClicked(false);
+                  setTimeout(() => {
+                    clickCallback();
+                  }, 320);
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
+            }
+          : undefined
+      }
+      defaultClass={`${defaultClass} ${clicked ? 'btn-clicked' : ''}`}
       defaultHoverClass={defaultHoverClass}
       style={_style}
       hoverStyle={hoverStyle}

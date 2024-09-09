@@ -133,7 +133,6 @@ export const ExtraVideo: FC = () => {
   const t = useTrans('menu.');
 
   const handleGoBack = () => {
-    playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
   };

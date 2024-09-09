@@ -25,8 +25,8 @@
 
 .backIcon {
   position: absolute;
-  left: px2(-75px);
-  top: px2(-7px);
+  left: px2(41px);
+  top: px2(15px);
   cursor: pointer;
   width: px2(53px);
   height: px2(53px);
@@ -63,6 +63,7 @@
 .mainTab_bgm {
   width: px2(277px);
   height: px2(74px);
+  cursor: pointer;
 
   background-size: contain;
   background-repeat: no-repeat;
@@ -72,6 +73,7 @@
 .mainTab_unselect_bgm {
   width: px2(276px);
   height: px2(74px);
+  cursor: pointer;
   
   background-size: contain;
   background-repeat: no-repeat;
@@ -81,6 +83,7 @@
 .mainTab_cg {
   width: px2(278px);
   height: px2(81px);
+  cursor: pointer;
 
   background-size: contain;
   background-repeat: no-repeat;
@@ -90,6 +93,7 @@
 .mainTab_unselect_cg {
   width: px2(278px);
   height: px2(81px);
+  cursor: pointer;
   
   background-size: contain;
   background-repeat: no-repeat;
@@ -184,6 +188,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 .footer_page_icon_checked {
   width: px2(13px);

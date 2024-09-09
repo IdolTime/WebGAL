@@ -147,6 +147,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
         let className = styles.Choose_item;
+        let clickedTime = Date.now();
         const onClick = () => {
           // if (!enable || timer.current) {
           //   return;
@@ -347,8 +348,34 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               className={className}
               style={styleObj}
               key={e.jump + i}
-              onClick={onClick}
               onMouseEnter={enable ? playSeEnter : undefined}
+              onMouseDown={
+                enable
+                  ? (e) => {
+                      const node = e.currentTarget as HTMLDivElement;
+                      node.className = `${className} btn-clicked`;
+                      clickedTime = Date.now();
+                    }
+                  : undefined
+              }
+              onMouseUp={
+                enable
+                  ? (e) => {
+                      const duration = Date.now() - clickedTime;
+                      let node = e.currentTarget;
+
+                      setTimeout(
+                        () => {
+                          node.className = className;
+                          // @ts-ignore
+                          node = null;
+                          setTimeout(onClick, 320);
+                        },
+                        duration - 350 > 0 ? 0 : 350 - duration,
+                      );
+                    }
+                  : undefined
+              }
             >
               <span>
                 {e.text}
@@ -367,6 +394,33 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             key={e.jump + i}
             onClick={onClick}
             onMouseEnter={enable ? playSeEnter : undefined}
+            onMouseDown={
+              enable
+                ? (e) => {
+                    const node = e.currentTarget as HTMLDivElement;
+                    node.className = `${className} btn-clicked`;
+                    clickedTime = Date.now();
+                  }
+                : undefined
+            }
+            onMouseUp={
+              enable
+                ? (e) => {
+                    const duration = Date.now() - clickedTime;
+                    let node = e.currentTarget;
+
+                    setTimeout(
+                      () => {
+                        node.className = className;
+                        // @ts-ignore
+                        node = null;
+                        setTimeout(onClick, 320);
+                      },
+                      duration - 350 > 0 ? 0 : 350 - duration,
+                    );
+                  }
+                : undefined
+            }
           >
             {e.text}
             {!e.hasBought && e.shouldPay && (

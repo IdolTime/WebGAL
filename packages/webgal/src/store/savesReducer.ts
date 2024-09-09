@@ -88,7 +88,7 @@ const saveDataSlice = createSlice({
         ...state.unlockStorylineList[action.payload.index],
         storyLine: action.payload.data.storyLine,
         // @ts-ignore
-        videoData: action.payload.data.videoData
+        videoData: action.payload.data.videoData,
       };
     },
     setSaveVideoData: (state, action: PayloadAction<ISaveData>) => {
@@ -129,7 +129,7 @@ const saveDataSlice = createSlice({
     saveAllUnlockAchieveList: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
       state.allUnlockAchieveList = action.payload;
     },
-    saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData>) => {
+    saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
       // @ts-ignore
       state.allStorylineData = action.payload;
     },

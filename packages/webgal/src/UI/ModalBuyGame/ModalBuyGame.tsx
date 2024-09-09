@@ -19,6 +19,7 @@ export function ModalBuyGame() {
     buyGameCallback: () => {},
     startGameCallback: () => {},
   });
+  const clickedTimeRef = useRef(0);
 
   const submitBuy = async () => {
     playSeClick();
@@ -86,10 +87,29 @@ export function ModalBuyGame() {
         <div
           className={styles.BuyGame_pay_close}
           onMouseEnter={playSeEnter}
-          onClick={() => {
-            playSeClick();
-            setVisible(false);
-            callbackRef.current.buyGameCallback();
+          onMouseDown={(e) => {
+            const node = e.currentTarget as HTMLDivElement;
+            node.className = `${styles.BuyGame_pay_close} btn-clicked`;
+            clickedTimeRef.current = Date.now();
+          }}
+          onMouseUp={(e) => {
+            const duration = Date.now() - clickedTimeRef.current;
+            let node = e.currentTarget;
+
+            setTimeout(
+              () => {
+                node.className = styles.BuyGame_pay_close;
+                // @ts-ignore
+                node = null;
+
+                setTimeout(() => {
+                  playSeClick();
+                  setVisible(false);
+                  callbackRef.current.buyGameCallback();
+                }, 320);
+              },
+              duration - 350 > 0 ? 0 : 350 - duration,
+            );
           }}
         />
         <div className={styles.BuyGame_pay_title}>交易确认</div>
@@ -138,7 +158,30 @@ export function ModalBuyGame() {
               {gameInfo?.salesAmount || 0}
               <span className={styles.BuyGame_price_stone} />
             </div>
-            <div className={styles.BuyGame_price_button} onMouseEnter={playSeEnter} onClick={submitBuy} />
+            <div
+              className={styles.BuyGame_price_button}
+              onMouseEnter={playSeEnter}
+              onMouseDown={(e) => {
+                const node = e.currentTarget as HTMLDivElement;
+                node.className = `${styles.BuyGame_price_button} btn-clicked`;
+                clickedTimeRef.current = Date.now();
+              }}
+              onMouseUp={(e) => {
+                const duration = Date.now() - clickedTimeRef.current;
+                let node = e.currentTarget;
+
+                setTimeout(
+                  () => {
+                    node.className = styles.BuyGame_price_button;
+                    // @ts-ignore
+                    node = null;
+
+                    setTimeout(submitBuy, 320);
+                  },
+                  duration - 350 > 0 ? 0 : 350 - duration,
+                );
+              }}
+            />
           </div>
         </div>
       </div>

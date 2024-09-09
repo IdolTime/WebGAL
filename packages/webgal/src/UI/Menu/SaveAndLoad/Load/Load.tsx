@@ -10,7 +10,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 import { px2 } from '@/Core/parser/utils';
-import { Scene, TitleSceneButtonKey, LoadSceneUIConfig, LoadSceneButtonKey } from '@/Core/UIConfigTypes';
+import { Scene, TitleSceneButtonKey, LoadSceneUIConfig, LoadSceneButtonKey, LoadSceneOtherKey } from '@/Core/UIConfigTypes';
 import { BgImage, Button } from '@/UI/Components/Base';
 
 export const Load: FC = () => {
@@ -20,10 +20,9 @@ export const Load: FC = () => {
   const dispatch = useDispatch();
 
   const GUIState = useSelector((state: RootState) => state.GUI);
-  const loadSceneUIConfig = GUIState.gameUIConfigs[Scene.load] as LoadSceneUIConfig;
-
-
   const page = [];
+  const loadUIConfigs = GUIState.gameUIConfigs[Scene.load] as LoadSceneUIConfig;
+
   for (let i = 1; i <= 4; i++) {
     const element = (
       <div
@@ -121,17 +120,18 @@ export const Load: FC = () => {
 
   return (
     <div className={styles.Save_Load_main}>
-      <div className={`${styles.Common_title} ${styles.Load_title}`}>
-        <Button
-          item={loadSceneUIConfig.buttons[LoadSceneButtonKey.Load_back_button]}
-          defaultClass={styles.Common_back}
-          onMouseEnter={playSeEnter}
-          onClick={() => {
-            dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
-          }}
-        />
-
-      </div>
+      <Button
+        item={loadUIConfigs.buttons.Load_back_button}
+        defaultClass={styles.Common_back}
+        onClick={() => {
+          dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+        }}
+        onMouseEnter={playSeEnter}
+      />
+      <Button
+        item={loadUIConfigs.other[LoadSceneOtherKey.Load_title]}
+        defaultClass={`${styles.Common_title} ${styles.Load_title}`}
+      />
       <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
         {showSaves}
       </div>

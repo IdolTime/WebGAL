@@ -1,4 +1,3 @@
-import styles from './extraContainer.module.scss';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { useEffect, useMemo, useState } from 'react';
@@ -6,6 +5,8 @@ import { px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { IShowAffinityChangeItem } from '@/store/stageInterface';
 import { updateShowAffinityChangeList } from '@/store/stageReducer';
+
+import styles from './extraContainer.module.scss';
 
 export const ExtraContainer = () => {
   const stageState = useSelector((state: RootState) => state.stage);

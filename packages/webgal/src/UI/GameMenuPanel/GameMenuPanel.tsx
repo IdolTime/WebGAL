@@ -1,6 +1,6 @@
 import styles from './gameMenuPanel.module.scss';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
@@ -14,6 +14,7 @@ export const GameMenuPanel = () => {
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const [show, setShow] = useState(false);
+  const clickedTimeRef = useRef<number>(0);
 
   useEffect(() => {
     setShow(GUIStore.isShowGameMenu);
@@ -101,19 +102,134 @@ export const GameMenuPanel = () => {
           <div className={styles.mask} />
           <div className={styles.gameMenuPanelContent}>
             <div className={styles.buttonswrapper}>
-              <span className={styles.button} onMouseEnter={playSeEnter} onClick={handleBackToGame}>
+              <span
+                className={styles.button}
+                onMouseEnter={playSeEnter}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = `${styles.button} btn-clicked`;
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = styles.button;
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleBackToGame, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
+              >
                 {t('buttons.backToGame')}
               </span>
-              <span className={styles.button} onMouseEnter={playSeEnter} onClick={handleSave}>
+              <span
+                className={styles.button}
+                onMouseEnter={playSeEnter}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = `${styles.button} btn-clicked`;
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = styles.button;
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleSave, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
+              >
                 {t('buttons.preserve')}
               </span>
-              <span className={styles.button} onMouseEnter={playSeEnter} onClick={handleRead}>
+              <span
+                className={styles.button}
+                onMouseEnter={playSeEnter}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = `${styles.button} btn-clicked`;
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = styles.button;
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleRead, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
+              >
                 {t('buttons.read')}
               </span>
-              <span className={styles.button} onMouseEnter={playSeEnter} onClick={handleSetting}>
+              <span
+                className={styles.button}
+                onMouseEnter={playSeEnter}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = `${styles.button} btn-clicked`;
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = styles.button;
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleSetting, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
+              >
                 {t('buttons.setting')}
               </span>
-              <span className={styles.button} onMouseEnter={playSeEnter} onClick={handleBackToTitle}>
+              <span
+                className={styles.button}
+                onMouseEnter={playSeEnter}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = `${styles.button} btn-clicked`;
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = styles.button;
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleBackToTitle, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
+              >
                 {t('buttons.backToTitle')}
               </span>
             </div>

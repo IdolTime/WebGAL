@@ -23,6 +23,7 @@ export const Backlog = () => {
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   let timeRef = useRef<ReturnType<typeof setTimeout>>();
   const [url, setUrl] = useState('');
+  const clickedTimeRef = useRef(0);
 
   // 缓存一下vdom
   const backlogList = useMemo<any>(() => {
@@ -70,6 +71,24 @@ export const Backlog = () => {
               </div>
               {backlogItem.currentStageState.vocal ? (
                 <div
+                  onMouseDown={(e) => {
+                    const node = e.currentTarget as HTMLDivElement;
+                    node.className = `${styles.backlog_item_button_element} btn-clicked`;
+                    clickedTimeRef.current = Date.now();
+                  }}
+                  onMouseUp={(e) => {
+                    const duration = Date.now() - clickedTimeRef.current;
+                    let node = e.currentTarget;
+
+                    setTimeout(
+                      () => {
+                        node.className = styles.backlog_item_button_element;
+                        // @ts-ignore
+                        node = null;
+                      },
+                      duration - 350 > 0 ? 0 : 350 - duration,
+                    );
+                  }}
                   onClick={(e) => {
                     playSeClick();
                     e.preventDefault();
@@ -170,10 +189,29 @@ export const Backlog = () => {
           >
             <div
               className={styles.backlog_top_icon}
-              onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
-                dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+              onMouseDown={(e) => {
+                const node = e.currentTarget as HTMLDivElement;
+                node.className = `${styles.backlog_top_icon} btn-clicked`;
+                clickedTimeRef.current = Date.now();
+              }}
+              onMouseUp={(e) => {
+                const duration = Date.now() - clickedTimeRef.current;
+                let node = e.currentTarget;
+
+                setTimeout(
+                  () => {
+                    node.className = styles.backlog_top_icon;
+                    // @ts-ignore
+                    node = null;
+
+                    setTimeout(() => {
+                      playSeClick();
+                      dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
+                      dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+                    }, 320);
+                  },
+                  duration - 350 > 0 ? 0 : 350 - duration,
+                );
               }}
               onMouseEnter={playSeEnter}
               // theme="outline"
