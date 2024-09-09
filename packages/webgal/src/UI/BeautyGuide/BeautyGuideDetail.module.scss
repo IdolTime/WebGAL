@@ -190,9 +190,10 @@
             }
 
             .thumbnailWrapper {
-                height: 150px;
-                width: 100%;
-                padding: 10px;
+                // min-height: px2(65px);
+                width: 85%;
+                padding: px2(10px);
+                margin-bottom: px2(5px);
                 overflow-x: auto;
                 overflow-y: hidden;
 
@@ -202,22 +203,22 @@
                 }
                 
                 .thumbnail_box {
-                    width: 200px;
-                    height: 180px;
-                    margin-right: 10px;
-                    padding: 10px 0;
+                    width: px2(109px);
+                    height: px2(62px);
+                    margin-right: px2(10px);
+                    padding: px2(10px) 0;
                     transition: all 0.3s;
                     overflow: hidden;
                     position: relative;
                     flex-shrink: 0;
                     cursor: pointer;
 
-                    // &:hover {
-                        
-                    //     & > img {
-                    //         transform: scale(1.2);
-                    //     }
-                    // }
+                    &:hover {
+                        cursor: pointer;
+                        // & > img {
+                        //     transform: scale(1.2);
+                        // }
+                    }
 
                     &:last-child {
                         margin-right: 0;
@@ -249,7 +250,7 @@
         }
 
         .desc_text {
-            padding: 20px 20px;
+            padding: px2(20px);
             min-height: 100px;
             width: px2(708px);
             position: relative;
