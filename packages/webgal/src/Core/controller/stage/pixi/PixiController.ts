@@ -554,17 +554,22 @@ export default class PixiStage {
             thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
           }
 
+
           if (key.startsWith('popImg-')) {
-
-            const axesX = originalWidth / 2 + 270;
-            const axesY = originalHeight * 2 + 55;
-
-            thisFigureContainer.setBaseX(axesX);
-            thisFigureContainer.setBaseY(axesY);
 
             // CG图片尺寸统一为680X420
             figureSprite.x = 680;
             figureSprite.y = 420;
+
+            const num = updateScreenSize().width === 2560 ? 2 : 3;
+            const axesY = 90 * num;
+            const axesX = 
+              presetPosition === 'center' && 300 * num ||
+              presetPosition === 'left' && 20 ||
+              presetPosition === 'right' && 300 * num * 2 - 20 || 0;
+
+            thisFigureContainer.setBaseX(axesX);
+            thisFigureContainer.setBaseY(axesY);
 
           } else {
             if (presetPosition === 'center') {
@@ -600,7 +605,13 @@ export default class PixiStage {
             // 开始播放动画
             updateFrame();
           }
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+
+          if (key.startsWith('popImg-')) {
+            thisFigureContainer.pivot.set(0, 0);
+          } else {
+            thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+          }
+
           thisFigureContainer.addChild(figureSprite);
         };
 
