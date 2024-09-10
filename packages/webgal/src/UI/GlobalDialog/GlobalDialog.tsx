@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
-import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
+import useSoundEffect, { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import React from 'react';
 import { Button } from '../Components/Base';
 import { TitleSceneButtonKey } from '@/Core/UIConfigTypes';
@@ -39,14 +39,17 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
   const modalType = props.type ?? 'normal';
   webgalStore.dispatch(setVisibility({ component: 'showGlobalDialog', visibility: true }));
   const handleLeft = () => {
+    playSeClick();
     props.leftFunc?.();
     hideGlobalDialog();
   };
   const handleRight = () => {
+    playSeClick();
     props.rightFunc();
     hideGlobalDialog();
   };
   let renderElement: React.ReactNode | null = null;
+  let clickedTime = 0;
 
   if (modalType === 'normal') {
     renderElement = (
@@ -56,21 +59,63 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             <div className={styles.title}>{props.title}</div>
             <div className={styles.button_list}>
               {!!props.leftText && (
-                <Button
-                  item={defaultItem}
-                  defaultClass={styles.button}
-                  onClick={handleLeft}
+                <div
+                  className={styles.button}
                   onMouseEnter={playSeEnter}
-                  defaultText={props.leftText}
-                />
+                  onMouseDown={(e) => {
+                    const node = e.currentTarget as HTMLDivElement;
+                    node.className = `${styles.button} btn-clicked`;
+                    clickedTime = Date.now();
+                  }}
+                  onMouseUp={(e) => {
+                    const duration = Date.now() - clickedTime;
+                    let node = e.currentTarget;
+
+                    setTimeout(
+                      () => {
+                        node.className = styles.button;
+                        // @ts-ignore
+                        node = null;
+
+                        setTimeout(() => {
+                          handleLeft();
+                        }, 320);
+                      },
+                      duration - 350 > 0 ? 0 : 350 - duration,
+                    );
+                  }}
+                >
+                  {props.leftText}
+                </div>
               )}
-              <Button
-                item={defaultItem}
-                defaultClass={styles.button}
-                onClick={handleRight}
+              <div
+                className={styles.button}
                 onMouseEnter={playSeEnter}
-                defaultText={props.rightText}
-              />
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = `${styles.button} btn-clicked`;
+                  clickedTime = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTime;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = styles.button;
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(() => {
+                        handleRight();
+                      }, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
+              >
+                {props.rightText}
+              </div>
             </div>
           </div>
         </div>
@@ -81,14 +126,32 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
       <div className={styles.GlobalDialog_main}>
         <div className={styles.GlobalDialog_pay_container}>
           <div className={styles.GlobalDialog_pay_tip} />
-          <Button
-            defaultClass={styles.GlobalDialog_pay_close}
-            item={defaultItem}
+          <div
+            className={styles.GlobalDialog_pay_close}
             onMouseEnter={playSeEnter}
-            onClick={() => {
-              playSeClick();
-              handleLeft();
-              hideGlobalDialog();
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.GlobalDialog_pay_close} btn-clicked`;
+              clickedTime = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTime;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = styles.GlobalDialog_pay_close;
+                  // @ts-ignore
+                  node = null;
+
+                  setTimeout(() => {
+                    playSeClick();
+                    handleLeft();
+                    hideGlobalDialog();
+                  }, 320);
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
             }}
           />
           <div className={styles.GlobalDialog_pay_title}>{props.title}</div>
@@ -98,17 +161,57 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             {props.suffixContent}
           </div>
           <div className={styles.GlobalDialog_pay_btns}>
-            <Button
-              item={defaultItem}
-              defaultClass={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`}
-              onClick={handleLeft}
+            <div
+              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`}
               onMouseEnter={playSeEnter}
+              onMouseDown={(e) => {
+                const node = e.currentTarget as HTMLDivElement;
+                node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel} btn-clicked`;
+                clickedTime = Date.now();
+              }}
+              onMouseUp={(e) => {
+                const duration = Date.now() - clickedTime;
+                let node = e.currentTarget;
+
+                setTimeout(
+                  () => {
+                    node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`;
+                    // @ts-ignore
+                    node = null;
+
+                    setTimeout(() => {
+                      handleLeft();
+                    }, 320);
+                  },
+                  duration - 350 > 0 ? 0 : 350 - duration,
+                );
+              }}
             />
-            <Button
-              item={defaultItem}
-              defaultClass={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`}
-              onClick={handleRight}
+            <div
+              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`}
               onMouseEnter={playSeEnter}
+              onMouseDown={(e) => {
+                const node = e.currentTarget as HTMLDivElement;
+                node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm} btn-clicked`;
+                clickedTime = Date.now();
+              }}
+              onMouseUp={(e) => {
+                const duration = Date.now() - clickedTime;
+                let node = e.currentTarget;
+
+                setTimeout(
+                  () => {
+                    node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`;
+                    // @ts-ignore
+                    node = null;
+
+                    setTimeout(() => {
+                      handleRight();
+                    }, 320);
+                  },
+                  duration - 350 > 0 ? 0 : 350 - duration,
+                );
+              }}
             />
           </div>
         </div>

@@ -95,7 +95,30 @@ export const GameMenuPanel = () => {
   return (
     <>
       <div className={styles.gameMenuPanel}>
-        <div className={styles.menuButton} onClick={handleShowGameMenuPanel} onMouseEnter={playSeEnter} />
+        <div
+          className={styles.menuButton}
+          onMouseEnter={playSeEnter}
+          onMouseDown={(e) => {
+            const node = e.currentTarget as HTMLDivElement;
+            node.className = `${styles.menuButton} btn-clicked`;
+            clickedTimeRef.current = Date.now();
+          }}
+          onMouseUp={(e) => {
+            const duration = Date.now() - clickedTimeRef.current;
+            let node = e.currentTarget;
+
+            setTimeout(
+              () => {
+                node.className = styles.menuButton;
+                // @ts-ignore
+                node = null;
+
+                setTimeout(handleShowGameMenuPanel, 320);
+              },
+              duration - 350 > 0 ? 0 : 350 - duration,
+            );
+          }}
+        />
       </div>
       {show && (
         <div className={styles.gameMenuPanelContentWrapper}>

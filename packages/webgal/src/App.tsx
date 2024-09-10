@@ -1,7 +1,7 @@
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect, useState } from 'react';
-import { initializeScript } from './Core/initializeScript';
+import { initClickAnimation, initializeScript } from './Core/initializeScript';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
@@ -38,6 +38,7 @@ function App() {
   const GUIState = useSelector((state: RootState) => state.GUI);
 
   useEffect(() => {
+    initClickAnimation();
     initializeScript();
     const token = localStorage.getItem('editor-token');
     const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
