@@ -112,7 +112,12 @@ function getUserAnimation() {
 
 export function initClickAnimation() {
   document.getElementById('root')?.addEventListener('click', function (event) {
-    const target = event.target as HTMLElement; // 将 event.target 断言为 HTMLElement
+    let target = event.target as HTMLElement; // 将 event.target 断言为 HTMLElement
+
+    // 如果点击的不是按钮本身，可能是子元素，向上查找最接近的父级按钮
+    if (!target.classList.contains('btn-clicked')) {
+      target = target.closest('.btn-clicked') as HTMLElement;
+    }
 
     if (target?.classList.contains('btn-clicked')) {
       const container = document.body;

@@ -392,7 +392,6 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             className={className}
             style={styleObj}
             key={e.jump + i}
-            onClick={onClick}
             onMouseEnter={enable ? playSeEnter : undefined}
             onMouseDown={
               enable
