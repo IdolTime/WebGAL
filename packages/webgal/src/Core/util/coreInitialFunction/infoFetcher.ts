@@ -1,8 +1,12 @@
 /* eslint-disable complexity */
 import axios from 'axios';
-import { logger } from '../logger';
-import { assetSetter, fileType } from '../gameAssetsAccess/assetSetter';
-import { getStorage } from '../../controller/storage/storageController';
+import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
+import { 
+  GameMenuItem, 
+  EecMenuKey, 
+  EscMenuItem, 
+  EnumAchievementUIKey 
+} from '@/store/guiInterface';
 import { webgalStore } from '@/store/store';
 import {
   setGuiAsset,
@@ -13,13 +17,14 @@ import {
   setEscMenus,
   setAchievementUI,
 } from '@/store/GUIReducer';
+import { saveActions } from '@/store/savesReducer';
+import { WebGAL } from '@/Core/WebGAL';
+import { getStorage } from '@/Core/controller/storage/storageController';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
-import { WebGAL } from '@/Core/WebGAL';
 import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { GameMenuItem, EecMenuKey, EscMenuItem, EnumAchievementUIKey } from '@/store/guiInterface';
-import { setStage } from '@/store/stageReducer';
 import {
   AchievementSceneButtonKey,
   AchievementSceneOtherKey,
@@ -42,8 +47,8 @@ import {
   CollectionSceneOtherKey,
   SliderItemKey,
 } from '@/Core/UIConfigTypes';
-import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
 import { createCursorAnimation } from '@/Core/parser/utils';
+import { logger } from '@/Core/util/logger';
 
 declare global {
   interface Window {
@@ -147,33 +152,16 @@ export const infoFetcher = (url: string) => {
 
           case 'Game_sound': {
             if (options?.length > 0) {
-              const newOptions = options.map((option) => {
-                if (typeof option.value === 'string') {
-                  const values = option.value?.split(',');
-                  if (values?.length && !boolMap.get(values[0])) {
-                    option.value = values[1] ? assetSetter(values[1], fileType.bgm) : '';
-                  }
-                }
-                return option;
-              });
-
-              dispatch(setStage({ key: 'gameScounds', value: newOptions }));
+              const configObject = parseSound(options)
+              dispatch(saveActions.setSaveStatus({ key: 'gameScounds', value: configObject }));
             }
             break;
           }
 
           case 'Menu_sound': {
             if (options?.length > 0) {
-              const newOptions = options.map((option) => {
-                if (typeof option.value === 'string') {
-                  const values = option.value?.split(',');
-                  if (values?.length && !boolMap.get(values[0])) {
-                    option.value = values[1] ? assetSetter(values[1], fileType.bgm) : '';
-                  }
-                }
-                return option;
-              });
-              dispatch(setStage({ key: 'menuScounds', value: newOptions }));
+              const configObject = parseSound(options)
+              dispatch(saveActions.setSaveStatus({ key: 'menuScounds', value: configObject }));
             }
             break;
           }
@@ -432,4 +420,22 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
       hoverStyle: hoverStyleObj,
     },
   };
+}
+
+function parseSound (options: { key: string, value: string | number | boolean }[]) {
+  const config: Record<string, string | boolean> = {}
+  options.forEach((option) => {
+    if (typeof option.value === 'string') {
+      const values = option.value?.split(',') ?? [];
+      config[option.key] = values?.length
+        ? !!boolMap.get(values[0]) || assetSetter(values[1], fileType.bgm)
+        : false;
+    } else {
+      config[option.key] = typeof option.value === 'boolean'
+        ? !!boolMap.get(option.value) 
+        : false;
+    }
+  });
+
+  return config;
 }

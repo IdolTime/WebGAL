@@ -64,8 +64,6 @@ export const initState: IStageState = {
   },
   uiSe: '', // 用户界面音效 文件地址（相对或绝对）
   gameSe: '', // 游戏内页面音效 文件地址（相对或绝对）
-  gameScounds: [], // 游戏内音效
-  menuScounds: [], // 菜单内音效
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果

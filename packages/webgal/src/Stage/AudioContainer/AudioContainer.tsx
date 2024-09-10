@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { useEffect, useState } from 'react';
+import { saveActions } from '@/store/savesReducer'
 import { logger } from '@/Core/util/logger';
 import { getAudioUrl } from '@/Core/util/getAudioUrl';
 
@@ -102,6 +103,9 @@ export const AudioContainer = () => {
     const setEffects = async () => {
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
+      webgalStore.dispatch(saveActions.setSaveStatus({ 
+        key: 'uiSeAudioElement', value: uiSeAudioElement 
+      }));
       uiSeAudioElement.src = url;
       uiSeAudioElement.loop = false;
       // 设置音量
@@ -134,7 +138,13 @@ export const AudioContainer = () => {
 
   return (
     <div>
-      <audio key={isShowTitle.toString() + bgmUrl} id="currentBgm" src={bgmUrl} loop={true} autoPlay={isEnterGame} />
+      <audio 
+        key={isShowTitle.toString() + bgmUrl} 
+        id="currentBgm" 
+        src={bgmUrl} 
+        loop={true} 
+        autoPlay={isEnterGame} 
+      />
       <audio id="currentVocal" src={stageStore.playVocal} />
     </div>
   );

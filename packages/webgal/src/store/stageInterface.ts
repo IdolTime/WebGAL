@@ -168,8 +168,6 @@ export interface IStageState {
   };
   uiSe: string; // 用户界面音效 文件地址（相对或绝对）
   gameSe: string; // 游戏内音效
-  gameScounds: IScound[]; // 游戏内音效
-  menuScounds: IScound[]; // 菜单内音效
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换
