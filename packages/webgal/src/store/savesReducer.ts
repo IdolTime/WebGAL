@@ -19,6 +19,14 @@ export interface ISavesData {
   allUnlockAchieveList: IUnlockAchieveItem[];
   allStorylineData: Array<ISaveStoryLineData>;
   unlockAffinityData: ISaveAffinity[];
+  gameScounds: Record<string, string | boolean>; // 游戏内音效
+  menuScounds: Record<string, string | boolean>; // 菜单内音效
+  uiSeAudioElement: HTMLAudioElement | null;
+}
+
+export interface ISetSavePayload {
+  key: keyof ISavesData;
+  value: unknown;
 }
 
 const initState: ISavesData = {
@@ -35,6 +43,9 @@ const initState: ISavesData = {
   allUnlockAchieveList: [],
   allStorylineData: [],
   unlockAffinityData: [],
+  gameScounds: {}, // 游戏内音效
+  menuScounds: {}, // 菜单内音效
+  uiSeAudioElement: null
 };
 
 interface ISaveStoryLine {
@@ -135,6 +146,10 @@ const saveDataSlice = createSlice({
     },
     updateAffinityData: (state, action: PayloadAction<ISaveAffinity[]>) => {
       state.unlockAffinityData = action.payload;
+    },
+    setSaveStatus: (state, action: PayloadAction<ISetSavePayload>) => {
+      // @ts-ignore
+      state[action.payload.key] = action.payload.value;
     },
   },
 });

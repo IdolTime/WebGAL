@@ -13,6 +13,7 @@ import {
   setEscMenus,
   setAchievementUI,
 } from '@/store/GUIReducer';
+import { saveActions } from '@/store/savesReducer';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
@@ -147,33 +148,16 @@ export const infoFetcher = (url: string) => {
 
           case 'Game_sound': {
             if (options?.length > 0) {
-              const newOptions = options.map((option) => {
-                if (typeof option.value === 'string') {
-                  const values = option.value?.split(',');
-                  if (values?.length && !boolMap.get(values[0])) {
-                    option.value = values[1] ? assetSetter(values[1], fileType.bgm) : '';
-                  }
-                }
-                return option;
-              });
-
-              dispatch(setStage({ key: 'gameScounds', value: newOptions }));
+              const configObject = parseSound(options)
+              dispatch(saveActions.setSaveStatus({ key: 'gameScounds', value: configObject }));
             }
             break;
           }
 
           case 'Menu_sound': {
             if (options?.length > 0) {
-              const newOptions = options.map((option) => {
-                if (typeof option.value === 'string') {
-                  const values = option.value?.split(',');
-                  if (values?.length && !boolMap.get(values[0])) {
-                    option.value = values[1] ? assetSetter(values[1], fileType.bgm) : '';
-                  }
-                }
-                return option;
-              });
-              dispatch(setStage({ key: 'menuScounds', value: newOptions }));
+              const configObject = parseSound(options)
+              dispatch(saveActions.setSaveStatus({ key: 'menuScounds', value: configObject }));
             }
             break;
           }
@@ -444,4 +428,22 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
       hoverStyle: hoverStyleObj,
     },
   };
+}
+
+function parseSound (options: { key: string, value: string | number | boolean }[]) {
+  const config: Record<string, string | boolean> = {}
+  options.forEach((option) => {
+    if (typeof option.value === 'string') {
+      const values = option.value?.split(',') ?? [];
+      config[option.key] = values?.length
+        ? !!boolMap.get(values[0]) || assetSetter(values[1], fileType.bgm)
+        : false;
+    } else {
+      config[option.key] = typeof option.value === 'boolean'
+        ? !!boolMap.get(option.value) 
+        : false;
+    }
+  });
+
+  return config;
 }

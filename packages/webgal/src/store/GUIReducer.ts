@@ -45,6 +45,7 @@ const initStateEscMenu = {
  * 初始GUI状态表
  */
 export const initState: IGuiState = {
+  isInGaming: false,
   showBacklog: false,
   showStarter: true,
   showTitle: true,

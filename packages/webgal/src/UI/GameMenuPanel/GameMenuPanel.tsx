@@ -87,6 +87,7 @@ export const GameMenuPanel = () => {
       leftFunc: () => {},
       rightFunc: () => {
         setComponentVisibility('isShowGameMenu', false);
+        setComponentVisibility('isInGaming', false);
         backToTitle();
       },
     });
