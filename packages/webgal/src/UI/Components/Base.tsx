@@ -180,6 +180,7 @@ export const CustomContainer = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  hoverImgSrc
 }: {
   children: ReactNode;
   defaultClass?: string;
@@ -189,6 +190,7 @@ export const CustomContainer = ({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onClick?: (e: any) => void;
+  hoverImgSrc?: string;
 }) => {
   const [hover, setHover] = useState(false);
   let className = defaultClass;
@@ -209,7 +211,11 @@ export const CustomContainer = ({
   };
   if (hover) {
     className = `${defaultClass} ${defaultHoverClass}`;
-    _style = { ...style, ...hoverStyle };
+    _style = { 
+      ...style, 
+      ...hoverStyle,
+      backgroundImage: `url(${hoverImgSrc})`
+    };
   }
 
   return (
@@ -273,6 +279,9 @@ export const Button = ({
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
   const src = item.args.style?.image || '';
   const hoverSrc = item.args.hoverStyle?.image || src;
+  const hoverImgSrc = type === 'button' && 
+    item.args.hoverStyle?.image && 
+    assetSetter(item.args.hoverStyle.image, fileType.ui) || '';
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
   const textStyle: CSSProperties = src
@@ -313,6 +322,7 @@ export const Button = ({
       style={_style}
       hoverStyle={hoverStyle}
       key={key}
+      hoverImgSrc={hoverImgSrc}
     >
       {/* {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />} */}
       {!!hoverSrc && type === 'checkbox' && checked && (
