@@ -134,6 +134,7 @@ export interface EscMenuItem {
       fontColor?: string;
       countdown?: number;
       btnImage?: string;
+      btnSound?: string;
       btnPosition: string;
       align: string;
       fontFamily: string;

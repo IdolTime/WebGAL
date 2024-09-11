@@ -58,12 +58,12 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
     if (styleObj.x !== undefined) {
       style.left = px2(styleObj.x) + 'px';
       style.position = 'absolute';
-      style.transform = 'translateX(-50%)';
+      // style.transform = 'translateX(-50%)';
     }
     if (styleObj.y !== undefined) {
       style.top = px2(styleObj.y) + 'px';
       style.position = 'absolute';
-      style.transform += ' translateY(-50%)';
+      // style.transform += ' translateY(-50%)';
     }
     if (styleObj.scale !== undefined) {
       style.transform += ` scale(${styleObj.scale})`;

@@ -313,11 +313,12 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     };
 
     const parsedArgs: any = { hide: false, style: {} };
+    const parsedKeys = ['info', 'images', 'btnSound'];
 
     args.forEach((e: any) => {
       if (e.key === 'hide') {
         parsedArgs.hide = e.value === true;
-      } else if (e.key.toLowerCase().endsWith('style') || sliderKeyArr.includes(e.key)) {
+      } else if (e.key.toLowerCase().endsWith('style')) {
         const style = parseStyleString(e.value as string);
 
         if (e.key === 'style' && swapImageContent) {
@@ -325,7 +326,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
         }
 
         parsedArgs[e.key] = style;
-      } else if (e.key.includes('info') || e.key.includes('images') || e.key === 'videos') {
+      } else if (parsedKeys.includes(e.key)) {
         const info = parseStyleString(e.value as string);
         parsedArgs[e.key] = info;
       }

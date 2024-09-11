@@ -4,7 +4,13 @@
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
 import { sceneUIConfig } from '@/Core/UIConfigTypes';
-import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload, EnumAchievementUIKey } from '@/store/guiInterface';
+import {
+  IGuiState,
+  MenuPanelTag,
+  setAssetPayload,
+  setVisibilityPayload,
+  EnumAchievementUIKey,
+} from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**
@@ -15,9 +21,9 @@ const initStateAchievement = {
   args: {
     hide: true,
     style: {},
-    hoverStyle: {}
-  }
-}
+    hoverStyle: {},
+  },
+};
 
 /**
  * ESC菜单按钮初始状态
@@ -37,8 +43,8 @@ const initStateEscMenu = {
       align: '',
       fontFamily: '',
     },
-  }
-}
+  },
+};
 
 /**
  * 初始GUI状态表
@@ -76,7 +82,7 @@ export const initState: IGuiState = {
     Esc_continueGame_button: initStateEscMenu,
     Esc_backToLevel_button: initStateEscMenu,
     Esc_setting_button: initStateEscMenu,
-    Esc_exitGame_button: initStateEscMenu
+    Esc_exitGame_button: initStateEscMenu,
   },
   achievementUI: {
     Achievement_progress_bg: initStateAchievement,
@@ -84,8 +90,8 @@ export const initState: IGuiState = {
     Achievement_progress: initStateAchievement,
     Achievement_notUnlock: initStateAchievement,
     Achievement_back_button: initStateAchievement,
-    Achievement_title: initStateAchievement
-  }
+    Achievement_title: initStateAchievement,
+  },
 };
 
 /**

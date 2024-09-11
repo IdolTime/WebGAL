@@ -8,9 +8,6 @@ cd ../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template || exit
 rm -r assets
 rm -r index.html
 rm -f idoltime-serviceworker.js
-rm -f decoderWorker.js
-rm -f waveWorker.js
-rm -f decoderWorker.wasm
 
 # 进入 WebGAL 构建目录
 cd ../../../../../../WebGAL/packages/webgal || exit
@@ -18,6 +15,3 @@ cd ../../../../../../WebGAL/packages/webgal || exit
 cp -r dist/index.html ../../../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template
 cp -r dist/assets ../../../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template
 cp -r dist/idoltime-serviceworker.js ../../../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template
-cp -r dist/decoderWorker.js ../../../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template
-cp -r dist/waveWorker.js ../../../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template
-cp -r dist/decoderWorker.wasm ../../../WebGAL_Terre/packages/terre2/assets/templates/IdolTime_Template

@@ -1,13 +1,4 @@
-import React, 
-  { 
-    ChangeEvent,
-    CSSProperties, 
-    ReactNode, 
-    useEffect, 
-    useMemo, 
-    useRef, 
-    useState 
-  } from 'react';
+import React, { ChangeEvent, CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ButtonItem,
   ContainerItem,
@@ -94,7 +85,7 @@ export const CustomImage = ({
   onMouseLeave,
   onClick,
   nId,
-  draggable
+  draggable,
 }: {
   src: string;
   hoverSrc?: string;
@@ -116,7 +107,7 @@ export const CustomImage = ({
   let _style = style || {};
 
   const _onMouseEnter = debounce(() => {
-    if (hoverStyle) {
+    if (hoverSrc || hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
@@ -132,7 +123,7 @@ export const CustomImage = ({
   };
 
   if (hover) {
-    className = `${defaultClass} ${defaultHoverClass} imageHoverAnimation`;
+    className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
     _style = { ...style, ...hoverStyle };
   }
 
@@ -163,6 +154,7 @@ export const CustomImage = ({
 };
 
 export const CustomContainer = ({
+  item,
   children,
   defaultClass,
   defaultHoverClass,
@@ -170,8 +162,12 @@ export const CustomContainer = ({
   hoverStyle,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
   onClick,
+  id,
 }: {
+  item?: ContainerItem;
   children: ReactNode;
   defaultClass?: string;
   defaultHoverClass?: string;
@@ -179,13 +175,24 @@ export const CustomContainer = ({
   hoverStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
   onClick?: (e: any) => void;
+  id?: string;
 }) => {
   const [hover, setHover] = useState(false);
   let className = defaultClass;
   let _style = style;
+  let _hoverStyle = hoverStyle;
+
+  if (item) {
+    if (item.args.hide) return null;
+    if (!_style) _style = parseStyleArg(item.args.style);
+    if (!_hoverStyle) _hoverStyle = parseStyleArg(item.args.hoverStyle);
+  }
+
   const _onMouseEnter = debounce(() => {
-    if (hoverStyle) {
+    if (_hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
@@ -199,8 +206,8 @@ export const CustomContainer = ({
     }
   };
   if (hover) {
-    className = `${defaultClass} ${defaultHoverClass}`;
-    _style = { ...style, ...hoverStyle };
+    className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
+    _style = { ..._style, ..._hoverStyle };
   }
 
   return (
@@ -210,6 +217,9 @@ export const CustomContainer = ({
       onMouseLeave={_onMouseLeave}
       onClick={onClick}
       style={_style}
+      id={id}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
     >
       {children}
     </div>
@@ -225,7 +235,7 @@ export const BgImage = ({ item, defaultClass, key }: { item: Item; defaultClass?
 
   if (!item.args.style?.image) return <div className={defaultClass} style={style} draggable="false" />;
 
-  return <CustomImage key={key} defaultClass={defaultClass} src={src} style={style} draggable={false} />;
+  return <CustomImage key={key} defaultClass={defaultClass} src={src} style={style} />;
 };
 
 export const Button = ({
@@ -260,12 +270,19 @@ export const Button = ({
   defaultText?: string;
 }) => {
   if (item.args.hide) return null;
+  const [clicked, setClicked] = useState(false);
   const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
+  const { playSeClick } = useSoundEffect();
   const src = item.args.style?.image || '';
+  const customClickSound = item.args?.btnSound?.clickSound
+    ? assetSetter(item.args.btnSound.clickSound, fileType.bgm)
+    : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
+  const clickTimerRef = useRef<any>();
+  const clickedTimeRef = useRef(0);
   const textStyle: CSSProperties = src
     ? {
         position: 'absolute',
@@ -285,32 +302,61 @@ export const Button = ({
     _style.backgroundRepeat = 'no-repeat';
   }
 
-  const clickCallback = (event: React.MouseEvent<HTMLDivElement>) => {
+  const clickCallback = () => {
     if (type === 'checkbox') {
+      playSeClick(customClickSound);
       onChecked(!checked);
     }
     if (onClick) {
+      playSeClick(customClickSound);
       onClick();
     }
   };
+
+  const interactable = typeof onClick === 'function' && typeof onMouseEnter === 'function';
 
   return (
     <CustomContainer
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={clickCallback}
-      defaultClass={defaultClass}
+      // onMouseDown={
+      //   interactable
+      //     ? () => {
+      //         clearTimeout(clickTimerRef.current);
+      //         setClicked(true);
+      //         clickedTimeRef.current = Date.now();
+      //       }
+      //     : undefined
+      // }
+      // onMouseUp={
+      //   interactable
+      //     ? () => {
+      //         const duration = Date.now() - clickedTimeRef.current;
+
+      //         setTimeout(
+      //           () => {
+      //             setClicked(false);
+      //             setTimeout(() => {
+      //               clickCallback();
+      //             }, 320);
+      //           },
+      //           duration - 350 > 0 ? 0 : 350 - duration,
+      //         );
+      //       }
+      //     : undefined
+      // }
+      defaultClass={`${defaultClass} ${clicked ? 'btn-clicked' : ''}`}
       defaultHoverClass={defaultHoverClass}
       style={_style}
       hoverStyle={hoverStyle}
       key={key}
     >
-      {/* {!!src && <CustomImage src={assetSetter(src, fileType.ui)} hoverSrc={type !== 'checkbox' ? hoverSrc : ''} style={imgStyle } />} */}
-      {!!hoverSrc && type === 'checkbox' && checked && (
+      {!!src && (
         <CustomImage
           nId={key}
-          src={assetSetter(hoverSrc, fileType.ui)}
-          hoverSrc={type !== 'checkbox' ? hoverSrc : ''}
+          src={assetSetter(checked ? hoverSrc : src, fileType.ui)}
+          hoverSrc={hoverSrc ? assetSetter(hoverSrc, fileType.ui) : ''}
           style={imgStyle}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -436,42 +482,34 @@ export const OptionSliderCustome = ({
     const inputBg = document.getElementById(`${uniqueID}-bg`);
     if (inputBg !== null) {
       if (uniqueID === 'light') {
-        const num = updateScreenSize().width == 2560 ? 2 : 3
+        const num = updateScreenSize().width === 2560 ? 2 : 3;
         const normalizedValue = (Number(initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
         const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * num) + 'px'; // 将 0-1 映射到 0-684px 范围
         inputBg.style.width = progressBarWidth;
       } else {
-        const scale = updateScreenSize().width == 2560 ? 0.5 : 0.3333
+        const scale = updateScreenSize().width === 2560 ? 0.5 : 0.3333;
         inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / scale + 'px';
       }
     }
   }
 
   const bgNone = {
-    background: 'none'
-  }
+    background: 'none',
+  };
 
   const style = parseStyleArg(item.args.style);
 
-  const barStyle = 
-    item.args?.slider?.image
-      ? {...parseStyleArg(item.args?.slider), ...bgNone}
-      : parseStyleArg(item.args?.slider);
+  const barStyle = item.args?.slider?.image
+    ? { ...parseStyleArg(item.args?.slider), ...bgNone }
+    : parseStyleArg(item.args?.slider);
 
-  const barBgStyle = 
-    item.args?.sliderBg?.image
-      ? { ...parseStyleArg(item.args?.sliderBg), ...bgNone }
-      : parseStyleArg(item.args?.sliderBg);
+  const barBgStyle = item.args?.sliderBg?.image
+    ? { ...parseStyleArg(item.args?.sliderBg), ...bgNone }
+    : parseStyleArg(item.args?.sliderBg);
 
-  const barSrc = 
-    item.args?.slider?.image 
-      ? assetSetter(item.args.slider.image, fileType.ui) 
-      : BarSlider;
+  const barSrc = item.args?.slider?.image ? assetSetter(item.args.slider.image, fileType.ui) : BarSlider;
 
-  const barBgSrc = 
-    item.args?.sliderBg?.image 
-      ? assetSetter(item.args.sliderBg.image, fileType.ui) 
-      : BarBg;
+  const barBgSrc = item.args?.sliderBg?.image ? assetSetter(item.args.sliderBg.image, fileType.ui) : BarBg;
 
   return (
     <CustomContainer style={style} defaultClass={`Option_WebGAL_slider ${defaultClass}`}>
@@ -486,7 +524,7 @@ export const OptionSliderCustome = ({
         onMouseEnter={playSeEnter}
       />
       <div className="Slider_group">
-        <CustomImage src={barSrc} style={barStyle} defaultClass="Slider_bg" nId={`${uniqueID}-bg`} draggable={false}  />
+        <CustomImage src={barSrc} style={barStyle} defaultClass="Slider_bg" nId={`${uniqueID}-bg`} draggable={false} />
         <CustomImage src={barBgSrc} style={barBgStyle} defaultClass="Slider_bg_under" draggable={false} />
       </div>
     </CustomContainer>

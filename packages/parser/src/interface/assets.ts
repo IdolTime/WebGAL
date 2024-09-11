@@ -9,4 +9,7 @@ export enum fileType {
   tex,
   vocal,
   video,
+  ui,
+  image,
+  font,
 }

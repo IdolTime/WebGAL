@@ -179,3 +179,17 @@ code {
     cursor: inherit;
   }
 }
+
+.btn-clicked {
+  transform: scale(0.85) !important;
+  transition: all 0.33s ease-in-out;
+}
+
+.click-frame {
+  position: fixed;
+  width: 72px;
+  height: 72.5px;
+  z-index: 99999;
+  background-size: cover;
+  pointer-events: none;
+}
