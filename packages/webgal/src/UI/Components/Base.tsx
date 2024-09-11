@@ -26,6 +26,7 @@ export const CustomText = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  key,
 }: {
   text: string;
   defaultClass?: string;
@@ -35,7 +36,9 @@ export const CustomText = ({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onClick?: () => void;
+  key?: string;
 }) => {
+  const id = `customText-${key}-${text}`;
   const [hover, setHover] = useState(false);
   let className = defaultClass;
   let _style = style;
@@ -61,6 +64,11 @@ export const CustomText = ({
     _style = { ...style, ...hoverStyle };
   }
 
+  const btnTextElement = document.getElementById(`${id}-text`);
+  if (btnTextElement && text) {
+    btnTextElement.innerText = text?.replace(/\\n/g, '\n') ?? text;
+  }
+
   return (
     <span
       className={className}
@@ -68,6 +76,7 @@ export const CustomText = ({
       onMouseLeave={_onMouseLeave}
       onClick={onClick}
       style={_style}
+      id={`${id}-text`}
     >
       {text}
     </span>
@@ -166,6 +175,7 @@ export const CustomContainer = ({
   onMouseUp,
   onClick,
   id,
+  hoverImgSrc,
 }: {
   item?: ContainerItem;
   children: ReactNode;
@@ -179,6 +189,7 @@ export const CustomContainer = ({
   onMouseUp?: () => void;
   onClick?: (e: any) => void;
   id?: string;
+  hoverImgSrc?: string;
 }) => {
   const [hover, setHover] = useState(false);
   let className = defaultClass;
@@ -206,8 +217,12 @@ export const CustomContainer = ({
     }
   };
   if (hover) {
-    className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
-    _style = { ..._style, ..._hoverStyle };
+    className = `${defaultClass} ${defaultHoverClass}`;
+    _style = {
+      ...style,
+      ...hoverStyle,
+      backgroundImage: `url(${hoverImgSrc})`,
+    };
   }
 
   return (
@@ -279,6 +294,8 @@ export const Button = ({
     ? assetSetter(item.args.btnSound.clickSound, fileType.bgm)
     : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
+  const hoverImgSrc =
+    (type === 'button' && item.args.hoverStyle?.image && assetSetter(item.args.hoverStyle.image, fileType.ui)) || '';
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
   const clickTimerRef = useRef<any>();
@@ -351,6 +368,7 @@ export const Button = ({
       style={_style}
       hoverStyle={hoverStyle}
       key={key}
+      hoverImgSrc={hoverImgSrc}
     >
       {!!src && (
         <CustomImage
@@ -363,7 +381,7 @@ export const Button = ({
         />
       )}
       {menu.content ? (
-        <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
+        <CustomText key={key} text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
       ) : (
         !src && defaultText
       )}
