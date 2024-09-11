@@ -184,9 +184,8 @@ code {
 
 .click-frame {
   position: fixed;
-  width: 158px;
-  height: 169px;
-  animation: fadeOut 0.5s forwards;
+  width: 72px;
+  height: 72.5px;
   z-index: 99999;
   background-size: cover;
   pointer-events: none;
@@ -195,18 +194,6 @@ code {
 .test-frame {
   animation: 1s forwards test2F;
   opacity: 0;
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
 }
 
 @keyframes test2F {
