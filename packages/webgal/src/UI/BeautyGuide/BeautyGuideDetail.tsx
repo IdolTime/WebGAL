@@ -1,34 +1,28 @@
-import React, { FC, useEffect, useState, useMemo } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setVisibility } from '@/store/GUIReducer';
 import { RootState } from '@/store/store';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { IPersonalInfo, IContent, ContentTypeEnum } from './configData';
+import { ContentTypeEnum } from './configData';
 import BeautyGuideImageDialog from './BeautyGuideImageDialog';
 import { Button, BgImage } from '@/UI/Components/Base';
 import {
   CollectionSceneUIConfig,
   CollectionSceneOtherKey,
   Scene,
-  CollectionInfoItem,
   CollectionInfo,
   contentListItem,
 } from '@/Core/UIConfigTypes';
-import { parseStyleArg, parseImagesArg, parseVideosArg } from '@/Core/parser/utils';
+import { parseStyleArg } from '@/Core/parser/utils';
 import {
   ButtonItem,
-  ContainerItem,
-  IndicatorContainerItem,
-  SliderContainerItem,
-  Style,
-  UIItemConfig,
+  ContainerItem
 } from '@/Core/UIConfigTypes';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 import styles from './BeautyGuideDetail.module.scss';
 import FlvPlayer from '../FlvPlayer';
 import FlvJs from 'flv.js';
-import { Display } from '../Menu/Options/Display/Display';
 
 
 type Item = ButtonItem | ContainerItem;
@@ -36,6 +30,7 @@ interface IProps {
   info: CollectionInfo | null;
   infoItemStyle: React.CSSProperties | null;
   detailRightDescBgStyle: Item;
+  infoTextStyle: React.CSSProperties | null;
 }
 
 type alignType = 'column' | 'column-reverse';
@@ -155,31 +150,33 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
               <img src={props.info?.image} alt="" />
             </div>
             <div className={styles.personal_info}>
-              <h3 className={styles.name}>{props.info?.name ?? ''}</h3>
+              <h3 className={styles.name} style={props?.infoItemStyle ?? {}}>
+                {props.info?.name ?? ''}
+              </h3>
 
-              <div className={styles.info}>
+              <div className={styles.info} style={props?.infoTextStyle ?? {}}>
                 <span>身高</span>
-                <span>{props.info?.height ?? '-'}</span>
+                <span>{props.info?.height ?? ''}</span>
               </div>
 
-              <div className={styles.info}>
+              <div className={styles.info} style={props?.infoTextStyle ?? {}}>
                 <span>体重</span>
-                <span>{props.info?.weight ?? '-'}</span>
+                <span>{props.info?.weight ?? ''}</span>
               </div>
 
-              <div className={styles.info}>
+              <div className={styles.info} style={props?.infoTextStyle ?? {}}>
                 <span>胸围</span>
-                <span>{props.info?.bustSize ?? '-'}</span>
+                <span>{props.info?.bustSize ?? ''}</span>
               </div>
 
-              <div className={styles.info}>
+              <div className={styles.info} style={props?.infoTextStyle ?? {}}>
                 <span>腰围</span>
-                <span>{props.info?.waistSize ?? '-'}</span>
+                <span>{props.info?.waistSize ?? ''}</span>
               </div>
 
-              <div className={styles.info}>
+              <div className={styles.info} style={props?.infoTextStyle ?? {}}>
                 <span>臀围</span>
-                <span>{props.info?.hipSize ?? '-'}</span>
+                <span>{props.info?.hipSize ?? ''}</span>
               </div>
             </div>
           </div>
