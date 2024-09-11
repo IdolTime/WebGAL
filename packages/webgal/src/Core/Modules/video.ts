@@ -272,10 +272,6 @@ export class VideoManager {
     }
   }
 
-  public setUrlIdMap(id: string, url: string) {
-    this.idURLMap[id] = url;
-  }
-
   public forward(key: string): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
