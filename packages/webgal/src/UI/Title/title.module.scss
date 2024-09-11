@@ -34,6 +34,7 @@
   // background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
   font-size: 165%;
   color: #fbfbfb;
+  white-space: pre;
 }
 
 .Title_button:hover {
@@ -44,6 +45,7 @@
 .Title_button_text {
   padding: 0 0.5em 0 0.5em;
   letter-spacing: 0.2em;
+  white-space: pre;
 }
 
 .Title_button_custom {

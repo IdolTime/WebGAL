@@ -35,6 +35,7 @@ export const CustomText = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  key,
 }: {
   text: string;
   defaultClass?: string;
@@ -44,7 +45,9 @@ export const CustomText = ({
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onClick?: () => void;
+  key?: string;
 }) => {
+  const id = `customText-${key}-${text}`
   const [hover, setHover] = useState(false);
   let className = defaultClass;
   let _style = style;
@@ -70,6 +73,11 @@ export const CustomText = ({
     _style = { ...style, ...hoverStyle };
   }
 
+  const btnTextElement = document.getElementById(`${id}-text`)
+  if (btnTextElement && text) {
+    btnTextElement.innerText = text?.replace(/\\n/g, "\n") ?? text;
+  }
+
   return (
     <span
       className={className}
@@ -77,6 +85,7 @@ export const CustomText = ({
       onMouseLeave={_onMouseLeave}
       onClick={onClick}
       style={_style}
+      id={`${id}-text`}
     >
       {text}
     </span>
@@ -317,7 +326,12 @@ export const Button = ({
         />
       )}
       {menu.content ? (
-        <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
+        <CustomText 
+          key={key} 
+          text={menu.content} 
+          defaultClass={defaultTextClass} 
+          style={textStyle} 
+        />
       ) : (
         !src && defaultText
       )}
