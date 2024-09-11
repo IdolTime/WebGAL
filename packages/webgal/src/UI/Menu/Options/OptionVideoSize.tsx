@@ -139,6 +139,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
     const MS: 2 | 3 = currentValue === videoSizeOption.Size1080P ? 3 : 2;
     const MSTop: 2 | 3.2 = currentValue === videoSizeOption.Size1080P ? 3.2 : 2;
 
+    const scaleFactor = currentValue === videoSizeOption.Size1080P ? 0.3333 : 0.5;
+
+    rootEle.style.setProperty('--scale-factor', `${scaleFactor}`);
+
     rootEle.style.setProperty('--options_checkbox_top', `${239 * MS}px`);
     rootEle.style.setProperty('--options_checkbox_left', `${441 * MS}px`);
 
@@ -151,10 +155,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
     rootEle.style.setProperty('--options_checkbox_720P_top', `${266 * MSTop}px`);
     rootEle.style.setProperty('--options_checkbox_720P_left', `${640 * MS}px`);
 
-    rootEle.style.setProperty('--options_light_slider_top', `${445 * MS}px`);
+    rootEle.style.setProperty('--options_light_slider_top', `${375 * MS}px`);
     rootEle.style.setProperty('--options_light_slider_left', `${622 * MS}px`);
 
-    rootEle.style.setProperty('--options_sound_slider_top', `${375 * MS}px`);
+    rootEle.style.setProperty('--options_sound_slider_top', `${445 * MS}px`);
     rootEle.style.setProperty('--options_sound_slider_left', `${622 * MS}px`);
 
     rootEle.style.setProperty('--options_light_main_top', `${510 * MS}px`);
@@ -185,9 +189,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_videoSize1080_checkbox]}
         defaultClass={`${styles.Options_checkbox} ${styles.Options_checkbox_1080P} ${
           userDataState.optionData.videoSize === videoSizeOption.Size1080P ? styles.Options_checkbox_active : ''
-        }`}
+        } interactive`}
         onMouseEnter={playSeEnter}
         onChecked={() => {
+          playSeClick();
           window.localStorage.setItem('game-screen-size', sizeOptions[0]);
           updateScreenSize(sizeOptions[0]);
           setCurrentValue(sizeOptions[0]);
@@ -205,9 +210,10 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
         item={optionUIConfigs.other[OptionSceneOtherKey.Option_videoSize720_checkbox]}
         defaultClass={`${styles.Options_checkbox} ${styles.Options_checkbox_720P} ${
           userDataState.optionData.videoSize === videoSizeOption.Size720P ? styles.Options_checkbox_active : ''
-        }`}
+        } interactive`}
         onMouseEnter={playSeEnter}
         onChecked={() => {
+          playSeClick();
           window.localStorage.setItem('game-screen-size', sizeOptions[1]);
           updateScreenSize(sizeOptions[1]);
           setCurrentValue(sizeOptions[1]);

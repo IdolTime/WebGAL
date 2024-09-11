@@ -48,7 +48,7 @@ export const Affinity: FC = () => {
         <div className={styles.affinity}>
           <Button
             item={affinityUIConfigs.buttons.Affinity_back_button}
-            defaultClass={styles.goBack}
+            defaultClass={`${styles.goBack} inactive`}
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />

@@ -153,7 +153,7 @@ export function ModalRecharge() {
                   key={j}
                   className={`${styles.RechargeModal_rechargeModalItem} ${
                     item === selectedItem ? styles.RechargeModal_rechargeModalItemChecked : ''
-                  }`}
+                  } interactive`}
                   onMouseEnter={playSeEnter}
                   onClick={() => {
                     playSeClick();

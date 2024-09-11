@@ -60,11 +60,11 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
             <div className={styles.button_list}>
               {!!props.leftText && (
                 <div
-                  className={styles.button}
+                  className={`${styles.button} interactive`}
                   onMouseEnter={playSeEnter}
                   onMouseDown={(e) => {
                     const node = e.currentTarget as HTMLDivElement;
-                    node.className = `${styles.button} btn-clicked`;
+                    node.className = `${styles.button} interactive btn-clicked`;
                     clickedTime = Date.now();
                   }}
                   onMouseUp={(e) => {
@@ -73,7 +73,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
 
                     setTimeout(
                       () => {
-                        node.className = styles.button;
+                        node.className = `${styles.button} interactive`;
                         // @ts-ignore
                         node = null;
 
@@ -89,11 +89,11 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
                 </div>
               )}
               <div
-                className={styles.button}
+                className={`${styles.button} interactive`}
                 onMouseEnter={playSeEnter}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
-                  node.className = `${styles.button} btn-clicked`;
+                  node.className = `${styles.button} interactive btn-clicked`;
                   clickedTime = Date.now();
                 }}
                 onMouseUp={(e) => {
@@ -102,7 +102,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
 
                   setTimeout(
                     () => {
-                      node.className = styles.button;
+                      node.className = `${styles.button} interactive`;
                       // @ts-ignore
                       node = null;
 
@@ -127,11 +127,11 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
         <div className={styles.GlobalDialog_pay_container}>
           <div className={styles.GlobalDialog_pay_tip} />
           <div
-            className={styles.GlobalDialog_pay_close}
+            className={`${styles.GlobalDialog_pay_close} interactive`}
             onMouseEnter={playSeEnter}
             onMouseDown={(e) => {
               const node = e.currentTarget as HTMLDivElement;
-              node.className = `${styles.GlobalDialog_pay_close} btn-clicked`;
+              node.className = `${styles.GlobalDialog_pay_close} interactive btn-clicked`;
               clickedTime = Date.now();
             }}
             onMouseUp={(e) => {
@@ -140,7 +140,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
 
               setTimeout(
                 () => {
-                  node.className = styles.GlobalDialog_pay_close;
+                  node.className = `${styles.GlobalDialog_pay_close} interactive`;
                   // @ts-ignore
                   node = null;
 
@@ -162,11 +162,11 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
           </div>
           <div className={styles.GlobalDialog_pay_btns}>
             <div
-              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`}
+              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel} interactive`}
               onMouseEnter={playSeEnter}
               onMouseDown={(e) => {
                 const node = e.currentTarget as HTMLDivElement;
-                node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel} btn-clicked`;
+                node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel} interactive btn-clicked`;
                 clickedTime = Date.now();
               }}
               onMouseUp={(e) => {
@@ -175,7 +175,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
 
                 setTimeout(
                   () => {
-                    node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel}`;
+                    node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_cancel} interactive`;
                     // @ts-ignore
                     node = null;
 
@@ -188,11 +188,11 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
               }}
             />
             <div
-              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`}
+              className={`${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm} interactive`}
               onMouseEnter={playSeEnter}
               onMouseDown={(e) => {
                 const node = e.currentTarget as HTMLDivElement;
-                node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm} btn-clicked`;
+                node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}  interactive btn-clicked`;
                 clickedTime = Date.now();
               }}
               onMouseUp={(e) => {
@@ -201,7 +201,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
 
                 setTimeout(
                   () => {
-                    node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm}`;
+                    node.className = `${styles.GlobalDialog_pay_btn} ${styles.GlobalDialog_pay_confirm} interactive`;
                     // @ts-ignore
                     node = null;
 

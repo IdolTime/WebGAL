@@ -10,7 +10,13 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 import { px2 } from '@/Core/parser/utils';
-import { Scene, TitleSceneButtonKey, LoadSceneUIConfig, LoadSceneButtonKey, LoadSceneOtherKey } from '@/Core/UIConfigTypes';
+import {
+  Scene,
+  TitleSceneButtonKey,
+  LoadSceneUIConfig,
+  LoadSceneButtonKey,
+  LoadSceneOtherKey,
+} from '@/Core/UIConfigTypes';
 import { BgImage, Button } from '@/UI/Components/Base';
 
 export const Load: FC = () => {
@@ -33,7 +39,7 @@ export const Load: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'Load_element_page' + i}
-        className={styles.Save_Load_top_button}
+        className={`${styles.Save_Load_top_button} interactive`}
       >
         <div
           className={
@@ -94,7 +100,7 @@ export const Load: FC = () => {
         }}
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
-        className={styles.Save_Load_content_element}
+        className={`${styles.Save_Load_content_element} interactive`}
         style={{ animationDelay: `${animationIndex * 30}ms` }}
       >
         {saveElementContent}
@@ -122,7 +128,7 @@ export const Load: FC = () => {
     <div className={styles.Save_Load_main}>
       <Button
         item={loadUIConfigs.buttons.Load_back_button}
-        defaultClass={styles.Common_back}
+        defaultClass={`${styles.Common_back} interactive`}
         onClick={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
@@ -136,10 +142,14 @@ export const Load: FC = () => {
         {showSaves}
       </div>
       <div className={styles.Save_Load_top_buttonList}>
-        <div className={styles.Btn} onMouseEnter={playSeEnter} onClick={() => handleBtnClick('left')} />
+        <div
+          className={`${styles.Btn} interactive`}
+          onMouseEnter={playSeEnter}
+          onClick={() => handleBtnClick('left')}
+        />
         <div className={styles.Save_Load_indicator_container}>{page}</div>
         <div
-          className={`${styles.Btn} ${styles.Btn_r}`}
+          className={`${styles.Btn} ${styles.Btn_r} interactive`}
           onMouseEnter={playSeEnter}
           onClick={() => handleBtnClick('right')}
         />

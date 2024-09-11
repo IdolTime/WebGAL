@@ -50,7 +50,7 @@ export function Extra() {
         >
           <Button
             item={extraUIConfigs.buttons.Extra_back_button}
-            defaultClass={styles.backIcon}
+            defaultClass={`${styles.backIcon} interactive`}
             onClick={handleGoBack}
             onMouseEnter={playSeEnter}
           />

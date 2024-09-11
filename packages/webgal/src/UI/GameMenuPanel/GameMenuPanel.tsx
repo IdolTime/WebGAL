@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
 import { RootState } from '@/store/store';
-import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
 
@@ -24,6 +24,22 @@ export const GameMenuPanel = () => {
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {
     dispatch(setVisibility({ component, visibility }));
   };
+
+  useEffect(() => {
+    const handleKeyPress = (event: { keyCode: number }) => {
+      if (event.keyCode === 27) {
+        // 在这里处理 ESC 按键按下的事件
+        playSeClick();
+        setComponentVisibility('isShowGameMenu', !GUIStore.isShowGameMenu);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   const setMenuPanel = (menuPanel: MenuPanelTag) => {
     dispatch(setMenuPanelTag(menuPanel));
@@ -96,11 +112,11 @@ export const GameMenuPanel = () => {
     <>
       <div className={styles.gameMenuPanel}>
         <div
-          className={styles.menuButton}
+          className={`${styles.menuButton} interactive`}
           onMouseEnter={playSeEnter}
           onMouseDown={(e) => {
             const node = e.currentTarget as HTMLDivElement;
-            node.className = `${styles.menuButton} btn-clicked`;
+            node.className = `${styles.menuButton} interactive btn-clicked`;
             clickedTimeRef.current = Date.now();
           }}
           onMouseUp={(e) => {
@@ -109,7 +125,7 @@ export const GameMenuPanel = () => {
 
             setTimeout(
               () => {
-                node.className = styles.menuButton;
+                node.className = `${styles.menuButton} interactive`;
                 // @ts-ignore
                 node = null;
 
@@ -126,11 +142,11 @@ export const GameMenuPanel = () => {
           <div className={styles.gameMenuPanelContent}>
             <div className={styles.buttonswrapper}>
               <span
-                className={styles.button}
+                className={`${styles.button} interactive`}
                 onMouseEnter={playSeEnter}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
-                  node.className = `${styles.button} btn-clicked`;
+                  node.className = `${styles.button} interactive btn-clicked`;
                   clickedTimeRef.current = Date.now();
                 }}
                 onMouseUp={(e) => {
@@ -139,7 +155,7 @@ export const GameMenuPanel = () => {
 
                   setTimeout(
                     () => {
-                      node.className = styles.button;
+                      node.className = `${styles.button} interactive`;
                       // @ts-ignore
                       node = null;
 
@@ -152,7 +168,7 @@ export const GameMenuPanel = () => {
                 {t('buttons.backToGame')}
               </span>
               <span
-                className={styles.button}
+                className={`${styles.button} interactive`}
                 onMouseEnter={playSeEnter}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
@@ -165,7 +181,7 @@ export const GameMenuPanel = () => {
 
                   setTimeout(
                     () => {
-                      node.className = styles.button;
+                      node.className = `${styles.button} interactive`;
                       // @ts-ignore
                       node = null;
 
@@ -178,7 +194,7 @@ export const GameMenuPanel = () => {
                 {t('buttons.preserve')}
               </span>
               <span
-                className={styles.button}
+                className={`${styles.button} interactive`}
                 onMouseEnter={playSeEnter}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
@@ -191,7 +207,7 @@ export const GameMenuPanel = () => {
 
                   setTimeout(
                     () => {
-                      node.className = styles.button;
+                      node.className = `${styles.button} interactive`;
                       // @ts-ignore
                       node = null;
 
@@ -204,7 +220,7 @@ export const GameMenuPanel = () => {
                 {t('buttons.read')}
               </span>
               <span
-                className={styles.button}
+                className={`${styles.button} interactive`}
                 onMouseEnter={playSeEnter}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
@@ -217,7 +233,7 @@ export const GameMenuPanel = () => {
 
                   setTimeout(
                     () => {
-                      node.className = styles.button;
+                      node.className = `${styles.button} interactive`;
                       // @ts-ignore
                       node = null;
 
@@ -230,7 +246,7 @@ export const GameMenuPanel = () => {
                 {t('buttons.setting')}
               </span>
               <span
-                className={styles.button}
+                className={`${styles.button} interactive`}
                 onMouseEnter={playSeEnter}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
@@ -243,7 +259,7 @@ export const GameMenuPanel = () => {
 
                   setTimeout(
                     () => {
-                      node.className = styles.button;
+                      node.className = `${styles.button} interactive`;
                       // @ts-ignore
                       node = null;
 

@@ -155,7 +155,7 @@ export interface IStageState {
   popUpImageNameLeft: string; // 弹窗图片_左 文件地址（相对或绝对）
   popUpImageNameRight: string; // 弹窗图片_右 文件地址（相对或绝对）
   freePopUpImage: Array<IFreeFigure>; // 弹窗图片
-  popUpImageAssociatedAnimation: Array<IFigureAssociatedAnimation>;  // 弹窗图片动画
+  popUpImageAssociatedAnimation: Array<IFigureAssociatedAnimation>; // 弹窗图片动画
   popImgLive2dMotion: ILive2DMotion[];
   popImgLive2dExpression: ILive2DExpression[];
   showText: string; // 文字

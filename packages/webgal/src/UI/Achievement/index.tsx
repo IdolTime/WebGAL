@@ -164,6 +164,7 @@ export const Achievement: FC = () => {
    * 返回
    */
   const handleGoBack = () => {
+    playSeClick();
     backToTitle();
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
   };
@@ -255,7 +256,7 @@ export const Achievement: FC = () => {
           {!GUIState.showProgressAndAchievement && (
             <Button
               item={achivementUIConfigs.buttons.Achievement_back_button}
-              defaultClass={styles.goback}
+              defaultClass={`${styles.goback} interactive`}
               onClick={handleGoBack}
               onMouseEnter={playSeEnter}
             />
@@ -310,6 +311,7 @@ export const Achievement: FC = () => {
                                     : '',
                                 )
                           }")`,
+                          transform: ` scale(${notUnlockStyle?.args?.style?.scale})`,
                           ...notUnlockCss,
                         }}
                       >

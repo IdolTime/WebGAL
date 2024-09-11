@@ -24,7 +24,7 @@ export const Options: FC = () => {
     <div className={styles.Options_main}>
       <Button
         item={OptionUIConfigs.buttons[OptionSceneButtonKey.Option_back_button]}
-        defaultClass={styles.Save_back}
+        defaultClass={`${styles.Save_back} interactive`}
         onClick={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
         }}
@@ -43,7 +43,7 @@ export const Options: FC = () => {
             <div className={styles.Check_row_option}>
               <span className={styles.Check_row_prefix}>全屏</span>
               <div
-                className={styles.Check_row_box}
+                className={`${styles.Check_row_box} interactive`}
                 onClick={() => {
                   dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
                   setStorage();
@@ -55,7 +55,7 @@ export const Options: FC = () => {
             <div className={styles.Check_row_option}>
               <span className={styles.Check_row_prefix}>窗口化</span>
               <div
-                className={styles.Check_row_box}
+                className={`${styles.Check_row_box} interactive`}
                 onClick={() => {
                   dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
                   setStorage();

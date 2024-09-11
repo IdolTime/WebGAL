@@ -38,7 +38,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
           onMouseEnter={playSeEnter}
           onMouseDown={(e) => {
             const node = e.currentTarget as HTMLDivElement;
-            node.className = `${styles.button} btn-clicked`;
+            node.className = `${styles.button} interactive btn-clicked`;
             clickedTime = Date.now();
           }}
           onMouseUp={(e) => {
@@ -64,7 +64,7 @@ export const getUserInput = (sentence: ISentence): IPerform => {
               duration - 350 > 0 ? 0 : 350 - duration,
             );
           }}
-          className={styles.button}
+          className={`${styles.button} interactive`}
         >
           {buttonText}
         </div>

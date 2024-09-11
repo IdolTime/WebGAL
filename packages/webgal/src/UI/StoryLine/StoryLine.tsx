@@ -76,7 +76,7 @@ export const StoryLine: FC = () => {
           {!GUIState.showProgressAndAchievement && (
             <Button
               item={storylineUIConfigs.buttons.Storyline_back_button}
-              defaultClass={styles.goBack}
+              defaultClass={`${styles.goBack} interactive`}
               onClick={handlGoBack}
               onMouseEnter={playSeEnter}
             />

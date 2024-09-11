@@ -159,7 +159,6 @@ export class SceneManager {
         return payload;
       });
 
-    // @ts-ignore
     webgalStore.dispatch(saveActions.saveAllStorylineData(allStorylineData));
 
     const newList = allStorylineData.filter((e) => e.storyLine.isUnlock);

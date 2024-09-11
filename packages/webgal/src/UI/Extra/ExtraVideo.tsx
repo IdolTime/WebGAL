@@ -141,7 +141,7 @@ export const ExtraVideo: FC = () => {
     <>
       <Button
         item={extraUIConfigs.buttons.Extra_back_button}
-        defaultClass={`${styles.goback} ${styles.extraVideo_goback}`}
+        defaultClass={`${styles.goback} ${styles.extraVideo_goback} interactive`}
         onClick={handleGoBack}
         onMouseEnter={playSeEnter}
       />

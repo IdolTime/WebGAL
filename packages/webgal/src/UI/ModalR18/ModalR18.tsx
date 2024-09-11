@@ -52,6 +52,7 @@ export const ModalR18: FC = () => {
               <img
                 src={isHoverExitButton ? ExitButtonHover : ExitButtonDefault}
                 onClick={handleDisagree}
+                className="interactive"
                 onMouseEnter={() => {
                   setIsHoverExitButton(true);
                   playSeEnter();
@@ -69,7 +70,7 @@ export const ModalR18: FC = () => {
                 }}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
-                  node.className = 'btn-clicked';
+                  node.className = 'interactive btn-clicked';
                   clickedTimeRef.current = Date.now();
                 }}
                 onMouseUp={(e) => {
@@ -78,7 +79,7 @@ export const ModalR18: FC = () => {
 
                   setTimeout(
                     () => {
-                      node.className = '';
+                      node.className = 'interactive';
                       // @ts-ignore
                       node = null;
 
@@ -92,6 +93,7 @@ export const ModalR18: FC = () => {
             </div>
             <div id="confirmButton">
               <img
+                className="interactive"
                 src={isHoverConfirmButton ? ConfirmButtonHover : ConfirmButtonDefault}
                 onMouseEnter={() => {
                   setIsHoverConfirmButton(true);
@@ -109,7 +111,7 @@ export const ModalR18: FC = () => {
                 }}
                 onMouseDown={(e) => {
                   const node = e.currentTarget as HTMLDivElement;
-                  node.className = 'btn-clicked';
+                  node.className = 'interactive btn-clicked';
                   clickedTimeRef.current = Date.now();
                 }}
                 onMouseUp={(e) => {
@@ -118,7 +120,7 @@ export const ModalR18: FC = () => {
 
                   setTimeout(
                     () => {
-                      node.className = '';
+                      node.className = 'interactive';
                       // @ts-ignore
                       node = null;
 

@@ -129,7 +129,7 @@ export const BottomControlPanel = () => {
           </span> */}
           <span
             id="Button_ControlPanel_auto"
-            className={`${styles.singleButton} ${styles.singleButton_auto}`}
+            className={`${styles.singleButton} ${styles.singleButton_auto} interactive`}
             title="自动"
             onClick={() => {
               switchAuto();
@@ -137,7 +137,7 @@ export const BottomControlPanel = () => {
             }}
             onMouseDown={(e) => {
               const node = e.currentTarget as HTMLDivElement;
-              node.className = `${styles.singleButton} ${styles.singleButton_auto} btn-clicked`;
+              node.className = `${styles.singleButton} ${styles.singleButton_auto} interactive btn-clicked`;
               clickedTimeRef.current = Date.now();
             }}
             onMouseUp={(e) => {
@@ -146,7 +146,7 @@ export const BottomControlPanel = () => {
 
               setTimeout(
                 () => {
-                  node.className = `${styles.singleButton} ${styles.singleButton_auto}`;
+                  node.className = `${styles.singleButton} ${styles.singleButton_auto} interactive`;
                   // @ts-ignore
                   node = null;
                 },
@@ -159,7 +159,7 @@ export const BottomControlPanel = () => {
           </span>
           <span
             id="Button_ControlPanel_fast"
-            className={`${styles.singleButton} ${styles.singleButton_fast}`}
+            className={`${styles.singleButton} ${styles.singleButton_fast} interactive`}
             title="快进"
             onClick={() => {
               switchFast();
@@ -167,7 +167,7 @@ export const BottomControlPanel = () => {
             }}
             onMouseDown={(e) => {
               const node = e.currentTarget as HTMLDivElement;
-              node.className = `${styles.singleButton} ${styles.singleButton_fast} btn-clicked`;
+              node.className = `${styles.singleButton} ${styles.singleButton_fast} interactive btn-clicked`;
               clickedTimeRef.current = Date.now();
             }}
             onMouseUp={(e) => {
@@ -176,7 +176,7 @@ export const BottomControlPanel = () => {
 
               setTimeout(
                 () => {
-                  node.className = `${styles.singleButton} ${styles.singleButton_fast}`;
+                  node.className = `${styles.singleButton} ${styles.singleButton_fast} interactive`;
                   // @ts-ignore
                   node = null;
                 },
@@ -188,7 +188,7 @@ export const BottomControlPanel = () => {
             <span className={styles.fastIcon} />
           </span>
           <span
-            className={styles.singleButton}
+            className={`${styles.singleButton} interactive`}
             title="剧情回顾"
             onClick={() => {
               // 如果现在正在自动播放，则点击时先停止自动播放
@@ -202,7 +202,7 @@ export const BottomControlPanel = () => {
             }}
             onMouseDown={(e) => {
               const node = e.currentTarget as HTMLDivElement;
-              node.className = `${styles.singleButton} btn-clicked`;
+              node.className = `${styles.singleButton} interactive btn-clicked`;
               clickedTimeRef.current = Date.now();
             }}
             onMouseUp={(e) => {
@@ -211,7 +211,7 @@ export const BottomControlPanel = () => {
 
               setTimeout(
                 () => {
-                  node.className = `${styles.singleButton}`;
+                  node.className = `${styles.singleButton} interactive`;
                   // @ts-ignore
                   node = null;
                 },

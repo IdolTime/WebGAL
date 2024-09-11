@@ -11,7 +11,7 @@
     overflow: auto;
     display: flex;
     background-color: #000;
-    padding: px2(15px) px2(10px);
+    // padding: px2(15px) px2(10px);
 
     .beautyGuide_detail_bg {
         position: absolute !important;
@@ -25,41 +25,66 @@
         background-position: center;
     }
 
+    .goback {
+        display: inline-block;
+        width: px2(53px);
+        height: px2(53px);
+        background-image: url('@/assets/imgs/back.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: fixed;
+        top: px2(41px);
+        left: px2(25px);
+        z-index: 100;
+
+        &:hover {
+          transform: scale(1.2);
+          background-image: url("@/assets/imgs/back-r.png");
+        }
+    }
+
     .beautyGuideDetail_left {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 30%;
+        width: 33.33%;
         height: 100%;
 
-        .header {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-
-            .goback {
-                display: inline-block;
-                width: px2(53px);
-                height: px2(53px);
-                background-image: url('@/assets/imgs/back.png');
-                background-repeat: no-repeat;
-                background-size: contain;
-                cursor: pointer;
-                transition: all 0.3s;
-                &:hover {
-                  transform: scale(1.2);
-                  background-image: url("@/assets/imgs/back-r.png");
-                }
-            }
-
-            .title {
-                font-size: 50px;
-                color: red;
-            }
+        .left_box {
+            position: relative;
+            transform: translateX(0) translateY(0) !important;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: px2(17px);
         }
+
+        .beautyGuide_detail_left_bg {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: inherit;
+            height: 100%;
+            z-index: -1;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            transform: translateX(0) translateY(0) !important;
+        }
+
+        // .header {
+        //     flex: 1;
+        //     display: flex;
+        //     align-items: center;
+        //     justify-content: center;
+        //     width: 100%;
+
+        //     .title {
+        //         font-size: 50px;
+        //         color: red;
+        //     }
+        // }
 
         .pictureUrl {
             flex: 3;
@@ -67,9 +92,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        
             img {
-                max-width: 100%;
-                max-height: 100%;
+                // max-width: 100%;
+                // max-height: 100%;
+                height: calc(267px* 2);
+                width: calc(189px* 2);
+                
             }
         }
 
@@ -78,8 +107,8 @@
             width: 100%;
 
             .name {
-                font-size: px2(30px);
-                color: red;
+                font-size: 60px;
+                color: #fff;
                 font-weight: 700;
                 text-align: center;
                 margin: px2(10px) 0;
@@ -107,19 +136,40 @@
     }
 
     .beautyGuideDetail_right {
-        width: 70%;
+        width: 66.66%;
         height: 100%;
         display: flex;
         flex-direction: column;
+        justify-content: center;
         overflow-y: auto;
 
         .contentWrapper {
-            flex: 1;
+            // flex: 1;
 
             .content {
                 height: px2(475px);
+                width: px2(708px);
                 display: flex;
                 justify-content: center;
+                position: relative;
+                transform: translateX(0) translateY(0) !important;
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.3);
+                border-radius: px2(17px);
+
+                .content_bg {
+                    position: absolute !important;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: -1;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    background-position: center;
+                    transform: translateX(0) translateY(0) !important;
+                }
+
                 & > video {
                     width: 100%;
                     height: 100%;
@@ -140,9 +190,10 @@
             }
 
             .thumbnailWrapper {
-                height: px2(75px);
-                width: 100%;
-                padding: 10px;
+                // min-height: px2(65px);
+                width: 85%;
+                padding: px2(10px);
+                margin-bottom: px2(5px);
                 overflow-x: auto;
                 overflow-y: hidden;
 
@@ -152,20 +203,21 @@
                 }
                 
                 .thumbnail_box {
-                    width: px2(90px);
-                    height: px2(65px);
-                    margin-right: px2(5px);
-                    padding: px2(5px) 0;
+                    width: px2(109px);
+                    height: px2(62px);
+                    margin-right: px2(10px);
+                    padding: px2(10px) 0;
                     transition: all 0.3s;
                     overflow: hidden;
                     position: relative;
                     flex-shrink: 0;
+                    cursor: pointer;
 
                     &:hover {
                         cursor: pointer;
-                        & > img {
-                            transform: scale(1.2);
-                        }
+                        // & > img {
+                        //     transform: scale(1.2);
+                        // }
                     }
 
                     &:last-child {
@@ -173,11 +225,13 @@
                     }
 
                     & > img {
+                        // height: 100%;
+                        // width: 100%;
                         max-height: 100%;
-                        max-width: 100%;
                         margin: 0 auto;
                         object-fit: cover;
                         transition: all 0.3s;
+                        cursor: pointer;
                     }
 
                     .video_mark {
@@ -196,12 +250,37 @@
         }
 
         .desc_text {
-            padding: px2(10px) px2(10px);
+            padding: px2(20px);
+            min-height: px2(50px);
+            width: px2(708px);
+            position: relative;
+            transform: translateX(0) translateY(0) !important;
+            color: #fff;
+            font-size: px2(15px);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: px2(17px);
+
+            .desc_bg {
+                position: absolute !important;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center;
+                transform: translateX(0) translateY(0) !important;
+            }
+
             & > span {
-                font-size: px2(15px);
-                color: #fff;
                 line-height: 1.2;
             }
         }
+    }
+
+    .hideBgc {
+        background: none !important;
     }
 }

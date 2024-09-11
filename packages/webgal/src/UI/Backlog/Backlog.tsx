@@ -62,7 +62,7 @@ export const Backlog = () => {
                   e.stopPropagation();
                 }}
                 onMouseEnter={playSeEnter}
-                className={styles.backlog_item_button_element}
+                className={`${styles.backlog_item_button_element} interactive`}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
               </div> */}
@@ -73,7 +73,7 @@ export const Backlog = () => {
                 <div
                   onMouseDown={(e) => {
                     const node = e.currentTarget as HTMLDivElement;
-                    node.className = `${styles.backlog_item_button_element} btn-clicked`;
+                    node.className = `${styles.backlog_item_button_element} interactive btn-clicked`;
                     clickedTimeRef.current = Date.now();
                   }}
                   onMouseUp={(e) => {
@@ -82,7 +82,7 @@ export const Backlog = () => {
 
                     setTimeout(
                       () => {
-                        node.className = styles.backlog_item_button_element;
+                        node.className = `${styles.backlog_item_button_element} interactive`;
                         // @ts-ignore
                         node = null;
                       },
@@ -113,7 +113,7 @@ export const Backlog = () => {
                     }
                   }}
                   onMouseEnter={playSeEnter}
-                  className={styles.backlog_item_button_element}
+                  className={`${styles.backlog_item_button_element} interactive`}
                 >
                   <span className={styles.sound_icon} />
                 </div>
@@ -188,10 +188,10 @@ export const Backlog = () => {
             }}
           >
             <div
-              className={styles.backlog_top_icon}
+              className={`${styles.backlog_top_icon} interactive`}
               onMouseDown={(e) => {
                 const node = e.currentTarget as HTMLDivElement;
-                node.className = `${styles.backlog_top_icon} btn-clicked`;
+                node.className = `${styles.backlog_top_icon} interactive btn-clicked`;
                 clickedTimeRef.current = Date.now();
               }}
               onMouseUp={(e) => {
@@ -200,7 +200,7 @@ export const Backlog = () => {
 
                 setTimeout(
                   () => {
-                    node.className = styles.backlog_top_icon;
+                    node.className = `${styles.backlog_top_icon} interactive`;
                     // @ts-ignore
                     node = null;
 

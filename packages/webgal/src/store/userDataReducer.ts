@@ -74,6 +74,7 @@ const userDataSlice = createSlice({
           isExist = true;
           e.url = url;
           e.series = series;
+          e.name = name || url;
         }
       });
       if (!isExist) {

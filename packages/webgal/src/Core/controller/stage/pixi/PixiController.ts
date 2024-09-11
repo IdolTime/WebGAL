@@ -544,7 +544,7 @@ export default class PixiStage {
             figureSprite.scale.x = targetScale;
             figureSprite.scale.y = targetScale;
           }
-         
+
           figureSprite.anchor.set(0.5);
           figureSprite.position.y = this.stageHeight / 2;
           const targetWidth = originalWidth * targetScale;
@@ -554,23 +554,21 @@ export default class PixiStage {
             thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
           }
 
-
           if (key.startsWith('popImg-')) {
-
             // CG图片尺寸统一为680X420
             figureSprite.x = 680;
             figureSprite.y = 420;
 
             const num = updateScreenSize().width === 2560 ? 2 : 3;
             const axesY = 90 * num;
-            const axesX = 
-              presetPosition === 'center' && 300 * num ||
-              presetPosition === 'left' && 20 ||
-              presetPosition === 'right' && 300 * num * 2 - 20 || 0;
+            const axesX =
+              (presetPosition === 'center' && 300 * num) ||
+              (presetPosition === 'left' && 20) ||
+              (presetPosition === 'right' && 300 * num * 2 - 20) ||
+              0;
 
             thisFigureContainer.setBaseX(axesX);
             thisFigureContainer.setBaseY(axesY);
-
           } else {
             if (presetPosition === 'center') {
               thisFigureContainer.setBaseX(this.stageWidth / 2);

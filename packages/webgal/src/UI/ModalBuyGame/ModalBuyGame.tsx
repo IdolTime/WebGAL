@@ -85,11 +85,11 @@ export function ModalBuyGame() {
       <div className={styles.BuyGame_pay_container}>
         <div className={styles.BuyGame_pay_tip} />
         <div
-          className={styles.BuyGame_pay_close}
+          className={`${styles.BuyGame_pay_close} interactive`}
           onMouseEnter={playSeEnter}
           onMouseDown={(e) => {
             const node = e.currentTarget as HTMLDivElement;
-            node.className = `${styles.BuyGame_pay_close} btn-clicked`;
+            node.className = `${styles.BuyGame_pay_close} interactive btn-clicked`;
             clickedTimeRef.current = Date.now();
           }}
           onMouseUp={(e) => {
@@ -98,7 +98,7 @@ export function ModalBuyGame() {
 
             setTimeout(
               () => {
-                node.className = styles.BuyGame_pay_close;
+                node.className = `${styles.BuyGame_pay_close} interactive`;
                 // @ts-ignore
                 node = null;
 
@@ -159,11 +159,11 @@ export function ModalBuyGame() {
               <span className={styles.BuyGame_price_stone} />
             </div>
             <div
-              className={styles.BuyGame_price_button}
+              className={`${styles.BuyGame_price_button} interactive`}
               onMouseEnter={playSeEnter}
               onMouseDown={(e) => {
                 const node = e.currentTarget as HTMLDivElement;
-                node.className = `${styles.BuyGame_price_button} btn-clicked`;
+                node.className = `${styles.BuyGame_price_button} interactive btn-clicked`;
                 clickedTimeRef.current = Date.now();
               }}
               onMouseUp={(e) => {
@@ -172,7 +172,7 @@ export function ModalBuyGame() {
 
                 setTimeout(
                   () => {
-                    node.className = styles.BuyGame_price_button;
+                    node.className = `${styles.BuyGame_price_button} interactive`;
                     // @ts-ignore
                     node = null;
 

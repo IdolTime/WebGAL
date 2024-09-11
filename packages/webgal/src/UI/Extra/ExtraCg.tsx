@@ -40,7 +40,7 @@ export function ExtraCg() {
       </div>
       <div className={styles.footer}>
         <div
-          className={styles.Btn}
+          className={`${styles.Btn} interactive`}
           onMouseEnter={playSeEnter}
           onClick={() => {
             playSeClick();
@@ -54,7 +54,7 @@ export function ExtraCg() {
             return (
               <div
                 key={i}
-                className={styles.footer_page_indicator}
+                className={`${styles.footer_page_indicator} interactive`}
                 onMouseEnter={playSeEnter}
                 onClick={() => {
                   playSeClick();
@@ -71,7 +71,7 @@ export function ExtraCg() {
           })}
         </div>
         <div
-          className={`${styles.Btn} ${styles.Btn_r}`}
+          className={`${styles.Btn} ${styles.Btn_r} interactive`}
           onMouseEnter={playSeEnter}
           onClick={() => {
             playSeClick();

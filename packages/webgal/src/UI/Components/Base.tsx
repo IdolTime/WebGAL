@@ -1,3 +1,4 @@
+import React, { ChangeEvent, CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ButtonItem,
   ContainerItem,
@@ -6,12 +7,12 @@ import {
   Style,
   UIItemConfig,
 } from '@/Core/UIConfigTypes';
-import React, { ChangeEvent, CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { parseStyleArg } from '@/Core/parser/utils';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
 import BarSlider from '@/assets/imgs/bar-checked.png';
 import { debounce } from 'lodash';
+import { SCREEN_CONSTANTS, updateScreenSize } from '@/Core/util/constants';
 
 import './slider.scss';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -84,6 +85,7 @@ export const CustomImage = ({
   onMouseLeave,
   onClick,
   nId,
+  draggable,
 }: {
   src: string;
   hoverSrc?: string;
@@ -95,6 +97,7 @@ export const CustomImage = ({
   onMouseLeave?: () => void;
   onClick?: () => void;
   nId?: string;
+  draggable?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
   const [_, _forceRender] = useState(0);
@@ -136,6 +139,7 @@ export const CustomImage = ({
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      draggable={draggable}
       style={_style}
       onClick={onClick}
       onLoad={(e) => {
@@ -229,7 +233,7 @@ export const BgImage = ({ item, defaultClass, key }: { item: Item; defaultClass?
   const style = parseStyleArg(item.args.style);
   const src = assetSetter(item.args.style?.image || '', fileType.background);
 
-  if (!item.args.style?.image) return <div className={defaultClass} style={style} />;
+  if (!item.args.style?.image) return <div className={defaultClass} style={style} draggable="false" />;
 
   return <CustomImage key={key} defaultClass={defaultClass} src={src} style={style} />;
 };
@@ -447,6 +451,7 @@ export const OptionSliderCustome = ({
   max?: number;
   className?: string;
 } & ISlider) => {
+  if (item.args.hide) return null;
   const { playSeEnter } = useSoundEffect();
   useEffect(() => {
     setTimeout(() => {
@@ -461,7 +466,7 @@ export const OptionSliderCustome = ({
   }, [initValue]);
 
   useEffect(() => {
-    const thumbStyle = parseStyleArg(item.args.sliderThumbStyle);
+    const thumbStyle = parseStyleArg(item.args.sliderThumb);
     const thumStyleString = cssPropertiesToString(thumbStyle);
 
     if (!thumStyleString) return;
@@ -470,26 +475,40 @@ export const OptionSliderCustome = ({
 
     replaceOrAddRule(`#${uniqueID}::-moz-range-thumb`, `#${uniqueID}::-moz-range-thumb { ${thumStyleString} }`);
     replaceOrAddRule(`#${uniqueID}::-ms-thumb`, `#${uniqueID}::-ms-thumb { ${thumStyleString} }`);
-  }, [item.args.sliderThumbStyle, uniqueID]);
+  }, [item.args.sliderThumb, uniqueID]);
 
   function calcSlideBg() {
     const inputBg = document.getElementById(`${uniqueID}-bg`);
     if (inputBg !== null) {
       if (uniqueID === 'light') {
+        const num = updateScreenSize().width === 2560 ? 2 : 3;
         const normalizedValue = (Number(initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
-        const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * 2) + 'px'; // 将 0-1 映射到 0-684px 范围
+        const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * num) + 'px'; // 将 0-1 映射到 0-684px 范围
         inputBg.style.width = progressBarWidth;
       } else {
-        inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / 0.5 + 'px';
+        const scale = updateScreenSize().width === 2560 ? 0.5 : 0.3333;
+        inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / scale + 'px';
       }
     }
   }
 
+  const bgNone = {
+    background: 'none',
+  };
+
   const style = parseStyleArg(item.args.style);
-  const barStyle = parseStyleArg(item.args.sliderStyle);
-  const barBgStyle = parseStyleArg(item.args.sliderBgStyle);
-  const barSrc = item.args.sliderStyle?.image || BarSlider;
-  const barBgSrc = item.args.sliderBgStyle?.image || BarBg;
+
+  const barStyle = item.args?.slider?.image
+    ? { ...parseStyleArg(item.args?.slider), ...bgNone }
+    : parseStyleArg(item.args?.slider);
+
+  const barBgStyle = item.args?.sliderBg?.image
+    ? { ...parseStyleArg(item.args?.sliderBg), ...bgNone }
+    : parseStyleArg(item.args?.sliderBg);
+
+  const barSrc = item.args?.slider?.image ? assetSetter(item.args.slider.image, fileType.ui) : BarSlider;
+
+  const barBgSrc = item.args?.sliderBg?.image ? assetSetter(item.args.sliderBg.image, fileType.ui) : BarBg;
 
   return (
     <CustomContainer style={style} defaultClass={`Option_WebGAL_slider ${defaultClass}`}>
@@ -504,8 +523,8 @@ export const OptionSliderCustome = ({
         onMouseEnter={playSeEnter}
       />
       <div className="Slider_group">
-        <CustomImage src={barSrc} style={barStyle} defaultClass="Slider_bg" nId={`${uniqueID}-bg`} />
-        <CustomImage src={barBgSrc} style={barBgStyle} defaultClass="Slider_bg_under" />
+        <CustomImage src={barSrc} style={barStyle} defaultClass="Slider_bg" nId={`${uniqueID}-bg`} draggable={false} />
+        <CustomImage src={barBgSrc} style={barBgStyle} defaultClass="Slider_bg_under" draggable={false} />
       </div>
     </CustomContainer>
   );

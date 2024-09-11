@@ -49,6 +49,7 @@ const Title: FC = () => {
     },
     [TitleSceneButtonKey.Game_continue_button]: () => {
       dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      dispatch(setVisibility({ component: 'isInGaming', visibility: true }));
       continueGame();
     },
     [TitleSceneButtonKey.Game_option_button]: () => {
@@ -96,7 +97,7 @@ const Title: FC = () => {
                 <Button
                   key={_key}
                   item={buttonConfigItem}
-                  defaultClass={styles.Title_button}
+                  defaultClass={`${styles.Title_button} interactive`}
                   defaultTextClass={styles.Title_button_text}
                   onClick={clickCallbackMap[_key]}
                   onMouseEnter={playSeEnter}

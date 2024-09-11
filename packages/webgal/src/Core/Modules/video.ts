@@ -12,7 +12,7 @@ function arrayBufferToWordArray(arrayBuffer: ArrayBuffer) {
 }
 
 // eslint-disable-next-line max-params
-async function decryptVideo(encryptedData: ArrayBuffer, key: string, iv: string, type: 'mp4' | 'flv') {
+export async function decryptVideo(encryptedData: ArrayBuffer, key: string, iv: string, type: 'mp4' | 'flv') {
   const keyHex = CryptoJS.enc.Hex.parse(key);
   const ivHex = CryptoJS.enc.Hex.parse(iv);
   const encryptedWordArray = arrayBufferToWordArray(encryptedData);
@@ -270,6 +270,10 @@ export class VideoManager {
         videoItem.player.currentTime -= 1; // 回退一秒
       }
     }
+  }
+
+  public setUrlIdMap(id: string, url: string) {
+    this.idURLMap[id] = url;
   }
 
   public forward(key: string): void {

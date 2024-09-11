@@ -4,7 +4,13 @@
  */
 import { getStorage } from '@/Core/controller/storage/storageController';
 import { sceneUIConfig } from '@/Core/UIConfigTypes';
-import { IGuiState, MenuPanelTag, setAssetPayload, setVisibilityPayload } from '@/store/guiInterface';
+import {
+  IGuiState,
+  MenuPanelTag,
+  setAssetPayload,
+  setVisibilityPayload,
+  EnumAchievementUIKey,
+} from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 /**
@@ -45,6 +51,7 @@ const initStateEscMenu = {
  * 初始GUI状态表
  */
 export const initState: IGuiState = {
+  isInGaming: false, // 是否在游戏中
   showBacklog: false,
   showStarter: true,
   showTitle: true,
@@ -61,7 +68,6 @@ export const initState: IGuiState = {
   showPanicOverlay: false,
   isEnterGame: false,
   isShowLogo: true,
-  isShowGameMenu: false,
   showStoryLine: false,
   showAchievement: false,
   showFavorited: false, // 显示收藏
@@ -74,6 +80,7 @@ export const initState: IGuiState = {
   openR18Modal: false,
   showProgressAndAchievement: false,
   showAffinity: false,
+  isShowGameMenu: false,
   escMenus: {
     Esc_continueGame_button: initStateEscMenu,
     Esc_backToLevel_button: initStateEscMenu,

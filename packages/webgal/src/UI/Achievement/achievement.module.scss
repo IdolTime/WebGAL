@@ -41,23 +41,54 @@ $default_pregress__bg_height: 300px;
 
   .achievement_content {
     position: absolute;
-    top: 50%;
-    left: 10%;
-    transform: translateY(-50%);
-    z-index: 101;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+    overflow: auto;
+    // background: #000;
+    animation: bg_animation .5s forwards;
+    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
 
-    .achievement_current {
-      width: $default_pregress_bg_width;
-      height: $default_pregress__bg_height;
-      border-radius: 50%;
-      background-color: rgb(205, 179, 50);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+    .goback {
+        position: fixed;
+        z-index: 101;
+        top: px2(35px);
+        left: px2(35px);
+        display: inline-block;
+        width: px2(53px);
+        height: px2(53px);
+        background-image: url('@/assets/imgs/back.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        transition: all 0.3s;
+        &:hover {
+          transform: scale(1.2);
+          background-image: url("@/assets/imgs/back-r.png");
+        }
+    }
+
+    .achievement_content {
+        position: absolute;
+        top: 50%;
+        left: 10%;
+        transform: translateY(-50%);
+        z-index: 101;
+
+        .achievement_current {
+            width: $default_pregress_bg_width;
+            height: $default_pregress__bg_height;
+            border-radius: 50%;
+            background-color: rgb(205, 179, 50);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-repeat: no-repeat;
+            background-size: cover;
 
 
 
@@ -73,56 +104,74 @@ $default_pregress__bg_height: 300px;
         font-weight: 600;
       }
 
-      .pregessBar {
-        width: 100%;
-        height: px2(7.5px);
-        position: relative;
-        border-radius: px2(4px);
-        overflow: hidden;
-        background-repeat: no-repeat;
-        background-size: cover;
+            .pregessBar {
+                width: 100%;
+                height: 15px;
+                position: relative;
+                border-radius: 8px;
+                overflow: hidden;
+                background-repeat: no-repeat;
+                background-size: cover;
+              
 
-
-        .pregressBar_inner {
-          width: 0%;
-          height: 100%;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          background-size: 100% 100%;
-          background-repeat: no-repeat;
+                .pregressBar_inner {
+                    width: 0%;
+                    height: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    background-size: 100% 100%;
+                    background-repeat: no-repeat;
+                }
+            }
         }
-      }
+
+    }
+
+    .achievement_content_bg {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        background-repeat: no-repeat;
+        position: relative;
+        background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
+        background-size: var(--screenWidth) var(--screenHeight);
     }
 
   }
 
-  .achievement_content_bg {
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    background-repeat: no-repeat;
-    position: relative;
-    background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
-    background-size: var(--screenWidth) var(--screenHeight);
-  }
+        .achievement_item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100px;
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            z-index: 101;
 
   .achievement_list {
     width: 100%;
     height: 100%;
 
-    .achievement_item {
-      position: absolute;
-      top: 0;
-      left: 0;
-      min-height: px2(50px);
-      min-width: px2(50px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      z-index: 101;
+            &:hover {
+                transform: scale(1.2);
+                transition: all 0.3s;
+                cursor: pointer;
+                z-index: 999;
+                .ripple {
+                    animation: ripple-effect 0.5s linear;
+                }
+                .info_card {
+                    // opacity: 1;
+                    display: flex;
+                    z-index: 9;
+                    transition: all 0.3s;
+                }
+            }
 
       .unlockname {
         display: flex;
@@ -230,13 +279,12 @@ $default_pregress__bg_height: 300px;
     opacity: 0;
   }
 }
-
+  
 @keyframes bg_animation {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
 }

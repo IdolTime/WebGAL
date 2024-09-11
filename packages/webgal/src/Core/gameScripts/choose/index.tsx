@@ -146,7 +146,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        let className = styles.Choose_item;
+        let className = styles.Choose_item + ' interactive';
         let clickedTime = Date.now();
         const onClick = () => {
           // if (!enable || timer.current) {
@@ -319,7 +319,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         }
 
         if (e.style?.image) {
-          className = styles.Choose_item_image;
+          className = `${styles.Choose_item_image} interactive`;
           const imgUrl = assetSetter(e.style.image, fileType.ui);
           const id = `img-option-${i}`;
           const img = new Image();
