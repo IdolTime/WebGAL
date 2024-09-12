@@ -58,6 +58,8 @@
             transform: translateX(0) translateY(0) !important;
             background: rgba(0, 0, 0, 0.3);
             border-radius: px2(17px);
+            height: px2(530px);
+            width: px2(189px);
         }
 
         .beautyGuide_detail_left_bg {
@@ -83,8 +85,8 @@
             img {
                 // max-width: 100%;
                 // max-height: 100%;
-                height: calc(267px* 2);
-                width: calc(189px* 2);
+                height: px2(267px);
+                width: px2(189px);
                 
             }
         }
@@ -135,7 +137,7 @@
         .contentWrapper {
 
             .content {
-                height: px2(475px);
+                height: px2(399px);
                 width: px2(708px);
                 display: flex;
                 justify-content: center;
@@ -238,16 +240,21 @@
         }
 
         .desc_text {
-            padding: px2(20px);
-            min-height: 100px;
+            padding: px2(10px) px2(20px);
+            min-height: px2(59px);
             width: px2(708px);
             position: relative;
             transform: translateX(0) translateY(0) !important;
             color: #fff;
-            font-size: 30px;
+            font-size: px2(18px);
+            font-weight: bold;
             text-align: center;
             background: rgba(0, 0, 0, 0.3);
             border-radius: px2(17px);
+            margin-bottom: px2(13px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             .desc_bg {
                 position: absolute !important;

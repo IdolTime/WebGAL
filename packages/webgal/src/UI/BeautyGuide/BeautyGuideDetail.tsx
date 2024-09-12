@@ -42,8 +42,6 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
   const [currentContent, setCurrentContent] = useState<contentListItem | null>(null); // 当前内容区域
   const [dialogImg, setDialogImg] = useState<string>(''); // 弹窗图片
   const videoPlayerRef = React.useRef<FlvJs.FlvPlayer>(null);
-  const [alignDirection, setAlignDirection] = useState<alignType>('column');
-  const [alignContent, setAlignContent] = useState<string>('center');
 
   const [thumbnailData, setThumbnailData] = useState<contentListItem[]>([]);
 
@@ -71,21 +69,17 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
       }
       setThumbnailData(element)
     }
+    // if (props.detailRightDescBgStyle) {
+    //   if (props.detailRightDescBgStyle?.args?.style) {
+    //     const style = props.detailRightDescBgStyle?.args?.style;
+    //     // console.log(style);
 
-    if (props.detailRightDescBgStyle) {
-      if (props.detailRightDescBgStyle?.args?.style) {
-        const style = props.detailRightDescBgStyle?.args?.style;
-        // console.log(style);
-
-        if (style?.alignPosition?.includes('top')) {
-          setAlignDirection('column-reverse')
-          setAlignContent('flex-start')
-        }
-      }
-    }
-
-
-   
+    //     if (style?.alignPosition?.includes('top')) {
+    //       setAlignDirection('column-reverse')
+    //       setAlignContent('flex-start')
+    //     }
+    //   }
+    // }
   }, [props]);
 
   /**
@@ -181,13 +175,28 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
             </div>
           </div>
         </div>
-        <div 
-          className={styles.beautyGuideDetail_right}
-          style={{ 
-            flexDirection: alignDirection, 
-            justifyContent: alignDirection === 'column-reverse' ? 'flex-start' : 'center' 
-          }}
-        >
+        <div className={styles.beautyGuideDetail_right}>
+          <div 
+            className={
+              `${styles.desc_text} 
+              ${collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.style.image ? styles.hideBgc : ''}`
+            }
+            style={
+              {
+                ...parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.style),
+                display: 
+                  collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.hide 
+                    ? 'none' : 'flex'
+              }
+            }
+          >
+            <BgImage
+              item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}
+              defaultClass={styles.desc_bg}
+            />
+            <span>{props.info?.description ?? ''}</span>
+          </div>
+
           <div 
             className={styles.contentWrapper}
             style={{ display: 
@@ -276,26 +285,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
               </div>
             </div>
           </div>
-          <div 
-            className={
-              `${styles.desc_text} 
-              ${collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.style.image ? styles.hideBgc : ''}`
-            }
-            style={
-              {
-                ...parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.style),
-                display: 
-                  collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]?.args?.hide 
-                    ? 'none' : 'block',
-              }
-            }
-          >
-            <BgImage
-              item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}
-              defaultClass={styles.desc_bg}
-            />
-            <span>{props.info?.description ?? ''}</span>
-          </div>
+          
         </div>
       </div>
 
