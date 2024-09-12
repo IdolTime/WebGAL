@@ -87,6 +87,7 @@ export enum GameMenuKey {
   Game_option_button = 'Game_option_button', // 设置
   Game_load_button = 'Game_load_button', // 读取
   Game_continue_button = 'Game_continue_button', // 继续游戏
+  Game_link_button = 'Game_link_button'
 }
 
 export interface IStyle {

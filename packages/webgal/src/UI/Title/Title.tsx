@@ -68,6 +68,13 @@ const Title: FC = () => {
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
     },
+    [TitleSceneButtonKey.Game_link_button]: () => {
+      const linkStr = TitleUIConfigs.buttons[TitleSceneButtonKey.Game_link_button].args?.buttonLink?.link ?? ''
+      playSeClick();
+      if (linkStr) {
+        alert(linkStr)
+      }
+    }
   };
 
   return (

@@ -313,7 +313,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     };
 
     const parsedArgs: any = { hide: false, style: {} };
-    const parsedKeys = ['info', 'images', 'btnSound'];
+    const parsedKeys = ['info', 'images', 'btnSound', 'buttonLink'];
 
     args.forEach((e: any) => {
       if (e.key === 'hide') {
