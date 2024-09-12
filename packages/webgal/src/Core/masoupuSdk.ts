@@ -1,8 +1,34 @@
 import { initGCPSDK } from './initGCPSDK';
 import { WebGAL } from '@/Core/WebGAL';
+import axios from 'axios';
 
 export const masoupuSdkInit = () => {
   initGCPSDK();
+};
+
+const reportData = (res: any) => {
+  const isReport = sessionStorage.getItem('sdk-report');
+  if (isReport) {
+    return;
+  }
+  const reportInfo = {
+    userId: sessionStorage.getItem('sdk-userId'),
+    gameId: WebGAL.gameId,
+    gameName: res.gameName,
+    paymentMode: res.paymentMode,
+    isBuy: res.isBuy,
+    time: new Date(),
+  };
+  axios
+    .post('https://test-api.idoltime.games/editorLog', {
+      record: JSON.stringify(reportInfo),
+    })
+    .then(() => {
+      sessionStorage.setItem('sdk-report', '1');
+    })
+    .catch((e) => {
+      alert(e);
+    });
 };
 
 export const masoupuSdkCheck = (cb: Function) => {
@@ -17,6 +43,10 @@ export const masoupuSdkCheck = (cb: Function) => {
       const gameInfo = res.data;
       const { acoinBalance } = res.data;
       const { paymentAmount, id, paymentMode } = gameInfo;
+      console.log('gameInfo', gameInfo);
+      // 上报
+      reportData(gameInfo);
+
       if (gameInfo.isBuy || paymentMode === 'free') {
         cb();
         return;
@@ -34,7 +64,6 @@ export const masoupuSdkCheck = (cb: Function) => {
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
           console.log('openBuyGameDialog success : ', res);
           cb();
-          // todo 买游戏上报
         });
       }
     });
