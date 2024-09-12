@@ -175,7 +175,6 @@ export const CustomContainer = ({
   onMouseUp,
   onClick,
   id,
-  hoverImgSrc,
 }: {
   item?: ContainerItem;
   children: ReactNode;
@@ -189,7 +188,6 @@ export const CustomContainer = ({
   onMouseUp?: () => void;
   onClick?: (e: any) => void;
   id?: string;
-  hoverImgSrc?: string;
 }) => {
   const [hover, setHover] = useState(false);
   let className = defaultClass;
@@ -221,7 +219,6 @@ export const CustomContainer = ({
     _style = {
       ...style,
       ...hoverStyle,
-      backgroundImage: `url(${hoverImgSrc})`,
     };
   }
 
@@ -294,8 +291,6 @@ export const Button = ({
     ? assetSetter(item.args.btnSound.clickSound, fileType.bgm)
     : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
-  const hoverImgSrc =
-    (type === 'button' && item.args.hoverStyle?.image && assetSetter(item.args.hoverStyle.image, fileType.ui)) || '';
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
   const clickTimerRef = useRef<any>();
@@ -368,7 +363,6 @@ export const Button = ({
       style={_style}
       hoverStyle={hoverStyle}
       key={key}
-      hoverImgSrc={hoverImgSrc}
     >
       {!!src && (
         <CustomImage
@@ -462,7 +456,7 @@ export const OptionSliderCustome = ({
   min,
   max,
   className,
-  isUpdate
+  isUpdate,
 }: {
   defaultClass?: string;
   item: SliderContainerItem;
