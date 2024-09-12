@@ -246,15 +246,17 @@ export const Achievement: FC = () => {
     );
   };
 
+  const hasBGImage = achieveStage?.achieveBg;
+
   return (
     <>
       {GUIState.showAchievement && (
-        <div className={styles.achievement} id="camera">
+        <div className={styles.achievement} style={hasBGImage ? { backgroundImage: 'none' } : {}} id="camera">
           {/* 头部 */}
           {!GUIState.showProgressAndAchievement && (
             <Button
               item={achivementUIConfigs.buttons.Achievement_back_button}
-              defaultClass={styles.goback}
+              defaultClass={`${styles.goback} interactive`}
               onClick={handleGoBack}
               onMouseEnter={playSeEnter}
             />
@@ -309,6 +311,7 @@ export const Achievement: FC = () => {
                                     : '',
                                 )
                           }")`,
+                          transform: ` scale(${notUnlockStyle?.args?.style?.scale})`,
                           ...notUnlockCss,
                         }}
                       >

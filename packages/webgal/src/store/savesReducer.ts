@@ -19,6 +19,14 @@ export interface ISavesData {
   allUnlockAchieveList: IUnlockAchieveItem[];
   allStorylineData: Array<ISaveStoryLineData>;
   unlockAffinityData: ISaveAffinity[];
+  gameScounds: Record<string, string | boolean>; // 游戏内音效
+  menuScounds: Record<string, string | boolean>; // 菜单内音效
+  uiSeAudioElement: HTMLAudioElement | null;
+}
+
+export interface ISetSavePayload {
+  key: keyof ISavesData;
+  value: unknown;
 }
 
 const initState: ISavesData = {
@@ -35,6 +43,9 @@ const initState: ISavesData = {
   allUnlockAchieveList: [],
   allStorylineData: [],
   unlockAffinityData: [],
+  gameScounds: {}, // 游戏内音效
+  menuScounds: {}, // 菜单内音效
+  uiSeAudioElement: null,
 };
 
 interface ISaveStoryLine {
@@ -57,6 +68,7 @@ const saveDataSlice = createSlice({
   initialState: cloneDeep(initState),
   reducers: {
     setFastSave: (state, action: PayloadAction<ISaveData | null>) => {
+      // @ts-ignore
       state.quickSaveData = action.payload;
     },
     resetFastSave: (state) => {
@@ -67,26 +79,31 @@ const saveDataSlice = createSlice({
       state.saveData = [];
     },
     saveGame: (state, action: PayloadAction<SaveAction>) => {
+      // @ts-ignore
       state.saveData[action.payload.index] = action.payload.saveData;
     },
     replaceSaveGame: (state, action: PayloadAction<ISaveData[]>) => {
+      // @ts-ignore
       state.saveData = action.payload;
     },
     setStorylineListFromStorage: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
+      // @ts-ignore
       state.unlockStorylineList = action.payload;
     },
     addStorylineList: (state, action: PayloadAction<ISaveStoryLineData>) => {
+      // @ts-ignore
       state.unlockStorylineList.push(action.payload);
     },
     replaceStorylineList: (state, action: PayloadAction<ISaveStoryLine>) => {
-      // state.unlockStorylineList[action.payload.index].storyLine = action.payload.data.storyLine;
       state.unlockStorylineList[action.payload.index] = {
         ...state.unlockStorylineList[action.payload.index],
         storyLine: action.payload.data.storyLine,
-        videoData: action.payload.data.videoData
+        // @ts-ignore
+        videoData: action.payload.data.videoData,
       };
     },
     setSaveVideoData: (state, action: PayloadAction<ISaveData>) => {
+      // @ts-ignore
       state.saveVideoData = action.payload;
     },
     setUnlockAchieveData: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
@@ -124,10 +141,15 @@ const saveDataSlice = createSlice({
       state.allUnlockAchieveList = action.payload;
     },
     saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
+      // @ts-ignore
       state.allStorylineData = action.payload;
     },
     updateAffinityData: (state, action: PayloadAction<ISaveAffinity[]>) => {
       state.unlockAffinityData = action.payload;
+    },
+    setSaveStatus: (state, action: PayloadAction<ISetSavePayload>) => {
+      // @ts-ignore
+      state[action.payload.key] = action.payload.value;
     },
   },
 });

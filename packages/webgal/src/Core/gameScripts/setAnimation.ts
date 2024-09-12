@@ -26,13 +26,13 @@ export const setAnimation = (sentence: ISentence): IPerform => {
       logger.debug(`动画${animationName}作用在${target}`, animationDuration);
       WebGAL.gameplay.pixiStage?.registerAnimation(animationObj, key, target);
     }
-  }, 0);
+  }, 1000);
   stopFunction = () => {
     setTimeout(() => {
       const endDialogKey = webgalStore.getState().stage.currentDialogKey;
       const isHasNext = startDialogKey !== endDialogKey;
       WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
-    }, 0);
+    }, 1500);
   };
 
   return {

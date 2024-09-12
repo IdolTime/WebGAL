@@ -31,6 +31,7 @@ export const end = (sentence: ISentence): IPerform => {
     WebGAL.sceneManager.setCurrentScene(rawScene, 'start.txt', sceneUrl);
   });
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
+  dispatch(setVisibility({ component: 'isInGaming', visibility: false }));
   playBgm(webgalStore.getState().GUI.titleBgm);
   return {
     performName: 'none',

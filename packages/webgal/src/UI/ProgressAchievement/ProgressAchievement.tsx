@@ -37,12 +37,18 @@ export const ProgressAchievement: FC = () => {
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick();
     backToTitle();
     dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
     dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
     dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
+    dispatch(setVisibility({ component: 'showStoryLine', visibility: false }));
   };
+
+  useEffect(() => {
+    if (GUIState.showProgressAndAchievement) {
+      enterStoryLine();
+    }
+  }, [GUIState.showProgressAndAchievement]);
 
   return (
     <>
@@ -51,29 +57,27 @@ export const ProgressAchievement: FC = () => {
           <BgImage defaultClass={styles.bg} item={progressUIConfigs.other[ProgressSceneOtherKey.Progress_bg]} />
           <Button
             item={progressUIConfigs.buttons.Progress_back_button}
-            defaultClass={styles.goBack}
+            defaultClass={`${styles.goBack} interactive`}
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />
           <Button
             item={progressUIConfigs.buttons.Progress_chapter_button}
-            defaultClass={styles.chapterTag}
+            defaultClass={`${styles.chapterTag} interactive`}
             type="checkbox"
             checked={tab === 'chapter'}
             onClick={() => {
               enterStoryLine();
-              playSeClick();
               setTab('chapter');
             }}
             onMouseEnter={playSeEnter}
           />
           <Button
             item={progressUIConfigs.buttons.Progress_achievement_button}
-            defaultClass={styles.achievementTag}
+            defaultClass={`${styles.achievementTag} interactive`}
             type="checkbox"
             checked={tab === 'achievement'}
             onClick={() => {
-              playSeClick();
               enterAchieve();
               setTab('achievement');
             }}
@@ -81,11 +85,10 @@ export const ProgressAchievement: FC = () => {
           />
           <Button
             item={progressUIConfigs.buttons.Progress_affinity_button}
-            defaultClass={styles.affinityTag}
+            defaultClass={`${styles.affinityTag} interactive`}
             type="checkbox"
             checked={tab === 'affinity'}
             onClick={() => {
-              playSeClick();
               enterAffinity();
               setTab('affinity');
             }}

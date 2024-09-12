@@ -68,23 +68,23 @@ export function popUpImage(sentence: ISentence): IPerform {
         break;
       case 'mouthOpen':
         mouthOpen = e.value.toString();
-        mouthOpen = assetSetter(mouthOpen, fileType.figure);
+        mouthOpen = assetSetter(mouthOpen, fileType.image);
         break;
       case 'mouthClose':
         mouthClose = e.value.toString();
-        mouthClose = assetSetter(mouthClose, fileType.figure);
+        mouthClose = assetSetter(mouthClose, fileType.image);
         break;
       case 'mouthHalfOpen':
         mouthHalfOpen = e.value.toString();
-        mouthHalfOpen = assetSetter(mouthHalfOpen, fileType.figure);
+        mouthHalfOpen = assetSetter(mouthHalfOpen, fileType.image);
         break;
       case 'eyesOpen':
         eyesOpen = e.value.toString();
-        eyesOpen = assetSetter(eyesOpen, fileType.figure);
+        eyesOpen = assetSetter(eyesOpen, fileType.image);
         break;
       case 'eyesClose':
         eyesClose = e.value.toString();
-        eyesClose = assetSetter(eyesClose, fileType.figure);
+        eyesClose = assetSetter(eyesClose, fileType.image);
         break;
       case 'animationFlag':
         animationFlag = e.value.toString();
@@ -97,11 +97,13 @@ export function popUpImage(sentence: ISentence): IPerform {
     }
   }
 
-  const id = key ? key : `fig-${pos}`;
+  const id = key ? key : `pop-${pos}`;
 
   const currentPopUpImageAssociatedAnimation = webgalStore.getState().stage.popUpImageAssociatedAnimation;
-  const filteredPopUpImageAssociatedAnimation = currentPopUpImageAssociatedAnimation.filter((item) => item.targetId !== id);
-  const newFigureAssociatedAnimationItem = {
+  const filteredPopUpImageAssociatedAnimation = currentPopUpImageAssociatedAnimation.filter(
+    (item) => item.targetId !== id,
+  );
+  const newPopImageAssociatedAnimationItem = {
     targetId: id,
     animationFlag: animationFlag,
     mouthAnimation: {
@@ -114,7 +116,7 @@ export function popUpImage(sentence: ISentence): IPerform {
       close: eyesClose,
     },
   };
-  filteredPopUpImageAssociatedAnimation.push(newFigureAssociatedAnimationItem);
+  filteredPopUpImageAssociatedAnimation.push(newPopImageAssociatedAnimationItem);
   dispatch(setStage({ key: 'popUpImageAssociatedAnimation', value: filteredPopUpImageAssociatedAnimation }));
 
   /**
@@ -122,9 +124,9 @@ export function popUpImage(sentence: ISentence): IPerform {
    */
   let isRemoveEffects = true;
   if (key !== '') {
-    const figWithKey = webgalStore.getState().stage.freePopUpImage.find((e) => e.key === key);
-    if (figWithKey) {
-      if (figWithKey.name === sentence.content) {
+    const popWithKey = webgalStore.getState().stage.freePopUpImage.find((e) => e.key === key);
+    if (popWithKey) {
+      if (popWithKey.name === sentence.content) {
         isRemoveEffects = false;
       }
     }
@@ -149,7 +151,7 @@ export function popUpImage(sentence: ISentence): IPerform {
    * 处理 Effects
    */
   if (isRemoveEffects) {
-    const deleteKey = `fig-${pos}`;
+    const deleteKey = `pop-${pos}`;
     const deleteKey2 = `${key}`;
     webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey));
     webgalStore.dispatch(stageActions.removeEffectByTargetId(deleteKey2));
@@ -224,9 +226,9 @@ export function popUpImage(sentence: ISentence): IPerform {
     dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
   } else {
     const positionMap = {
-      center: 'fig-center',
-      left: 'fig-left',
-      right: 'fig-right',
+      center: 'pop-center',
+      left: 'pop-left',
+      right: 'pop-right',
     };
     const dispatchMap: Record<string, keyof IStageState> = {
       center: 'popUpImageName',

@@ -133,7 +133,6 @@ export const ExtraVideo: FC = () => {
   const t = useTrans('menu.');
 
   const handleGoBack = () => {
-    playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
   };
@@ -142,7 +141,7 @@ export const ExtraVideo: FC = () => {
     <>
       <Button
         item={extraUIConfigs.buttons.Extra_back_button}
-        defaultClass={`${styles.goback} ${styles.extraVideo_goback}`}
+        defaultClass={`${styles.goback} ${styles.extraVideo_goback} interactive`}
         onClick={handleGoBack}
         onMouseEnter={playSeEnter}
       />

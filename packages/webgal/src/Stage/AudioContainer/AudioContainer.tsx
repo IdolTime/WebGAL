@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
+import { saveActions } from '@/store/savesReducer'
 import { setStage } from '@/store/stageReducer';
-import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/logger';
 import { getAudioUrl } from '@/Core/util/getAudioUrl';
 
@@ -100,11 +101,16 @@ export const AudioContainer = () => {
 
   useEffect(() => {
     if (uiSoundEffects === '') return;
-
-    const setEffects = async () => {
+    
+    const setEffects = async () => {     
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
       uiSeAudioElement.src = url;
+      webgalStore.dispatch(saveActions.setSaveStatus({ 
+        key: 'uiSeAudioElement', 
+        value: uiSeAudioElement 
+      }));
+      
       uiSeAudioElement.load();
       uiSeAudioElement.loop = false;
       // 设置音量
@@ -116,10 +122,10 @@ export const AudioContainer = () => {
         uiSeAudioElement.volume = isNaN(seVol) ? mainVol / 100 : seVol / 100;
       }
       // 播放UI音效
-      uiSeAudioElement.play();
+      uiSeAudioElement?.play?.();
       uiSeAudioElement.addEventListener('ended', () => {
         // Processing after sound effects are played
-        uiSeAudioElement.remove();
+        uiSeAudioElement?.remove?.();
       });
       webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
     };

@@ -23,6 +23,7 @@ export const Backlog = () => {
   const [isDisableScroll, setIsDisableScroll] = useState(false);
   let timeRef = useRef<ReturnType<typeof setTimeout>>();
   const [url, setUrl] = useState('');
+  const clickedTimeRef = useRef(0);
 
   // 缓存一下vdom
   const backlogList = useMemo<any>(() => {
@@ -61,7 +62,7 @@ export const Backlog = () => {
                   e.stopPropagation();
                 }}
                 onMouseEnter={playSeEnter}
-                className={styles.backlog_item_button_element}
+                className={`${styles.backlog_item_button_element} interactive`}
               >
                 <Return theme="outline" size={iconSize} fill="#ffffff" strokeWidth={3} />
               </div> */}
@@ -70,6 +71,24 @@ export const Backlog = () => {
               </div>
               {backlogItem.currentStageState.vocal ? (
                 <div
+                  onMouseDown={(e) => {
+                    const node = e.currentTarget as HTMLDivElement;
+                    node.className = `${styles.backlog_item_button_element} interactive btn-clicked`;
+                    clickedTimeRef.current = Date.now();
+                  }}
+                  onMouseUp={(e) => {
+                    const duration = Date.now() - clickedTimeRef.current;
+                    let node = e.currentTarget;
+
+                    setTimeout(
+                      () => {
+                        node.className = `${styles.backlog_item_button_element} interactive`;
+                        // @ts-ignore
+                        node = null;
+                      },
+                      duration - 350 > 0 ? 0 : 350 - duration,
+                    );
+                  }}
                   onClick={(e) => {
                     playSeClick();
                     e.preventDefault();
@@ -94,7 +113,7 @@ export const Backlog = () => {
                     }
                   }}
                   onMouseEnter={playSeEnter}
-                  className={styles.backlog_item_button_element}
+                  className={`${styles.backlog_item_button_element} interactive`}
                 >
                   <span className={styles.sound_icon} />
                 </div>
@@ -169,11 +188,30 @@ export const Backlog = () => {
             }}
           >
             <div
-              className={styles.backlog_top_icon}
-              onClick={() => {
-                playSeClick();
-                dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
-                dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+              className={`${styles.backlog_top_icon} interactive`}
+              onMouseDown={(e) => {
+                const node = e.currentTarget as HTMLDivElement;
+                node.className = `${styles.backlog_top_icon} interactive btn-clicked`;
+                clickedTimeRef.current = Date.now();
+              }}
+              onMouseUp={(e) => {
+                const duration = Date.now() - clickedTimeRef.current;
+                let node = e.currentTarget;
+
+                setTimeout(
+                  () => {
+                    node.className = `${styles.backlog_top_icon} interactive`;
+                    // @ts-ignore
+                    node = null;
+
+                    setTimeout(() => {
+                      playSeClick();
+                      dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
+                      dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+                    }, 320);
+                  },
+                  duration - 350 > 0 ? 0 : 350 - duration,
+                );
               }}
               onMouseEnter={playSeEnter}
               // theme="outline"

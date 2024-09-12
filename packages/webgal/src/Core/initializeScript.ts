@@ -16,6 +16,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
+import { px2 } from './parser/utils';
 
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
@@ -106,5 +107,47 @@ function getUserAnimation() {
         }
       });
     }
+  });
+}
+
+export function initClickAnimation() {
+  document.getElementById('root')?.addEventListener('click', function (event) {
+    let target = event.target as HTMLElement; // 将 event.target 断言为 HTMLElement
+
+    // 如果点击的不是按钮本身，可能是子元素，向上查找最接近的父级按钮
+    const container = document.body;
+
+    // 创建点击动画的图片元素
+    const clickEffect = document.createElement('div');
+    clickEffect.classList.add('click-frame');
+
+    // 根据鼠标点击位置放置图片
+    const { clientX: x, clientY: y } = event;
+    // 打印clientX和clientY, pageX和pageY, x和y
+    clickEffect.style.left = `${x - 36}px`; // 居中
+    clickEffect.style.top = `${y - 36.25}px`;
+
+    container?.appendChild(clickEffect);
+
+    // 动态更新图片帧 (click0 - click9)
+    let frame = 0;
+    const updateFrame = () => {
+      if (frame > 9) {
+        // 当所有帧都显示完毕后，延迟移除元素
+        setTimeout(() => {
+          container?.removeChild(clickEffect);
+        }, 0);
+      } else {
+        // 更新当前帧的背景图片
+        clickEffect.style.backgroundImage = `url('./assets/click${frame}.png')`;
+        frame++;
+
+        // 使用递归的 setTimeout 来模拟下一帧的执行
+        setTimeout(updateFrame, 35); // 每帧间隔 32ms
+      }
+    };
+
+    // 启动动画帧更新
+    setTimeout(updateFrame, 35); // 初始延时启动
   });
 }

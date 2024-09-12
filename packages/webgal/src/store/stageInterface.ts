@@ -155,7 +155,7 @@ export interface IStageState {
   popUpImageNameLeft: string; // 弹窗图片_左 文件地址（相对或绝对）
   popUpImageNameRight: string; // 弹窗图片_右 文件地址（相对或绝对）
   freePopUpImage: Array<IFreeFigure>; // 弹窗图片
-  popUpImageAssociatedAnimation: Array<IFigureAssociatedAnimation>;  // 弹窗图片动画
+  popUpImageAssociatedAnimation: Array<IFigureAssociatedAnimation>; // 弹窗图片动画
   popImgLive2dMotion: ILive2DMotion[];
   popImgLive2dExpression: ILive2DExpression[];
   showText: string; // 文字
@@ -173,10 +173,9 @@ export interface IStageState {
     enter: number; // 背景音乐 淡入或淡出的毫秒数
     volume: number; // 背景音乐 音量调整（0 - 100）
   };
+  currentPlayAudio: null | HTMLAudioElement; // 当前播放的音频
   uiSe: string; // 用户界面音效 文件地址（相对或绝对）
   gameSe: string; // 游戏内音效
-  gameScounds: IScound[]; // 游戏内音效
-  menuScounds: IScound[]; // 菜单内音效
   miniAvatar: string; // 小头像 文件地址（相对或绝对）
   GameVar: IGameVar; // 游戏内变量
   effects: Array<IEffect>; // 应用的变换

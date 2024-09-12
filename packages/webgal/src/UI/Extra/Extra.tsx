@@ -33,7 +33,6 @@ export function Extra() {
   }, [showExtra]);
 
   const handleGoBack = () => {
-    playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
   };
@@ -51,28 +50,18 @@ export function Extra() {
         >
           <Button
             item={extraUIConfigs.buttons.Extra_back_button}
-            defaultClass={styles.backIcon}
+            defaultClass={`${styles.backIcon} interactive`}
             onClick={handleGoBack}
             onMouseEnter={playSeEnter}
           />
           <Button item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_title]} defaultClass={styles.extraTop} />
-          <div className={styles.extraTop}>
-            <div
-              className={styles.backIcon}
-              onClick={() => {
-                dispatch(setVisibility({ component: 'showExtra', visibility: false }));
-                playSeClick();
-              }}
-              onMouseEnter={playSeEnter}
-            />
-          </div>
           <div className={styles.mainContainer}>
             <div className={styles.mainTab}>
               {checked === 'bgm' ? (
-                <span className={styles.mainTab_bgm} />
+                <span className={`${styles.mainTab_bgm} interactive`} />
               ) : (
                 <span
-                  className={styles.mainTab_unselect_bgm}
+                  className={`${styles.mainTab_unselect_bgm} interactive`}
                   onClick={() => {
                     setCheked('bgm');
                     playSeClick();
@@ -81,10 +70,10 @@ export function Extra() {
                 />
               )}
               {checked === 'cg' ? (
-                <span className={styles.mainTab_cg} />
+                <span className={`${styles.mainTab_cg} interactive`} />
               ) : (
                 <span
-                  className={styles.mainTab_unselect_cg}
+                  className={`${styles.mainTab_unselect_cg} interactive`}
                   onClick={() => {
                     setCheked('cg');
                     playSeClick();

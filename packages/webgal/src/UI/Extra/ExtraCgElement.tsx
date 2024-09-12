@@ -20,7 +20,7 @@ export function ExtraCgElement(props: IProps) {
             showFull.set(!showFull.value);
             playSeClick();
           }}
-          className={styles.showFullContainer}
+          className={`${styles.showFullContainer} interactive`}
           onMouseEnter={playSeEnter}
         >
           <div className={styles.showFullCgMain}>
@@ -43,7 +43,7 @@ export function ExtraCgElement(props: IProps) {
         }}
         onMouseEnter={playSeEnter}
         key={props.name}
-        className={`${styles.cgElement} ${styles.cgUnLockElement}`}
+        className={`${styles.cgElement} ${styles.cgUnLockElement} interactive`}
       >
         <div
           className={styles.unlockedCGImg}

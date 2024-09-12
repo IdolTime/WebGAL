@@ -1,7 +1,7 @@
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect, useState } from 'react';
-import { initializeScript } from './Core/initializeScript';
+import { initializeScript, initClickAnimation } from './Core/initializeScript';
 import { initGCPSDK } from './Core/initGCPSDK';
 import { platform_getGameDetail, platform_getUserInfo } from '@/Core/platformMessage';
 import { webgalStore } from '@/store/store';
@@ -185,6 +185,7 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
+      initClickAnimation();
       initializeScript();
     }, 1000);
     // @ts-ignore
@@ -224,7 +225,7 @@ function App() {
       <GlobalDialog />
       <PanicOverlay />
       <DevPanel />
-      <StoryLine />
+      {!GUIState.showProgressAndAchievement && <StoryLine />}
       {!GUIState.showProgressAndAchievement && <Achievement />}
       <BeautyGuide />
       <ModalR18 />

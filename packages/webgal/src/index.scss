@@ -173,6 +173,61 @@ code {
   z-index: 5;
 }
 
-#root{
+#root {
   /*will-change: transform;*/
+  * {
+    cursor: inherit;
+  }
+}
+
+.btn-clicked {
+  transform: scale(0.85) !important;
+  transition: all 0.33s ease-in-out;
+}
+
+.click-frame {
+  position: fixed;
+  width: 72px;
+  height: 72.5px;
+  z-index: 99999;
+  background-size: cover;
+  pointer-events: none;
+}
+
+.test-frame {
+  animation: 1s forwards test2F;
+  opacity: 0;
+}
+
+@keyframes test2F {
+  0% {
+    background-image: url('@/assets/imgs/click0.png');
+  }
+  1% {
+    background-image: url('@/assets/imgs/click1.png');
+  }
+  2% {
+    background-image: url('@/assets/imgs/click2.png');
+  }
+  3% {
+    background-image: url('@/assets/imgs/click3.png');
+  }
+  4% {
+    background-image: url('@/assets/imgs/click4.png');
+  }
+  5% {
+    background-image: url('@/assets/imgs/click5.png');
+  }
+  6% {
+    background-image: url('@/assets/imgs/click6.png');
+  }
+  7% {
+    background-image: url('@/assets/imgs/click7.png');
+  }
+  8% {
+    background-image: url('@/assets/imgs/click8.png');
+  }
+  9% {
+    background-image: url('@/assets/imgs/click9.png');
+  }
 }

@@ -12,6 +12,7 @@ import useTrans from '@/hooks/useTrans';
 import { useTranslation } from 'react-i18next';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
+import { useRef } from 'react';
 // import { showGlogalDialog, switchControls } from '@/UI/GlobalDialog/GlobalDialog';
 // import { useEffect } from 'react';
 // import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
@@ -22,6 +23,7 @@ export const BottomControlPanel = () => {
   const { i18n } = useTranslation();
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const lang = i18n.language;
+  const clickedTimeRef = useRef(0);
   const isFr = lang === 'fr';
   let size = 42;
   let fontSize = '150%';
@@ -127,11 +129,29 @@ export const BottomControlPanel = () => {
           </span> */}
           <span
             id="Button_ControlPanel_auto"
-            className={`${styles.singleButton} ${styles.singleButton_auto}`}
+            className={`${styles.singleButton} ${styles.singleButton_auto} interactive`}
             title="自动"
             onClick={() => {
               switchAuto();
               playSeClick();
+            }}
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.singleButton} ${styles.singleButton_auto} interactive btn-clicked`;
+              clickedTimeRef.current = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTimeRef.current;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = `${styles.singleButton} ${styles.singleButton_auto} interactive`;
+                  // @ts-ignore
+                  node = null;
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
             }}
             onMouseEnter={playSeEnter}
           >
@@ -139,18 +159,36 @@ export const BottomControlPanel = () => {
           </span>
           <span
             id="Button_ControlPanel_fast"
-            className={`${styles.singleButton} ${styles.singleButton_fast}`}
+            className={`${styles.singleButton} ${styles.singleButton_fast} interactive`}
             title="快进"
             onClick={() => {
               switchFast();
               playSeClick();
+            }}
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.singleButton} ${styles.singleButton_fast} interactive btn-clicked`;
+              clickedTimeRef.current = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTimeRef.current;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = `${styles.singleButton} ${styles.singleButton_fast} interactive`;
+                  // @ts-ignore
+                  node = null;
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
             }}
             onMouseEnter={playSeEnter}
           >
             <span className={styles.fastIcon} />
           </span>
           <span
-            className={styles.singleButton}
+            className={`${styles.singleButton} interactive`}
             title="剧情回顾"
             onClick={() => {
               // 如果现在正在自动播放，则点击时先停止自动播放
@@ -161,6 +199,24 @@ export const BottomControlPanel = () => {
               setComponentVisibility('showBacklog', true);
               setComponentVisibility('showTextBox', false);
               playSeClick();
+            }}
+            onMouseDown={(e) => {
+              const node = e.currentTarget as HTMLDivElement;
+              node.className = `${styles.singleButton} interactive btn-clicked`;
+              clickedTimeRef.current = Date.now();
+            }}
+            onMouseUp={(e) => {
+              const duration = Date.now() - clickedTimeRef.current;
+              let node = e.currentTarget;
+
+              setTimeout(
+                () => {
+                  node.className = `${styles.singleButton} interactive`;
+                  // @ts-ignore
+                  node = null;
+                },
+                duration - 350 > 0 ? 0 : 350 - duration,
+              );
             }}
             onMouseEnter={playSeEnter}
           >

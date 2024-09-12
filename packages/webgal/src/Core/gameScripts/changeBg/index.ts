@@ -23,9 +23,6 @@ import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 export const changeBg = (sentence: ISentence): IPerform => {
   const url = sentence.content;
   const dispatch = webgalStore.dispatch;
-
-  console.log(4444, WebGAL.sceneManager.sceneData.currentScene.sceneName)
-
   // 故事线背景
   if (webgalStore.getState().GUI.showStoryLine) {
     dispatch(setStage({ key: 'storyLineBg', value: url }));

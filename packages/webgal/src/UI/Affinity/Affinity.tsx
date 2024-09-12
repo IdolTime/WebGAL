@@ -39,7 +39,6 @@ export const Affinity: FC = () => {
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick();
     backToTitle();
   };
 
@@ -49,15 +48,11 @@ export const Affinity: FC = () => {
         <div className={styles.affinity}>
           <Button
             item={affinityUIConfigs.buttons.Affinity_back_button}
-            defaultClass={styles.goBack}
+            defaultClass={`${styles.goBack} inactive`}
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />
-          <Button
-            item={affinityUIConfigs.other[AffinitySceneOtherKey.Affinity_title]}
-            onClick={handlGoBack}
-            onMouseEnter={playSeEnter}
-          />
+          <Button item={affinityUIConfigs.other[AffinitySceneOtherKey.Affinity_title]} />
           <BgImage item={affinityUIConfigs.other[AffinitySceneOtherKey.Affinity_bg]} defaultClass={styles.affinityBg} />
           {unlockAffinityList?.map((item: ISaveAffinity, index) => {
             const { name, url, x, y, isUnlocked } = item;

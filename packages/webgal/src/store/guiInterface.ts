@@ -14,6 +14,7 @@ export enum MenuPanelTag {
  * @interface IGuiState GUI状态接口
  */
 export interface IGuiState {
+  isInGaming: boolean; // 是否在游戏中
   showStarter: boolean; // 是否显示初始界面（用于使得bgm可以播放)
   showTitle: boolean; // 是否显示标题界面
   showMenuPanel: boolean; // 是否显示Menu界面
@@ -135,6 +136,7 @@ export interface EscMenuItem {
       fontColor?: string;
       countdown?: number;
       btnImage?: string;
+      btnSound?: string;
       btnPosition: string;
       align: string;
       fontFamily: string;

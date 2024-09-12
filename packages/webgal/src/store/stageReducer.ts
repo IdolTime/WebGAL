@@ -70,10 +70,9 @@ export const initState: IStageState = {
     enter: 0, // 背景音乐 淡入或淡出的毫秒数
     volume: 100, // 背景音乐 音量调整（0 - 100）
   },
+  currentPlayAudio: null,
   uiSe: '', // 用户界面音效 文件地址（相对或绝对）
   gameSe: '', // 游戏内页面音效 文件地址（相对或绝对）
-  gameScounds: [], // 游戏内音效
-  menuScounds: [], // 菜单内音效
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果

@@ -47,7 +47,7 @@ export const scriptExecutor = () => {
   const sceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
   if (
     WebGAL.sceneManager.sceneData.currentSentenceId >
-      WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1
+    WebGAL.sceneManager.sceneData.currentScene.sentenceList.length - 1
   ) {
     if (WebGAL.sceneManager.sceneData.sceneStack.length !== 0) {
       const sceneToRestore: ISceneEntry | undefined = WebGAL.sceneManager.sceneData.sceneStack.pop();

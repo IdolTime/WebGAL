@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useState } from 'react';
+import { CSSProperties, FC, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setGameR18 } from '@/store/GUIReducer';
@@ -27,6 +27,7 @@ export const ModalR18: FC = () => {
     height: undefined,
     opacity: 0,
   });
+  const clickedTimeRef = useRef(0);
 
   const handleAgree = () => {
     playSeClick();
@@ -41,16 +42,17 @@ export const ModalR18: FC = () => {
   return (
     <>
       {GUIStore.isShowR18Modal && GUIStore.openR18Modal && (
-        <div 
-          className={
-            `${styles.modalR18_main} ${GUIStore.isShowR18Modal && GUIStore.openR18Modal ? 'animated fadeIn' : ''}`
-          } 
+        <div
+          className={`${styles.modalR18_main} ${
+            GUIStore.isShowR18Modal && GUIStore.openR18Modal ? 'animated fadeIn' : ''
+          }`}
         >
           <div className={styles.footer}>
             <div id="exitButton">
               <img
                 src={isHoverExitButton ? ExitButtonHover : ExitButtonDefault}
                 onClick={handleDisagree}
+                className="interactive"
                 onMouseEnter={() => {
                   setIsHoverExitButton(true);
                   playSeEnter();
@@ -66,13 +68,33 @@ export const ModalR18: FC = () => {
                     opacity: 1,
                   });
                 }}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = 'interactive btn-clicked';
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = 'interactive';
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleAgree, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
+                }}
                 style={exitButtonLayout}
               />
             </div>
             <div id="confirmButton">
               <img
+                className="interactive"
                 src={isHoverConfirmButton ? ConfirmButtonHover : ConfirmButtonDefault}
-                onClick={handleAgree}
                 onMouseEnter={() => {
                   setIsHoverConfirmButton(true);
                   playSeEnter();
@@ -86,6 +108,26 @@ export const ModalR18: FC = () => {
                     height: (e.target as HTMLImageElement).naturalHeight / 0.5,
                     opacity: 1,
                   });
+                }}
+                onMouseDown={(e) => {
+                  const node = e.currentTarget as HTMLDivElement;
+                  node.className = 'interactive btn-clicked';
+                  clickedTimeRef.current = Date.now();
+                }}
+                onMouseUp={(e) => {
+                  const duration = Date.now() - clickedTimeRef.current;
+                  let node = e.currentTarget;
+
+                  setTimeout(
+                    () => {
+                      node.className = 'interactive';
+                      // @ts-ignore
+                      node = null;
+
+                      setTimeout(handleAgree, 320);
+                    },
+                    duration - 350 > 0 ? 0 : 350 - duration,
+                  );
                 }}
                 style={confirmButtonLayout}
               />

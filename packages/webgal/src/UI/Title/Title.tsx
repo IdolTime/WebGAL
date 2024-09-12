@@ -78,46 +78,37 @@ const Title: FC = () => {
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
       startGame();
-      playSeClick();
       dispatch(setshowFavorited(false));
     },
     [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();
-      playSeClick();
     },
     [TitleSceneButtonKey.Game_storyline_button]: () => {
       enterStoryLine();
-      playSeClick();
     },
     [TitleSceneButtonKey.Game_extra_button]: () => {
       dispatch(setVisibility({ component: 'showExtra', visibility: true }));
-      playSeClick();
     },
     [TitleSceneButtonKey.Game_collection_button]: () => {
       enterBeautyGuide();
-      playSeClick();
     },
     [TitleSceneButtonKey.Game_continue_button]: () => {
-      playSeClick();
       dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      dispatch(setVisibility({ component: 'isInGaming', visibility: true }));
       continueGame();
     },
     [TitleSceneButtonKey.Game_option_button]: () => {
-      playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Option));
     },
     [TitleSceneButtonKey.Game_load_button]: () => {
-      playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
     },
     [TitleSceneButtonKey.Game_progression_button]: () => {
-      playSeClick();
       dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: true }));
     },
     [TitleSceneButtonKey.Game_affinity_button]: () => {
-      playSeClick();
       dispatch(setVisibility({ component: 'showAffinity', visibility: true }));
     },
   };
@@ -151,7 +142,7 @@ const Title: FC = () => {
                 <Button
                   key={_key}
                   item={buttonConfigItem}
-                  defaultClass={styles.Title_button}
+                  defaultClass={`${styles.Title_button} interactive`}
                   defaultTextClass={styles.Title_button_text}
                   onClick={() => {
                     const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
