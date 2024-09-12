@@ -56,6 +56,7 @@ const Title: FC = () => {
     [TitleSceneButtonKey.Game_continue_button]: () => {
       playSeClick();
       dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+      dispatch(setVisibility({ component: 'isInGaming', visibility: true }));
       continueGame();
     },
     [TitleSceneButtonKey.Game_option_button]: () => {
@@ -68,6 +69,13 @@ const Title: FC = () => {
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
     },
+    [TitleSceneButtonKey.Game_link_button]: () => {
+      const linkStr = TitleUIConfigs.buttons[TitleSceneButtonKey.Game_link_button].args?.buttonLink?.link ?? ''
+      playSeClick();
+      if (linkStr) {
+        alert(linkStr)
+      }
+    }
   };
 
   return (

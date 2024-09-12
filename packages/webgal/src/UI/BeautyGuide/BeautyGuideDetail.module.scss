@@ -58,6 +58,8 @@
             transform: translateX(0) translateY(0) !important;
             background: rgba(0, 0, 0, 0.3);
             border-radius: px2(17px);
+            height: px2(530px);
+            width: px2(189px);
         }
 
         .beautyGuide_detail_left_bg {
@@ -73,19 +75,6 @@
             transform: translateX(0) translateY(0) !important;
         }
 
-        // .header {
-        //     flex: 1;
-        //     display: flex;
-        //     align-items: center;
-        //     justify-content: center;
-        //     width: 100%;
-
-        //     .title {
-        //         font-size: 50px;
-        //         color: red;
-        //     }
-        // }
-
         .pictureUrl {
             flex: 3;
             width: 100%;
@@ -96,8 +85,8 @@
             img {
                 // max-width: 100%;
                 // max-height: 100%;
-                height: calc(267px* 2);
-                width: calc(189px* 2);
+                height: px2(267px);
+                width: px2(189px);
                 
             }
         }
@@ -119,9 +108,11 @@
                 align-items: center;
                 justify-content: center;
                 margin-bottom: 10px;
+                color: #fff;
+                font-size: 28px;
                 & > span {
-                    font-size: 28px;
-                    color: #fff;
+                    font-size: inherit;
+                    color: inherit;
                     font-weight: 700;
                     flex: 1;
                     &:first-child {
@@ -144,10 +135,9 @@
         overflow-y: auto;
 
         .contentWrapper {
-            // flex: 1;
 
             .content {
-                height: px2(475px);
+                height: px2(399px);
                 width: px2(708px);
                 display: flex;
                 justify-content: center;
@@ -190,9 +180,10 @@
             }
 
             .thumbnailWrapper {
-                height: 150px;
-                width: 100%;
-                padding: 10px;
+                // min-height: px2(65px);
+                width: 85%;
+                padding: px2(10px);
+                margin-bottom: px2(5px);
                 overflow-x: auto;
                 overflow-y: hidden;
 
@@ -202,22 +193,22 @@
                 }
                 
                 .thumbnail_box {
-                    width: 200px;
-                    height: 180px;
-                    margin-right: 10px;
-                    padding: 10px 0;
+                    width: px2(109px);
+                    height: px2(62px);
+                    margin-right: px2(10px);
+                    padding: px2(10px) 0;
                     transition: all 0.3s;
                     overflow: hidden;
                     position: relative;
                     flex-shrink: 0;
                     cursor: pointer;
 
-                    // &:hover {
-                        
-                    //     & > img {
-                    //         transform: scale(1.2);
-                    //     }
-                    // }
+                    &:hover {
+                        cursor: pointer;
+                        // & > img {
+                        //     transform: scale(1.2);
+                        // }
+                    }
 
                     &:last-child {
                         margin-right: 0;
@@ -249,16 +240,21 @@
         }
 
         .desc_text {
-            padding: 20px 20px;
-            min-height: 100px;
+            padding: px2(10px) px2(20px);
+            min-height: px2(59px);
             width: px2(708px);
             position: relative;
             transform: translateX(0) translateY(0) !important;
             color: #fff;
-            font-size: 30px;
+            font-size: px2(18px);
+            font-weight: bold;
             text-align: center;
             background: rgba(0, 0, 0, 0.3);
             border-radius: px2(17px);
+            margin-bottom: px2(13px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             .desc_bg {
                 position: absolute !important;

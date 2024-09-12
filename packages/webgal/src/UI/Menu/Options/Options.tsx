@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './options.module.scss';
 import { getStorage, setStorage } from '@/Core/controller/storage/storageController';
 import { useValue } from '@/hooks/useValue';
@@ -33,6 +33,7 @@ export const Options: FC = () => {
   const { playSeEnter, playSeSwitch, playSeClick } = useSoundEffect();
   const userDataState = useSelector((state: RootState) => state.userData);
   const currentOptionPage = useValue(optionPage.System);
+  const [isUpdateCompount, setIsUpdateCompount] = useState(false);
   useEffect(getStorage, []);
   const dispatch = useDispatch();
   const optionUIConfigs = useSelector(
@@ -83,7 +84,7 @@ export const Options: FC = () => {
       />
 
       {/* 视频尺寸 */}
-      <OptionVideoSize />
+      <OptionVideoSize onUpdate={() => setIsUpdateCompount(!isUpdateCompount)} />
 
       {/* 亮度 */}
       <OptionSliderCustome
@@ -94,6 +95,7 @@ export const Options: FC = () => {
         uniqueID="light"
         min={configLight.min}
         max={configLight.max}
+        isUpdate={isUpdateCompount}
         onChange={(event) => {
           let newValue = Number(event.target.value);
           if (newValue < configLight.min) {
@@ -111,6 +113,7 @@ export const Options: FC = () => {
         initValue={userDataState.optionData.seVolume}
         // uniqueID="音效"
         uniqueID="seVolume"
+        isUpdate={isUpdateCompount}
         onChange={(event) => {
           const newValue = event.target.value;
           dispatch(setOptionData({ key: 'seVolume', value: Number(newValue) }));
@@ -124,6 +127,7 @@ export const Options: FC = () => {
         defaultClass={`${styles.Options_main_slider} interactive`}
         // uniqueID="全局音量"
         uniqueID="volumeMain"
+        isUpdate={isUpdateCompount}
         onChange={(event) => {
           const newValue = event.target.value;
           dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));

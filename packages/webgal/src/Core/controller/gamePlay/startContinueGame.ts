@@ -34,6 +34,7 @@ export const startGame = () => {
   webgalStore.dispatch(saveActions.setIsShowUnlock(true));
   webgalStore.dispatch(saveActions.setShowStoryline(true));
   webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
+  webgalStore.dispatch(setVisibility({ component: 'isInGaming', visibility: true }));
   // 设置UI亮度
   useUILight(webgalStore.getState().userData.optionData.uiLight)
 };

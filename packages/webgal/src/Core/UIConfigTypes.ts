@@ -7,6 +7,7 @@ export enum TitleSceneButtonKey {
   Game_option_button = 'Game_option_button', // 设置
   Game_load_button = 'Game_load_button', // 读取
   Game_continue_button = 'Game_continue_button', // 继续游戏
+  Game_link_button = 'Game_link_button', // 链接按钮
 }
 
 export interface UIItemConfig {
@@ -67,6 +68,21 @@ export enum SliderItemKey {
   sliderThumb = 'sliderThumb',
 }
 
+export enum collectionItemInfoKey {
+  collectionInfo = 'collection_info',
+  collectionImages = 'collection_images',
+  collectionVideos = 'collection_videos',
+}
+
+export interface IBtnSoundConfig {
+  clickSound?: string;
+  hoverSound?: string;
+}
+
+export interface IBtnLinkConfig {
+  link: string;
+}
+
 export interface ContainerItem {
   key: AllKey;
   content: '';
@@ -80,6 +96,8 @@ export interface ContainerItem {
     backgroundHoverStyle?: Style;
     extraStyle?: Style;
     extraHoverStyle?: Style;
+    btnSound?: IBtnSoundConfig;
+    buttonLink?: IBtnLinkConfig;
   };
 }
 
@@ -95,6 +113,8 @@ export interface SliderContainerItem {
     slider?: Style;
     sliderBg?: Style;
     sliderThumb?: Style;
+    btnSound?: IBtnSoundConfig;
+    buttonLink?: IBtnLinkConfig;
   };
 }
 
@@ -110,6 +130,8 @@ export interface IndicatorContainerItem {
     indicatorLeftHoverStyle?: Style;
     indicatorRightStyle?: Style;
     indicatorRightHoverStyle?: Style;
+    btnSound?: IBtnSoundConfig;
+    buttonLink?: IBtnLinkConfig;
   };
 }
 
@@ -147,6 +169,10 @@ export const titleSceneButtonConfig: Record<TitleSceneButtonKey, UIItemConfig> =
     hasHoverStyle: true,
     label: '继续游戏',
   },
+  [TitleSceneButtonKey.Game_link_button]: {
+    hasHoverStyle: true,
+    label: '链接按钮',
+  }
 };
 
 export enum LoadSceneButtonKey {
@@ -222,7 +248,7 @@ export enum CollectionSceneOtherKey {
   Collection_detail_title = 'Collection_detail_title',
   Collection_detail_dialog_bg = 'Collection_detail_dialog_bg',
   Collection_detail_dialog_text = 'Collection_detail_dialog_text',
-  Collection_detail_left_bg = "Collection_detail_left_bg",
+  Collection_detail_left_bg = 'Collection_detail_left_bg',
   Collection_detail_right_content_bg = 'Collection_detail_right_content_bg',
   Collection_detail_right_thumbnail_bg = 'Collection_detail_right_thumbnail_bg',
   Collection_detail_right_desc_bg = 'Collection_detail_right_desc_bg',
@@ -717,18 +743,18 @@ export const collectionSceneOtherConfig: Record<
   [CollectionSceneOtherKey.Collection_detail_right_content_bg]: {
     label: '详情界面右侧内容背景',
     type: 'bg',
-    hasHoverStyle: false
+    hasHoverStyle: false,
   },
   [CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]: {
     label: '详情界面右侧缩略图背景',
     type: 'bg',
-    hasHoverStyle: false
+    hasHoverStyle: false,
   },
   [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: {
     label: '详情界面右侧说明背景',
     type: 'bg',
-    hasHoverStyle: false
-  }
+    hasHoverStyle: false,
+  },
 };
 
 export enum AchievementSceneOtherKey {
@@ -925,6 +951,8 @@ export interface ButtonItem {
     hide: boolean;
     style: Style;
     hoverStyle?: Style;
+    btnSound?: IBtnSoundConfig;
+    buttonLink?: IBtnLinkConfig;
   };
 }
 
@@ -983,6 +1011,8 @@ export interface CollectionInfoItem {
     info?: CollectionInfo;
     images?: CollectionImages;
     videos?: CollectionVideos;
+    btnSound?: IBtnSoundConfig;
+    buttonLink?: IBtnLinkConfig;
   };
 }
 
@@ -1212,6 +1242,11 @@ export const sceneUIConfig: SceneUIConfig = {
         content: '',
         args: generateArgs(['hoverStyle']),
       },
+      [TitleSceneButtonKey.Game_link_button]: {
+        key: TitleSceneButtonKey.Game_link_button,
+        content: '',
+        args: generateArgs(['hoverStyle', 'buttonLink']),
+      }
     },
   },
   [Scene.load]: {
@@ -1555,7 +1590,7 @@ export const sceneUIConfig: SceneUIConfig = {
         key: CollectionSceneOtherKey.Collection_detail_right_desc_bg,
         content: '',
         args: generateArgs(),
-      }
+      },
     },
     buttons: {
       [CollectionSceneButtonKey.Collection_back_button]: {
@@ -1608,5 +1643,5 @@ export const bgKey = {
   [CollectionSceneOtherKey.Collection_detail_left_bg]: 1,
   [CollectionSceneOtherKey.Collection_detail_right_content_bg]: 1,
   [CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]: 1,
-  [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: 1
+  [CollectionSceneOtherKey.Collection_detail_right_desc_bg]: 1,
 };

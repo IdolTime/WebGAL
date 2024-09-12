@@ -37,6 +37,9 @@ export const SCRIPT_CONFIG = [
   { scriptString: 'payProduct', scriptType: commandType.payProduct },
   { scriptString: 'finishTrial', scriptType: commandType.finishTrial },
   { scriptString: 'moveCamera', scriptType: commandType.moveCamera },
+  { scriptString: 'changeAffinity', scriptType: commandType.changeAffinity },
+  { scriptString: 'unlockAffinity', scriptType: commandType.unlockAffinity },
+  { scriptString: 'popUpImage', scriptType: commandType.popUpImage },
 ];
 export const ADD_NEXT_ARG_LIST = [
   commandType.bgm,

@@ -38,12 +38,15 @@ export enum commandType {
   setTransition,
   getUserInput,
   applyStyle,
-  unlockAchieve,
-  unlockStoryline,
-  showValue, // 显示变量名称
+  unlockAchieve, // 解锁成就
+  unlockStoryline, // 解锁故事线
+  showValue, // 显示变量
   payProduct, // 付费
   finishTrial, // 结束试玩
   moveCamera, // 移动镜头
+  changeAffinity, // 修改亲密度
+  unlockAffinity, // 解锁亲密度
+  popUpImage, // 弹窗图片
 }
 
 /**

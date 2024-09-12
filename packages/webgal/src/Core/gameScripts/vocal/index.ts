@@ -181,7 +181,9 @@ export const playVocal = (sentence: ISentence) => {
             }, 10000);
           }
 
-          VocalControl?.play();
+          (VocalControl as HTMLAudioElement).onloadeddata = () => {
+            VocalControl?.play();
+          };
 
           VocalControl.onended = () => {
             for (const e of WebGAL.gameplay.performController.performList) {

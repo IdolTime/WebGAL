@@ -5,6 +5,7 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { useSelector } from 'react-redux';
 import { WebGAL } from '@/Core/WebGAL';
+import { getAudioUrl } from '../util/getAudioUrl';
 
 /**
  * 播放一段效果音
@@ -42,10 +43,11 @@ export const playEffect = (sentence: ISentence): IPerform => {
     duration: 1000 * 60 * 60,
     arrangePerformPromise: new Promise((resolve) => {
       // 播放效果音
-      setTimeout(() => {
+      setTimeout(async () => {
         const volumeArg = getSentenceArgByKey(sentence, 'volume');
         let seElement = document.createElement('audio');
-        seElement.src = url;
+        seElement.src = await getAudioUrl(url);
+        seElement.load();
         if (isLoop) {
           seElement.loop = true;
         }

@@ -237,7 +237,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   );
   return {
     performName: 'choose',
-    duration: 1000 * 60 * 60 * 24,
+    duration: 1000 * 60 * 60 * 24 * 3650,
     isHoldOn: false,
     stopFunction: () => {
       // eslint-disable-next-line react/no-deprecated

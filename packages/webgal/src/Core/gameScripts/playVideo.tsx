@@ -20,10 +20,12 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
   const bgmVol = mainVol * 0.01 * userDataState.optionData.bgmVolume * 0.01;
-  const performInitName: string = 'videoPlay.' + getRandomPerformName();
+  let keepVideo = false;
   let chooseContent = '';
   let loopValue = false;
   let continueBgmValue = false;
+  let hideVideo = sentence.content === 'none' || sentence.content === '';
+  let id = '';
   const optionId = Date.now();
   webgalStore.dispatch(setshowFavorited(false));
   const endPerformRef = {
@@ -41,8 +43,41 @@ export const playVideo = (sentence: ISentence): IPerform => {
     }
     if (e.key === 'loop') {
       loopValue = e.value === true;
+    } else if (e.key === 'keep') {
+      keepVideo = e.value === true;
+      loopValue = true;
+    } else if (e.key === 'id') {
+      id = e.value as string;
     }
   });
+
+  if (id && !hideVideo) {
+    WebGAL.videoManager.setUrlIdMap(id, sentence.content);
+  }
+
+  const performInitName: string = 'videoPlay.' + (id || getRandomPerformName());
+
+  if (hideVideo) {
+    if (!id) {
+      WebGAL.videoManager.destroy(WebGAL.videoManager.currentPlayingVideo);
+    } else {
+      const url = WebGAL.videoManager.idURLMap[id];
+
+      if (url) {
+        WebGAL.videoManager.destroy(url);
+      }
+    }
+
+    return {
+      performName: 'none',
+      duration: 0,
+      isHoldOn: false,
+      stopFunction: () => {},
+      blockingNext: () => false,
+      blockingAuto: () => true,
+      stopTimeout: undefined,
+    };
+  }
 
   const checkIfBlockingNext = () => {
     let blockingNext = getSentenceArgByKey(sentence, 'skipOff');
@@ -67,10 +102,14 @@ export const playVideo = (sentence: ISentence): IPerform => {
       }
     }
 
+    if (keepVideo) {
+      blockingNextFlag = false;
+    }
+
     return blockingNextFlag;
   };
 
-  WebGAL.videoManager.showVideo(sentence.content);
+  WebGAL.videoManager.showVideo(sentence.content, keepVideo);
 
   let isOver = false;
   const performObject = {
@@ -84,7 +123,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
     arrangePerformPromise: new Promise<IPerform>((resolve) => {
       const endCallback = (e: IPerform) => {
         isOver = true;
-        e.stopFunction();
+        // e.stopFunction();
         WebGAL.gameplay.performController.unmountPerform(e.performName);
       };
 
@@ -111,9 +150,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         const endPerform = () => {
           // 如果为鉴赏模式下播放视频，播放完后自动跳转到鉴赏模式页面
           if (isLoadVideo) {
-            webgalStore.dispatch(
-              setVisibility({ component: 'showExtra', visibility: true })
-            );
+            webgalStore.dispatch(setVisibility({ component: 'showExtra', visibility: true }));
             return;
           }
 
@@ -148,29 +185,31 @@ export const playVideo = (sentence: ISentence): IPerform => {
         // 播放并作为一个特别演出加入
         const perform = {
           performName: performInitName,
-          duration: 1000 * 60 * 60,
+          duration: keepVideo ? 0 : 1000 * 60 * 60 * 24 * 3650,
           isOver: false,
           isHoldOn: false,
           stopFunction: (noWait = false) => {
             // WebGAL.events.fullscreenDbClick.off(skipVideo);
 
             // if (!continueBgmValue) {
-              /**
-               * 恢复音量
-               * 需求变更：bgm与视频同时播放，不被视频打断
-               */
-              // const bgmElement: any = document.getElementById('currentBgm');
-              // if (bgmElement) {
-              //   bgmElement.volume = bgmVol.toString();
-              // }
+            /**
+             * 恢复音量
+             * 需求变更：bgm与视频同时播放，不被视频打断
+             */
+            // const bgmElement: any = document.getElementById('currentBgm');
+            // if (bgmElement) {
+            //   bgmElement.volume = bgmVol.toString();
+            // }
             // }
 
-            const vocalElement: any = document.getElementById('currentVocal');
-            if (vocalElement) {
-              vocalElement.volume = vocalVol.toString();
-            }
+            if (!keepVideo) {
+              const vocalElement: any = document.getElementById('currentVocal');
+              if (vocalElement) {
+                vocalElement.volume = vocalVol.toString();
+              }
 
-            WebGAL.videoManager.destroy(url, noWait);
+              WebGAL.videoManager.destroy(url, noWait);
+            }
           },
           blockingNext: checkIfBlockingNext,
           blockingAuto: () => {
@@ -185,16 +224,19 @@ export const playVideo = (sentence: ISentence): IPerform => {
          * 需求变更：bgm与视频同时播放，不被视频打断
          */
         // if (!continueBgmValue) {
-          // const bgmVol2 = 0;
-          // const bgmElement: any = document.getElementById('currentBgm');
-          // if (bgmElement) {
-          //   bgmElement.volume = bgmVol2.toString();
-          // }
+        // const bgmVol2 = 0;
+        // const bgmElement: any = document.getElementById('currentBgm');
+        // if (bgmElement) {
+        //   bgmElement.volume = bgmVol2.toString();
         // }
-        const vocalVol2 = 0;
-        const vocalElement: any = document.getElementById('currentVocal');
-        if (vocalElement) {
-          vocalElement.volume = vocalVol2.toString();
+        // }
+
+        if (!keepVideo) {
+          const vocalVol2 = 0;
+          const vocalElement: any = document.getElementById('currentVocal');
+          if (vocalElement) {
+            vocalElement.volume = vocalVol2.toString();
+          }
         }
 
         WebGAL.videoManager.playVideo(url);
@@ -219,11 +261,11 @@ export const playVideo = (sentence: ISentence): IPerform => {
           const perform = choose(script, endPerform);
           WebGAL.gameplay.performController.arrangeNewPerform(perform, script);
         }
-        
+
         setTimeout(() => {
-          //延迟一秒 获取当前视频播放信息，用于故事线信息存储
+          // 延迟一秒 获取当前视频播放信息，用于故事线信息存储
           getCurrentVideoStageDataForStoryLine();
-        }, 1000)
+        }, 1000);
 
         WebGAL.videoManager.onEnded(url, () => {
           // getCurrentVideoStageDataForStoryLine();
@@ -234,9 +276,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
             // 视频播放完成后，隐藏当前设置的显示变量
             const showValueList = webgalStore.getState().stage.showValueList;
             if (showValueList?.length) {
-              const name = webgalStore.getState().stage.showValueName
-              const newShowValueList = showValueList.filter(item => item.showValueName !== name);
-              webgalStore.dispatch(updateShowValueList(newShowValueList))
+              const name = webgalStore.getState().stage.showValueName;
+              const newShowValueList = showValueList.filter((item) => item.showValueName !== name);
+              webgalStore.dispatch(updateShowValueList(newShowValueList));
             }
 
             endPerform();

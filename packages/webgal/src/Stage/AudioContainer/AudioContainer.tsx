@@ -19,6 +19,7 @@ export const AudioContainer = () => {
   const uiSeVol = mainVol * 0.01 * (userDataState.optionData.uiSeVolume ?? 50) * 0.01;
   const isEnterGame = useSelector((state: RootState) => state.GUI.isEnterGame);
   const [bgmUrl, setBgmUrl] = useState('');
+  const [vocalUrl, setVocalUrl] = useState('');
 
   // 淡入淡出定时器
   const [fadeTimer, setFadeTimer] = useState(setTimeout(() => {}, 0));
@@ -75,6 +76,7 @@ export const AudioContainer = () => {
     const setBgm = async () => {
       const url = await getAudioUrl(isShowTitle ? titleBgm : stageStore.bgm.src);
       setBgmUrl(url);
+      (document.getElementById('currentBgm') as HTMLAudioElement)?.load();
     };
 
     setBgm();
@@ -98,11 +100,27 @@ export const AudioContainer = () => {
 
   useEffect(() => {
     if (uiSoundEffects === '') return;
+    const currentPlayAudioElement = webgalStore.getState().stage.currentPlayAudio;
+    const hasCustomClickSe = webgalStore.getState().stage.hasCustomClickSe;
+    
+    if (currentPlayAudioElement && hasCustomClickSe && currentPlayAudioElement?.id === 'uiSe-clickSe') {
+      currentPlayAudioElement?.pause();
+      currentPlayAudioElement.volume = 0;
+      currentPlayAudioElement?.remove?.()
+      webgalStore.dispatch(setStage({ key: 'currentPlayAudio', value: null }));
+    }
 
-    const setEffects = async () => {
+    const setEffects = async () => {     
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
       uiSeAudioElement.src = url;
+      if (hasCustomClickSe) {
+        uiSeAudioElement.id = `uiSe-clickSe`
+        webgalStore.dispatch(setStage({ key: 'currentPlayAudio', value: uiSeAudioElement }));
+        webgalStore.dispatch(setStage({ key: 'hasCustomClickSe', value: false }));
+      }
+      
+      uiSeAudioElement.load();
       uiSeAudioElement.loop = false;
       // 设置音量
       if (!isNaN(uiSeVol)) {
@@ -113,10 +131,10 @@ export const AudioContainer = () => {
         uiSeAudioElement.volume = isNaN(seVol) ? mainVol / 100 : seVol / 100;
       }
       // 播放UI音效
-      uiSeAudioElement.play();
+      uiSeAudioElement?.play?.();
       uiSeAudioElement.addEventListener('ended', () => {
         // Processing after sound effects are played
-        uiSeAudioElement.remove();
+        uiSeAudioElement?.remove?.();
       });
       webgalStore.dispatch(setStage({ key: 'uiSe', value: '' }));
     };
@@ -132,10 +150,19 @@ export const AudioContainer = () => {
     logger.debug(`设置用户界面音效音量: ${uiSeVol}`);
   }, [uiSeVol]);
 
+  useEffect(() => {
+    logger.debug(`播放声音: ${stageStore.playVocal}`);
+
+    getAudioUrl(stageStore.playVocal).then((url) => {
+      setVocalUrl(url);
+      (document.getElementById('currentVocal') as HTMLAudioElement).load();
+    });
+  }, [stageStore.playVocal]);
+
   return (
     <div>
       <audio key={isShowTitle.toString() + bgmUrl} id="currentBgm" src={bgmUrl} loop={true} autoPlay={isEnterGame} />
-      <audio id="currentVocal" src={stageStore.playVocal} />
+      <audio id="currentVocal" src={vocalUrl} />
     </div>
   );
 };

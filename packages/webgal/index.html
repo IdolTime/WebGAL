@@ -158,7 +158,6 @@
 
       const gameSizeVal = window.localStorage.getItem('game-screen-size');
       const sizeArr = gameSizeVal && typeof gameSizeVal === 'string' && gameSizeVal?.split('x') || []
-      console.log('sizeArr', sizeArr, gameSizeVal)
       if (sizeArr.length > 0) {
         targetWidth = parseInt(sizeArr[0]) * 2;
         targetHeight = parseInt(sizeArr[1]) * 2;

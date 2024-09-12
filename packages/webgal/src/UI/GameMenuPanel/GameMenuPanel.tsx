@@ -82,6 +82,7 @@ export const GameMenuPanel = () => {
         leftFunc: () => {},
         rightFunc: () => {
           setComponentVisibility('isShowGameMenu', false);
+          setComponentVisibility('isInGaming', false);
           window.location.href = '/';
           // backToTitle();
         },
@@ -202,7 +203,11 @@ export const GameMenuPanel = () => {
   return (
     <>
       <div className={styles.gameMenuPanel}>
-        <div className={styles.menuButton} onClick={handleShowGameMenuPanel} onMouseEnter={playSeEnter} />
+        <div 
+          className={styles.menuButton} 
+          onClick={handleShowGameMenuPanel} 
+          onMouseEnter={playSeEnter} 
+        />
       </div>
       {GUIStore.isShowGameMenu && (
         <div className={styles.gameMenuPanelContentWrapper}>

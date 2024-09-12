@@ -35,8 +35,8 @@ export enum fullScreenOption {
 }
 
 export enum videoSizeOption {
-  Size1080P = '1920x1080', 
-  Size720P = '1280x720'
+  Size1080P = '1920x1080',
+  Size720P = '1280x720',
 }
 
 /**
@@ -44,7 +44,7 @@ export enum videoSizeOption {
  */
 export interface IOptionData {
   volumeMain: number; // 主音量
-  textSpeed: playSpeed; // 文字速度
+  textSpeed: number; // 文字速度
   autoSpeed: playSpeed; // 自动播放速度
   textSize: textSize;
   vocalVolume: number; // 语音音量
@@ -58,7 +58,7 @@ export interface IOptionData {
   voiceInterruption: voiceOption; // 是否中断语音
   fullScreen: fullScreenOption;
   uiLight: number; // 游戏UI亮度
-  videoSize: videoSizeOption
+  videoSize: videoSizeOption;
 }
 
 /**
@@ -133,7 +133,7 @@ export interface IUserDataStore {
 export type UserDataStore = IUserDataStore;
 
 export interface ISaveStoryLine {
-  thumbnailUrl:  string; // 缩略图地址
+  thumbnailUrl: string; // 缩略图地址
   name: string; // 解锁名称
   x: number; // 解锁按钮 X坐标
   y: number; // 解锁按钮 Y坐标

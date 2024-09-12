@@ -24,7 +24,7 @@ function initGameScreen() {
   let defaultWidth = 1280;
   let defaultHeight = 720;
   const gameSizeStr = window.localStorage.getItem('game-screen-size');
-  const sizeArr = gameSizeStr?.split('x') ?? []
+  const sizeArr = gameSizeStr?.split('x') ?? [];
 
   if (sizeArr?.length > 0) {
     defaultWidth = Number(sizeArr[0]);
@@ -33,8 +33,8 @@ function initGameScreen() {
 
   return {
     defaultWidth,
-    defaultHeight
-  }
+    defaultHeight,
+  };
 }
 
 // 初始化舞台数据
@@ -62,6 +62,8 @@ export const initState: IStageState = {
     enter: 0, // 背景音乐 淡入或淡出的毫秒数
     volume: 100, // 背景音乐 音量调整（0 - 100）
   },
+  currentPlayAudio: null,
+  hasCustomClickSe: false,
   uiSe: '', // 用户界面音效 文件地址（相对或绝对）
   gameSe: '', // 游戏内页面音效 文件地址（相对或绝对）
   gameScounds: [], // 游戏内音效
@@ -98,7 +100,7 @@ export const initState: IStageState = {
   totalAchievements: 0, // 总成就数量
   unlockedAchievements: 0, // 已获得的成就数量
   // isShowUnlockAchieve: false,
-  isShowValueSWitch: false,
+  isShowValueSwitch: false,
   showValueName: '',
   showValueAxisX: 0,
   showValueAxisY: 0,
@@ -234,7 +236,15 @@ const stageSlice = createSlice({
       state.showValues.push(action.payload);
     },
     addShowValueList: (state, action: PayloadAction<IShowValueListItem>) => {
-      state.showValueList.push(action.payload);
+      const index = state.showValueList.findIndex((e) => e.showValueName === action.payload.showValueName);
+
+      if (index > -1) {
+        const list = [...state.showValueList];
+        list[index] = action.payload;
+        state.showValueList = list;
+      } else {
+        state.showValueList = [...state.showValueList, action.payload];
+      }
     },
     updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
       state.showValueList = action.payload;

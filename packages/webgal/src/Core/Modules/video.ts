@@ -50,6 +50,7 @@ export class VideoManager {
       poster: string;
     }
   >;
+  public idURLMap: Record<string, string> = {};
   public currentPlayingVideo = '';
   private videoIndex = 0;
 
@@ -209,7 +210,7 @@ export class VideoManager {
     }
   }
 
-  public showVideo(key: string): void {
+  public showVideo(key: string, keepVideo?: boolean): void {
     const videoItem = this.videosByKey[key];
 
     if (videoItem?.player) {
@@ -217,7 +218,7 @@ export class VideoManager {
 
       if (videoContainerTag) {
         videoContainerTag.style.opacity = '1';
-        videoContainerTag.style.zIndex = '11';
+        videoContainerTag.style.zIndex = keepVideo ? '6' : '11';
       }
     } else if (!videoItem) {
       this.preloadVideo(key, true);
@@ -261,7 +262,7 @@ export class VideoManager {
       videoItem.waitCommands.seek = time;
     }
   }
-  
+
   public backward(key: string): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
@@ -269,6 +270,10 @@ export class VideoManager {
         videoItem.player.currentTime -= 1; // 回退一秒
       }
     }
+  }
+
+  public setUrlIdMap(id: string, url: string) {
+    this.idURLMap[id] = url;
   }
 
   public forward(key: string): void {
@@ -319,7 +324,7 @@ export class VideoManager {
             },
             noWait ? 0 : 500,
           );
-            delete this.videosByKey[key];
+          delete this.videosByKey[key];
         },
         noWait ? 0 : 2000,
       );
