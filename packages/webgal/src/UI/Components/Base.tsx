@@ -462,6 +462,7 @@ export const OptionSliderCustome = ({
   min,
   max,
   className,
+  isUpdate
 }: {
   defaultClass?: string;
   item: SliderContainerItem;
@@ -469,6 +470,7 @@ export const OptionSliderCustome = ({
   min?: number;
   max?: number;
   className?: string;
+  isUpdate?: boolean;
 } & ISlider) => {
   if (item.args.hide) return null;
   const { playSeEnter } = useSoundEffect();
@@ -482,7 +484,7 @@ export const OptionSliderCustome = ({
 
   useEffect(() => {
     calcSlideBg();
-  }, [initValue]);
+  }, [initValue, isUpdate]);
 
   useEffect(() => {
     const thumbStyle = parseStyleArg(item.args.sliderThumb);
@@ -499,13 +501,14 @@ export const OptionSliderCustome = ({
   function calcSlideBg() {
     const inputBg = document.getElementById(`${uniqueID}-bg`);
     if (inputBg !== null) {
+      const screenSizeWidth = updateScreenSize().width;
+      const num = screenSizeWidth === 2560 ? 2 : 3;
+      const scale = screenSizeWidth === 2560 ? 0.5 : 0.3333;
       if (uniqueID === 'light') {
-        const num = updateScreenSize().width === 2560 ? 2 : 3;
         const normalizedValue = (Number(initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
         const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * num) + 'px'; // 将 0-1 映射到 0-684px 范围
         inputBg.style.width = progressBarWidth;
       } else {
-        const scale = updateScreenSize().width === 2560 ? 0.5 : 0.3333;
         inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / scale + 'px';
       }
     }

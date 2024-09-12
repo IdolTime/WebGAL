@@ -14,6 +14,7 @@ import styles from './OptionVideoSize.module.scss';
 
 interface IProps {
   label?: string;
+  onUpdate?: () => void;
 }
 
 export const OptionVideoSize: FC<IProps> = (props: IProps) => {
@@ -127,6 +128,7 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
       setTimeout(() => {
         setUpdateSize(false);
       }, 500);
+      props?.onUpdate && props.onUpdate?.()
     }
   }, [updateSize]);
 
