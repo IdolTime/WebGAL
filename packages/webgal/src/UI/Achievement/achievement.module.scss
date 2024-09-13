@@ -2,8 +2,8 @@
 $default_storyLine_bg_x: 1280px;
 $default_storyLine_bg_y: 720px;
 
-$default_pregress_bg_width: 300px;
-$default_pregress__bg_height: 300px;
+$default_pregress_bg_width: 200px;
+$default_pregress__bg_height: 200px;
 
 .achievement {
     width: 100%;
@@ -46,10 +46,10 @@ $default_pregress__bg_height: 300px;
         z-index: 101;
 
         .achievement_current {
-            width: $default_pregress_bg_width;
-            height: $default_pregress__bg_height;
+            width: px2($default_pregress_bg_width);
+            height: px2($default_pregress__bg_height);
             border-radius: 50%;
-            background-color: rgb(205, 179, 50);
+            background-color: rgba(0, 0, 0, 0.2);
             position: relative;
             display: flex;
             flex-direction: column;
@@ -61,13 +61,13 @@ $default_pregress__bg_height: 300px;
 
 
             .text {
-                font-size: 40px;
+                font-size: px2(20px);
                 color: #000;
                 font-weight: 600;
             }
 
             .number {
-                font-size: 50px;
+                font-size: px2(25px);;
                 color: #000;
                 font-weight: 600;
             }

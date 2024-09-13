@@ -9,6 +9,7 @@ import { saveActions } from '@/store/savesReducer';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { parseStyleArg } from '@/Core/parser/utils';
 import { sceneNameType } from '@/Core/Modules/scene';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { px2 } from '@/Core/parser/utils';
@@ -182,14 +183,20 @@ export const Achievement: FC = () => {
       ? assetSetter(progressStyle?.args.hoverStyle.image, fileType.ui)
       : '';
 
+      let bgOtherStyle = {};
+      if (bgUrl) {
+        bgOtherStyle = {
+          backgroundColor: 'transparent',
+          borderRadius: 'initial'
+        }
+      }
+
     const bgStyle =
-      !progressBgStyle?.args?.hide && bgUrl
+      !progressBgStyle?.args?.hide
         ? {
-            ...progressBgStyle?.args?.style,
+            ...parseStyleArg(progressBgStyle?.args?.style),
             backgroundImage: `url(${bgUrl})`,
-            transform: progressBgStyle?.args.style?.scale && `scale(${progressBgStyle?.args.style?.scale})`,
-            width: progressBgStyle?.args.style?.width && `${px2(progressBgStyle?.args.style?.width)}px`,
-            height: progressBgStyle?.args.style?.height && `${px2(progressBgStyle?.args.style?.height)}px`,
+           ...bgOtherStyle
           }
         : {};
 
@@ -204,24 +211,14 @@ export const Achievement: FC = () => {
     const progressBgCss = !progressStyle?.args?.hide
       ? {
           backgroundImage: `url(${pregressUrl})`,
-          transform: progressStyle?.args?.style?.scale ? `scale(${progressStyle.args.style.scale})` : undefined,
-          width: progressStyle?.args?.style?.width ? `${px2(progressStyle.args.style.width)}px` : undefined,
-          height: progressStyle?.args?.style?.height ? `${px2(progressStyle.args.style.height)}px` : undefined,
-          top: progressStyle?.args?.style?.y ? `${px2(progressStyle.args.style.y)}px` : undefined,
-          left: progressStyle?.args?.style?.x ? `${px2(progressStyle.args.style.x)}px` : undefined,
+          ...parseStyleArg(progressStyle?.args?.style)
         }
       : {};
 
     const progressBgActionCss = !progressStyle?.args?.hide
       ? {
           backgroundImage: `url(${pregressActionUrl})`,
-          transform: progressStyle?.args?.hoverStyle?.scale
-            ? `scale(${progressStyle.args.hoverStyle?.scale})`
-            : undefined,
-          width: progressStyle?.args?.hoverStyle?.width ? `${px2(progressStyle.args.hoverStyle.width)}px` : undefined,
-          height: progressStyle?.args?.hoverStyle?.height
-            ? `${px2(progressStyle.args.hoverStyle.height)}px`
-            : undefined,
+          ...parseStyleArg(progressStyle?.args?.hoverStyle)
         }
       : {};
 
