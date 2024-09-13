@@ -309,7 +309,7 @@ export const Button = ({
   // if (!style.position) style.position = 'absolute';
   // if (src) style.backgroundImage = 'none';
   if (src) {
-    _style.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
+    // _style.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
     _style.backgroundSize = '100% 100%';
     _style.backgroundRepeat = 'no-repeat';
   }

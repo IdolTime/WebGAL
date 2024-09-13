@@ -34,12 +34,13 @@
   // background: linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
   font-size: 165%;
   color: #fbfbfb;
-  white-space: pre;
+  white-space: pre; 
 }
 
-.Title_button:hover {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 1);
-  padding: 1em 6em 1em 3em;
+.Title_button_hover:hover {
+  // text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+  // padding: 1em 6em 1em 3em;
+  animation: button_animation_pulse 0.33s;
 }
 
 .Title_button_text {
@@ -74,4 +75,16 @@
   position: absolute;
   z-index: 13;
   background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
+}
+
+@keyframes button_animation_pulse {
+  0% {
+      opacity: 1;
+  } 
+  50% {
+      opacity: 0.8;
+  }
+  100% {
+      opacity: 1;
+  }
 }
