@@ -116,6 +116,7 @@ const Title: FC = () => {
                   key={_key}
                   item={buttonConfigItem}
                   defaultClass={`${styles.Title_button} interactive`}
+                  defaultHoverClass={buttonConfigItem.args.hoverStyle?.image ? styles.Title_button_hover : ''}
                   defaultTextClass={styles.Title_button_text}
                   onClick={() => {
                     if (window.location.href.indexOf('file://') > -1) {
