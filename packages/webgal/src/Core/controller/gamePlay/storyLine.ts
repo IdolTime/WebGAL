@@ -20,11 +20,10 @@ export const enterStoryLine = async () => {
 
   // 场景写入到运行时
   const rawScene = await sceneFetcher(sceneUrl);
-  webgalStore.dispatch(setShowStoryLine(true));
   // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Storyline, sceneUrl);
-
-  nextSentence();
+  await nextSentence();
+  webgalStore.dispatch(setShowStoryLine(true));
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
 };

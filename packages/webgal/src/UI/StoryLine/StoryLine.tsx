@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
@@ -13,6 +13,22 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { px2 } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
+import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { sceneNameType } from '@/Core/Modules/scene';
+import { sceneParser } from '@/Core/parser/sceneParser';
+
+interface IStoryLinStageItem {
+  storylineBg: string;
+  storylineBgX: number;
+  storylineBgY: number;
+}
+
+const defaultStoryLinStageItem: IStoryLinStageItem = {
+  storylineBg: '',
+  storylineBgX: 1280,
+  storylineBgY: 720,
+};
 
 /**
  * 故事线页面
@@ -23,17 +39,60 @@ export const StoryLine: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
+  const saveData = useSelector((state: RootState) => state.saveData);
   const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
   const storylineUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
   ) as StorylineSceneUIConfig;
 
+  const [achieveStage, setAchieveStage] = useState<IStoryLinStageItem>(defaultStoryLinStageItem);
+
   useEffect(() => {
     getStorylineFromStorage();
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
+      initStoryline()
     }
   }, [GUIState.showStoryLine]);
+
+  async function initStoryline() {
+    // 初始化成就场景
+    const sceneUrl: string = assetSetter(sceneNameType.Storyline, fileType.scene);
+    const rawScene = await sceneFetcher(sceneUrl);
+
+    const currentScene = sceneParser(rawScene, sceneNameType.Storyline, sceneUrl);
+    const sentenceList = currentScene.sentenceList;
+
+    if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
+      const storylineBg = sentenceList[0]?.content ?? '';
+
+      let storylineBgX = 1280;
+      let storylineBgY = 720;
+
+      const gameSizeStr = window.localStorage.getItem('game-screen-size');
+      const sizeArr = gameSizeStr?.split('x') ?? []
+
+      if (sizeArr?.length > 0 && sizeArr[0] === '1920') {
+        storylineBgX = Number(sizeArr[0]);
+        storylineBgY = Number(sizeArr[1]);
+      }
+
+      
+      sentenceList[0]?.args?.forEach((arg) => {
+        if (arg?.key === 'x') {
+          storylineBgX = Number(arg?.value);
+        } else if (arg?.key === 'y') {
+          storylineBgY = Number(arg?.value);
+        }
+      });
+
+      setAchieveStage({
+        storylineBg,
+        storylineBgX,
+        storylineBgY
+      });
+    }
+  }
 
   /**
    * 返回
@@ -73,13 +132,13 @@ export const StoryLine: FC = () => {
           <div
             className={styles.storyLine_content}
             style={{
-              width: px2(StageState.storyLineBgX),
-              height: StageState.storyLineBgY > 720 ? px2(StageState.storyLineBgY) : '100%',
-              backgroundImage: `url("${StageState.storyLineBg}")`,
+              width: px2(achieveStage.storylineBgX),
+              height: achieveStage.storylineBgY > 720 ? px2(achieveStage.storylineBgY) : '100%',
+              backgroundImage: `url("${achieveStage.storylineBg}")`,
               backgroundSize:
-                StageState.storyLineBgX &&
-                StageState.storyLineBgY &&
-                `${px2(StageState.storyLineBgX)}px ${px2(StageState.storyLineBgY)}px`,
+              achieveStage.storylineBgX &&
+              achieveStage.storylineBgY &&
+                `${px2(achieveStage.storylineBgX)}px ${px2(achieveStage.storylineBgY)}px`,
             }}
           >
             {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
