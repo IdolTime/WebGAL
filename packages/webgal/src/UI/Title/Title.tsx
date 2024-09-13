@@ -29,6 +29,8 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
+  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
   const applyStyle = useApplyStyle('UI/Title/title.scss');
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
@@ -72,7 +74,13 @@ const Title: FC = () => {
       const linkStr = TitleUIConfigs.buttons[TitleSceneButtonKey.Game_link_button].args?.buttonLink?.link ?? ''
       playSeClick();
       if (linkStr) {
-        alert(linkStr)
+        if (isSafari) {
+          const newWindow = window.open('', '_blank');
+          // @ts-ignore
+          newWindow.location.href = linkStr;
+        } else {
+          window.open(linkStr);
+        }
       }
     }
   };
