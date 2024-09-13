@@ -95,6 +95,7 @@ export const CustomImage = ({
   onClick,
   nId,
   draggable,
+  isHoverStatus,
 }: {
   src: string;
   hoverSrc?: string;
@@ -107,6 +108,7 @@ export const CustomImage = ({
   onClick?: () => void;
   nId?: string;
   draggable?: boolean;
+  isHoverStatus?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
   const [_, _forceRender] = useState(0);
@@ -115,14 +117,14 @@ export const CustomImage = ({
   let className = defaultClass;
   let _style = style || {};
 
-  const _onMouseEnter = debounce(() => {
+  const _onMouseEnter = () => {
     if (hoverSrc || hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  }, 100);
+  };
 
   const _onMouseLeave = () => {
     setHover(false);
@@ -131,7 +133,7 @@ export const CustomImage = ({
     }
   };
 
-  if (hover) {
+  if (isHoverStatus) {
     className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
     _style = { ...style, ...hoverStyle };
   }
@@ -144,7 +146,7 @@ export const CustomImage = ({
   return (
     <img
       id={nId}
-      src={hover && hoverSrc ? hoverSrc : src}
+      src={isHoverStatus && hoverSrc ? hoverSrc : src}
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
@@ -283,6 +285,7 @@ export const Button = ({
 }) => {
   if (item.args.hide) return null;
   const [clicked, setClicked] = useState(false);
+  const [hover, setHover] = useState(false);
   const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
   const { playSeClick } = useSoundEffect();
@@ -329,8 +332,14 @@ export const Button = ({
 
   return (
     <CustomContainer
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={() => {
+        setHover(true)
+        onMouseEnter && onMouseEnter?.();
+      }}
+      onMouseLeave={() => {
+        setHover(false)
+        onMouseLeave && onMouseLeave?.()
+      }}
       onClick={clickCallback}
       // onMouseDown={
       //   interactable
@@ -372,10 +381,16 @@ export const Button = ({
           style={imgStyle}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          isHoverStatus={hover}
         />
       )}
       {menu.content ? (
-        <CustomText key={key} text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
+        <CustomText 
+          key={key} 
+          text={menu.content} 
+          defaultClass={defaultTextClass} 
+          style={textStyle} 
+        />
       ) : (
         !src && defaultText
       )}
