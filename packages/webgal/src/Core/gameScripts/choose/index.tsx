@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React, { CSSProperties, useRef } from 'react';
+import React, { CSSProperties } from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
@@ -14,6 +14,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { parseStyleArg } from '@/Core/parser/utils';
+import { px2 } from '@/Core/parser/utils';
 
 class ChooseOption {
   /**
@@ -188,18 +189,27 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
           img.onload = function () {
             let ele = document.getElementById(id);
-            img.style.width = img.naturalWidth + 'px';
-            img.style.height = img.naturalHeight + 'px';
+            let imgElements = ele?.querySelectorAll('img');
+            imgElements && imgElements.forEach(function(img) {
+              img.remove();
+            });
+
+            const imgWidth = px2(img.naturalWidth) + 'px';
+            const imgHeight = px2(img.naturalHeight) + 'px';
+            img.style.width = imgWidth;
+            img.style.height = imgHeight;
             img.style.position = 'absolute';
             img.alt = e.text;
 
             if (ele) {
-              ele.style.width = img.naturalWidth + 'px';
-              ele.style.height = img.naturalHeight + 'px';
-              setTimeout(() => {
-                ele?.prepend(img);
-                ele = null;
-              }, 32);
+              ele.style.width = imgWidth;
+              ele.style.height = imgHeight;
+              ele?.prepend(img);
+              ele = null;
+              // setTimeout(() => {
+              //   ele?.prepend(img);
+              //   ele = null;
+              // }, 50);
             }
           };
 

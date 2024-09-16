@@ -4,6 +4,10 @@ import { videoSizeOption } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStage } from '@/store/stageReducer';
 import { RootState } from '@/store/store';
+import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from '@/store/store';
+import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
+import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { OptionSceneOtherKey, OptionSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { updateScreenSize } from '@/Core/util/constants';
@@ -125,6 +129,15 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
       resize();
       window.onload = resize;
       window.onresize = resize;
+      WebGAL.events.screenSizeChange.emit();
+    
+      if (webgalStore.getState().GUI.isInGaming) {
+        const currentScript: ISentence =
+          WebGAL.sceneManager.sceneData.currentScene.sentenceList[WebGAL.sceneManager.sceneData.currentSentenceId - 1];
+        runScript(currentScript)
+      }
+
+
       setTimeout(() => {
         setUpdateSize(false);
       }, 500);
