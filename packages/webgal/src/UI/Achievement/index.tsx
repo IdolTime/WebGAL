@@ -46,6 +46,7 @@ export const Achievement: FC = () => {
   const [notUnlockStyle, setNotUnlockStyle] = useState<GameMenuItem | null>(null);
 
   const [achieveStage, setAchieveStage] = useState<IAchieveStageItem>(defaultAchieveStageItem);
+  const hasBGImage = achieveStage?.achieveBg;
 
   const [unlockedData, setUnlockedData] = useState({
     unlocked: 0,
@@ -245,8 +246,6 @@ export const Achievement: FC = () => {
       </div>
     );
   };
-
-  const hasBGImage = achieveStage?.achieveBg;
 
   return (
     <>

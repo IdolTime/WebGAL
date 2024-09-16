@@ -41,54 +41,23 @@ $default_pregress__bg_height: 300px;
 
   .achievement_content {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 99;
-    overflow: auto;
-    // background: #000;
-    animation: bg_animation .5s forwards;
-    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    z-index: 101;
 
-    .goback {
-        position: fixed;
-        z-index: 101;
-        top: px2(35px);
-        left: px2(35px);
-        display: inline-block;
-        width: px2(53px);
-        height: px2(53px);
-        background-image: url('@/assets/imgs/back.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        cursor: pointer;
-        transition: all 0.3s;
-        &:hover {
-          transform: scale(1.2);
-          background-image: url("@/assets/imgs/back-r.png");
-        }
-    }
-
-    .achievement_content {
-        position: absolute;
-        top: 50%;
-        left: 10%;
-        transform: translateY(-50%);
-        z-index: 101;
-
-        .achievement_current {
-            width: $default_pregress_bg_width;
-            height: $default_pregress__bg_height;
-            border-radius: 50%;
-            background-color: rgb(205, 179, 50);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+    .achievement_current {
+      width: $default_pregress_bg_width;
+      height: $default_pregress__bg_height;
+      border-radius: 50%;
+      background-color: rgb(205, 179, 50);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-repeat: no-repeat;
+      background-size: cover;
 
 
 
@@ -104,167 +73,169 @@ $default_pregress__bg_height: 300px;
         font-weight: 600;
       }
 
-            .pregessBar {
-                width: 100%;
-                height: 15px;
-                position: relative;
-                border-radius: 8px;
-                overflow: hidden;
-                background-repeat: no-repeat;
-                background-size: cover;
-              
-
-                .pregressBar_inner {
-                    width: 0%;
-                    height: 100%;
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    background-size: 100% 100%;
-                    background-repeat: no-repeat;
-                }
-            }
-        }
-
-    }
-
-    .achievement_content_bg {
-        height: 100%;
+      .pregessBar {
         width: 100%;
-        overflow: auto;
-        background-repeat: no-repeat;
+        height: 15px;
         position: relative;
-        background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
-        background-size: var(--screenWidth) var(--screenHeight);
+        border-radius: 8px;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+
+        .pregressBar_inner {
+          width: 0%;
+          height: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+        }
+      }
     }
 
   }
 
-        .achievement_item {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100px;
-            width: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            z-index: 101;
+  .achievement_content_bg {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-repeat: no-repeat;
+    position: relative;
+    background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
+    background-size: var(--screenWidth) var(--screenHeight);
+  }
+
+}
+
+.achievement_item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: 101;
 
   .achievement_list {
     width: 100%;
     height: 100%;
 
-            &:hover {
-                transform: scale(1.2);
-                transition: all 0.3s;
-                cursor: pointer;
-                z-index: 999;
-                .ripple {
-                    animation: ripple-effect 0.5s linear;
-                }
-                .info_card {
-                    // opacity: 1;
-                    display: flex;
-                    z-index: 9;
-                    transition: all 0.3s;
-                }
-            }
+    &:hover {
+      transform: scale(1.2);
+      transition: all 0.3s;
+      cursor: pointer;
+      z-index: 999;
 
-      .unlockname {
+      .ripple {
+        animation: ripple-effect 0.5s linear;
+      }
+
+      .info_card {
+        // opacity: 1;
+        display: flex;
+        z-index: 9;
+        transition: all 0.3s;
+      }
+    }
+
+    .unlockname {
+      display: flex;
+      justify-content: center;
+      padding: 0.2em 0.8rem;
+      font-size: px2(15px);
+      color: rgb(249, 239, 224);
+      border-radius: 1rem;
+      background-color: rgb(209, 129, 175);
+      position: absolute;
+      top: px2(-31px);
+      width: max-content;
+    }
+
+    &:hover {
+      transform: scale(1.2);
+      transition: all 0.3s;
+      cursor: pointer;
+
+      .ripple {
+        animation: ripple-effect 0.5s linear;
+      }
+
+      .info_card {
+        // opacity: 1;
+        display: flex;
+        z-index: 9;
+        transition: all 0.3s;
+      }
+    }
+
+    .ripple {
+      position: absolute;
+      width: px2(50px);
+      height: px2(50px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .info_card {
+      position: absolute;
+      top: px2(-15px);
+      left: px2(50px);
+      width: px2(250px);
+      min-height: px2(100px);
+      padding: 1em;
+      background-color: rgb(234, 213, 226);
+      border-radius: 2em;
+      flex-direction: column;
+      flex-wrap: wrap;
+      line-height: 1.2;
+      font-weight: bold;
+      display: none;
+      z-index: -1;
+
+      .condition {
         display: flex;
         justify-content: center;
         padding: 0.2em 0.8rem;
         font-size: px2(15px);
         color: rgb(249, 239, 224);
         border-radius: 1rem;
-        background-color: rgb(209, 129, 175);
-        position: absolute;
-        top: px2(-31px);
-        width: max-content;
+        background-color: rgb(88, 88, 88);
       }
 
-      &:hover {
-        transform: scale(1.2);
-        transition: all 0.3s;
-        cursor: pointer;
-
-        .ripple {
-          animation: ripple-effect 0.5s linear;
-        }
-
-        .info_card {
-          // opacity: 1;
-          display: flex;
-          z-index: 9;
-          transition: all 0.3s;
-        }
+      .condition_bg_active {
+        background-color: rgb(209, 129, 175) !important;
       }
 
-      .ripple {
-        position: absolute;
-        width: px2(50px);
-        height: px2(50px);
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(0, 0, 0, 0.4);
-        border-radius: 50%;
-        opacity: 0;
-      }
 
-      .info_card {
-        position: absolute;
-        top: px2(-15px);
-        left: px2(50px);
-        width: px2(250px);
-        min-height: px2(100px);
-        padding: 1em;
-        background-color: rgb(234, 213, 226);
-        border-radius: 2em;
-        flex-direction: column;
-        flex-wrap: wrap;
-        line-height: 1.2;
-        font-weight: bold;
-        display: none;
-        z-index: -1;
-
-        .condition {
-          display: flex;
-          justify-content: center;
-          padding: 0.2em 0.8rem;
-          font-size: px2(15px);
-          color: rgb(249, 239, 224);
-          border-radius: 1rem;
-          background-color: rgb(88, 88, 88);
-        }
-
-        .condition_bg_active {
-          background-color: rgb(209, 129, 175) !important;
-        }
-
-
-        .time,
-        .description {
-          color: rgb(162, 99, 137);
-          font-size: px2(15px);
-          margin-top: px2(5px);
-        }
-      }
-
-      .info_card_position_right {
-        left: auto;
-        right: px2(50px);
+      .time,
+      .description {
+        color: rgb(162, 99, 137);
+        font-size: px2(15px);
+        margin-top: px2(5px);
       }
     }
 
-    .achievement_item_bg_active {
-      background-color: transparent !important;
+    .info_card_position_right {
+      left: auto;
+      right: px2(50px);
     }
   }
+
+  .achievement_item_bg_active {
+    background-color: transparent !important;
+  }
 }
+
 
 
 
@@ -279,12 +250,13 @@ $default_pregress__bg_height: 300px;
     opacity: 0;
   }
 }
-  
+
 @keyframes bg_animation {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
