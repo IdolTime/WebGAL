@@ -125,7 +125,11 @@ export const StoryLine: FC = () => {
         <div className={styles.storyLine} id="camera">
           <Button
             item={storylineUIConfigs.buttons.Storyline_back_button}
-            defaultClass={`${styles.goBack} interactive`}
+            defaultClass={`
+              ${styles.goBack} 
+              ${storylineUIConfigs.buttons.Storyline_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
+              interactive`
+            }
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />

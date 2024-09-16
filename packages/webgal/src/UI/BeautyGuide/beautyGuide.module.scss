@@ -54,6 +54,13 @@
             }
         }
 
+        .hideDefalutGobackBg {
+            background-image: none;
+            &:hover {
+                background-image: none;
+            }
+          }
+
         .title {
             flex: 1;
             font-size: 50px;

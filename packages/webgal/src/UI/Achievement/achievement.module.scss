@@ -38,6 +38,13 @@ $default_pregress__bg_height: 200px;
         }
     }
 
+    .hideDefalutGobackBg {
+        background-image: none;
+        &:hover {
+            background-image: none;
+        }
+    }
+
     .achievement_content {
         position: absolute;
         top: 50%;

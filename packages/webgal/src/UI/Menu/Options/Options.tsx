@@ -47,7 +47,11 @@ export const Options: FC = () => {
       <BgImage item={optionUIConfigs.other[OptionSceneOtherKey.Option_bg]} defaultClass={styles.Options_bg} />
       <Button
         item={optionUIConfigs.buttons[OptionSceneButtonKey.Option_back_button]}
-        defaultClass={`${styles.Options_back} interactive`}
+        defaultClass={`
+          ${styles.Options_back} 
+          ${optionUIConfigs.buttons[OptionSceneButtonKey.Option_back_button]?.args?.style?.image ? styles.hideDefalutGobackBg : ''}
+          interactive`
+        }
         onMouseEnter={playSeEnter}
         onClick={() => {
           playSeClick();

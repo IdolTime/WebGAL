@@ -14,6 +14,7 @@ export interface UIItemConfig {
   label: string;
   type?: 'image' | 'text' | 'container' | 'placeholder' | 'bgm' | 'bg';
   hasHoverStyle?: boolean;
+  hasActiveStyle?: boolean;
   hasXY?: boolean;
   hasWidthHeight?: boolean;
   hasText?: boolean;
@@ -90,6 +91,7 @@ export interface ContainerItem {
     hide: boolean;
     style?: Style;
     hoverStyle?: Style;
+    activeStyle?: Style;
     contentStyle?: Style;
     contentHoverStyle?: Style;
     backgroundStyle?: Style;
@@ -951,6 +953,7 @@ export interface ButtonItem {
     hide: boolean;
     style: Style;
     hoverStyle?: Style;
+    activeStyle?: Style;
     btnSound?: IBtnSoundConfig;
     buttonLink?: IBtnLinkConfig;
   };
@@ -1008,6 +1011,7 @@ export interface CollectionInfoItem {
     hide: boolean;
     style?: Style;
     hoverStyle?: Style;
+    activeStyle?: Style;
     info?: CollectionInfo;
     images?: CollectionImages;
     videos?: CollectionVideos;
@@ -1205,47 +1209,47 @@ export const sceneUIConfig: SceneUIConfig = {
       [TitleSceneButtonKey.Game_start_button]: {
         key: TitleSceneButtonKey.Game_start_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_load_button]: {
         key: TitleSceneButtonKey.Game_load_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_option_button]: {
         key: TitleSceneButtonKey.Game_option_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_storyline_button]: {
         key: TitleSceneButtonKey.Game_storyline_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_achievement_button]: {
         key: TitleSceneButtonKey.Game_achievement_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_extra_button]: {
         key: TitleSceneButtonKey.Game_extra_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_collection_button]: {
         key: TitleSceneButtonKey.Game_collection_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_continue_button]: {
         key: TitleSceneButtonKey.Game_continue_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [TitleSceneButtonKey.Game_link_button]: {
         key: TitleSceneButtonKey.Game_link_button,
         content: '',
-        args: generateArgs(['hoverStyle', 'buttonLink']),
+        args: generateArgs(['hoverStyle', 'buttonLink', 'activeStyle']),
       }
     },
   },
@@ -1260,7 +1264,7 @@ export const sceneUIConfig: SceneUIConfig = {
       [LoadSceneOtherKey.Load_title]: {
         key: LoadSceneOtherKey.Load_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [LoadSceneOtherKey.Load_item]: {
         key: LoadSceneOtherKey.Load_item,
@@ -1289,14 +1293,14 @@ export const sceneUIConfig: SceneUIConfig = {
       [LoadSceneOtherKey.Load_locked_item]: {
         key: LoadSceneOtherKey.Load_locked_item,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
     buttons: {
       [LoadSceneButtonKey.Load_back_button]: {
         key: LoadSceneButtonKey.Load_back_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
   },
@@ -1306,14 +1310,14 @@ export const sceneUIConfig: SceneUIConfig = {
       [StorylineSceneOtherKey.Storyline_title]: {
         key: StorylineSceneOtherKey.Storyline_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
     buttons: {
       [StorylineSceneButtonKey.Storyline_back_button]: {
         key: StorylineSceneButtonKey.Storyline_back_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
   },
@@ -1323,14 +1327,14 @@ export const sceneUIConfig: SceneUIConfig = {
       [AchievementSceneOtherKey.Achievement_title]: {
         key: AchievementSceneOtherKey.Achievement_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
     buttons: {
       [AchievementSceneButtonKey.Achievement_back_button]: {
         key: AchievementSceneButtonKey.Achievement_back_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
   },
@@ -1340,7 +1344,7 @@ export const sceneUIConfig: SceneUIConfig = {
       [ExtraSceneOtherKey.Extra_title]: {
         key: ExtraSceneOtherKey.Extra_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [ExtraSceneOtherKey.Extra_bgm_unlocked_item]: {
         key: ExtraSceneOtherKey.Extra_bgm_unlocked_item,
@@ -1397,17 +1401,17 @@ export const sceneUIConfig: SceneUIConfig = {
       [ExtraSceneButtonKey.Extra_back_button]: {
         key: ExtraSceneButtonKey.Extra_back_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [ExtraSceneButtonKey.Extra_video_button]: {
         key: ExtraSceneButtonKey.Extra_video_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [ExtraSceneButtonKey.Extra_bgm_button]: {
         key: ExtraSceneButtonKey.Extra_bgm_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
   },
@@ -1422,7 +1426,7 @@ export const sceneUIConfig: SceneUIConfig = {
       [OptionSceneOtherKey.Option_title]: {
         key: OptionSceneOtherKey.Option_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [OptionSceneOtherKey.Option_window_label]: {
         key: OptionSceneOtherKey.Option_window_label,
@@ -1482,22 +1486,22 @@ export const sceneUIConfig: SceneUIConfig = {
       [OptionSceneOtherKey.Option_fullscreen_checkbox]: {
         key: OptionSceneOtherKey.Option_fullscreen_checkbox,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [OptionSceneOtherKey.Option_window_checkbox]: {
         key: OptionSceneOtherKey.Option_window_checkbox,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [OptionSceneOtherKey.Option_videoSize1080_checkbox]: {
         key: OptionSceneOtherKey.Option_videoSize1080_checkbox,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [OptionSceneOtherKey.Option_videoSize720_checkbox]: {
         key: OptionSceneOtherKey.Option_videoSize720_checkbox,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [OptionSceneOtherKey.Options_light_slider]: {
         key: OptionSceneOtherKey.Options_light_slider,
@@ -1519,7 +1523,7 @@ export const sceneUIConfig: SceneUIConfig = {
       [OptionSceneButtonKey.Option_back_button]: {
         key: OptionSceneButtonKey.Option_back_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
   },
@@ -1529,7 +1533,7 @@ export const sceneUIConfig: SceneUIConfig = {
       [CollectionSceneOtherKey.Collection_title]: {
         key: CollectionSceneOtherKey.Collection_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [CollectionSceneOtherKey.Collection_bg]: {
         key: CollectionSceneOtherKey.Collection_bg,
@@ -1554,7 +1558,7 @@ export const sceneUIConfig: SceneUIConfig = {
       [CollectionSceneOtherKey.Collection_detail_title]: {
         key: CollectionSceneOtherKey.Collection_detail_title,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [CollectionSceneOtherKey.Collection_detail_bg]: {
         key: CollectionSceneOtherKey.Collection_detail_bg,
@@ -1596,17 +1600,17 @@ export const sceneUIConfig: SceneUIConfig = {
       [CollectionSceneButtonKey.Collection_back_button]: {
         key: CollectionSceneButtonKey.Collection_back_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [CollectionSceneButtonKey.Collection_detail_dialog_prev_button]: {
         key: CollectionSceneButtonKey.Collection_detail_dialog_prev_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
       [CollectionSceneButtonKey.Collection_detail_dialog_next_button]: {
         key: CollectionSceneButtonKey.Collection_detail_dialog_next_button,
         content: '',
-        args: generateArgs(['hoverStyle']),
+        args: generateArgs(['hoverStyle', 'activeStyle']),
       },
     },
   },
