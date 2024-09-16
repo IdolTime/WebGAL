@@ -59,6 +59,7 @@ export const Achievement: FC = () => {
 
   useEffect(() => {
     if (GUIState.showAchievement) {
+
       if (GUIState.achievementUI.Achievement_progress_text) {
         setTextStyle(GUIState.achievementUI.Achievement_progress_text);
       }
@@ -252,7 +253,11 @@ export const Achievement: FC = () => {
           {/* 头部 */}
           <Button
             item={achivementUIConfigs.buttons.Achievement_back_button}
-            defaultClass={`${styles.goback} interactive`}
+            defaultClass={`
+              ${styles.goback} 
+              ${achivementUIConfigs.buttons.Achievement_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
+              interactive`
+            }
             onClick={handleGoBack}
             onMouseEnter={playSeEnter}
           />

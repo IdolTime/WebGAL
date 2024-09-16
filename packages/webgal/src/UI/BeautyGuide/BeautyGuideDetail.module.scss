@@ -45,6 +45,13 @@
         }
     }
 
+    .hideDefalutGobackBg {
+        background-image: none;
+        &:hover {
+            background-image: none;
+        }
+    }
+
     .beautyGuideDetail_left {
         display: flex;
         flex-direction: column;

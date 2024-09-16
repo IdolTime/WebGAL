@@ -121,14 +121,15 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
         />
         <Button
           item={collectionUIConfigs.buttons.Collection_back_button}
-          defaultClass={`${styles.goback} interactive`}
+          defaultClass={`
+            ${styles.goback} 
+            ${collectionUIConfigs.buttons.Collection_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
+            interactive`
+          }
           onClick={handleGoback}
           onMouseEnter={playSeEnter}
         />
         <div className={styles.beautyGuideDetail_left}>
-          {/* <div className={styles.header}>
-            <Button item={collectionUIConfigs.other.Collection_detail_title} defaultClass={styles.title} />
-          </div> */}
           <div 
             className={styles.left_box}
             style={

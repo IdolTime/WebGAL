@@ -21,25 +21,40 @@ export const CustomText = ({
   text,
   defaultClass,
   defaultHoverClass,
+  defaultActiveClass,
   style,
   hoverStyle,
+  activeStyle,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
+  onMouseOut,
   onClick,
   key,
+  isACtiveStatus,
+  isHoverStatus
 }: {
   text: string;
   defaultClass?: string;
   defaultHoverClass?: string;
   style?: CSSProperties;
   hoverStyle?: CSSProperties;
+  defaultActiveClass?: string;
+  activeStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
+  onMouseOut?: () => void;
   onClick?: () => void;
   key?: string;
+  isACtiveStatus?: boolean;
+  isHoverStatus?: boolean;
 }) => {
   const id = `customText-${key}-${text}`;
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
   let className = defaultClass;
   let _style = style;
 
@@ -59,14 +74,29 @@ export const CustomText = ({
     }
   };
 
-  if (hover) {
+  if (isHoverStatus) {
     className = `${defaultClass} ${defaultHoverClass}`;
     _style = { ...style, ...hoverStyle };
   }
 
+  if (isACtiveStatus) {
+    className = `${defaultClass} ${defaultActiveClass}`;
+    _style = { ...style, ...activeStyle };
+  } 
+
   const btnTextElement = document.getElementById(`${id}-text`);
   if (btnTextElement && text) {
     btnTextElement.innerText = text?.replace(/\\n/g, '\n') ?? text;
+  }
+
+  const _mousedown = () => {
+    if (active) setActive(true);
+    onMouseDown?.();
+  }
+
+  const _mouseup = () => {
+    setActive(false);
+    onMouseUp?.();
   }
 
   return (
@@ -74,6 +104,9 @@ export const CustomText = ({
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      onMouseDown={_mousedown}
+      onMouseUp={_mouseup}
+      onMouseOut={onMouseOut}
       onClick={onClick}
       style={_style}
       id={`${id}-text`}
@@ -86,31 +119,44 @@ export const CustomText = ({
 export const CustomImage = ({
   src,
   hoverSrc,
+  activeSrc,
   defaultClass,
   defaultHoverClass,
+  defaultActiveClass,
   style,
   hoverStyle,
+  activeStyle,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
   onClick,
   nId,
   draggable,
   isHoverStatus,
+  isACtiveStatus
 }: {
   src: string;
   hoverSrc?: string;
+  activeSrc?: string;
   defaultClass?: string;
   defaultHoverClass?: string;
+  defaultActiveClass?: string;
   style?: CSSProperties;
   hoverStyle?: CSSProperties;
+  activeStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
   onClick?: () => void;
   nId?: string;
   draggable?: boolean;
   isHoverStatus?: boolean;
+  isACtiveStatus?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
   const [_, _forceRender] = useState(0);
   const forceRender = () => _forceRender((i) => i + 1);
   const imgLayout = useRef<{ width?: number; height?: number }>({ width: undefined, height: undefined });
@@ -133,9 +179,25 @@ export const CustomImage = ({
     }
   };
 
+  const _onMouseDown = () => {
+    setActive(true);
+    setHover(false);
+    onMouseDown && onMouseDown?.();
+  }
+  
+  const _onMouseUp = () => {
+    setActive(false);
+    onMouseUp && onMouseUp?.()
+  }
+
   if (isHoverStatus) {
     className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
     _style = { ...style, ...hoverStyle };
+  }
+
+  if (isACtiveStatus) {
+    className = `${defaultClass || ''} ${defaultActiveClass || ''}`;
+    _style = { ...style, ...activeStyle };
   }
 
   if (_style.width === undefined) {
@@ -146,10 +208,12 @@ export const CustomImage = ({
   return (
     <img
       id={nId}
-      src={isHoverStatus && hoverSrc ? hoverSrc : src}
+      src={isHoverStatus && hoverSrc || isACtiveStatus && activeSrc || src}
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      onMouseDown={_onMouseDown}
+      onMouseUp={_onMouseUp}
       draggable={draggable}
       style={_style}
       onClick={onClick}
@@ -169,37 +233,48 @@ export const CustomContainer = ({
   children,
   defaultClass,
   defaultHoverClass,
+  defaultActiveClass,
   style,
   hoverStyle,
+  activeStyle,
   onMouseEnter,
   onMouseLeave,
   onMouseDown,
   onMouseUp,
+  onMouseOut,
   onClick,
   id,
+  isACtiveStatus
 }: {
   item?: ContainerItem;
   children: ReactNode;
   defaultClass?: string;
   defaultHoverClass?: string;
+  defaultActiveClass?: string;
   style?: CSSProperties;
   hoverStyle?: CSSProperties;
+  activeStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onMouseDown?: () => void;
   onMouseUp?: () => void;
+  onMouseOut?: () => void;
   onClick?: (e: any) => void;
   id?: string;
+  isACtiveStatus?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
   let className = defaultClass;
   let _style = style;
   let _hoverStyle = hoverStyle;
+  let _activeStyle = activeStyle;
 
   if (item) {
     if (item.args.hide) return null;
     if (!_style) _style = parseStyleArg(item.args.style);
     if (!_hoverStyle) _hoverStyle = parseStyleArg(item.args.hoverStyle);
+    if (!_activeStyle) _activeStyle = parseStyleArg(item.args.activeStyle);
   }
 
   const _onMouseEnter = debounce(() => {
@@ -224,16 +299,42 @@ export const CustomContainer = ({
     };
   }
 
+  if (active) {
+    className = `${defaultClass} ${defaultActiveClass}`;
+    _style = {
+      ...style,
+      ...activeStyle,
+    };
+  }
+
+  const _mousedown = () => {
+    if (_activeStyle) {
+      setActive(true);
+    }
+    onMouseDown?.();
+  }
+
+  const _mouseup = () => {
+    setActive(false);
+    onMouseUp?.();
+  }
+
+  const _mouseOut = () => {
+    setActive(false);
+    onMouseOut?.()
+  }
+
   return (
     <div
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      onMouseDown={_mousedown}
+      onMouseUp={_mouseup}
+      onMouseOut={_mouseOut}
       onClick={onClick}
       style={_style}
       id={id}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
     >
       {children}
     </div>
@@ -258,8 +359,11 @@ export const Button = ({
   defaultTextClass,
   key,
   defaultHoverClass,
+  defaultActiveClass,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
   onClick,
   type = 'button',
   checked = false,
@@ -272,8 +376,11 @@ export const Button = ({
   defaultClass?: string;
   defaultTextClass?: string;
   defaultHoverClass?: string;
+  defaultActiveClass?: string;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
   onClick?: () => void;
   key?: string;
   type?: 'button' | 'checkbox';
@@ -286,14 +393,18 @@ export const Button = ({
   if (item.args.hide) return null;
   const [clicked, setClicked] = useState(false);
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+  const [isTextMouseOut, setIsTextMouseOut] = useState(false);
   const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
+  const activeStyle = parseStyleArg(item.args.activeStyle);
   const { playSeClick } = useSoundEffect();
   const src = item.args.style?.image || '';
   const customClickSound = item.args?.btnSound?.clickSound
     ? assetSetter(item.args.btnSound.clickSound, fileType.bgm)
     : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
+  const activeSrc = item.args.activeStyle?.image || '';
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
   const clickTimerRef = useRef<any>();
@@ -333,14 +444,36 @@ export const Button = ({
   return (
     <CustomContainer
       onMouseEnter={() => {
-        setHover(true)
-        onMouseEnter && onMouseEnter?.();
+        setHover(true);
+        onMouseEnter?.();
       }}
       onMouseLeave={() => {
-        setHover(false)
-        onMouseLeave && onMouseLeave?.()
+        setHover(false);
+        onMouseLeave?.();
       }}
       onClick={clickCallback}
+      onMouseDown={() => {
+        setActive(true);
+        setHover(false);
+        onMouseDown?.();
+      }}
+      onMouseUp={() => {
+        setActive(false);
+        setHover(false);
+        setIsTextMouseOut(false);
+        onMouseUp?.();
+      }}
+      onMouseOut={() => {
+        if (isTextMouseOut) {
+          setTimeout(() => {
+            setActive(false);
+            setIsTextMouseOut(false);
+          }, 2000)
+        } else {
+          setActive(false);
+          setIsTextMouseOut(false);
+        }
+      }}
       // onMouseDown={
       //   interactable
       //     ? () => {
@@ -369,19 +502,26 @@ export const Button = ({
       // }
       defaultClass={`${defaultClass} ${clicked ? 'btn-clicked' : ''}`}
       defaultHoverClass={defaultHoverClass}
+      defaultActiveClass={defaultActiveClass}
       style={_style}
       hoverStyle={hoverStyle}
+      activeStyle={activeStyle}
       key={key}
+      isACtiveStatus={active}
     >
       {!!src && (
         <CustomImage
           nId={key}
           src={assetSetter(checked ? hoverSrc : src, fileType.ui)}
           hoverSrc={hoverSrc ? assetSetter(hoverSrc, fileType.ui) : ''}
+          activeSrc={activeSrc ? assetSetter(activeSrc, fileType.ui) : ''}
           style={imgStyle}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
           isHoverStatus={hover}
+          isACtiveStatus={active}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
         />
       )}
       {menu.content ? (
@@ -389,7 +529,13 @@ export const Button = ({
           key={key} 
           text={menu.content} 
           defaultClass={defaultTextClass} 
+          activeStyle={activeStyle}
           style={textStyle} 
+          isACtiveStatus={active}
+          isHoverStatus={hover}
+          onMouseDown={() => {
+            if (!!src) setIsTextMouseOut(true);
+          }}
         />
       ) : (
         !src && defaultText

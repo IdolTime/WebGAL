@@ -138,7 +138,11 @@ export const BeautyGuide: FC = () => {
           <div className={styles.beautyGuide_header}>
             <Button
               item={collectionUIConfigs.buttons.Collection_back_button}
-              defaultClass={`${styles.goback} interactive`}
+              defaultClass={`
+                ${styles.goback} 
+                ${collectionUIConfigs.buttons.Collection_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
+                interactive`
+              }
               onClick={handleGoback}
               onMouseEnter={playSeEnter}
             />

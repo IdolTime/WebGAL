@@ -11,6 +11,7 @@ import useApplyStyle from '@/hooks/useApplyStyle';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { px2 } from '@/Core/parser/utils';
 
+
 import styles from './gameMenuPanel.module.scss';
 
 export const GameMenuPanel = () => {
@@ -98,7 +99,7 @@ export const GameMenuPanel = () => {
 
     const styleObj: CSSProperties = {};
     const styleText: CSSProperties = {};
-    let className = styles.button;
+    // let className = styles.button;
     const id = `escMenu-${key}`;
 
     if (menu.args.style) {
@@ -148,7 +149,7 @@ export const GameMenuPanel = () => {
 
     if (menu.args.style?.btnImage) {
       let ele = document.getElementById(id);
-      className = styles.button_custom;
+      // className = styles.button_custom;
 
       if (!ele) {
         const imgUrl = assetSetter(menu.args.style.btnImage, fileType.ui);
@@ -157,13 +158,13 @@ export const GameMenuPanel = () => {
 
         img.onload = function () {
           let ele = document.getElementById(id);
-          img.style.width = img.naturalWidth + 'px';
-          img.style.height = img.naturalHeight + 'px';
+          // img.style.width = img.naturalWidth + 'px';
+          // img.style.height = img.naturalHeight + 'px';
           img.alt = menu.content;
 
           if (ele) {
-            ele.style.width = img.naturalWidth + 'px';
-            ele.style.height = img.naturalHeight + 'px';
+            // ele.style.width = img.naturalWidth + 'px';
+            // ele.style.height = img.naturalHeight + 'px';
             setTimeout(() => {
               ele?.prepend(img);
               ele = null;
@@ -188,7 +189,10 @@ export const GameMenuPanel = () => {
       <span 
         id={id}
         key={key}
-        className={`${applyStyle('button', className)} interactive`}
+        className={`
+          ${menu.args.style?.btnImage ? styles.button_custom : styles.button} 
+          interactive`
+        }
         onMouseEnter={playSeEnter}
         onClick={clickCallbackMap[key]}
         style={styleObj}

@@ -40,6 +40,13 @@ $default_storyLine_bg_y: 720px;
         }
     }
 
+    .hideDefalutGobackBg {
+        background-image: none;
+        &:hover {
+            background-image: none;
+        }
+    }
+
     .storyLine_content {
         height: 100%;
         width: 100%;

@@ -40,6 +40,13 @@ $default_options_slider_width: 342px;
   }
 }
 
+.hideDefalutGobackBg {
+  background-image: none;
+  &:hover {
+    background-image: none;
+  }
+}
+
 .Options_checkbox {
   position: relative;
   top: px2(239px);
