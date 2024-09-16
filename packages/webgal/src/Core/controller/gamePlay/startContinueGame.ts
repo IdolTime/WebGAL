@@ -64,7 +64,7 @@ export const startGame = () => {
       showGlogalDialog({
         type: 'pay',
         title: '购买游戏',
-        content: '需要花费' + gameInfo.salesAmount,
+        content: '需要花费' + gameInfo.salesAmount + (gameInfo.salesAmountType === 1 ? '星石' : '星光'),
         suffixContent: '购买完整版游戏继续游玩',
         rightText: '确定',
         rightFunc: () => {

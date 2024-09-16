@@ -143,7 +143,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
             showGlogalDialog({
               title: `试玩结束`,
               type: 'pay',
-              content: `可以花费${_info?.salesAmount}`,
+              content: `可以花费${_info?.salesAmount}${_info?.salesAmountType === 1 ? '星石' : '星光'}`,
               suffixContent: '购买完整版继续游玩',
               leftText: '否',
               rightText: '是',

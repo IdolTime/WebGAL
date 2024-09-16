@@ -52,11 +52,12 @@ class ChooseOption {
     }
 
     const payInfoMatch = /\#\{(.*?)\}/.exec(mainPart);
-    if (payInfoMatch && webgalStore.getState().storeData.isEditorPreviewMode === false) {
+    if (payInfoMatch && webgalStore.getState().storeData.isEditorPreviewMode === true) {
       const payInfoStr = payInfoMatch[1];
       const payInfoProps = payInfoStr.split(',');
       let productId = 0;
       let amount = 0;
+      let salesType = 1;
 
       payInfoProps.forEach((prop) => {
         const [key, value] = prop.split('=');
@@ -64,6 +65,8 @@ class ChooseOption {
           productId = isNaN(Number(value.trim())) ? 0 : Number(value.trim());
         } else if (key === 'amount') {
           amount = isNaN(Number(value.trim())) ? 0 : Number(value.trim());
+        } else if (key === 'salesType') {
+          salesType = isNaN(Number(value.trim())) ? 1 : Number(value.trim());
         }
       });
 
@@ -75,6 +78,7 @@ class ChooseOption {
         option.shouldPay = true;
         option.productId = productId;
         option.amount = amount;
+        option.salesType = salesType;
         getIsBuy(productId).then((res) => {
           loadingRef.current[productId] = true;
         });
@@ -105,6 +109,7 @@ class ChooseOption {
   public enableCondition?: string;
   public shouldPay?: boolean;
   public amount?: number;
+  public salesType?: number;
   public productId?: number;
   public hasBought?: boolean;
   public style?: {
@@ -216,7 +221,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             const showDialog = () => {
               showGlogalDialog({
                 title: `您已进入付费选项`,
-                content: `需要花费${e.amount}`,
+                content: `需要花费${e.amount}${e.salesType === 1 ? '星石' : '星光'}`,
                 suffixContent: '解锁该选项吗？',
                 leftText: '否',
                 rightText: '是',
@@ -380,7 +385,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
               <span>
                 {e.text}
                 {!e.hasBought && e.shouldPay && (
-                  <span style={{ marginLeft: 8, fontSize: '0.7em' }}>(需要{e.amount}星石解锁)</span>
+                  <span style={{ marginLeft: 8, fontSize: '0.7em' }}>
+                    (需要{e.amount}
+                    {e.salesType === 1 ? '星石' : '星光'}解锁)
+                  </span>
                 )}
               </span>
             </div>
