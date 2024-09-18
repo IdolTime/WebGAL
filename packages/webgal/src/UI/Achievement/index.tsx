@@ -17,6 +17,7 @@ import { Button } from '../Components/Base';
 import { AchievementSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { GameMenuItem } from '@/store/guiInterface';
 import { sceneParser } from '@/Core/parser/sceneParser';
+import { SourceImg } from '../Components/SourceImg';
 
 interface IAchieveStageItem {
   achieveBg: string;
@@ -59,7 +60,6 @@ export const Achievement: FC = () => {
 
   useEffect(() => {
     if (GUIState.showAchievement) {
-
       if (GUIState.achievementUI.Achievement_progress_text) {
         setTextStyle(GUIState.achievementUI.Achievement_progress_text);
       }
@@ -88,20 +88,18 @@ export const Achievement: FC = () => {
 
     if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
       const achieveBg = sentenceList[0]?.content ?? '';
-      
 
       let achieveBgX = 1280;
       let achieveBgY = 720;
 
       const gameSizeStr = window.localStorage.getItem('game-screen-size');
-      const sizeArr = gameSizeStr?.split('x') ?? []
+      const sizeArr = gameSizeStr?.split('x') ?? [];
 
       if (sizeArr?.length > 0 && sizeArr[0] === '1920') {
         achieveBgX = Number(sizeArr[0]);
         achieveBgY = Number(sizeArr[1]);
       }
 
-      
       sentenceList[0]?.args?.forEach((arg) => {
         if (arg?.key === 'x') {
           achieveBgX = Number(arg?.value);
@@ -184,22 +182,21 @@ export const Achievement: FC = () => {
       ? assetSetter(progressStyle?.args.hoverStyle.image, fileType.ui)
       : '';
 
-      let bgOtherStyle = {};
-      if (bgUrl) {
-        bgOtherStyle = {
-          backgroundColor: 'transparent',
-          borderRadius: 'initial'
-        }
-      }
+    let bgOtherStyle = {};
+    if (bgUrl) {
+      bgOtherStyle = {
+        backgroundColor: 'transparent',
+        borderRadius: 'initial',
+      };
+    }
 
-    const bgStyle =
-      !progressBgStyle?.args?.hide
-        ? {
-            ...parseStyleArg(progressBgStyle?.args?.style),
-            backgroundImage: `url(${bgUrl})`,
-           ...bgOtherStyle
-          }
-        : {};
+    const bgStyle = !progressBgStyle?.args?.hide
+      ? {
+          ...parseStyleArg(progressBgStyle?.args?.style),
+          backgroundImage: `url(${bgUrl})`,
+          ...bgOtherStyle,
+        }
+      : {};
 
     const textCss = !textStyle?.args?.hide
       ? {
@@ -212,14 +209,14 @@ export const Achievement: FC = () => {
     const progressBgCss = !progressStyle?.args?.hide
       ? {
           backgroundImage: `url(${pregressUrl})`,
-          ...parseStyleArg(progressStyle?.args?.style)
+          ...parseStyleArg(progressStyle?.args?.style),
         }
       : {};
 
     const progressBgActionCss = !progressStyle?.args?.hide
       ? {
           backgroundImage: `url(${pregressActionUrl})`,
-          ...parseStyleArg(progressStyle?.args?.hoverStyle)
+          ...parseStyleArg(progressStyle?.args?.hoverStyle),
         }
       : {};
 
@@ -255,9 +252,12 @@ export const Achievement: FC = () => {
             item={achivementUIConfigs.buttons.Achievement_back_button}
             defaultClass={`
               ${styles.goback} 
-              ${achivementUIConfigs.buttons.Achievement_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
-              interactive`
-            }
+              ${
+                achivementUIConfigs.buttons.Achievement_back_button?.args?.style?.image
+                  ? styles.hideDefalutGobackBg
+                  : ''
+              } 
+              interactive`}
             onClick={handleGoBack}
             onMouseEnter={playSeEnter}
           />
@@ -265,79 +265,71 @@ export const Achievement: FC = () => {
           {/* 已获得成就  */}
           {renderInfoAchievement()}
 
-          {/* 内容部分 */}
-          <div
-            className={styles.achievement_content_bg}
+          <SourceImg
+            src={achieveStage.achieveBg}
             style={{
-              width: achieveStage?.achieveBgX ? px2(achieveStage.achieveBgX) : '100%',
-              height: achieveStage?.achieveBgY > 720 ? px2(achieveStage.achieveBgY) : '100%',
-              backgroundImage: `url("${achieveStage?.achieveBg}")`,
-              backgroundSize:
-                achieveStage?.achieveBgX &&
-                achieveStage?.achieveBgY &&
-                `${px2(achieveStage.achieveBgX)}px ${px2(achieveStage.achieveBgY)}px`,
+              width: typeof achieveStage.achieveBgX === 'number' ? px2(achieveStage.achieveBgX) : undefined,
+              height: typeof achieveStage.achieveBgY === 'number' ? px2(achieveStage.achieveBgY) : undefined,
+              maxWidth: 'none',
             }}
-          >
-            {saveData.allUnlockAchieveList?.length > 0 && (
-              <div className={styles.achievement_list}>
-                {saveData.allUnlockAchieveList?.map(
-                  ({ unlockname, x, y, url, isShowUnlock, saveTime, condition }, index) => {
-                    const notUnlockCss = !notUnlockStyle?.args.hide
-                      ? {
-                          width: notUnlockStyle?.args?.style?.width
-                            ? `${px2(notUnlockStyle.args.style.width)}px`
-                            : undefined,
-                          height: notUnlockStyle?.args?.style?.height
-                            ? `${px2(notUnlockStyle.args.style.height)}px`
-                            : undefined,
-                        }
-                      : {};
+          />
+          {saveData.allUnlockAchieveList?.length > 0 && (
+            <div className={styles.achievement_list}>
+              {saveData.allUnlockAchieveList?.map(
+                ({ unlockname, x, y, url, isShowUnlock, saveTime, condition }, index) => {
+                  const notUnlockCss = !notUnlockStyle?.args.hide
+                    ? {
+                        width: notUnlockStyle?.args?.style?.width
+                          ? `${px2(notUnlockStyle.args.style.width)}px`
+                          : undefined,
+                        height: notUnlockStyle?.args?.style?.height
+                          ? `${px2(notUnlockStyle.args.style.height)}px`
+                          : undefined,
+                      }
+                    : {};
 
-                    return (
+                  return (
+                    <div
+                      key={`unlockAchieveItem-${index}`}
+                      className={`${styles.achievement_item} ${isShowUnlock ? styles.achievement_item_bg_active : ''}`}
+                      style={{
+                        top: `${px2(y)}px`,
+                        left: `${getPositionX(px2(x), px2(achieveStage?.achieveBgX ?? ''))}px`,
+                        backgroundImage: `url("${
+                          isShowUnlock
+                            ? getUrl(url)
+                            : getUrl(
+                                !notUnlockStyle?.args.hide && notUnlockStyle?.args?.style?.image
+                                  ? notUnlockStyle?.args?.style?.image
+                                  : '',
+                              )
+                        }")`,
+                        transform: ` scale(${notUnlockStyle?.args?.style?.scale})`,
+                        ...notUnlockCss,
+                      }}
+                    >
+                      {isShowUnlock && <div className={styles.ripple} />}
+                      {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
+                      {/* 信息详情卡片 */}
                       <div
-                        key={`unlockAchieveItem-${index}`}
-                        className={`${styles.achievement_item} ${
-                          isShowUnlock ? styles.achievement_item_bg_active : ''
+                        className={`${styles.info_card} ${
+                          isEdge(px2(x), px2(achieveStage?.achieveBgX ?? 0)) ? styles.info_card_position_right : ''
                         }`}
-                        style={{
-                          top: `${px2(y)}px`,
-                          left: `${getPositionX(px2(x), px2(achieveStage?.achieveBgX ?? ''))}px`,
-                          backgroundImage: `url("${
-                            isShowUnlock
-                              ? getUrl(url)
-                              : getUrl(
-                                  !notUnlockStyle?.args.hide && notUnlockStyle?.args?.style?.image
-                                    ? notUnlockStyle?.args?.style?.image
-                                    : '',
-                                )
-                          }")`,
-                          transform: ` scale(${notUnlockStyle?.args?.style?.scale})`,
-                          ...notUnlockCss,
-                        }}
                       >
-                        {isShowUnlock && <div className={styles.ripple} />}
-                        {isShowUnlock && <span className={styles.unlockname}>{unlockname}</span>}
-                        {/* 信息详情卡片 */}
-                        <div
-                          className={`${styles.info_card} ${
-                            isEdge(px2(x), px2(achieveStage?.achieveBgX ?? 0)) ? styles.info_card_position_right : ''
-                          }`}
-                        >
-                          {condition && (
-                            <span className={`${styles.condition} ${isShowUnlock ? styles.condition_bg_active : ''}`}>
-                              {condition}
-                            </span>
-                          )}
-                          {saveTime && <span className={styles.time}>{`${saveTime}达成`}</span>}
-                          <span className={styles.description}>{`${Math.floor(Math.random() * 101)}%`}玩家已达成</span>
-                        </div>
+                        {condition && (
+                          <span className={`${styles.condition} ${isShowUnlock ? styles.condition_bg_active : ''}`}>
+                            {condition}
+                          </span>
+                        )}
+                        {saveTime && <span className={styles.time}>{`${saveTime}达成`}</span>}
+                        <span className={styles.description}>{`${Math.floor(Math.random() * 101)}%`}玩家已达成</span>
                       </div>
-                    );
-                  },
-                ) ?? null}
-              </div>
-            )}
-          </div>
+                    </div>
+                  );
+                },
+              ) ?? null}
+            </div>
+          )}
         </div>
       )}
     </>
