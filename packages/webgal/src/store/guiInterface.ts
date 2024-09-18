@@ -47,13 +47,14 @@ export interface IGuiState {
   achievementUI: {
     [key in EnumAchievementUIKey]: GameMenuItem;
   };
+  currentPlayAudio: HTMLAudioElement | null; // 当前播放的音频
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
   Exclude<
     keyof IGuiState,
-    'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI'
+    'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI' | 'currentPlayAudio'
   >
 >;
 // 标题资源
