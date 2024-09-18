@@ -125,7 +125,7 @@ export const StoryLine: FC = () => {
           height: px2(achieveStage.storylineBgY),
           maxWidth: 'none',
         }
-      : { maxWidth: 'none' };
+      : { maxWidth: 'none' }
 
   return (
     <>
