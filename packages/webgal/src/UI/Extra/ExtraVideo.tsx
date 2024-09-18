@@ -89,41 +89,72 @@ export const ExtraVideo: FC = () => {
     animationIndex++;
     const saveData = saveDataState.saveData[i];
     let saveElementContent = <div />;
-    if (saveData) {
-      saveElementContent = (
-        <>
-          <div className={styles.Save_Load_content_element_top}>
-            <div className={styles.Save_Load_content_element_top_index + ' ' + styles.Load_content_elememt_top_index}>
-              {saveData.index}
-            </div>
-          </div>
-          <div className={styles.Save_Load_content_miniRen}>
-            <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
-          </div>
-          <div>
-            <div
-              className={styles.Save_Load_content_element_top_date + ' ' + styles.Load_content_element_top_date}
-              style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
-              onClick={(e) => handleEditName(e, saveData, i)}
-              title={`${saveData.saveName || saveData.saveTime}`}
-            >
-              {saveData.saveName || saveData.saveTime}
-            </div>
-          </div>
-        </>
-      );
+
+    // 已解锁元素
+    const unlockedItem = extraUIConfigs.other[ExtraSceneOtherKey.Extra_bgm_unlocked_item]
+    // 未解锁元素
+    const item = extraUIConfigs.other[ExtraSceneOtherKey.Extra_bgm_locked_item_bg]
+
+    // 已解锁元素 文字
+    // const unlockedItem = extraUIConfigs.other[ExtraSceneOtherKey.Extra_bgm_unlocked_item]
+
+    const unlockedItemStyle: CSSProperties = parseStyleArg(unlockedItem.args.style);
+    let styleObj: CSSProperties = parseStyleArg(item.args.style);
+
+    const unlockedSrcBg = unlockedItem.args.style?.image || '';
+    const itemSrcBg = item.args.style?.image || '';
+
+    if (itemSrcBg) {
+      styleObj.backgroundImage = `url(${assetSetter(itemSrcBg, fileType.ui)})`;
+      styleObj.backgroundSize = '100% 100%';
+      styleObj.backgroundRepeat = 'no-repeat';
     }
 
-    const item = extraUIConfigs.other[ExtraSceneOtherKey.Extra_bgm_locked_item_bg]
-    if (!item.args.hide) {
-      const parsedStyle: CSSProperties = parseStyleArg(item.args.style);
 
-      const src = item.args.style?.image || '';
-      if (src) {
-        parsedStyle.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
-        parsedStyle.backgroundSize = '100% 100%';
-        parsedStyle.backgroundRepeat = 'no-repeat';
+    if (saveData && unlockedSrcBg) {
+      unlockedItemStyle.backgroundImage = `url(${assetSetter(unlockedSrcBg, fileType.ui)})`;
+      unlockedItemStyle.backgroundSize = '100% 100%';
+      unlockedItemStyle.backgroundRepeat = 'no-repeat';
+    }
+
+
+    if (saveData) {
+
+      if (unlockedItem?.args?.hide) {
+        saveElementContent = <div />
+      } else {
+
+        styleObj = {
+          ...styleObj,
+          ...unlockedItemStyle
+        }
+
+        saveElementContent = (
+          <>
+            <div className={styles.Save_Load_content_element_top}>
+              <div className={styles.Save_Load_content_element_top_index + ' ' + styles.Load_content_elememt_top_index}>
+                {saveData.index}
+              </div>
+            </div>
+            <div className={styles.Save_Load_content_miniRen}>
+              <img className={styles.Save_Load_content_miniRen_bg} alt="Save_img_preview" src={saveData.previewImage} />
+            </div>
+            <div>
+              <div
+                className={styles.Save_Load_content_element_top_date + ' ' + styles.Load_content_element_top_date}
+                style={{ width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                onClick={(e) => handleEditName(e, saveData, i)}
+                title={`${saveData.saveName || saveData.saveTime}`}
+              >
+                {saveData.saveName || saveData.saveTime}
+              </div>
+            </div>
+          </>
+        );
       }
+    }
+
+    if (!item.args.hide) {
 
       const saveElement = (
         <div
@@ -135,7 +166,7 @@ export const ExtraVideo: FC = () => {
           onMouseEnter={playSeEnter}
           key={'loadElement_' + i}
           className={`${styles.Save_Load_content_element} interactive`}
-          style={{ animationDelay: `${animationIndex * 30}ms`, ...parsedStyle }}
+          style={{ animationDelay: `${animationIndex * 30}ms`, ...styleObj }}
         >
           {saveElementContent}
         </div>
@@ -172,7 +203,10 @@ export const ExtraVideo: FC = () => {
         defaultText={t('extra.title')}
       />
 
+        {/* Extra_indicator */}
       <Indicator
+        isExtraIndicator={true}
+        isShowNumber={true}
         item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
         activeIndex={userDataState.optionData.slPage}
         defaultClass={`${styles.Save_Load_top_buttonList} ${styles.extra_video_top_buttonList} interactive`}
