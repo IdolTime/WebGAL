@@ -22,8 +22,8 @@ export const enterStoryLine = async () => {
   const rawScene = await sceneFetcher(sceneUrl);
   // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Storyline, sceneUrl);
-  await nextSentence();
   webgalStore.dispatch(setShowStoryLine(true));
+  await nextSentence();
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
 };

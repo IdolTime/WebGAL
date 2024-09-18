@@ -11,6 +11,7 @@ export const SourceImg = (
       {...props}
       style={layout ? { ...props.style, width: layout.width, height: layout.height } : props.style}
       onLoad={(e) => {
+        if (props.style?.width || props.style?.height) return;
         setLayout({ width: px2(e.currentTarget.naturalWidth), height: px2(e.currentTarget.naturalHeight) });
       }}
     />
