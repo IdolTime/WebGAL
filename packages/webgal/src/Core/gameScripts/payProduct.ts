@@ -43,6 +43,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
   const item = webgalStore.getState().storeData.paymentConfigurationList.find((e) => e.product_id === productId);
   let name = '';
   let price = item?.sales_amount;
+  let salesType = item?.sales_type;
   const shouldDisplayModal = { current: false };
 
   sentence.args.forEach((e) => {
@@ -120,7 +121,7 @@ export const payProduct = (sentence: ISentence): IPerform => {
           } else {
             showGlogalDialog({
               title: `您已进入付费章节`,
-              content: `需要花费${price}`,
+              content: `需要花费${price}${salesType === 1 ? '星石' : '星光'}`,
               suffixContent: '解锁该章节吗？',
               leftText: '否',
               rightText: '是',
