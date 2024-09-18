@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { loadGame } from '@/Core/controller/storage/loadGame';
 import styles from '@/UI/Menu/SaveAndLoad/SaveAndLoad.module.scss';
 import { setStorage } from '@/Core/controller/storage/storageController';
@@ -16,6 +16,8 @@ import { setVisibility } from '@/store/GUIReducer';
 import { saveActions } from '@/store/savesReducer';
 import { ExtraSceneOtherKey, ExtraSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { Button, Indicator } from '../Components/Base';
+import { parseStyleArg } from '@/Core/parser/utils';
+import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 
 let editNameVal = '';
 let editNameIndex = 0;
@@ -112,22 +114,34 @@ export const ExtraVideo: FC = () => {
       );
     }
 
-    const saveElement = (
-      <div
-        onClick={() => {
-          dispatch(setshowFavorited(true));
-          loadGame(i, true);
-          playSeClick();
-        }}
-        onMouseEnter={playSeEnter}
-        key={'loadElement_' + i}
-        className={`${styles.Save_Load_content_element} interactive`}
-        style={{ animationDelay: `${animationIndex * 30}ms` }}
-      >
-        {saveElementContent}
-      </div>
-    );
-    showSaves.push(saveElement);
+    const item = extraUIConfigs.other[ExtraSceneOtherKey.Extra_bgm_locked_item_bg]
+    if (!item.args.hide) {
+      const parsedStyle: CSSProperties = parseStyleArg(item.args.style);
+
+      const src = item.args.style?.image || '';
+      if (src) {
+        parsedStyle.backgroundImage = `url(${assetSetter(src, fileType.ui)})`;
+        parsedStyle.backgroundSize = '100% 100%';
+        parsedStyle.backgroundRepeat = 'no-repeat';
+      }
+
+      const saveElement = (
+        <div
+          onClick={() => {
+            dispatch(setshowFavorited(true));
+            loadGame(i, true);
+            playSeClick();
+          }}
+          onMouseEnter={playSeEnter}
+          key={'loadElement_' + i}
+          className={`${styles.Save_Load_content_element} interactive`}
+          style={{ animationDelay: `${animationIndex * 30}ms`, ...parsedStyle }}
+        >
+          {saveElementContent}
+        </div>
+      );
+      showSaves.push(saveElement);
+    }
   }
 
   const t = useTrans('menu.');

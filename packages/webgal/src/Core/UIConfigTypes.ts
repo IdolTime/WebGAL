@@ -771,12 +771,16 @@ export const achievementSceneOtherConfig: Record<AchievementSceneOtherKey, UIIte
 
 export enum StorylineSceneOtherKey {
   Storyline_title = 'Storyline_title',
+  Storyline_item = 'Storyline_item'
 }
 
 export const storylineSceneOtherConfig: Record<StorylineSceneOtherKey, UIItemConfig> = {
   [StorylineSceneOtherKey.Storyline_title]: {
     label: '标题',
   },
+  [StorylineSceneOtherKey.Storyline_item]: {
+    label: '故事线元素',
+  }
 };
 
 export enum LoadSceneOtherKey {
@@ -1312,6 +1316,11 @@ export const sceneUIConfig: SceneUIConfig = {
         content: '',
         args: generateArgs(['hoverStyle', 'activeStyle']),
       },
+      [StorylineSceneOtherKey.Storyline_item]: {
+        key: StorylineSceneOtherKey.Storyline_item,
+        content: '',
+        args: generateArgs(['hoverStyle', 'activeStyle']),
+      }
     },
     buttons: {
       [StorylineSceneButtonKey.Storyline_back_button]: {
