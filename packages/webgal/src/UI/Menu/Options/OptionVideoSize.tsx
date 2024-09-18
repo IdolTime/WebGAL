@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { videoSizeOption } from '@/store/userDataInterface';
+import { videoSizeOption, textSize } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStage } from '@/store/stageReducer';
 import { RootState } from '@/store/store';
@@ -213,6 +213,7 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
           setCurrentValue(sizeOptions[0]);
           updateTitle_enter_pageStyle();
           dispatch(setOptionData({ key: 'videoSize', value: sizeOptions[0] }));
+          dispatch(setOptionData({ key: 'textSize', value: textSize.medium }));
           setStorage();
           setUpdateSize(true);
         }}
@@ -234,6 +235,7 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
           setCurrentValue(sizeOptions[1]);
           updateTitle_enter_pageStyle();
           dispatch(setOptionData({ key: 'videoSize', value: sizeOptions[1] }));
+          dispatch(setOptionData({ key: 'textSize', value: textSize.small }));
           setStorage();
           setUpdateSize(true);
         }}
