@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
@@ -13,22 +13,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { px2 } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
-import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
-import { sceneNameType } from '@/Core/Modules/scene';
-import { sceneParser } from '@/Core/parser/sceneParser';
-
-interface IStoryLinStageItem {
-  storylineBg: string;
-  storylineBgX: number;
-  storylineBgY: number;
-}
-
-const defaultStoryLinStageItem: IStoryLinStageItem = {
-  storylineBg: '',
-  storylineBgX: 1280,
-  storylineBgY: 720,
-};
+import { SourceImg } from '../Components/SourceImg';
 
 /**
  * 故事线页面
@@ -39,66 +24,22 @@ export const StoryLine: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
-  const saveData = useSelector((state: RootState) => state.saveData);
   const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
   const storylineUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
   ) as StorylineSceneUIConfig;
 
-  const [achieveStage, setAchieveStage] = useState<IStoryLinStageItem>(defaultStoryLinStageItem);
-
   useEffect(() => {
     getStorylineFromStorage();
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
-      initStoryline()
     }
   }, [GUIState.showStoryLine]);
-
-  async function initStoryline() {
-    // 初始化成就场景
-    const sceneUrl: string = assetSetter(sceneNameType.Storyline, fileType.scene);
-    const rawScene = await sceneFetcher(sceneUrl);
-
-    const currentScene = sceneParser(rawScene, sceneNameType.Storyline, sceneUrl);
-    const sentenceList = currentScene.sentenceList;
-
-    if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
-      const storylineBg = sentenceList[0]?.content ?? '';
-
-      let storylineBgX = 1280;
-      let storylineBgY = 720;
-
-      const gameSizeStr = window.localStorage.getItem('game-screen-size');
-      const sizeArr = gameSizeStr?.split('x') ?? []
-
-      if (sizeArr?.length > 0 && sizeArr[0] === '1920') {
-        storylineBgX = Number(sizeArr[0]);
-        storylineBgY = Number(sizeArr[1]);
-      }
-
-      
-      sentenceList[0]?.args?.forEach((arg) => {
-        if (arg?.key === 'x') {
-          storylineBgX = Number(arg?.value);
-        } else if (arg?.key === 'y') {
-          storylineBgY = Number(arg?.value);
-        }
-      });
-
-      setAchieveStage({
-        storylineBg,
-        storylineBgX,
-        storylineBgY
-      });
-    }
-  }
 
   /**
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick();
     backToTitle();
     dispatch(setShowStoryLine(false));
   };
@@ -119,62 +60,58 @@ export const StoryLine: FC = () => {
     return assetSetter(url, fileType.ui);
   }
 
+  const hasBGImage = !!StageState.storyLineBg;
+  const bgStyle =
+    typeof StageState.storyLineBgX === 'number' && typeof StageState.storyLineBgY === 'number'
+      ? {
+          width: px2(StageState.storyLineBgX),
+          height: px2(StageState.storyLineBgY),
+        }
+      : {};
+
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine} id="camera">
+        <div className={styles.storyLine} style={hasBGImage ? { backgroundImage: 'none' } : {}} id="camera">
           <Button
             item={storylineUIConfigs.buttons.Storyline_back_button}
             defaultClass={`
               ${styles.goBack} 
               ${storylineUIConfigs.buttons.Storyline_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
-              interactive`
-            }
+              interactive`}
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />
-          <div
-            className={styles.storyLine_content}
-            style={{
-              width: px2(achieveStage.storylineBgX),
-              height: achieveStage.storylineBgY > 720 ? px2(achieveStage.storylineBgY) : '100%',
-              backgroundImage: `url("${achieveStage.storylineBg}")`,
-              backgroundSize:
-              achieveStage.storylineBgX &&
-              achieveStage.storylineBgY &&
-                `${px2(achieveStage.storylineBgX)}px ${px2(achieveStage.storylineBgY)}px`,
-            }}
-          >
-            {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
-              const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
+          <SourceImg src={StageState.storyLineBg} style={bgStyle} />
+          {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
+            const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
 
-              if (!isUnlock) {
-                return null;
-              }
+            if (!isUnlock) {
+              return null;
+            }
 
-              return (
-                <div
-                  key={`storyLine-${index}`}
-                  className={`${styles.storyLine_item} interactive`}
-                  style={
-                    thumbnailUrl
-                      ? {
-                          top: `${px2(y)}px`,
-                          left: `${px2(x)}px`,
-                          backgroundImage: `url("${getImagePath(thumbnailUrl)}")`,
-                        }
-                      : {}
-                  }
-                  onClick={(e) => handlPlay(e, item)}
-                >
-                  <div className={styles.info_card}>
-                    <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
-                    {isHideName ? null : <span className={styles.name}>{name}</span>}
-                  </div>
+            return (
+              <div
+                key={`storyLine-${index}`}
+                className={styles.storyLine_item}
+                style={
+                  thumbnailUrl
+                    ? {
+                        top: `${px2(y)}px`,
+                        left: `${px2(x)}px`,
+                      }
+                    : {}
+                }
+                onClick={(e) => handlPlay(e, item)}
+              >
+                <SourceImg src={getImagePath(thumbnailUrl)} />
+                <div className={styles.info_card}>
+                  <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
+                  {isHideName ? null : <span className={styles.name}>{name}</span>}
                 </div>
-              );
-            }) ?? null}
-          </div>
+              </div>
+            );
+          }) ?? null}
         </div>
       )}
     </>
