@@ -58,66 +58,67 @@ $default_storyLine_bg_y: 720px;
         position: relative;
         background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
         background-size: var(--screenWidth) var(--screenHeight);
+    }
 
-        .storyLine_item {
-            width: px2(135px);
-            height: px2(81px);
-            overflow: hidden;
-            background-repeat: no-repeat;
+    .storyLine_item {
+        width: px2(135px);
+        height: px2(81px);
+        overflow: hidden;
+        background-repeat: no-repeat;
+        position: absolute;
+        background-size: contain;
+        background-position: center;
+
+        &:hover .info_card {
+            z-index: 100;
+            opacity: 1;
+        }
+
+        .info_card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             position: absolute;
-            background-size: contain;
-            background-position: center;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            opacity: 0;
+            transition: all 0.5s;
+            cursor: pointer;
 
-            &:hover .info_card {
-                z-index: 100;
-                opacity: 1;
-            }
-
-            .info_card {
+            .playButton_icon {
                 display: flex;
                 justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: -1;
-                opacity: 0;
-                transition: all 0.5s;
+                align-items: baseline;
+                width: 100%;
+                // height: 60%;
+                text-align: center;  
+                border-radius: 50%;  
+                color: #fff;  
+                font-size: px2(45px);  
                 cursor: pointer;
-
-                .playButton_icon {
-                    display: flex;
-                    justify-content: center;
-                    align-items: baseline;
-                    width: 100%;
-                    height: 60%;
-                    text-align: center;  
-                    border-radius: 50%;  
-                    color: #fff;  
-                    font-size: px2(45px);  
-                    cursor: pointer;
-                    flex: 1;
-                    &::before {  
-                        content: "▶";  
-                        color: #fff;
-                      }  
-                }
-
-                .name {
-                    font-size: px2(22px);
+                // flex: 1;
+                &::before {  
+                    content: "▶";  
                     color: #fff;
-                    font-weight: 700;
-                    flex: 1;
-                    display: flex;
-                    align-items: flex-end;
-                    justify-content: center;
-                    width: auto;
-                    line-height: 1.2;
-                    height: inherit;
-                }
+                  }  
+            }
+
+            .name {
+                font-size: px2(24px);
+                color: #fff;
+                font-weight: 700;
+                // flex: 1;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                width: auto;
+                line-height: 1.2;
+                height: inherit;
+                text-align: center;
             }
         }
     }

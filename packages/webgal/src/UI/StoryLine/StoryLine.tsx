@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { CSSProperties, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
@@ -10,13 +10,14 @@ import styles from './storyLine.module.scss';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { px2 } from '@/Core/parser/utils';
+import { px2, parseStyleArg } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { sceneNameType } from '@/Core/Modules/scene';
 import { sceneParser } from '@/Core/parser/sceneParser';
+import { SourceImg } from '../Components/SourceImg';
 
 interface IStoryLinStageItem {
   storylineBg: string;
@@ -45,13 +46,15 @@ export const StoryLine: FC = () => {
     (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
   ) as StorylineSceneUIConfig;
 
+  const storylineUIItem = storylineUIConfigs.other.Storyline_item
+
   const [achieveStage, setAchieveStage] = useState<IStoryLinStageItem>(defaultStoryLinStageItem);
 
   useEffect(() => {
     getStorylineFromStorage();
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
-      initStoryline()
+      initStoryline();
     }
   }, [GUIState.showStoryLine]);
 
@@ -70,14 +73,13 @@ export const StoryLine: FC = () => {
       let storylineBgY = 720;
 
       const gameSizeStr = window.localStorage.getItem('game-screen-size');
-      const sizeArr = gameSizeStr?.split('x') ?? []
+      const sizeArr = gameSizeStr?.split('x') ?? [];
 
       if (sizeArr?.length > 0 && sizeArr[0] === '1920') {
         storylineBgX = Number(sizeArr[0]);
         storylineBgY = Number(sizeArr[1]);
       }
 
-      
       sentenceList[0]?.args?.forEach((arg) => {
         if (arg?.key === 'x') {
           storylineBgX = Number(arg?.value);
@@ -89,7 +91,7 @@ export const StoryLine: FC = () => {
       setAchieveStage({
         storylineBg,
         storylineBgX,
-        storylineBgY
+        storylineBgY,
       });
     }
   }
@@ -98,7 +100,6 @@ export const StoryLine: FC = () => {
    * 返回
    */
   const handlGoBack = () => {
-    playSeClick();
     backToTitle();
     dispatch(setShowStoryLine(false));
   };
@@ -119,6 +120,15 @@ export const StoryLine: FC = () => {
     return assetSetter(url, fileType.ui);
   }
 
+  const bgStyle =
+    typeof achieveStage.storylineBgX === 'number' && typeof achieveStage.storylineBgY === 'number'
+      ? {
+          width: px2(achieveStage.storylineBgX),
+          height: px2(achieveStage.storylineBgY),
+          maxWidth: 'none',
+        }
+      : { maxWidth: 'none' }
+
   return (
     <>
       {GUIState.showStoryLine && (
@@ -128,53 +138,55 @@ export const StoryLine: FC = () => {
             defaultClass={`
               ${styles.goBack} 
               ${storylineUIConfigs.buttons.Storyline_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
-              interactive`
-            }
+              interactive`}
             onClick={handlGoBack}
             onMouseEnter={playSeEnter}
           />
-          <div
-            className={styles.storyLine_content}
-            style={{
-              width: px2(achieveStage.storylineBgX),
-              height: achieveStage.storylineBgY > 720 ? px2(achieveStage.storylineBgY) : '100%',
-              backgroundImage: `url("${achieveStage.storylineBg}")`,
-              backgroundSize:
-              achieveStage.storylineBgX &&
-              achieveStage.storylineBgY &&
-                `${px2(achieveStage.storylineBgX)}px ${px2(achieveStage.storylineBgY)}px`,
-            }}
-          >
-            {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
-              const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
+          <SourceImg src={achieveStage.storylineBg} style={bgStyle} />
+          {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
+            const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
 
-              if (!isUnlock) {
-                return null;
+            if (!isUnlock) return null;
+
+            let styleObj = parseStyleArg(storylineUIItem.args.style) || {};
+
+            if (thumbnailUrl) {
+              styleObj = {
+                ...styleObj,
+                position: 'absolute',
+                top: `${px2(y)}px`,
+                left: `${px2(x)}px`,
               }
+            }
 
-              return (
-                <div
-                  key={`storyLine-${index}`}
-                  className={`${styles.storyLine_item} interactive`}
-                  style={
-                    thumbnailUrl
-                      ? {
-                          top: `${px2(y)}px`,
-                          left: `${px2(x)}px`,
-                          backgroundImage: `url("${getImagePath(thumbnailUrl)}")`,
-                        }
-                      : {}
-                  }
-                  onClick={(e) => handlPlay(e, item)}
-                >
-                  <div className={styles.info_card}>
-                    <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
-                    {isHideName ? null : <span className={styles.name}>{name}</span>}
-                  </div>
+            let sourceImgStyle: CSSProperties = {};
+
+            if (styleObj?.width) {
+              sourceImgStyle.width = styleObj.width;
+            }
+            
+            if (styleObj?.height) {
+              sourceImgStyle.height = styleObj.height;
+            }
+
+            return (
+              <div
+                key={`storyLine-${index}`}
+                className={`${styles.storyLine_item} interactive`}
+                style={styleObj}
+                onClick={(e) => handlPlay(e, item)}
+              >
+                <SourceImg 
+                  src={getImagePath(thumbnailUrl)} 
+                  style={sourceImgStyle}
+                />
+                <div className={styles.info_card}>
+                  <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
+                  {isHideName ? null : <span className={styles.name}>{name}</span>}
                 </div>
-              );
-            }) ?? null}
-          </div>
+              </div>
+            );
+          }) ?? null}
         </div>
       )}
     </>

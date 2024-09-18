@@ -20,7 +20,6 @@ export interface ISavesData {
   allStorylineData: Array<ISaveStoryLineData>;
   gameScounds: Record<string, string | boolean>; // 游戏内音效
   menuScounds: Record<string, string | boolean>; // 菜单内音效
-  uiSeAudioElement: HTMLAudioElement | null;
 }
 
 export interface ISetSavePayload {
@@ -43,7 +42,6 @@ const initState: ISavesData = {
   allStorylineData: [],
   gameScounds: {}, // 游戏内音效
   menuScounds: {}, // 菜单内音效
-  uiSeAudioElement: null
 };
 
 interface ISaveStoryLine {
@@ -91,6 +89,8 @@ const saveDataSlice = createSlice({
     addStorylineList: (state, action: PayloadAction<ISaveStoryLineData>) => {
       // @ts-ignore
       state.unlockStorylineList.push(action.payload)
+      console.log(action.payload, state.unlockStorylineList);
+      debugger;
     },
     replaceStorylineList: (state, action: PayloadAction<ISaveStoryLine>) => {
       state.unlockStorylineList[action.payload.index] = {

@@ -10,6 +10,15 @@
   box-sizing: border-box;
 }
 
+.extra_bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  z-index: 0;
+}
+
 .extra_top {
   padding: 0 0 0 0;
   display: flex;

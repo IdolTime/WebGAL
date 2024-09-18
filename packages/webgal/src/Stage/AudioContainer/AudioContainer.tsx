@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
+import { setCurrentPlayAudio } from '@/store/GUIReducer';
 import { useEffect, useState } from 'react';
 import { logger } from '@/Core/util/logger';
 import { getAudioUrl } from '@/Core/util/getAudioUrl';
@@ -100,14 +101,14 @@ export const AudioContainer = () => {
 
   useEffect(() => {
     if (uiSoundEffects === '') return;
-    const currentPlayAudioElement = webgalStore.getState().stage.currentPlayAudio;
+    const currentPlayAudioElement: HTMLAudioElement = webgalStore.getState().GUI.currentPlayAudio as unknown as HTMLAudioElement;
     const hasCustomClickSe = webgalStore.getState().stage.hasCustomClickSe;
     
     if (currentPlayAudioElement && hasCustomClickSe && currentPlayAudioElement?.id === 'uiSe-clickSe') {
       currentPlayAudioElement?.pause();
       currentPlayAudioElement.volume = 0;
       currentPlayAudioElement?.remove?.()
-      webgalStore.dispatch(setStage({ key: 'currentPlayAudio', value: null }));
+      webgalStore.dispatch(setCurrentPlayAudio(null));
     }
 
     const setEffects = async () => {     
@@ -116,7 +117,7 @@ export const AudioContainer = () => {
       uiSeAudioElement.src = url;
       if (hasCustomClickSe) {
         uiSeAudioElement.id = `uiSe-clickSe`
-        webgalStore.dispatch(setStage({ key: 'currentPlayAudio', value: uiSeAudioElement }));
+        webgalStore.dispatch(setCurrentPlayAudio(uiSeAudioElement));
         webgalStore.dispatch(setStage({ key: 'hasCustomClickSe', value: false }));
       }
       

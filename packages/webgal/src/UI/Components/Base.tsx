@@ -721,6 +721,8 @@ export const Indicator = ({
   onClickNext = () => {},
   nextIconDefaultClass,
   prevIconDefaultClass,
+  isExtraIndicator,
+  isShowNumber
 }: {
   item: IndicatorContainerItem;
   defaultClass?: string;
@@ -740,20 +742,24 @@ export const Indicator = ({
   onClickNext?: () => void;
   nextIconDefaultClass?: string;
   prevIconDefaultClass?: string;
+  isExtraIndicator?: boolean;
+  isShowNumber?: boolean;
 }) => {
   if (item.args.hide) return null;
   const style = parseStyleArg(item.args.style);
+
+  const contentImg = isExtraIndicator ? item.args.style?.image :item.args.indicatorStyle?.image
 
   const indicatorList = useMemo(
     () =>
       Array.from({ length: pageLength }).map(
         (_, index) =>
           ({
-            content: item.args.indicatorStyle?.image ? '' : (index + 1).toString(),
+            content: contentImg ? '' : (index + 1).toString(),
             key: '' as any,
             args: {
               hide: false,
-              style: item.args.indicatorStyle || {},
+              style: isExtraIndicator ? item.args?.style || {} : item.args.indicatorStyle || {},
               hoverStyle: item.args.indicatorHoverStyle,
             },
           } satisfies ButtonItem),
