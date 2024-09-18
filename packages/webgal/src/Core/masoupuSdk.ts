@@ -62,8 +62,7 @@ export const masoupuSdkCheck = (cb: Function) => {
         // 购买
         // @ts-ignore
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-          console.log('openBuyGameDialog success : ', res);
-          cb();
+          window.location.reload();
         });
       }
     });
