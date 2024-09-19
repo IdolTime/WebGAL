@@ -29,30 +29,32 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
-  var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
-      startGame();
-      playSeClick();
-      dispatch(setshowFavorited(false));
+      // playSeClick();
+      setTimeout(() => {
+        startGame();
+        dispatch(setshowFavorited(false));
+      }, 16)
     },
     [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();
-      playSeClick();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_storyline_button]: () => {
       enterStoryLine();
-      playSeClick();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_extra_button]: () => {
       dispatch(setVisibility({ component: 'showExtra', visibility: true }));
-      playSeClick();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_collection_button]: () => {
       enterBeautyGuide();
-      playSeClick();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_continue_button]: () => {
       playSeClick();
@@ -61,18 +63,18 @@ const Title: FC = () => {
       continueGame();
     },
     [TitleSceneButtonKey.Game_option_button]: () => {
-      playSeClick();
+      // playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Option));
     },
     [TitleSceneButtonKey.Game_load_button]: () => {
-      playSeClick();
+      // playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
     },
     [TitleSceneButtonKey.Game_link_button]: () => {
       const linkStr = TitleUIConfigs.buttons[TitleSceneButtonKey.Game_link_button].args?.buttonLink?.link ?? ''
-      playSeClick();
+      // playSeClick();
       if (linkStr) {
         if (isSafari) {
           const newWindow = window.open('', '_blank');
