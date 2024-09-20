@@ -79,7 +79,7 @@ export const ExtraVideo: FC = () => {
 
   const onConfirm = (newName: string) => {
     editNameVal = '';
-    saveGame(editNameIndex, newName);
+    saveGame(editNameIndex, newName, true);
     setStorage();
     setShowEditDialog(false);
   };
@@ -119,7 +119,6 @@ export const ExtraVideo: FC = () => {
 
 
     if (saveData) {
-
       if (unlockedItem?.args?.hide) {
         saveElementContent = <div />
       } else {
