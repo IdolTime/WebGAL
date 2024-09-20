@@ -277,14 +277,14 @@ export const CustomContainer = ({
     if (!_activeStyle) _activeStyle = parseStyleArg(item.args.activeStyle);
   }
 
-  const _onMouseEnter = debounce(() => {
+  const _onMouseEnter = () => {
     if (_hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  }, 100);
+  };
   const _onMouseLeave = () => {
     setHover(false);
     if (onMouseLeave) {
