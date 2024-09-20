@@ -177,6 +177,10 @@
   height: 100%;
   width: 20%;
   background-color: #B28FCE;
+  font-size: px2(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .Load_content_elememt_top_index {
@@ -192,8 +196,12 @@
   width: 80%;
   font-family: WebgalUI, serif;
   letter-spacing: 0.1em;
-  height: px2(100px);
-  font-size: px2(20px);
+  height: px2(35px);
+  font-size: px2(16px);
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 .Load_content_element_top_date {
