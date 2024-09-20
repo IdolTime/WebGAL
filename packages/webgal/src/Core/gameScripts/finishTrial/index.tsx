@@ -5,10 +5,8 @@ import { webgalStore } from '@/store/store';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
-import { buyGame, getGameInfo } from '@/services/store';
 import { getRandomPerformName } from '../../Modules/perform/performController';
-import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
-import { sleep } from '@/Core/util/sleep';
+import { platform_isCanStart, platform_getGameDetail } from '@/Core/platformMessage';
 
 /**
  * 结束试玩
@@ -32,16 +30,10 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     current: null as ReturnType<typeof setTimeout> | null,
   };
   const gameInfo = webgalStore.getState().storeData.gameInfo;
-  let hasTrial = gameInfo?.isFree === 1 && gameInfo?.tryPlay === 2;
   const { playSeEnter, playSeClick } = useSEByWebgalStore();
   const shouldDisplayModal = { current: false };
 
-  if (
-    (hasTrial && gameInfo?.canPlay) ||
-    gameInfo?.isFree === 2 ||
-    (gameInfo?.isFree === 1 && gameInfo?.tryPlay === 1 && gameInfo.canPlay)
-  ) {
-    // if (false) {
+  if (gameInfo?.isBuy || gameInfo?.paymentMode === 'free') {
     return {
       performName: getRandomPerformName(),
       duration: 0,
@@ -54,33 +46,56 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     };
   }
 
-  const submitBuy = async () => {
+  const submitBuy = () => {
     playSeClick();
-    const res = await buyGame();
-
-    // @ts-ignore
-    window.pubsub.publish('loading', { loading: false });
-
-    await sleep(2000);
-
-    if (res.code === 0 || res.code === 10053) {
-      // if (res.code === 0) {
-      // @ts-ignore
-      res.code === 0 && window.pubsub.publish('toaster', { show: true });
-      WebGAL.gameplay.performController.unmountPerform('finishTrial');
-    } else if (res.code === 10014) {
-      // } else if (res.code === 10053) {
-      // @ts-ignore
-      window.pubsub.publish('toaster', { show: true, text: '余额不足, 请充值' });
-      // @ts-ignore
-      window.pubsub.publish('rechargeModal', {
-        successCallback: checkBuy,
-        closeCallback: checkBuy,
-      });
+    if (window !== window.top) {
+      platform_isCanStart();
     } else {
+      const token = sessionStorage.getItem('sdk-token');
       // @ts-ignore
-      window.pubsub.publish('toaster', { show: true, text: res.message });
+      window.globalThis.getUserInfo(token).then((res: any) => {
+        console.log('getUserInfo success : ', res);
+        const gameInfo: any = webgalStore.getState().storeData.gameInfo;
+        if (res.code === 401) {
+          // @ts-ignore
+          window.reload();
+          sessionStorage.setItem('sdk-token', '');
+          return;
+        }
+        const { acoinBalance } = res.data;
+        const { paymentAmount, id } = gameInfo;
+        if (acoinBalance < paymentAmount) {
+          // 充值
+          // @ts-ignore
+          window.globalThis.openRechargeDialog(token).then((res: any) => {
+            shouldDisplayModal.current = true;
+          });
+        } else {
+          // 购买
+          // @ts-ignore
+          // setTimeout(() => {
+          //   console.log('openBuyGameDialog success : ', res);
+          //   // @ts-ignore
+          //   window.pubsub.publish('toaster', { show: true });
+          //   WebGAL.gameplay.performController.unmountPerform('finishTrial');
+          // }, 3000);
+          window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
+            console.log('openBuyGameDialog success : ', res);
+            // @ts-ignore
+            window.pubsub.publish('toaster', { show: true });
+            WebGAL.gameplay.performController.unmountPerform('finishTrial');
+          });
+        }
+      });
     }
+  };
+
+  const isTryPlay = () => {
+    const sceneData = WebGAL.sceneManager.sceneData;
+    const res = sceneData.currentScene.sentenceList.filter((item: any) => {
+      return item.commandRaw === 'finishTrial' && item.content === 'true';
+    });
+    return res.length > 0;
   };
 
   const checkBuy = (refresh = false) => {
@@ -100,69 +115,77 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       });
     };
 
-    getGameInfo()
-      .then((res) => {
-        timer.current && clearTimeout(timer.current);
-        // @ts-ignore
-        window.pubsub.publish('loading', { loading: false });
-        if (res.code === 0) {
-          const info = res.data;
-          if (!info) return;
-
-          // 已经付费
-          if (info.isFree === 1 && info.tryPlay === 2 && info.canPlay) {
-            // if (false) {
-            WebGAL.gameplay.performController.unmountPerform('finishTrial');
-          } else {
-            // eslint-disable-next-line react/no-deprecated
-            // ReactDOM.render(
-            //   <div className={styles.FinishTrial_container}>
-            //     <div className={styles.FinishTrial_inner}>
-            //       <SourceImg src={FinishTrialBg} />
-            //       <SourceImg
-            //         src={ModalClose}
-            //         className={styles.FinishTrial_close}
-            //         onMouseEnter={playSeEnter}
-            //         onClick={() => {
-            //           shouldDisplayModal.current = true;
-            //           // eslint-disable-next-line react/no-deprecated
-            //           ReactDOM.render(<div />, document.getElementById('chooseContainer'));
-            //         }}
-            //       />
-            //       <span className={styles.FinishTrial_price}>{info.salesAmount}</span>
-            //       <div className={styles.FinishTrial_btn} onClick={submitBuy} onMouseEnter={playSeEnter}>
-            //         <span className={styles.FinishTrial_btn_text}>继续游玩</span>
-            //       </div>
-            //     </div>
-            //   </div>,
-            //   document.getElementById('chooseContainer'),
-            // );
-
-            const _info = webgalStore.getState().storeData.gameInfo;
-
-            showGlogalDialog({
-              title: `试玩结束`,
-              type: 'pay',
-              content: `可以花费${_info?.salesAmount}${_info?.salesAmountType === 1 ? '星石' : '星光'}`,
-              suffixContent: '购买完整版继续游玩',
-              leftText: '否',
-              rightText: '是',
-              leftFunc: () => {
-                shouldDisplayModal.current = true;
-                // backToTitle();
-              },
-              rightFunc: submitBuy,
-            });
-          }
+    const disposeGameRes = (res: any) => {
+      timer.current && clearTimeout(timer.current);
+      // @ts-ignore
+      window.pubsub.publish('loading', { loading: false });
+      if (res) {
+        const { paymentMode, isBuy } = res;
+        // 已经付费
+        if (paymentMode === 'paid' && isBuy) {
+          // @ts-ignore
+          shouldDisplayModal.current = false;
+          WebGAL.gameplay.performController.unmountPerform('finishTrial');
         } else {
-          retry();
+          const _info = webgalStore.getState().storeData.gameInfo;
+          showGlogalDialog({
+            title: `试玩结束`,
+            type: 'pay',
+            // @ts-ignore
+            content: `可以花费${_info?.paymentAmount}`,
+            suffixContent: '购买完整版继续游玩',
+            leftText: '否',
+            rightText: '是',
+            leftFunc: () => {
+              shouldDisplayModal.current = true;
+            },
+            rightFunc: submitBuy,
+          });
         }
-      })
-      .catch(() => {
-        // @ts-ignore
-        window.pubsub.publish('loading', { loading: false });
+      } else {
         retry();
-      });
+      }
+    };
+
+    window.addEventListener('message', (message: any) => {
+      const data = message.data;
+      const { method } = message.data.data;
+      if (method === 'IS_CAN_START') {
+        console.log('message.data.data', message.data.data);
+        // @ts-ignore
+        window.pubsub.publish('toaster', { show: true });
+        WebGAL.gameplay.performController.unmountPerform('finishTrial');
+      }
+      if (method === 'GET_GAME_DETAIL') {
+        disposeGameRes(data.data.response.data);
+      }
+      // todo
+      // 关闭弹窗 消息
+    });
+
+    const gameId = new URLSearchParams(window.location.search).get('gameId');
+    const token = sessionStorage.getItem('sdk-token');
+
+    // @ts-ignore
+    const is_terre = window?.top[0]?.origin?.indexOf('localhost') > -1;
+    const isPlatIframe = window !== window.top && !is_terre;
+    if (isPlatIframe && isTryPlay()) {
+      platform_getGameDetail();
+      return;
+    }
+    // @ts-ignore
+    window.globalThis.getGameDetail(gameId, token).then((res: any) => {
+      console.log('res', res.data);
+      disposeGameRes(res.data);
+    });
+    // @ts-ignore 关闭购买弹窗
+    window.globalThis.closeBuyGameDialog(() => {
+      shouldDisplayModal.current = true;
+    });
+    // @ts-ignore 关闭充值弹窗
+    window.globalThis.closeGameItemPurchaseDialog(() => {
+      shouldDisplayModal.current = true;
+    });
   };
 
   checkBuy();

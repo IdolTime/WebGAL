@@ -54,30 +54,31 @@ function App() {
     const loadGameDetail = () => {
       // @ts-ignore
       const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
+      // 平台-iframe
       if (window !== window.top && !is_terre) {
         platform_getGameDetail();
         return;
       }
-      if (is_terre) {
-        getGameInfo().then((res) => {
-          if (res.code === 0) {
-            // @ts-ignore
-            window.pubsub.publish('gameInfoReady');
-          } else {
-            // @ts-ignore
-            window.pubsub.publish('gameInfoReady');
-            showGlogalDialog({
-              title: '获取游戏信息失败\n请刷新页面！',
-              rightText: '确定',
-              rightFunc: () => {
-                window.location.reload();
-              },
-            });
-          }
-        });
-        getPaymentConfigList();
-        return;
-      }
+      // if (is_terre) {
+      //   getGameInfo().then((res) => {
+      //     if (res.code === 0) {
+      //       // @ts-ignore
+      //       window.pubsub.publish('gameInfoReady');
+      //     } else {
+      //       // @ts-ignore
+      //       window.pubsub.publish('gameInfoReady');
+      //       showGlogalDialog({
+      //         title: '获取游戏信息失败\n请刷新页面！',
+      //         rightText: '确定',
+      //         rightFunc: () => {
+      //           window.location.reload();
+      //         },
+      //       });
+      //     }
+      //   });
+      //   getPaymentConfigList();
+      //   return;
+      // }
 
       const gameId = new URLSearchParams(window.location.search).get('gameId');
       // @ts-ignore
@@ -169,7 +170,7 @@ function App() {
 
   const sdk_init = () => {
     initGCPSDK();
-    const token = localStorage.getItem('sdk-token');
+    const token = sessionStorage.getItem('sdk-token');
     if (token) {
       initLoginInfo(token);
       return;
@@ -177,8 +178,8 @@ function App() {
     // @ts-ignore
     window.globalThis.openLoginDialog().then((res) => {
       initLoginInfo(res.token);
-      localStorage.setItem('sdk-token', res.token);
-      localStorage.setItem('sdk-userId', res.userId);
+      sessionStorage.setItem('sdk-token', res.token);
+      sessionStorage.setItem('sdk-userId', res.userId);
       window.location.reload();
     });
   };

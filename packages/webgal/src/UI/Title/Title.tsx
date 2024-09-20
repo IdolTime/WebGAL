@@ -6,6 +6,7 @@ import { enterStoryLine } from '@/Core/controller/gamePlay/enterSubPage';
 import { enterBeautyGuide } from '@/Core/controller/gamePlay/beautyGuide';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
+import { WebGAL } from '@/Core/WebGAL';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { setshowFavorited } from '@/store/GUIReducer';
@@ -33,7 +34,7 @@ const Title: FC = () => {
   const applyStyle = useApplyStyle('UI/Title/title.scss');
 
   const sdk_loadUserInfo = () => {
-    const token = localStorage.getItem('sdk-token');
+    const token = sessionStorage.getItem('sdk-token');
     // @ts-ignore
     window.globalThis.getUserInfo(token).then((res: any) => {
       console.log('getUserInfo success : ', res);
@@ -44,14 +45,13 @@ const Title: FC = () => {
         // 充值
         // @ts-ignore
         window.globalThis.openRechargeDialog(token).then((res: any) => {
-          console.log('openRechargeDialog success : ', res);
+          window.location.reload();
         });
       } else {
         // 购买
         // @ts-ignore
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-          console.log('openBuyGameDialog success : ', res);
-          // todo 买游戏上报
+          window.location.reload();
         });
       }
     });
@@ -73,6 +73,14 @@ const Title: FC = () => {
     } else {
       loadUserInfo();
     }
+  };
+
+  const isNotTryPlay = () => {
+    const sceneData = WebGAL.sceneManager.sceneData;
+    const res = sceneData.currentScene.sentenceList.filter((item: any) => {
+      return item.commandRaw === 'finishTrial' && item.content === 'true';
+    });
+    return res.length === 0;
   };
 
   const clickCallbackMap = {
@@ -153,13 +161,13 @@ const Title: FC = () => {
                     } else {
                       const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};
                       const { paymentMode } = gameInfo;
-                      // 付费
-                      if (paymentMode === 'paid') {
+                      // 付费 & 不是试玩
+                      if (paymentMode === 'paid' && isNotTryPlay()) {
                         loadGameDetail(() => {
                           clickCallbackMap[_key]();
                         });
                       } else {
-                        // 免费
+                        // 免费 || 付费&试玩
                         clickCallbackMap[_key]();
                       }
                     }

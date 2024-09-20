@@ -83,6 +83,8 @@ export interface IGameInfo {
   tagList: ITag[];
   sales: ISale[];
   discount: IDiscount[];
+  isBuy?: boolean;
+  paymentMode?: string;
 }
 
 export interface IRechargeItem {
