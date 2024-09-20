@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { setVisibility } from '@/store/GUIReducer';
@@ -190,9 +190,25 @@ export const Achievement: FC = () => {
       };
     }
 
+    let achievementContentStyle: CSSProperties = {} 
+    const bgStyleObj = parseStyleArg(progressBgStyle?.args?.style);
+    if (bgStyleObj?.top !== undefined) {
+      achievementContentStyle.top = bgStyleObj.top;
+      achievementContentStyle.transform = 'inherit';
+      delete bgStyleObj.top;
+      delete bgStyleObj.position;
+    }
+
+    if (bgStyleObj?.left !== undefined) {
+      achievementContentStyle.left = bgStyleObj.left;
+      achievementContentStyle.transform = 'inherit';
+      delete bgStyleObj.left;
+      delete bgStyleObj.position;
+    }
+
     const bgStyle = !progressBgStyle?.args?.hide
       ? {
-          ...parseStyleArg(progressBgStyle?.args?.style),
+          ...bgStyleObj,
           backgroundImage: `url(${bgUrl})`,
           ...bgOtherStyle,
         }
@@ -221,7 +237,7 @@ export const Achievement: FC = () => {
       : {};
 
     return (
-      <div className={styles.achievement_content}>
+      <div className={styles.achievement_content} style={achievementContentStyle}>
         <div className={styles.achievement_current} style={bgStyle || {}}>
           <span className={styles.text} style={textCss || {}}>
             {text}
