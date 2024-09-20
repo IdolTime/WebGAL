@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { CSSProperties, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setShowStoryLine } from '@/store/GUIReducer';
@@ -10,10 +10,26 @@ import styles from './storyLine.module.scss';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { px2 } from '@/Core/parser/utils';
+import { px2, parseStyleArg } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
+import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
+import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
+import { sceneNameType } from '@/Core/Modules/scene';
+import { sceneParser } from '@/Core/parser/sceneParser';
 import { SourceImg } from '../Components/SourceImg';
+
+interface IStoryLinStageItem {
+  storylineBg: string;
+  storylineBgX: number;
+  storylineBgY: number;
+}
+
+const defaultStoryLinStageItem: IStoryLinStageItem = {
+  storylineBg: '',
+  storylineBgX: 1280,
+  storylineBgY: 720,
+};
 
 /**
  * 故事线页面
@@ -24,17 +40,61 @@ export const StoryLine: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const StageState = useSelector((state: RootState) => state.stage);
+  const saveData = useSelector((state: RootState) => state.saveData);
   const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
   const storylineUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
   ) as StorylineSceneUIConfig;
 
+  const storylineUIItem = storylineUIConfigs.other.Storyline_item;
+
+  const [achieveStage, setAchieveStage] = useState<IStoryLinStageItem>(defaultStoryLinStageItem);
+
   useEffect(() => {
     getStorylineFromStorage();
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
+      initStoryline();
     }
   }, [GUIState.showStoryLine]);
+
+  async function initStoryline() {
+    // 初始化成就场景
+    const sceneUrl: string = assetSetter(sceneNameType.Storyline, fileType.scene);
+    const rawScene = await sceneFetcher(sceneUrl);
+
+    const currentScene = sceneParser(rawScene, sceneNameType.Storyline, sceneUrl);
+    const sentenceList = currentScene.sentenceList;
+
+    if (sentenceList?.length > 0 && sentenceList[0]?.commandRaw === 'changeBg') {
+      const storylineBg = sentenceList[0]?.content ?? '';
+
+      let storylineBgX = 1280;
+      let storylineBgY = 720;
+
+      const gameSizeStr = window.localStorage.getItem('game-screen-size');
+      const sizeArr = gameSizeStr?.split('x') ?? [];
+
+      if (sizeArr?.length > 0 && sizeArr[0] === '1920') {
+        storylineBgX = Number(sizeArr[0]);
+        storylineBgY = Number(sizeArr[1]);
+      }
+
+      sentenceList[0]?.args?.forEach((arg) => {
+        if (arg?.key === 'x') {
+          storylineBgX = Number(arg?.value);
+        } else if (arg?.key === 'y') {
+          storylineBgY = Number(arg?.value);
+        }
+      });
+
+      setAchieveStage({
+        storylineBg,
+        storylineBgX,
+        storylineBgY,
+      });
+    }
+  }
 
   /**
    * 返回
@@ -62,51 +122,73 @@ export const StoryLine: FC = () => {
 
   const hasBGImage = !!StageState.storyLineBg;
   const bgStyle =
-    typeof StageState.storyLineBgX === 'number' && typeof StageState.storyLineBgY === 'number'
+    typeof achieveStage.storylineBgX === 'number' && typeof achieveStage.storylineBgY === 'number'
       ? {
-          width: px2(StageState.storyLineBgX),
-          height: px2(StageState.storyLineBgY),
+          width: px2(achieveStage.storylineBgX),
+          height: px2(achieveStage.storylineBgY),
+          maxWidth: 'none',
         }
-      : {};
+      : { maxWidth: 'none' };
 
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine} style={hasBGImage ? { backgroundImage: 'none' } : {}} id="camera">
-          {!GUIState.showProgressAndAchievement && (
-            <Button
-              item={storylineUIConfigs.buttons.Storyline_back_button}
-              defaultClass={`${styles.goBack} interactive`}
-              onClick={handlGoBack}
-              onMouseEnter={playSeEnter}
-            />
-          )}
-          <SourceImg src={StageState.storyLineBg} style={bgStyle} />
+        <div className={styles.storyLine} id="camera">
+          <Button
+            item={storylineUIConfigs.buttons.Storyline_back_button}
+            defaultClass={`
+              ${styles.goBack} 
+              ${storylineUIConfigs.buttons.Storyline_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
+              interactive`}
+            onClick={handlGoBack}
+            onMouseEnter={playSeEnter}
+          />
+          <SourceImg src={achieveStage.storylineBg} style={bgStyle} />
           {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
             const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
 
-            if (!isUnlock) {
-              return null;
+            if (!isUnlock) return null;
+
+            let styleObj = parseStyleArg(storylineUIItem.args.style) || {};
+            let nameStyle: CSSProperties = {};
+
+            if (styleObj?.fontSize) nameStyle.fontSize = styleObj.fontSize;
+            if (styleObj?.color) nameStyle.color = styleObj.color;
+
+            if (thumbnailUrl) {
+              styleObj = {
+                ...styleObj,
+                position: 'absolute',
+                top: `${px2(y)}px`,
+                left: `${px2(x)}px`,
+              };
+            }
+
+            let sourceImgStyle: CSSProperties = {};
+
+            if (styleObj?.width) {
+              sourceImgStyle.width = styleObj.width;
+            }
+
+            if (styleObj?.height) {
+              sourceImgStyle.height = styleObj.height;
             }
 
             return (
               <div
                 key={`storyLine-${index}`}
-                className={styles.storyLine_item}
-                style={
-                  thumbnailUrl
-                    ? {
-                        top: `${px2(y)}px`,
-                        left: `${px2(x)}px`,
-                      }
-                    : {}
-                }
+                className={`${styles.storyLine_item} interactive`}
+                style={styleObj}
                 onClick={(e) => handlPlay(e, item)}
               >
-                <SourceImg src={getImagePath(thumbnailUrl)} />
+                <SourceImg src={getImagePath(thumbnailUrl)} style={sourceImgStyle} />
                 <div className={styles.info_card}>
                   <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
-                  {isHideName ? null : <span className={styles.name}>{name}</span>}
+                  {isHideName ? null : (
+                    <span className={styles.name} style={nameStyle}>
+                      {name}
+                    </span>
+                  )}
                 </div>
               </div>
             );

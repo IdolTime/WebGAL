@@ -1,9 +1,13 @@
 import { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { videoSizeOption } from '@/store/userDataInterface';
+import { videoSizeOption, textSize } from '@/store/userDataInterface';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStage } from '@/store/stageReducer';
 import { RootState } from '@/store/store';
+import { WebGAL } from '@/Core/WebGAL';
+import { webgalStore } from '@/store/store';
+import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
+import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { OptionSceneOtherKey, OptionSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { updateScreenSize } from '@/Core/util/constants';
@@ -14,6 +18,7 @@ import styles from './OptionVideoSize.module.scss';
 
 interface IProps {
   label?: string;
+  onUpdate?: () => void;
 }
 
 export const OptionVideoSize: FC<IProps> = (props: IProps) => {
@@ -33,11 +38,11 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
     let targetWidth = 2560;
     const sizeArr = currentValue?.split('x') || [];
     if (sizeArr?.length === 2) {
-      targetWidth = parseInt(sizeArr[0]) * 2;
-      targetHeight = parseInt(sizeArr[1]) * 2;
+      targetWidth = parseInt(sizeArr[0], 10) * 2;
+      targetHeight = parseInt(sizeArr[1], 10) * 2;
 
-      dispatch(setStage({ key: 'storyLineBgX', value: parseInt(sizeArr[0]) }));
-      dispatch(setStage({ key: 'storyLineBgY', value: parseInt(sizeArr[1]) }));
+      dispatch(setStage({ key: 'storyLineBgX', value: parseInt(sizeArr[0], 10) }));
+      dispatch(setStage({ key: 'storyLineBgY', value: parseInt(sizeArr[1], 10) }));
     }
 
     const h = window.innerHeight; // 窗口高度
@@ -101,7 +106,7 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
       }
 
       // @ts-ignore
-      if (window && window?.isIOSDevice) {
+      if (window?.isIOSDevice) {
         const zoomWi = w / targetWidth;
         transform = `translate(${-mw}px, ${-mh}px) scale(${zoomWi},${zoomWi})`;
       }
@@ -124,9 +129,18 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
       resize();
       window.onload = resize;
       window.onresize = resize;
+      WebGAL.events.screenSizeChange.emit();
+
+      if (webgalStore.getState().GUI.isInGaming) {
+        const currentScript: ISentence =
+          WebGAL.sceneManager.sceneData.currentScene.sentenceList[WebGAL.sceneManager.sceneData.currentSentenceId - 1];
+        runScript(currentScript);
+      }
+
       setTimeout(() => {
         setUpdateSize(false);
       }, 500);
+      props?.onUpdate && props.onUpdate?.();
     }
   }, [updateSize]);
 
@@ -198,6 +212,7 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
           setCurrentValue(sizeOptions[0]);
           updateTitle_enter_pageStyle();
           dispatch(setOptionData({ key: 'videoSize', value: sizeOptions[0] }));
+          dispatch(setOptionData({ key: 'textSize', value: textSize.medium }));
           setStorage();
           setUpdateSize(true);
         }}
@@ -219,6 +234,7 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
           setCurrentValue(sizeOptions[1]);
           updateTitle_enter_pageStyle();
           dispatch(setOptionData({ key: 'videoSize', value: sizeOptions[1] }));
+          dispatch(setOptionData({ key: 'textSize', value: textSize.small }));
           setStorage();
           setUpdateSize(true);
         }}

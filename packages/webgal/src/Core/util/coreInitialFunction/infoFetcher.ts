@@ -332,7 +332,7 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     };
 
     const parsedArgs: any = { hide: false, style: {} };
-    const parsedKeys = ['info', 'images', 'btnSound'];
+    const parsedKeys = ['hoverStyle', 'info', 'images', 'btnSound', 'videos', 'buttonLink', 'activeStyle'];
 
     args.forEach((e: any) => {
       if (e.key === 'hide') {
@@ -440,14 +440,18 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
   };
 }
 
-function parseSound(options: { key: string; value: string | number | boolean }[]) {
-  const config: Record<string, string | boolean> = {};
+function parseSound (options: { key: string, value: string | number | boolean }[]) {
+  const config: Record<string, string | boolean> = {}
   options.forEach((option) => {
     if (typeof option.value === 'string') {
       const values = option.value?.split(',') ?? [];
-      config[option.key] = values?.length ? !!boolMap.get(values[0]) || assetSetter(values[1], fileType.bgm) : false;
+      config[option.key] = values?.length
+        ? !!boolMap.get(values[0]) || assetSetter(values[1], fileType.bgm)
+        : false;
     } else {
-      config[option.key] = typeof option.value === 'boolean' ? !!boolMap.get(option.value) : false;
+      config[option.key] = typeof option.value === 'boolean'
+        ? !!boolMap.get(option.value) 
+        : false;
     }
   });
 

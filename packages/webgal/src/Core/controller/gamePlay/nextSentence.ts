@@ -20,7 +20,8 @@ export const nextSentence = () => {
 
   // 如果当前显示标题，那么不进行下一句
   const GUIState = webgalStore.getState().GUI;
-  if (GUIState.showTitle) {
+  if (GUIState.showTitle && !GUIState.showStoryLine && !GUIState.showAchievement) {
+    logger.warn('标题页面不允许下一句。');
     return;
   }
 

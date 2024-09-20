@@ -34,12 +34,14 @@ export const moveCamera = (sentence: ISentence): IPerform => {
     }
   });
 
-  const cameraElement = document.getElementById('camera');
+  setTimeout(() => {
+    const cameraElement = document.getElementById('camera');
 
-  if (cameraElement) {
-    logger.info(`移动镜头：${x}：${y}`);
-    smoothScrollToElement(cameraElement, x, y, endDelay);
-  }
+    if (cameraElement) {
+      logger.info(`移动镜头：${x}：${y}`);
+      smoothScrollToElement(cameraElement, x, y, endDelay);
+    }
+  }, 16);
 
   return {
     performName: performInitName,

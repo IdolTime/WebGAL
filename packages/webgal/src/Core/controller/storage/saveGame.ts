@@ -11,8 +11,8 @@ import { dumpSavesToStorage } from '@/Core/controller/storage/savesController';
  * 保存游戏
  * @param index 游戏的档位
  */
-export const saveGame = async (index: number, newName?: string) => {
-  const saveData: ISaveData = await generateCurrentStageData(index, true, newName);
+export const saveGame = async (index: number, newName?: string, isChangeName?: boolean) => {
+  const saveData: ISaveData = await generateCurrentStageData(index, true, newName, isChangeName);
   webgalStore.dispatch(saveActions.saveGame({ index, saveData }));
   dumpSavesToStorage(index, index);
 };
@@ -25,10 +25,10 @@ export async function generateCurrentStageData(
   index: number,
   isSavePreviewImage = true,
   newName?: string,
+  isChangeName?: boolean
 ): Promise<ISaveData> {
   const stageState = webgalStore.getState().stage;
   const saveBacklog = cloneDeep(WebGAL.backlogManager.getBacklog());
-
   /**
    * 生成缩略图
    */
@@ -51,6 +51,12 @@ export async function generateCurrentStageData(
     if (videoItem) {
       urlToSave = videoItem.poster;
     }
+  }
+
+  // 更改名称时缩略图不变
+  if (isChangeName) {
+    const currentSaveState: ISaveData[] = webgalStore.getState().saveData.saveData;
+    urlToSave = currentSaveState?.[index]?.previewImage ?? ''
   }
 
   // 保存时间

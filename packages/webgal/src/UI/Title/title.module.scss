@@ -70,3 +70,15 @@
   z-index: 13;
   background: linear-gradient(135deg, #fdfbfb 0%, #dcddde 100%);
 }
+
+@keyframes button_animation_pulse {
+  0% {
+      opacity: 1;
+  } 
+  50% {
+      opacity: 0.8;
+  }
+  100% {
+      opacity: 1;
+  }
+}

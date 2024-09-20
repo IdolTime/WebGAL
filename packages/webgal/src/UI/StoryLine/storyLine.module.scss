@@ -23,7 +23,7 @@ $default_storyLine_bg_y: 720px;
         max-width: none !important;
     }
 
-       
+
     .goBack {
         position: fixed !important;
         top: px2(35px);
@@ -39,50 +39,47 @@ $default_storyLine_bg_y: 720px;
         transition: all 0.3s;
 
         &:hover {
-            transform: scale(1.2);
             background-image: url("@/assets/imgs/back-r.png");
         }
     }
 
+    .hideDefalutGobackBg {
+        background-image: none;
+
+        &:hover {
+            background-image: none;
+        }
+    }
+
+    .storyLine_content {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        // overflow-x: scroll; /* 允许水平滚动 */
+        // overflow-y: hidden; /* 禁止垂直滚动 */
+        background-repeat: no-repeat;
+        // background-size: cover;
+        position: relative;
+        background-size: px2($default_storyLine_bg_x) px2($default_storyLine_bg_y);
+        background-size: var(--screenWidth) var(--screenHeight);
+    }
+
     .storyLine_item {
-        overflow: hidden;
+        width: px2(135px);
+        height: px2(81px);
+        // overflow: hidden;
         background-repeat: no-repeat;
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: -1;
-        opacity: 0;
-        transition: all 0.5s;
-        cursor: pointer;
+        background-size: contain;
+        background-position: center;
 
-        .playButton_icon {
-            width: 100%;
-            height: 60%;
-            text-align: center;  
-            border-radius: 50%;  
-            color: #fff;  
-            font-size: px2(45px);  
-            cursor: pointer;
-            flex: 1;
-            &::before {  
-                content: "▶";  
-                color: #fff;
-                position: absolute;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                left: 50%;
-            }
+        &:hover .info_card {
+            z-index: 100;
+            opacity: 1;
         }
 
-        .name {
-            font-size: px2(22px);
-            color: #fff;
-            font-weight: 700;
-            flex: 1;
+        .info_card {
             display: flex;
-            align-items: flex-end;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -101,30 +98,32 @@ $default_storyLine_bg_y: 720px;
                 justify-content: center;
                 align-items: baseline;
                 width: 100%;
-                height: 60%;
-                text-align: center;  
-                border-radius: 50%;  
-                color: #fff;  
-                font-size: px2(45px);  
+                // height: 60%;
+                text-align: center;
+                border-radius: 50%;
+                color: #fff;
+                font-size: px2(30px);
                 cursor: pointer;
-                flex: 1;
-                &::before {  
-                    content: "▶";  
+
+                // flex: 1;
+                &::before {
+                    content: "▶";
                     color: #fff;
-                  }  
+                }
             }
 
             .name {
-                font-size: px2(22px);
+                font-size: px2(24px);
                 color: #fff;
                 font-weight: 700;
-                flex: 1;
+                // flex: 1;
                 display: flex;
                 align-items: flex-end;
                 justify-content: center;
-                width: auto;
+                width: 100%;
                 line-height: 1.2;
                 height: inherit;
+                text-align: center;
             }
         }
     }
@@ -132,9 +131,10 @@ $default_storyLine_bg_y: 720px;
 
 @keyframes bg_animation {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
+
     100% {
-      opacity: 1;
+        opacity: 1;
     }
 }
