@@ -28,6 +28,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let id = '';
   const optionId = Date.now();
   webgalStore.dispatch(setshowFavorited(false));
+  webgalStore.dispatch(setVisibility({ component: 'playingVideo', visibility: true }));
   const endPerformRef = {
     current: () => {
       console.log('快进状态尝试跳过视频');
@@ -58,6 +59,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const performInitName: string = 'videoPlay.' + (id || getRandomPerformName());
 
   if (hideVideo) {
+    webgalStore.dispatch(setVisibility({ component: 'playingVideo', visibility: false }));
     if (!id) {
       WebGAL.videoManager.destroy(WebGAL.videoManager.currentPlayingVideo);
     } else {
@@ -275,6 +277,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
           } else {
             // 视频播放完成后，隐藏当前设置的显示变量
             const showValueList = webgalStore.getState().stage.showValueList;
+            webgalStore.dispatch(setVisibility({ component: 'playingVideo', visibility: false }));
             if (showValueList?.length) {
               const name = webgalStore.getState().stage.showValueName;
               const newShowValueList = showValueList.filter((item) => item.showValueName !== name);
