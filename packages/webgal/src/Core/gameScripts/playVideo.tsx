@@ -10,7 +10,7 @@ import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
-import { updateShowValueList } from '@/store/stageReducer';
+import { updateShowValueList, setStage } from '@/store/stageReducer';
 import { VideoManager } from '../Modules/video';
 
 /**
@@ -29,6 +29,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let id = '';
   const optionId = Date.now();
   webgalStore.dispatch(setshowFavorited(false));
+  webgalStore.dispatch(setStage({ key: 'showText', value: '' }));
+  webgalStore.dispatch(setStage({ key: 'showName', value: '' }));
+  webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
   const endPerformRef = {
     current: () => {
       console.log('快进状态尝试跳过视频');
