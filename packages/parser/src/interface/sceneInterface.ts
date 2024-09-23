@@ -47,6 +47,8 @@ export enum commandType {
   changeAffinity, // 修改亲密度
   unlockAffinity, // 解锁亲密度
   popUpImage, // 弹窗图片
+  clearScreen, // 清屏
+  showUI,
 }
 
 /**
