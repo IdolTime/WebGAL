@@ -93,6 +93,7 @@ export const initState: IGuiState = {
     Achievement_title: initStateAchievement,
   },
   currentPlayAudio: null, // 当前播放的音频
+  playingVideo: false
 };
 
 /**

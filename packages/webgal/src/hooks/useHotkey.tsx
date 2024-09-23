@@ -17,16 +17,17 @@ import { fullScreenOption } from '@/store/userDataInterface';
 
 // options备用
 export interface HotKeyType {
-  MouseRight: {} | boolean;
-  MouseWheel: {} | boolean;
-  Ctrl: boolean;
-  Esc:
+  MouseRight?: {} | boolean;
+  MouseWheel?: {} | boolean;
+  Ctrl?: boolean;
+  isDisableCtrl?: boolean
+  Esc?:
   | {
     href: string;
     nav: 'replace' | 'push';
   }
   | boolean;
-  AutoSave: {} | boolean;
+  AutoSave?: {} | boolean;
 }
 
 export interface Keyboard {
@@ -42,7 +43,7 @@ export const keyboard: Keyboard | undefined = 'keyboard' in navigator && (naviga
 export function useHotkey(opt?: HotKeyType) {
   useMouseRightClickHotKey();
   useMouseWheel();
-  useSkip();
+  useSkip(opt?.isDisableCtrl);
   usePanic();
   useFastSaveBeforeUnloadPage();
   useSpaceAndEnter();
@@ -187,8 +188,9 @@ export function usePanic() {
 
 /**
  * ctrl控制快进
+ * @param isDisableCtrl 是否禁用
  */
-export function useSkip() {
+export function useSkip(isDisableCtrl: boolean = false) {
   // 因为document事件只绑定一次 为了防止之后更新GUIStore时取不到最新值
   // 使用Ref共享GUIStore
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);
@@ -197,7 +199,7 @@ export function useSkip() {
   // 判断按键是否为ctrl
   const isCtrlKey = useCallback((e) => e.keyCode === 17, []);
   const handleCtrlKeydown = useCallback((e) => {
-    if (isCtrlKey(e) && isGameActive()) {
+    if (isCtrlKey(e) && isGameActive() && !isDisableCtrl) {
       startFast();
     }
   }, []);

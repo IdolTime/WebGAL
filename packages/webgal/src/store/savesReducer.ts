@@ -88,9 +88,7 @@ const saveDataSlice = createSlice({
     },
     addStorylineList: (state, action: PayloadAction<ISaveStoryLineData>) => {
       // @ts-ignore
-      state.unlockStorylineList.push(action.payload)
-      console.log(action.payload, state.unlockStorylineList);
-      debugger;
+      state.unlockStorylineList.push(action.payload);
     },
     replaceStorylineList: (state, action: PayloadAction<ISaveStoryLine>) => {
       state.unlockStorylineList[action.payload.index] = {

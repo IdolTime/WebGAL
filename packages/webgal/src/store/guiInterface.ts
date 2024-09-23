@@ -48,6 +48,7 @@ export interface IGuiState {
     [key in EnumAchievementUIKey]: GameMenuItem;
   };
   currentPlayAudio: HTMLAudioElement | null; // 当前播放的音频
+  playingVideo: boolean; // 是否正在播放视频
 }
 
 export type componentsVisibility = Pick<

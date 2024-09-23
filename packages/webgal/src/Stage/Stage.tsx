@@ -103,7 +103,7 @@ export const Stage: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const dispatch = useDispatch();
 
-  useHotkey();
+  useHotkey({ isDisableCtrl: true });
 
   return (
     <div className={styles.MainStage_main}>

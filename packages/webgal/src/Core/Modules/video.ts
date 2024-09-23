@@ -11,19 +11,59 @@ function arrayBufferToWordArray(arrayBuffer: ArrayBuffer) {
   return CryptoJS.lib.WordArray.create(words, uint8Array.length);
 }
 
-// eslint-disable-next-line max-params
-export async function decryptVideo(encryptedData: ArrayBuffer, key: string, iv: string, type: 'mp4' | 'flv') {
-  const keyHex = CryptoJS.enc.Hex.parse(key);
-  const ivHex = CryptoJS.enc.Hex.parse(iv);
-  const encryptedWordArray = arrayBufferToWordArray(encryptedData);
-  const decrypted = CryptoJS.AES.decrypt({ ciphertext: encryptedWordArray }, keyHex, { iv: ivHex });
+async function decryptChunk(encryptedChunk: ArrayBuffer, key: CryptoJS.lib.WordArray, iv: CryptoJS.lib.WordArray) {
+  const encryptedWordArray = arrayBufferToWordArray(encryptedChunk);
+  const decrypted = CryptoJS.AES.decrypt({ ciphertext: encryptedWordArray }, key, { iv });
 
   const decryptedData = new Uint8Array(decrypted.sigBytes);
   for (let i = 0; i < decrypted.sigBytes; i++) {
     decryptedData[i] = (decrypted.words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
   }
 
+  return decryptedData;
+}
+
+// eslint-disable-next-line max-params
+export async function decryptVideoInChunks(
+  encryptedData: ArrayBuffer,
+  key: string,
+  iv: string,
+  type: 'mp4' | 'flv',
+  chunkSize = 16 * 1024 * 1024,
+) {
+  const keyHex = CryptoJS.enc.Hex.parse(key);
+  const ivHex = CryptoJS.enc.Hex.parse(iv);
+
+  const totalChunks = Math.ceil(encryptedData.byteLength / chunkSize);
+  const decryptedChunks: Uint8Array[] = [];
+
+  for (let i = 0; i < totalChunks; i++) {
+    const chunkStart = i * chunkSize;
+    const chunkEnd = Math.min(chunkStart + chunkSize, encryptedData.byteLength);
+    const encryptedChunk = encryptedData.slice(chunkStart, chunkEnd);
+
+    const decryptedChunk = await decryptChunk(encryptedChunk, keyHex, ivHex);
+    decryptedChunks.push(decryptedChunk);
+  }
+
+  const totalDecryptedLength = decryptedChunks.reduce((acc, chunk) => acc + chunk.length, 0);
+  const decryptedData = new Uint8Array(totalDecryptedLength);
+
+  let offset = 0;
+  for (const chunk of decryptedChunks) {
+    decryptedData.set(chunk, offset);
+    offset += chunk.length;
+  }
+
   return new Blob([decryptedData], { type: `video/${type === 'mp4' ? 'mp4' : 'x-flv'}` });
+}
+
+// eslint-disable-next-line max-params
+export async function decryptVideo(encryptedData: ArrayBuffer, key: Uint8Array, iv: Uint8Array, type: 'mp4' | 'flv') {
+  const algorithm = { name: 'AES-CBC', iv: iv };
+  const cryptoKey = await crypto.subtle.importKey('raw', key, algorithm, false, ['decrypt']);
+  const decryptedData = await crypto.subtle.decrypt(algorithm, cryptoKey, encryptedData);
+  return new Blob([new Uint8Array(decryptedData)], { type: `video/${type === 'mp4' ? 'mp4' : 'x-flv'}` });
 }
 
 export class VideoManager {
@@ -152,9 +192,21 @@ export class VideoManager {
         let videoBlob;
         if (isEncrypted) {
           const encryptedData = dataBuffer.slice(markerLength);
-          const key = '40e6ad429a13020a07be290c5ef1d7dc7e45e5c4bf34d54a5664282627946e4d';
-          const iv = '9d6bac74c64ee8714e7959cef75271d0';
-          videoBlob = await decryptVideo(encryptedData, key, iv, videoType);
+
+          if (window.crypto?.subtle) {
+            const key = new Uint8Array([
+              0x40, 0xe6, 0xad, 0x42, 0x9a, 0x13, 0x02, 0x0a, 0x07, 0xbe, 0x29, 0x0c, 0x5e, 0xf1, 0xd7, 0xdc, 0x7e,
+              0x45, 0xe5, 0xc4, 0xbf, 0x34, 0xd5, 0x4a, 0x56, 0x64, 0x28, 0x26, 0x27, 0x94, 0x6e, 0x4d,
+            ]);
+            const iv = new Uint8Array([
+              0x9d, 0x6b, 0xac, 0x74, 0xc6, 0x4e, 0xe8, 0x71, 0x4e, 0x79, 0x59, 0xce, 0xf7, 0x52, 0x71, 0xd0,
+            ]);
+            videoBlob = await decryptVideo(encryptedData, key, iv, videoType);
+          } else {
+            const key = '40e6ad429a13020a07be290c5ef1d7dc7e45e5c4bf34d54a5664282627946e4d';
+            const iv = '9d6bac74c64ee8714e7959cef75271d0';
+            videoBlob = await decryptVideoInChunks(encryptedData, key, iv, videoType);
+          }
         } else {
           videoBlob = new Blob([new Uint8Array(dataBuffer)], {
             type: `video/${videoType === 'mp4' ? 'mp4' : 'x-flv'}`,

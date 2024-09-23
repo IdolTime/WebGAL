@@ -104,7 +104,7 @@ export const AudioContainer = () => {
     const currentPlayAudioElement: HTMLAudioElement = webgalStore.getState().GUI.currentPlayAudio as unknown as HTMLAudioElement;
     const hasCustomClickSe = webgalStore.getState().stage.hasCustomClickSe;
     
-    if (currentPlayAudioElement && hasCustomClickSe && currentPlayAudioElement?.id === 'uiSe-clickSe') {
+    if (currentPlayAudioElement) {
       currentPlayAudioElement?.pause();
       currentPlayAudioElement.volume = 0;
       currentPlayAudioElement?.remove?.()
@@ -115,11 +115,11 @@ export const AudioContainer = () => {
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
       uiSeAudioElement.src = url;
-      if (hasCustomClickSe) {
-        uiSeAudioElement.id = `uiSe-clickSe`
-        webgalStore.dispatch(setCurrentPlayAudio(uiSeAudioElement));
-        webgalStore.dispatch(setStage({ key: 'hasCustomClickSe', value: false }));
-      }
+      webgalStore.dispatch(setCurrentPlayAudio(uiSeAudioElement));
+      // if (hasCustomClickSe) {
+      //   uiSeAudioElement.id = `uiSe-clickSe`
+      //   webgalStore.dispatch(setStage({ key: 'hasCustomClickSe', value: false }));
+      // }
       
       uiSeAudioElement.load();
       uiSeAudioElement.loop = false;

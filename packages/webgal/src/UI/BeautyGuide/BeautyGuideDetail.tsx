@@ -112,6 +112,12 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
     );
   };
 
+  const getInfoText = (id: string, text?: string) => {
+    if (typeof text !== 'string' || text === '' ) return null
+    const textElement = document.getElementById(`${id}`)
+    if (textElement) return textElement.innerHTML = text;
+  }
+
   return (
     <>
       <div className={styles.beautyGuideDetail_main}>
@@ -195,7 +201,7 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
               item={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}
               defaultClass={styles.desc_bg}
             />
-            <span>{props.info?.description ?? ''}</span>
+            <span id='info_description'>{getInfoText('info_description', props.info?.description)}</span>
           </div>
 
           <div 

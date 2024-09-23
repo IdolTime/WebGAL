@@ -320,17 +320,21 @@ $endTransform: scale(1, 1) translate3d(0, 0, 0);
     min-height: px2(230px);
     background-color: #b7c3cf;
     padding: px2(50px) px2(35px);
+    border-top-left-radius: px2(25px);
+    border-top-right-radius: px2(25px);
 
 
     & label {
-      font-size: 40px;
+      font-size: px2(20px);
       
     }
 
     & input {
       display: block;
-      height: 68px;
-      font-size: 40px;
+      width: 60%;
+      height: px2(50px);
+      font-size: px2(20px);
+      text-indent: px2(20px);
     }
     
   }
@@ -341,6 +345,8 @@ $endTransform: scale(1, 1) translate3d(0, 0, 0);
     width: px2(800px);
     padding: px2(50px);
     background-color: #b7c3cf;
+    border-bottom-left-radius: px2(25px);
+    border-bottom-right-radius: px2(25px);
 
     .button {
       font-size: px2(20px);

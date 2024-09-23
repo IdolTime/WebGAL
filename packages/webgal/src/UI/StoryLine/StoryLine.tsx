@@ -149,7 +149,11 @@ export const StoryLine: FC = () => {
             if (!isUnlock) return null;
 
             let styleObj = parseStyleArg(storylineUIItem.args.style) || {};
+            let nameStyle: CSSProperties = {};
 
+            if (styleObj?.fontSize) nameStyle.fontSize = styleObj.fontSize;
+            if (styleObj?.color) nameStyle.color = styleObj.color;
+ 
             if (thumbnailUrl) {
               styleObj = {
                 ...styleObj,
@@ -182,7 +186,10 @@ export const StoryLine: FC = () => {
                 />
                 <div className={styles.info_card}>
                   <span className={styles.playButton_icon} style={{ width: isHideName ? '100%' : '50%' }} />
-                  {isHideName ? null : <span className={styles.name}>{name}</span>}
+                  {isHideName 
+                    ? null 
+                    : <span className={styles.name} style={nameStyle}>{name}</span>
+                  }
                 </div>
               </div>
             );

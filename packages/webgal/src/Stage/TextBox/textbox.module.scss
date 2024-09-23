@@ -129,21 +129,14 @@ $height: 330px;
 .TextBox_showName {
   @include text_shadow_textElement;
   font-size: px2(42.5%);
-  //border-bottom: 3px solid rgb(176, 176, 176);
-  //min-width: 25%;
   padding: 0 2em 0 2em;
-  //margin: 0 0 0 0;
   position: absolute;
   left: px2(150px);
-  top: px2(-68px);
-  height: px2(80px);
-  line-height: px2(68px);
-  //display: flex;
-  //align-items: center;
-  // background: rgba(11, 52, 110, 0.9);
+  top: px2(-60px);
+  height: px2(60px);
+  display: flex;
+  align-items: center;
   border-radius: px2(40px);
-  // border: 4px solid rgba(255, 255, 255, 0.75);
-  // box-shadow: 3px 3px 10px rgba(100, 100, 100, 0.5);
   z-index: 3;
   border: 4px solid rgba(255, 255, 255, 0);
 }

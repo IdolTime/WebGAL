@@ -28,8 +28,6 @@ export function Extra() {
   useEffect(() => {
     if (showExtra) {
       dispatch(saveActions.setLoadVideo(true));
-      console.log(extraSceneUIConfigs);
-      debugger; // Extra_bgm_unlocked_item 已解锁
     }
   }, [showExtra]);
 
