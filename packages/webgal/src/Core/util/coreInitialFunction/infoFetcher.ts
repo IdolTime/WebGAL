@@ -313,7 +313,21 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
     };
 
     const parsedArgs: any = { hide: false, style: {} };
-    const parsedKeys = ['hoverStyle', 'info', 'images', 'btnSound', 'videos', 'buttonLink', 'activeStyle'];
+    const parsedKeys = [
+      'hoverStyle', 
+      'info', 
+      'images', 
+      'btnSound', 
+      'videos', 
+      'buttonLink', 
+      'activeStyle',
+      'indicatorStyle',
+      'indicatorHoverStyle',
+      'indicatorLeftStyle',
+      'indicatorLeftHoverStyle',
+      'indicatorRightStyle',
+      'indicatorRightHoverStyle'
+    ];
 
     args.forEach((e: any) => {
       if (e.key === 'hide') {
