@@ -40,6 +40,7 @@ import { achieveBg } from '@/Core/gameScripts/achieve/achieveBg';
 import { unlockAchieve } from '@/Core/gameScripts/achieve/unlockAchieve';
 import { showValue } from '@/Core/gameScripts/showValue';
 import { moveCamera } from '../gameScripts/moveCamera';
+import { showUI } from '../gameScripts/showUI'
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -77,6 +78,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   unlockStoryline: ScriptConfig(commandType.unlockStoryline, unlockStoryline, { next: true }),
   showValue: ScriptConfig(commandType.showValue, showValue, { next: true }),
   moveCamera: ScriptConfig(commandType.moveCamera, moveCamera),
+  showUI: ScriptConfig(commandType.showUI, showUI, { next: true }),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 

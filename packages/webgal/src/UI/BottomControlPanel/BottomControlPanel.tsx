@@ -225,8 +225,13 @@ export const BottomControlPanel = () => {
     return true;
   };
 
+    
+  if (GUIStore.isHideGameUI) {
+    return null
+  }
+
+
   return (
-    // <div className={styles.ToCenter}>
     <>
       {GUIStore.showTextBox && stageState.enableFilm === '' && (
         <div 

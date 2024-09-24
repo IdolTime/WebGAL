@@ -49,6 +49,7 @@ export interface IGuiState {
   };
   currentPlayAudio: HTMLAudioElement | null; // 当前播放的音频
   playingVideo: boolean; // 是否正在播放视频
+  isHideGameUI: boolean; // 是否隐藏游戏UI
 }
 
 export type componentsVisibility = Pick<
