@@ -473,7 +473,6 @@ export const Button = ({
         setHover(false);
         onMouseLeave?.();
       }}
-      onClick={clickCallback}
       onMouseDown={() => {
         onMouseHoverAnimationIn();
         setActive(true);
