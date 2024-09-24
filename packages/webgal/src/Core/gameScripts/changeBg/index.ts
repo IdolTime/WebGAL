@@ -154,8 +154,8 @@ export const changeBg = (sentence: ISentence): IPerform => {
   dispatch(setStage({ key: 'bgName', value: sentence.content }));
 
   return {
-    performName: 'none',
-    duration,
+    performName: getRandomPerformName(),
+    duration: duration,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

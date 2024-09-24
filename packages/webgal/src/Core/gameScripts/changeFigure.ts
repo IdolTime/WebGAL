@@ -11,6 +11,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { logger } from '@/Core/util/logger';
 import { getAnimateDuration } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { getRandomPerformName } from '../Modules/perform/performController';
 /**
  * 更改立绘
  * @param sentence 语句
@@ -246,7 +247,7 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   return {
-    performName: 'none',
+    performName: getRandomPerformName(),
     duration,
     isHoldOn: false,
     stopFunction: () => {},
