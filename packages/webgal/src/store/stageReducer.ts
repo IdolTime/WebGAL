@@ -204,6 +204,19 @@ const stageSlice = createSlice({
         if (newFigure.name !== '') currentFreeFigures.push(newFigure);
       }
     },
+    setFreePopupImageBykey: (state, action: PayloadAction<IFreeFigure>) => {
+      const currentFreePopupImages = state.freePopUpImage;
+      const newPopupImage = action.payload;
+      const index = currentFreePopupImages.findIndex((popupImage) => popupImage.key === newPopupImage.key);
+
+      if (index >= 0) {
+        currentFreePopupImages[index].basePosition = newPopupImage.basePosition;
+        currentFreePopupImages[index].name = newPopupImage.name;
+      } else {
+        // 新加
+        if (newPopupImage.name !== '') currentFreePopupImages.push(newPopupImage);
+      }
+    },
     setLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {
       const { target, motion } = action.payload;
 

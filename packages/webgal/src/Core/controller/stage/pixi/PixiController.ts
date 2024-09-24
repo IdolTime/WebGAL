@@ -74,8 +74,10 @@ export default class PixiStage {
   public notUpdateBacklogEffects = false;
   private readonly figureContainer: PIXI.Container;
   private figureObjects: Array<IStageObject> = [];
+  private popupObjects: Array<IStageObject> = [];
   private readonly backgroundContainer: PIXI.Container;
   private backgroundObjects: Array<IStageObject> = [];
+  private apngTimer: Record<string, any> = {};
 
   // 注册到 Ticker 上的函数
   private stageAnimations: Array<IStageAnimationObject> = [];
@@ -151,6 +153,10 @@ export default class PixiStage {
 
   public getFigureObjects() {
     return this.figureObjects;
+  }
+
+  public getPopupObjects() {
+    return this.popupObjects;
   }
 
   public getAllLockedObject() {
@@ -537,13 +543,8 @@ export default class PixiStage {
           const targetScale = Math.min(scaleX, scaleY);
           const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
 
-          if (key.startsWith('popImg-') || key !== 'bg-popImg') {
-            figureSprite.scale.x = 2;
-            figureSprite.scale.y = 2;
-          } else {
-            figureSprite.scale.x = targetScale;
-            figureSprite.scale.y = targetScale;
-          }
+          figureSprite.scale.x = targetScale;
+          figureSprite.scale.y = targetScale;
 
           figureSprite.anchor.set(0.5);
           figureSprite.position.y = this.stageHeight / 2;
@@ -554,31 +555,14 @@ export default class PixiStage {
             thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
           }
 
-          if (key.startsWith('popImg-')) {
-            // CG图片尺寸统一为680X420
-            figureSprite.x = 680;
-            figureSprite.y = 420;
-
-            const num = updateScreenSize().width === 2560 ? 2 : 3;
-            const axesY = 90 * num;
-            const axesX =
-              (presetPosition === 'center' && 300 * num) ||
-              (presetPosition === 'left' && 20) ||
-              (presetPosition === 'right' && 300 * num * 2 - 20) ||
-              0;
-
-            thisFigureContainer.setBaseX(axesX);
-            thisFigureContainer.setBaseY(axesY);
-          } else {
-            if (presetPosition === 'center') {
-              thisFigureContainer.setBaseX(this.stageWidth / 2);
-            }
-            if (presetPosition === 'left') {
-              thisFigureContainer.setBaseX(targetWidth / 2);
-            }
-            if (presetPosition === 'right') {
-              thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-            }
+          if (presetPosition === 'center') {
+            thisFigureContainer.setBaseX(this.stageWidth / 2);
+          }
+          if (presetPosition === 'left') {
+            thisFigureContainer.setBaseX(targetWidth / 2);
+          }
+          if (presetPosition === 'right') {
+            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
           }
 
           if (isApng) {
@@ -587,8 +571,12 @@ export default class PixiStage {
             let currentFrame = 0;
             let direction = 1;
             const updateFrame = () => {
+              if (this.apngTimer[key]) {
+                clearTimeout(this.apngTimer[key]);
+                this.apngTimer[key] = null;
+              }
               sprite.gotoAndStop(currentFrame);
-              setTimeout(() => {
+              this.apngTimer[key] = setTimeout(() => {
                 if (currentFrame === textures.length - 1) {
                   direction = -1;
                 }
@@ -604,13 +592,148 @@ export default class PixiStage {
             updateFrame();
           }
 
-          if (key.startsWith('popImg-')) {
-            thisFigureContainer.pivot.set(0, 0);
-          } else {
-            thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-          }
+          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
 
           thisFigureContainer.addChild(figureSprite);
+        };
+
+        showAndPlay(explosionTextures);
+      }
+    };
+
+    /**
+     * 加载器部分
+     */
+    this.cacheGC();
+    if (!loader.resources?.[url]?.texture) {
+      this.loadAsset(url, setup, '', isApng);
+    } else {
+      // 复用
+      setup();
+    }
+  }
+
+  /**
+   * 添加弹窗图片
+   * @param key 弹窗图片的标识，一般和位置有关
+   * @param url 弹窗图片url
+   * @param presetPosition
+   * @param isApng
+   */
+  // eslint-disable-next-line max-params
+  public addPopupImg(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center', isApng = false) {
+    const loader = this.assetLoader;
+    // 准备用于存放这个弹窗图片的 Container
+    const thisFigureContainer = new WebGALPixiContainer();
+
+    // 是否有相同 key 的弹窗图片
+    const setPopupIndex = this.popupObjects.findIndex((e) => e.key === key);
+    const isPopupSet = setPopupIndex >= 0;
+
+    // 已经有一个这个 key 的立绘存在了
+    if (isPopupSet) {
+      this.removeStageObjectByKey(key);
+    }
+
+    // 挂载
+    this.figureContainer.addChild(thisFigureContainer);
+    const popupId = uuid();
+    this.popupObjects.push({
+      uuid: popupId,
+      key: key,
+      pixiContainer: thisFigureContainer,
+      sourceUrl: url,
+      sourceType: 'img',
+      sourceExt: this.getExtName(url),
+    });
+
+    // 完成图片加载后执行的函数
+    const setup = () => {
+      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+      const texture = loader.resources?.[url]?.texture;
+      let delays: number[] = [];
+
+      if (texture && this.getStageObjByUuid(popupId)) {
+        const resource = loader.resources[url];
+        const explosionTextures: any[] = [];
+
+        if (isApng) {
+          // @ts-ignore
+          const { frameDelay, textures, frameCount } = resource;
+          delays = frameDelay;
+          Object.values(textures || []).forEach((v) => {
+            explosionTextures.push(v);
+          });
+        }
+
+        /**
+         * 重设大小
+         */
+        const showAndPlay = (textures: any[]) => {
+          const originalWidth = texture.width;
+          const originalHeight = texture.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.min(scaleX, scaleY);
+          const popupSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
+
+          popupSprite.scale.x = 2;
+          popupSprite.scale.y = 2;
+
+          popupSprite.anchor.set(0.5);
+          popupSprite.position.y = this.stageHeight / 2;
+          const targetWidth = originalWidth * targetScale;
+          const targetHeight = originalHeight * targetScale;
+          thisFigureContainer.setBaseY(this.stageHeight / 2);
+          if (targetHeight < this.stageHeight) {
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+          }
+
+          // CG图片尺寸统一为680X420
+          popupSprite.x = 680;
+          popupSprite.y = 420;
+
+          const num = updateScreenSize().width === 2560 ? 2 : 3;
+          const axesY = 90 * num;
+          const axesX =
+            (presetPosition === 'center' && 300 * num) ||
+            (presetPosition === 'left' && 20) ||
+            (presetPosition === 'right' && 300 * num * 2 - 20) ||
+            0;
+
+          thisFigureContainer.setBaseX(axesX);
+          thisFigureContainer.setBaseY(axesY);
+
+          if (isApng) {
+            const sprite = popupSprite as PIXI.AnimatedSprite;
+            // 自定义播放速度的函数
+            let currentFrame = 0;
+            let direction = 1;
+            const updateFrame = () => {
+              if (this.apngTimer[key]) {
+                clearTimeout(this.apngTimer[key]);
+                this.apngTimer[key] = null;
+              }
+              sprite.gotoAndStop(currentFrame);
+              this.apngTimer[key] = setTimeout(() => {
+                if (currentFrame === textures.length - 1) {
+                  direction = -1;
+                }
+                if (currentFrame === 0) {
+                  direction = 1;
+                }
+                currentFrame += direction;
+                updateFrame();
+              }, delays[currentFrame]); // 设置下一个帧的显示时长
+            };
+
+            // 开始播放动画
+            updateFrame();
+          }
+
+          thisFigureContainer.pivot.set(0, 0);
+
+          thisFigureContainer.addChild(popupSprite);
         };
 
         showAndPlay(explosionTextures);
@@ -893,15 +1016,15 @@ export default class PixiStage {
    * @param key
    */
   public getStageObjByKey(key: string) {
-    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.key === key);
+    return [...this.figureObjects, ...this.backgroundObjects, ...this.popupObjects].find((e) => e.key === key);
   }
 
   public getStageObjByUuid(objUuid: string) {
-    return [...this.figureObjects, ...this.backgroundObjects].find((e) => e.uuid === objUuid);
+    return [...this.figureObjects, ...this.backgroundObjects, ...this.popupObjects].find((e) => e.uuid === objUuid);
   }
 
   public getAllStageObj() {
-    return [...this.figureObjects, ...this.backgroundObjects];
+    return [...this.figureObjects, ...this.backgroundObjects, ...this.popupObjects];
   }
 
   /**
@@ -911,6 +1034,7 @@ export default class PixiStage {
   public removeStageObjectByKey(key: string) {
     const indexFig = this.figureObjects.findIndex((e) => e.key === key);
     const indexBg = this.backgroundObjects.findIndex((e) => e.key === key);
+    const indexPopup = this.popupObjects.findIndex((e) => e.key === key);
     if (indexFig >= 0) {
       const bgSprite = this.figureObjects[indexFig];
       for (const element of bgSprite.pixiContainer.children) {
@@ -928,6 +1052,15 @@ export default class PixiStage {
       bgSprite.pixiContainer.destroy();
       this.backgroundContainer.removeChild(bgSprite.pixiContainer);
       this.backgroundObjects.splice(indexBg, 1);
+    }
+    if (indexPopup >= 0) {
+      const bgSprite = this.popupObjects[indexPopup];
+      for (const element of bgSprite.pixiContainer.children) {
+        element.destroy();
+      }
+      bgSprite.pixiContainer.destroy();
+      this.figureContainer.removeChild(bgSprite.pixiContainer);
+      this.popupObjects.splice(indexPopup, 1);
     }
     // /**
     //  * 删掉相关 Effects，因为已经移除了
