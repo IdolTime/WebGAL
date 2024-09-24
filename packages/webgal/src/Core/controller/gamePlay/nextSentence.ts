@@ -28,9 +28,16 @@ export const nextSentence = () => {
   // 第一步，检查是否存在 blockNext 的演出
   let isBlockingNext = false;
   WebGAL.gameplay.performController.performList.forEach((e) => {
-    if (e.blockingNext() && !WebGAL.gameplay.isFast && !WebGAL.gameplay.isSyncingWithOrigine) {
-      // 阻塞且没有结束的演出
-      isBlockingNext = true;
+    if (e.blockingNext()) {
+      if (e.performName.startsWith('videoPlay')) {
+        if (!WebGAL.gameplay.isFast && !WebGAL.gameplay.isSyncingWithOrigine) {
+          // 阻塞且没有结束的演出
+          isBlockingNext = true;
+        }
+      } else {
+        // 阻塞且没有结束的演出
+        isBlockingNext = true;
+      }
     }
   });
   if (isBlockingNext) {
