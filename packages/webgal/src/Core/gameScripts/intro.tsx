@@ -92,9 +92,10 @@ if (typeof sentence.content === 'string') {
 
   if (result) {
     const GameVar = webgalStore.getState().stage.GameVar;
+    const globalGameVar = webgalStore.getState().userData.globalGameVar;
     const key = result[1];
     // @ts-ignore
-    sentence.content = GameVar?.[key]?.toString() ?? sentence.content
+    sentence.content = GameVar?.[key]?.toString() ?? globalGameVar?.[key]?.toString() ?? sentence.content
   }
 }
 

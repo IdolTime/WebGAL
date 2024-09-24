@@ -8,6 +8,7 @@ import { masoupuSdkCheck } from '@/Core/masoupuSdk';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
+import { setSlPage } from '@/store/userDataReducer';
 import { MenuPanelTag } from '@/store/guiInterface';
 import { setshowFavorited } from '@/store/GUIReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
@@ -50,8 +51,8 @@ const Title: FC = () => {
       // playSeClick();
     },
     [TitleSceneButtonKey.Game_extra_button]: () => {
+      dispatch(setSlPage(1))
       dispatch(setVisibility({ component: 'showExtra', visibility: true }));
-      // playSeClick();
     },
     [TitleSceneButtonKey.Game_collection_button]: () => {
       enterBeautyGuide();

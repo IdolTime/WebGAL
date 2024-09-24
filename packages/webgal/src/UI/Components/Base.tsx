@@ -779,7 +779,7 @@ export const Indicator = ({
     <CustomContainer defaultClass={defaultClass} style={style} key={key}>
       {prevIconSrc ? (
         <CustomImage
-          src={prevIconSrc}
+          src={assetSetter(prevIconSrc, fileType.ui)}
           onMouseEnter={onMouseEnter}
           defaultClass={prevIconDefaultClass}
           onClick={onClickPrev}
@@ -791,17 +791,17 @@ export const Indicator = ({
         <Button
           key={index.toString()}
           item={x}
-          defaultClass={`${indicatorDefaultClass} ${index === activeIndex ? activeIndecatorClass : ''}`}
-          checked={index === activeIndex}
+          defaultClass={`${indicatorDefaultClass} ${Number(x.content) === activeIndex ? activeIndecatorClass : ''}`}
+          checked={Number(x.content) === activeIndex}
           type="checkbox"
           onChecked={() => {
-            onClickIndicator(index);
+            onClickIndicator(Number(x.content));
           }}
         />
       ))}
       {nextIconSrc ? (
         <CustomImage
-          src={nextIconSrc}
+          src={assetSetter(nextIconSrc, fileType.ui)}
           onMouseEnter={onMouseEnter}
           defaultClass={nextIconDefaultClass}
           onClick={onClickNext}

@@ -28,6 +28,7 @@ export const ExtraVideo: FC = () => {
   const saveDataState = useSelector((state: RootState) => state.saveData);
   const dispatch = useDispatch();
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
+  const gapObj: CSSProperties = {}
   const page = [];
   const extraUIConfigs = useSelector((state: RootState) => state.GUI.gameUIConfigs[Scene.extra]) as ExtraSceneUIConfig;
 
@@ -100,6 +101,18 @@ export const ExtraVideo: FC = () => {
 
     const unlockedItemStyle: CSSProperties = parseStyleArg(unlockedItem.args.style);
     let styleObj: CSSProperties = parseStyleArg(item.args.style);
+
+   
+
+    if (styleObj?.columnGap) {
+      //@ts-ignore
+      gapObj.columnGap = styleObj.columnGap
+    }
+
+    if (styleObj?.rowGap) {
+      //@ts-ignore
+      gapObj.rowGap = styleObj.rowGap
+    }
 
     const unlockedSrcBg = unlockedItem.args.style?.image || '';
     const itemSrcBg = item.args.style?.image || '';
@@ -217,28 +230,37 @@ export const ExtraVideo: FC = () => {
           setStorage();
           playSePageChange();
         }}
+        onClickPrev={() => {
+          if (userDataState.optionData.slPage <= 1) return
+          dispatch(setSlPage(userDataState.optionData.slPage - 1));
+          setStorage();
+          playSePageChange();
+        }}
+        onClickNext={() => {
+          if (userDataState.optionData.slPage >= 20) return
+          dispatch(setSlPage(userDataState.optionData.slPage + 1));
+          setStorage();
+          playSePageChange();
+        }}
       />
 
       <div className={`${styles.Save_Load_main} ${styles.extra_video_main}`}>
-        {/* <Indicator
-          item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
-          activeIndex={userDataState.optionData.slPage}
-          defaultClass={styles.Save_Load_top_buttonList}
-          pageLength={20}
-          indicatorDefaultClass={`${styles.Save_Load_top_button} ${styles.Load_top_button}`}
-          activeIndecatorClass={`${styles.Save_Load_top_button_on} ${styles.Load_top_button_on}`}
-          onClickIndicator={(i) => {
-            dispatch(setSlPage(i));
-            setStorage();
-            playSePageChange();
-          }}
-        /> */}
-        <div className={styles.Save_Load_content} id={'Load_content_page_' + userDataState.optionData.slPage}>
+        <div 
+          className={styles.Save_Load_content} 
+          id={'Load_content_page_' + userDataState.optionData.slPage}
+          style={gapObj}
+        >
           {showSaves}
         </div>
       </div>
 
-      {showEditDialog && <EditNameDialog value={editNameVal} onCancel={onCancel} onConfirm={onConfirm} />}
+      {showEditDialog && ( 
+        <EditNameDialog 
+          value={editNameVal} 
+          onCancel={onCancel} 
+          onConfirm={onConfirm} 
+        />
+      )}
     </>
   );
 };
