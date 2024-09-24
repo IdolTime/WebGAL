@@ -93,7 +93,8 @@ export const initState: IGuiState = {
     Achievement_title: initStateAchievement,
   },
   currentPlayAudio: null, // 当前播放的音频
-  playingVideo: false
+  playingVideo: false,
+  isHideGameUI: false, // 是否隐藏游戏UI
 };
 
 /**

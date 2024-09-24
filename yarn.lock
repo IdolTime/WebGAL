@@ -3216,14 +3216,6 @@ iconv-lite@0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
-"idoltime-parser@file:packages/parser":
-  version "4.4.24"
-  dependencies:
-    chevrotain "^10.5.0"
-    cloudlogjs "^1.0.11"
-    lodash "^4.17.21"
-    tsx "^3.12.7"
-
 ieee754@^1.1.13:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
