@@ -26,12 +26,10 @@ export const initSdkLink = () => {
   };
 
   if (!hasLink(WebGAL.gameCssLink)) {
-    console.log('link1');
     loadCSS(WebGAL.gameCssLink);
   }
 
   if (!hasScript(WebGAL.gameJsLink)) {
-    console.log('js1');
     loadScript(WebGAL.gameJsLink);
   }
 };
