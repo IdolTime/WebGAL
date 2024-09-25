@@ -712,6 +712,7 @@ export const Indicator = ({
   defaultClass,
   key,
   onMouseEnter,
+  onMouseLeave,
   activeIndex,
   pageLength = 1,
   indicatorDefaultClass,
@@ -747,6 +748,8 @@ export const Indicator = ({
 }) => {
   if (item.args.hide) return null;
   const style = parseStyleArg(item.args.style);
+  const [hover, setHover] = useState<string>('');
+  const [active, setActive] = useState<string>('');
 
   const contentImg = isExtraIndicator ? item.args.style?.image :item.args.indicatorStyle?.image
 
@@ -756,7 +759,7 @@ export const Indicator = ({
         (_, index) =>
           ({
             content: contentImg ? '' : (index + 1).toString(),
-            key: '' as any,
+            key: (index + 1)?.toString() as any,
             args: {
               hide: false,
               style: isExtraIndicator ? item.args?.style || {} : item.args.indicatorStyle || {},
@@ -769,6 +772,13 @@ export const Indicator = ({
 
   const prevIconSrc = item.args.indicatorLeftStyle?.image || '';
   const nextIconSrc = item.args.indicatorRightStyle?.image || '';
+  
+  const prevIconHoverSrc = item.args?.indicatorLeftHoverStyle?.image;
+  const nextIconHoverSrc = item.args?.indicatorRightHoverStyle?.image;
+
+  const prevIconActive = item.args?.indicatorLeftActiveStyle?.image;
+  const nextIconActive = item.args?.indicatorRightActiveStyle?.image;
+
   const indicatorStyle: CSSProperties = {};
 
   if (item.args.indicatorStyle?.image) {
@@ -779,10 +789,26 @@ export const Indicator = ({
     <CustomContainer defaultClass={defaultClass} style={style} key={key}>
       {prevIconSrc ? (
         <CustomImage
-          src={assetSetter(prevIconSrc, fileType.ui)}
-          onMouseEnter={onMouseEnter}
+          nId={key + 'prevIcon'}
+          src={assetSetter(prevIconHoverSrc && hover === 'prevIconHover' ? prevIconHoverSrc : prevIconSrc, fileType.ui)}
+          activeSrc={prevIconActive ? assetSetter(prevIconActive, fileType.ui) : ''}
           defaultClass={prevIconDefaultClass}
           onClick={onClickPrev}
+          isACtiveStatus={active === 'prevIconActive'}
+          onMouseEnter={() => {
+            if (prevIconHoverSrc) setHover('prevIconHover');
+            onMouseEnter?.();
+          }}
+          onMouseLeave={() => {
+            setHover('');
+            onMouseLeave?.();
+          }}
+          onMouseDown={() => {
+            setActive('prevIconActive');
+          }}
+          onMouseUp={() => {
+            setActive('');
+          }}
         />
       ) : (
         <div className={prevIconDefaultClass} onMouseEnter={onMouseEnter} onClick={onClickPrev} />
@@ -791,20 +817,36 @@ export const Indicator = ({
         <Button
           key={index.toString()}
           item={x}
-          defaultClass={`${indicatorDefaultClass} ${Number(x.content) === activeIndex ? activeIndecatorClass : ''}`}
-          checked={Number(x.content) === activeIndex}
+          defaultClass={`${indicatorDefaultClass} ${index+1 === activeIndex ? activeIndecatorClass : ''}`}
+          checked={Number(x.key) === activeIndex}
           type="checkbox"
           onChecked={() => {
-            onClickIndicator(Number(x.content));
+            onClickIndicator(Number(x.key));
           }}
         />
       ))}
       {nextIconSrc ? (
         <CustomImage
-          src={assetSetter(nextIconSrc, fileType.ui)}
-          onMouseEnter={onMouseEnter}
+          nId={key + 'nextIcon'}
+          src={assetSetter(nextIconHoverSrc && hover === 'nextIconHover' ? nextIconHoverSrc : nextIconSrc, fileType.ui)}
+          activeSrc={nextIconActive ? assetSetter(nextIconActive, fileType.ui) : ''}
           defaultClass={nextIconDefaultClass}
+          isACtiveStatus={active === 'nextIconActive'}
           onClick={onClickNext}
+          onMouseEnter={() => {
+            if (nextIconHoverSrc) setHover('nextIconHover');
+            onMouseEnter?.();
+          }}
+          onMouseLeave={() => {
+            setHover('');
+            onMouseLeave?.();
+          }}
+          onMouseDown={() => {
+            setActive('nextIconActive');
+          }}
+          onMouseUp={() => {
+            setActive('');
+          }}
         />
       ) : (
         <div className={nextIconDefaultClass} onMouseEnter={onMouseEnter} onClick={onClickNext} />

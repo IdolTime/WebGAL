@@ -130,8 +130,10 @@ export interface IndicatorContainerItem {
     indicatorHoverStyle?: Style;
     indicatorLeftStyle?: Style;
     indicatorLeftHoverStyle?: Style;
+    indicatorLeftActiveStyle?: Style;
     indicatorRightStyle?: Style;
     indicatorRightHoverStyle?: Style;
+    indicatorRightActiveStyle?: Style;
     btnSound?: IBtnSoundConfig;
     buttonLink?: IBtnLinkConfig;
   };
@@ -1292,6 +1294,8 @@ export const sceneUIConfig: SceneUIConfig = {
           'indicatorLeftHoverStyle',
           'indicatorRightStyle',
           'indicatorRightHoverStyle',
+          'indicatorLeftActiveStyle',
+          'indicatorRightActiveStyle'
         ]),
       },
       [LoadSceneOtherKey.Load_locked_item]: {

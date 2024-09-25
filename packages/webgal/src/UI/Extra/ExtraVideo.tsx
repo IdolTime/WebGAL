@@ -23,37 +23,19 @@ let editNameVal = '';
 let editNameIndex = 0;
 
 export const ExtraVideo: FC = () => {
-  const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
+  const t = useTrans('menu.');
+  const dispatch = useDispatch();
   const userDataState = useSelector((state: RootState) => state.userData);
   const saveDataState = useSelector((state: RootState) => state.saveData);
-  const dispatch = useDispatch();
+  const extraUIConfigs = useSelector((state: RootState) => 
+    state.GUI.gameUIConfigs[Scene.extra]) as ExtraSceneUIConfig;
+
+  const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
+  const [currentPageACtive, setCurrentPageACtive] = useState<number>(userDataState.optionData.slPage);
+
   const gapObj: CSSProperties = {}
   const page = [];
-  const extraUIConfigs = useSelector((state: RootState) => state.GUI.gameUIConfigs[Scene.extra]) as ExtraSceneUIConfig;
-
-  for (let i = 1; i <= 20; i++) {
-    let classNameOfElement = styles.Save_Load_top_button + ' ' + styles.Load_top_button;
-    if (i === userDataState.optionData.slPage) {
-      classNameOfElement = classNameOfElement + ' ' + styles.Save_Load_top_button_on + ' ' + styles.Load_top_button_on;
-    }
-    const element = (
-      <div
-        onClick={() => {
-          dispatch(setSlPage(i));
-          setStorage();
-          playSePageChange();
-        }}
-        onMouseEnter={playSeEnter}
-        key={'Load_element_page' + i}
-        className={classNameOfElement}
-      >
-        <div className={styles.Save_Load_top_button_text}>{i}</div>
-      </div>
-    );
-    page.push(element);
-  }
-
   const showSaves = [];
   // 现在尝试设置10个存档每页
   const start = (userDataState.optionData.slPage - 1) * 10 + 1;
@@ -187,8 +169,6 @@ export const ExtraVideo: FC = () => {
     }
   }
 
-  const t = useTrans('menu.');
-
   const handleGoBack = () => {
     playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
@@ -215,29 +195,31 @@ export const ExtraVideo: FC = () => {
         defaultText={t('extra.title')}
       />
 
-        {/* Extra_indicator */}
       <Indicator
         isExtraIndicator={true}
         isShowNumber={true}
         item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_indicator]}
-        activeIndex={userDataState.optionData.slPage}
+        activeIndex={currentPageACtive}
         defaultClass={`${styles.Save_Load_top_buttonList} ${styles.extra_video_top_buttonList} interactive`}
         pageLength={20}
         indicatorDefaultClass={`${styles.Save_Load_top_button} ${styles.Load_top_button} interactive`}
         activeIndecatorClass={`${styles.Save_Load_top_button_on} ${styles.Load_top_button_on}`}
         onClickIndicator={(i) => {
           dispatch(setSlPage(i));
+          setCurrentPageACtive(i);
           setStorage();
           playSePageChange();
         }}
         onClickPrev={() => {
           if (userDataState.optionData.slPage <= 1) return
+          setCurrentPageACtive(userDataState.optionData.slPage - 1);
           dispatch(setSlPage(userDataState.optionData.slPage - 1));
           setStorage();
           playSePageChange();
         }}
         onClickNext={() => {
           if (userDataState.optionData.slPage >= 20) return
+          setCurrentPageACtive(userDataState.optionData.slPage + 1);
           dispatch(setSlPage(userDataState.optionData.slPage + 1));
           setStorage();
           playSePageChange();
