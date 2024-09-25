@@ -1,9 +1,13 @@
-import { initGCPSDK } from './initGCPSDK';
+import { initGCPSDK, initSdkLink } from './initGCPSDK';
 import { WebGAL } from '@/Core/WebGAL';
 import axios from 'axios';
 
 export const masoupuSdkInit = () => {
   initGCPSDK();
+};
+
+export const masoupuSdkLinkInit = () => {
+  initSdkLink();
 };
 
 const reportData = (res: any) => {
@@ -33,7 +37,11 @@ const reportData = (res: any) => {
 
 export const masoupuSdkCheck = (cb: Function) => {
   if (!WebGAL.gameId) {
-    alert('没有游戏id~');
+    alert('没有配置游戏id~');
+    return;
+  }
+  if (!WebGAL.gameCssLink || !WebGAL.gameJsLink) {
+    alert('没有配置sdk的js或者css链接~');
     return;
   }
   const token = sessionStorage.getItem('sdk-token');

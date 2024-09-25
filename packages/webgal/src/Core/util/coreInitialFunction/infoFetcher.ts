@@ -1,11 +1,11 @@
 /* eslint-disable complexity */
 import axios from 'axios';
 import { WebgalConfig } from 'idoltime-parser/build/types/configParser/configParser';
-import { 
-  GameMenuItem, 
-  EecMenuKey, 
-  EscMenuItem, 
-  EnumAchievementUIKey 
+import {
+  GameMenuItem,
+  EecMenuKey,
+  EscMenuItem,
+  EnumAchievementUIKey
 } from '@/store/guiInterface';
 import { webgalStore } from '@/store/store';
 import {
@@ -182,6 +182,16 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_Js_Link': {
+            WebGAL.gameJsLink = args[0];
+            break;
+          }
+
+          case 'Game_Css_Link': {
+            WebGAL.gameCssLink = args[0];
+            break;
+          }
+
           case EecMenuKey.Esc_continueGame_button:
           case EecMenuKey.Esc_backToLevel_button:
           case EecMenuKey.Esc_setting_button:
@@ -319,12 +329,12 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
 
     const parsedArgs: any = { hide: false, style: {} };
     const parsedKeys = [
-      'hoverStyle', 
-      'info', 
-      'images', 
-      'btnSound', 
-      'videos', 
-      'buttonLink', 
+      'hoverStyle',
+      'info',
+      'images',
+      'btnSound',
+      'videos',
+      'buttonLink',
       'activeStyle',
       'indicatorStyle',
       'indicatorHoverStyle',
@@ -452,7 +462,7 @@ function parseSound (options: { key: string, value: string | number | boolean }[
         : false;
     } else {
       config[option.key] = typeof option.value === 'boolean'
-        ? !!boolMap.get(option.value) 
+        ? !!boolMap.get(option.value)
         : false;
     }
   });

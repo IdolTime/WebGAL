@@ -2,7 +2,8 @@ import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect } from 'react';
 import { initializeScript } from './Core/initializeScript';
-import { masoupuSdkInit } from '@/Core/masoupuSdk';
+import { masoupuSdkInit, masoupuSdkLinkInit } from '@/Core/masoupuSdk';
+import { WebGAL } from '@/Core/WebGAL';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
@@ -21,6 +22,10 @@ import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 import { GameMenuPanel } from '@/UI/GameMenuPanel/GameMenuPanel';
 
 function App() {
+  useEffect(() => {
+    masoupuSdkLinkInit();
+  }, [WebGAL.gameJsLink, WebGAL.gameCssLink]);
+
   useEffect(() => {
     masoupuSdkInit();
     initializeScript();
