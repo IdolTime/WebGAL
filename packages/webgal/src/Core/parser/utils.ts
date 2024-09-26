@@ -207,3 +207,27 @@ export function createCursorAnimation(cursor: { imgs: string[]; interval: number
 
   document.head.appendChild(styleSheet);
 }
+
+/**
+ * 解析游戏变量
+ * @param text 变量名
+ * @param GameVar 游戏变量
+ * @param globalGameVar 全部变量
+ * @returns 
+ */
+export function getGameVar(text: string, GameVar: any, globalGameVar: any): string {
+  let value = text
+  if (typeof text === 'string') {
+    // 正则匹配花括号
+    const pattern = /\{(.+?)\}/;
+    // 使用正则表达式进行匹配
+    let result = text?.match(pattern);
+    if (result) {
+      const key = result[1];
+      // @ts-ignore
+      value = GameVar?.[key]?.toString() ?? globalGameVar?.[key]?.toString() ?? text;
+    }
+  }
+
+  return value
+}

@@ -150,10 +150,12 @@
   width: 17.5%;
   height: 45%;
   //box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out;
+  // animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out;
+  animation: Elements_in 1s ease-out forwards;
   opacity: 0;
   border-radius: 4px;
   transition: transform 0.25s, box-shadow 0.25s;
+  transform: scale(1, 1) translate(0, 0);
   cursor: pointer;
 }
 
