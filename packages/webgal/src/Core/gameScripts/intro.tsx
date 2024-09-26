@@ -8,6 +8,7 @@ import { PerformController } from '@/Core/Modules/perform/performController';
 import { logger } from '@/Core/util/logger';
 import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
+import { getGameVar } from '@/Core/parser/utils';
 /**
  * 显示一小段黑屏演示
  * @param sentence
@@ -84,20 +85,9 @@ export const intro = (sentence: ISentence): IPerform => {
   };
 
 
-
-if (typeof sentence.content === 'string') {
-  const pattern = /\{(.+?)\}/;
-  // 使用正则表达式进行匹配
-  let result = sentence?.content?.match(pattern);
-
-  if (result) {
-    const GameVar = webgalStore.getState().stage.GameVar;
-    const globalGameVar = webgalStore.getState().userData.globalGameVar;
-    const key = result[1];
-    // @ts-ignore
-    sentence.content = GameVar?.[key]?.toString() ?? globalGameVar?.[key]?.toString() ?? sentence.content
-  }
-}
+  const GameVar = webgalStore.getState().stage.GameVar;
+  const globalGameVar = webgalStore.getState().userData.globalGameVar;
+  sentence.content = getGameVar(sentence.content, GameVar, globalGameVar)
 
   const introArray: Array<string> = sentence.content?.split(/\|/);
 

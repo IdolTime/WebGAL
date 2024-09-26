@@ -14,7 +14,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { parseStyleArg } from '@/Core/parser/utils';
-import { px2 } from '@/Core/parser/utils';
+import { px2, getGameVar } from '@/Core/parser/utils';
 
 class ChooseOption {
   /**
@@ -180,19 +180,9 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
           );
         }
         
-        if (typeof e.text === 'string') {
-          const pattern = /\{(.+?)\}/;
-          // 使用正则表达式进行匹配
-          let result = e.text?.match(pattern);
-          debugger;
-          if (result) {
-            const GameVar = webgalStore.getState().stage.GameVar;
-            const globalGameVar = webgalStore.getState().userData.globalGameVar;
-            const key = result[1];
-            // @ts-ignore
-            e.text = GameVar?.[key]?.toString() ?? globalGameVar?.[key]?.toString() ?? e.text;
-          }
-        }
+        const GameVar = webgalStore.getState().stage.GameVar;
+        const globalGameVar = webgalStore.getState().userData.globalGameVar;
+        e.text = getGameVar(e.text, GameVar, globalGameVar)
 
         if (e.style?.image) {
           className = styles.Choose_item_image;
