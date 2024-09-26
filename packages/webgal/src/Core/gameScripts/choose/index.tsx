@@ -179,6 +179,20 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             </React.Fragment>
           );
         }
+        
+        if (typeof e.text === 'string') {
+          const pattern = /\{(.+?)\}/;
+          // 使用正则表达式进行匹配
+          let result = e.text?.match(pattern);
+          debugger;
+          if (result) {
+            const GameVar = webgalStore.getState().stage.GameVar;
+            const globalGameVar = webgalStore.getState().userData.globalGameVar;
+            const key = result[1];
+            // @ts-ignore
+            e.text = GameVar?.[key]?.toString() ?? globalGameVar?.[key]?.toString() ?? e.text;
+          }
+        }
 
         if (e.style?.image) {
           className = styles.Choose_item_image;
