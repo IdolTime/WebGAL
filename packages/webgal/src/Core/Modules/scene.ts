@@ -84,8 +84,10 @@ export class SceneManager {
 
     webgalStore.getState().saveData.unlockStorylineList.forEach((item: ISaveStoryLineData) => {
       const { name, isUnlock = false } = (item.storyLine as ISaveStoryLine) || {};
-      unlockStoryLineeMapper.set(name, name);
-      videoDataMapper.set(name, item.videoData);
+      if (isUnlock && item.videoData) {
+        unlockStoryLineeMapper.set(name, name);
+        videoDataMapper.set(name, item.videoData);
+      }
     });
 
     const allStorylineData: ISaveStoryLineData[] = sentenceList
