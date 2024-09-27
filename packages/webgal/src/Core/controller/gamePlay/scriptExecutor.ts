@@ -179,7 +179,7 @@ export const scriptExecutor = () => {
       currentStageState: currentStageState,
       globalGameVar: webgalStore.getState().userData.globalGameVar,
     };
-    logger.debug('本条语句执行结果', WebGAL.sceneManager.sceneData.currentSentenceId);
+    logger.debug('本条语句执行结果', allState);
     // 保存 backlog
     if (isSaveBacklog) {
       // WebGAL.backlogManager.isSaveBacklogNext = true;

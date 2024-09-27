@@ -170,8 +170,8 @@ export function changeFigure(sentence: ISentence): IPerform {
       try {
         const frame = JSON.parse(transformString.toString()) as ITransform & { duration: number };
         animationObj = generateTransformAnimationObj(key, frame, duration);
-        // 因为是切换，必须把一开始的 alpha 改为 0
-        animationObj[0].alpha = 0;
+        // 设置了alpha，必须把一开始的 alpha 改为 0
+        animationObj[0].alpha = typeof frame.alpha === 'number' ? 0 : 1;
         const animationName = (Math.random() * 10).toString(16);
         const newAnimation: IUserAnimation = { name: animationName, effects: animationObj };
         WebGAL.animationManager.addAnimation(newAnimation);
@@ -247,9 +247,10 @@ export function changeFigure(sentence: ISentence): IPerform {
   }
 
   return {
-    performName: getRandomPerformName(),
+    performName: 'changeFigure.' + getRandomPerformName(),
     duration,
     isHoldOn: false,
+    skipNextCollect: true,
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => false,

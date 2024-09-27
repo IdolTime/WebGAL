@@ -1,9 +1,10 @@
-import { ITransform } from '@/store/stageInterface';
+import { baseTransform, ITransform } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 
 type AnimationFrame = ITransform & { duration: number };
 type AnimationObj = Array<AnimationFrame>;
 
+// eslint-disable-next-line max-params
 export function generateTransformAnimationObj(
   target: string,
   applyFrame: AnimationFrame,
@@ -24,7 +25,7 @@ export function generateTransformAnimationObj(
     animationObj.unshift(effectWithDuration);
   } else {
     // 应用默认effect，也就是最终的 effect 的 alpha = 0 版本
-    const effectWithDuration = { ...applyFrame, alpha: 0, duration: 0 };
+    const effectWithDuration = { ...baseTransform, alpha: 0, duration: 0 };
     animationObj.unshift(effectWithDuration);
   }
   return animationObj;
