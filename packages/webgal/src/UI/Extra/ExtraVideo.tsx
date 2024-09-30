@@ -154,6 +154,7 @@ export const ExtraVideo: FC = () => {
         <div
           onClick={() => {
             dispatch(setshowFavorited(true));
+            dispatch(setVisibility({ component: 'isInGaming', visibility: true }));
             loadGame(i, true);
             playSeClick();
           }}
@@ -190,7 +191,7 @@ export const ExtraVideo: FC = () => {
       />
       <Button
         item={extraUIConfigs.other[ExtraSceneOtherKey.Extra_title]}
-        defaultClass={styles.Save_Load_title}
+        defaultClass={`${styles.Save_Load_title} ${styles.extra_video_title}`}
         defaultTextClass={styles.Load_title_text}
         defaultText={t('extra.title')}
       />

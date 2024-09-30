@@ -2,7 +2,7 @@ import { useEffect, CSSProperties } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { componentsVisibility, MenuPanelTag, EecMenuKey } from '@/store/guiInterface';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useSoundEffect from '@/hooks/useSoundEffect';
@@ -10,7 +10,6 @@ import useTrans from '@/hooks/useTrans';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { px2 } from '@/Core/parser/utils';
-
 
 import styles from './gameMenuPanel.module.scss';
 
@@ -28,12 +27,11 @@ export const GameMenuPanel = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: { keyCode: number; }) => {
-        if (event.keyCode === 27) {
-            // 在这里处理 ESC 按键按下的事件
-            playSeClick();
-            setComponentVisibility('isShowGameMenu', !GUIStore.isShowGameMenu);
-            
-        }
+      if (event.keyCode === 27 && webgalStore.getState().GUI.isInGaming) {
+        // 在这里处理 ESC 按键按下的事件
+        playSeClick();
+        setComponentVisibility('isShowGameMenu', !GUIStore.isShowGameMenu);
+      }
     };
 
     document.addEventListener('keydown', handleKeyPress);
@@ -64,6 +62,7 @@ export const GameMenuPanel = () => {
     [EecMenuKey.Esc_backToLevel_button]: () => {
       playSeClick();
       setComponentVisibility('isShowGameMenu', false);
+      setComponentVisibility('isInGaming', false);
       backToTitle();
     },
 

@@ -85,10 +85,13 @@ export const intro = (sentence: ISentence): IPerform => {
   };
 
 
-  const GameVar = webgalStore.getState().stage.GameVar;
+  const gameVar = webgalStore.getState().stage.GameVar;
   const globalGameVar = webgalStore.getState().userData.globalGameVar;
-  sentence.content = getGameVar(sentence.content, GameVar, globalGameVar)
-
+  const result = getGameVar(sentence?.content, gameVar, globalGameVar)
+  if (result !== sentence.content) {
+    sentence.content = result
+  }
+  
   const introArray: Array<string> = sentence.content?.split(/\|/);
 
   let endWait = 1000;

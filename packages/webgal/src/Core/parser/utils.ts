@@ -216,7 +216,7 @@ export function createCursorAnimation(cursor: { imgs: string[]; interval: number
  * @returns 
  */
 export function getGameVar(text: string, GameVar: any, globalGameVar: any): string {
-  let value = text
+  let value = text;
   if (typeof text === 'string') {
     // 正则匹配花括号
     const pattern = /\{(.+?)\}/;
