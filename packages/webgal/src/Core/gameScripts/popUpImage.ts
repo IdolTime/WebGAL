@@ -20,7 +20,7 @@ export function popUpImage(sentence: ISentence): IPerform {
   // 根据参数设置指定位置
   let pos: 'center' | 'left' | 'right' = 'center';
   let content = sentence.content;
-  let isFreeFigure = false;
+  let isFreePopupImage = false;
   let motion = '';
   let expression = '';
   let key = '';
@@ -57,7 +57,7 @@ export function popUpImage(sentence: ISentence): IPerform {
         }
         break;
       case 'id':
-        isFreeFigure = true;
+        isFreePopupImage = true;
         key = e.value.toString();
         break;
       case 'motion':
@@ -209,7 +209,7 @@ export function popUpImage(sentence: ISentence): IPerform {
       duration = getAnimateDuration(exitAnim.toString());
     }
   };
-  if (isFreeFigure) {
+  if (isFreePopupImage) {
     const currentFreeFigures = webgalStore.getState().stage.freePopUpImage;
 
     /**
@@ -223,7 +223,7 @@ export function popUpImage(sentence: ISentence): IPerform {
     if (expression) {
       dispatch(stageActions.setPopUpImageLive2dExpression({ target: key, expression }));
     }
-    dispatch(stageActions.setFreeFigureByKey(freeFigureItem));
+    dispatch(stageActions.setFreePopupImageBykey(freeFigureItem));
   } else {
     const positionMap = {
       center: 'pop-center',

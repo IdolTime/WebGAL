@@ -48,7 +48,7 @@ export const ModalR18: FC = () => {
           }`}
         >
           <div className={styles.footer}>
-            <div id="exitButton">
+            <div id="exitButton" className="interactive">
               <img
                 src={isHoverExitButton ? ExitButtonHover : ExitButtonDefault}
                 onClick={handleDisagree}
@@ -91,7 +91,7 @@ export const ModalR18: FC = () => {
                 style={exitButtonLayout}
               />
             </div>
-            <div id="confirmButton">
+            <div id="confirmButton" className="interactive">
               <img
                 className="interactive"
                 src={isHoverConfirmButton ? ConfirmButtonHover : ConfirmButtonDefault}

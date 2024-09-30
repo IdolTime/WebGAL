@@ -1,4 +1,5 @@
 @import 'src/assets/style/px2.scss';
+
 .beautyGuide_main {
     width: 100%;
     height: 100%;
@@ -14,7 +15,7 @@
     // background-color: #000;
     animation: bg_animation .5s forwards;
     background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
-    
+
 
     .beautyGuide_bg {
         position: absolute !important;
@@ -26,7 +27,7 @@
         background-repeat: no-repeat;
         background-size: contain;
         background-position: center;
-      }
+    }
 
     .beautyGuide_header {
         width: 100%;
@@ -49,8 +50,15 @@
             z-index: 100;
 
             &:hover {
-              transform: scale(1.2);
-              background-image: url("@/assets/imgs/back-r.png");
+                background-image: url("@/assets/imgs/back-r.png");
+            }
+        }
+
+        .hideDefalutGobackBg {
+            background-image: none;
+
+            &:hover {
+                background-image: none;
             }
         }
 
@@ -73,12 +81,12 @@
             flex: 1;
             height: 100%;
             // margin: 0 5%;
-       
+
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-         
+
             & img {
                 max-width: 100%;
                 max-height: 100%;
@@ -102,9 +110,10 @@
 
 @keyframes bg_animation {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
+
     100% {
-      opacity: 1;
+        opacity: 1;
     }
 }

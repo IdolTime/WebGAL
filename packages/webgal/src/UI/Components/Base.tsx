@@ -21,22 +21,40 @@ export const CustomText = ({
   text,
   defaultClass,
   defaultHoverClass,
+  defaultActiveClass,
   style,
   hoverStyle,
+  activeStyle,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
+  onMouseOut,
   onClick,
+  key,
+  isACtiveStatus,
+  isHoverStatus,
 }: {
   text: string;
   defaultClass?: string;
   defaultHoverClass?: string;
   style?: CSSProperties;
   hoverStyle?: CSSProperties;
+  defaultActiveClass?: string;
+  activeStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
+  onMouseOut?: () => void;
   onClick?: () => void;
+  key?: string;
+  isACtiveStatus?: boolean;
+  isHoverStatus?: boolean;
 }) => {
+  const id = `customText-${key}-${text}`;
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
   let className = defaultClass;
   let _style = style;
 
@@ -56,18 +74,42 @@ export const CustomText = ({
     }
   };
 
-  if (hover) {
+  if (isHoverStatus) {
     className = `${defaultClass} ${defaultHoverClass}`;
     _style = { ...style, ...hoverStyle };
   }
+
+  if (isACtiveStatus) {
+    className = `${defaultClass} ${defaultActiveClass}`;
+    _style = { ...style, ...activeStyle };
+  }
+
+  const btnTextElement = document.getElementById(`${id}-text`);
+  if (btnTextElement && text) {
+    btnTextElement.innerText = text?.replace(/\\n/g, '\n') ?? text;
+  }
+
+  const _mousedown = () => {
+    if (active) setActive(true);
+    onMouseDown?.();
+  };
+
+  const _mouseup = () => {
+    setActive(false);
+    onMouseUp?.();
+  };
 
   return (
     <span
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      onMouseDown={_mousedown}
+      onMouseUp={_mouseup}
+      onMouseOut={onMouseOut}
       onClick={onClick}
       style={_style}
+      id={`${id}-text`}
     >
       {text}
     </span>
@@ -77,43 +119,58 @@ export const CustomText = ({
 export const CustomImage = ({
   src,
   hoverSrc,
+  activeSrc,
   defaultClass,
   defaultHoverClass,
+  defaultActiveClass,
   style,
   hoverStyle,
+  activeStyle,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
   onClick,
   nId,
   draggable,
+  isHoverStatus,
+  isACtiveStatus,
 }: {
   src: string;
   hoverSrc?: string;
+  activeSrc?: string;
   defaultClass?: string;
   defaultHoverClass?: string;
+  defaultActiveClass?: string;
   style?: CSSProperties;
   hoverStyle?: CSSProperties;
+  activeStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
   onClick?: () => void;
   nId?: string;
   draggable?: boolean;
+  isHoverStatus?: boolean;
+  isACtiveStatus?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
   const [_, _forceRender] = useState(0);
   const forceRender = () => _forceRender((i) => i + 1);
   const imgLayout = useRef<{ width?: number; height?: number }>({ width: undefined, height: undefined });
   let className = defaultClass;
   let _style = style || {};
 
-  const _onMouseEnter = debounce(() => {
+  const _onMouseEnter = () => {
     if (hoverSrc || hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  }, 100);
+  };
 
   const _onMouseLeave = () => {
     setHover(false);
@@ -122,9 +179,25 @@ export const CustomImage = ({
     }
   };
 
-  if (hover) {
+  const _onMouseDown = () => {
+    setActive(true);
+    setHover(false);
+    onMouseDown?.();
+  };
+
+  const _onMouseUp = () => {
+    setActive(false);
+    onMouseUp?.();
+  };
+
+  if (isHoverStatus) {
     className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
     _style = { ...style, ...hoverStyle };
+  }
+
+  if (isACtiveStatus) {
+    className = `${defaultClass || ''} ${defaultActiveClass || ''}`;
+    _style = { ...style, ...activeStyle };
   }
 
   if (_style.width === undefined) {
@@ -135,10 +208,12 @@ export const CustomImage = ({
   return (
     <img
       id={nId}
-      src={hover && hoverSrc ? hoverSrc : src}
+      src={(isHoverStatus && hoverSrc) || (isACtiveStatus && activeSrc) || src}
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      onMouseDown={_onMouseDown}
+      onMouseUp={_onMouseUp}
       draggable={draggable}
       style={_style}
       onClick={onClick}
@@ -158,37 +233,48 @@ export const CustomContainer = ({
   children,
   defaultClass,
   defaultHoverClass,
+  defaultActiveClass,
   style,
   hoverStyle,
+  activeStyle,
   onMouseEnter,
   onMouseLeave,
   onMouseDown,
   onMouseUp,
+  onMouseOut,
   onClick,
   id,
+  isACtiveStatus,
 }: {
   item?: ContainerItem;
   children: ReactNode;
   defaultClass?: string;
   defaultHoverClass?: string;
+  defaultActiveClass?: string;
   style?: CSSProperties;
   hoverStyle?: CSSProperties;
+  activeStyle?: CSSProperties;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onMouseDown?: () => void;
   onMouseUp?: () => void;
+  onMouseOut?: () => void;
   onClick?: (e: any) => void;
   id?: string;
+  isACtiveStatus?: boolean;
 }) => {
   const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
   let className = defaultClass;
   let _style = style;
   let _hoverStyle = hoverStyle;
+  let _activeStyle = activeStyle;
 
   if (item) {
     if (item.args.hide) return null;
     if (!_style) _style = parseStyleArg(item.args.style);
     if (!_hoverStyle) _hoverStyle = parseStyleArg(item.args.hoverStyle);
+    if (!_activeStyle) _activeStyle = parseStyleArg(item.args.activeStyle);
   }
 
   const _onMouseEnter = debounce(() => {
@@ -206,20 +292,49 @@ export const CustomContainer = ({
     }
   };
   if (hover) {
-    className = `${defaultClass || ''} ${defaultHoverClass || ''}`;
-    _style = { ..._style, ..._hoverStyle };
+    className = `${defaultClass} ${defaultHoverClass}`;
+    _style = {
+      ...style,
+      ...hoverStyle,
+    };
   }
+
+  if (active) {
+    className = `${defaultClass} ${defaultActiveClass}`;
+    _style = {
+      ...style,
+      ...activeStyle,
+    };
+  }
+
+  const _mousedown = () => {
+    if (_activeStyle) {
+      setActive(true);
+    }
+    onMouseDown?.();
+  };
+
+  const _mouseup = () => {
+    setActive(false);
+    onMouseUp?.();
+  };
+
+  const _mouseOut = () => {
+    setActive(false);
+    onMouseOut?.();
+  };
 
   return (
     <div
       className={className}
       onMouseEnter={_onMouseEnter}
       onMouseLeave={_onMouseLeave}
+      onMouseDown={_mousedown}
+      onMouseUp={_mouseup}
+      onMouseOut={_mouseOut}
       onClick={onClick}
       style={_style}
       id={id}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
     >
       {children}
     </div>
@@ -244,8 +359,11 @@ export const Button = ({
   defaultTextClass,
   key,
   defaultHoverClass,
+  defaultActiveClass,
   onMouseEnter,
   onMouseLeave,
+  onMouseDown,
+  onMouseUp,
   onClick,
   type = 'button',
   checked = false,
@@ -258,8 +376,11 @@ export const Button = ({
   defaultClass?: string;
   defaultTextClass?: string;
   defaultHoverClass?: string;
+  defaultActiveClass?: string;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onMouseDown?: () => void;
+  onMouseUp?: () => void;
   onClick?: () => void;
   key?: string;
   type?: 'button' | 'checkbox';
@@ -271,14 +392,19 @@ export const Button = ({
 }) => {
   if (item.args.hide) return null;
   const [clicked, setClicked] = useState(false);
+  const [hover, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+  const [isTextMouseOut, setIsTextMouseOut] = useState(false);
   const parsedStyle = parseStyleArg(item.args.style);
   const hoverStyle = parseStyleArg(item.args.hoverStyle);
+  const activeStyle = parseStyleArg(item.args.activeStyle);
   const { playSeClick } = useSoundEffect();
   const src = item.args.style?.image || '';
   const customClickSound = item.args?.btnSound?.clickSound
     ? assetSetter(item.args.btnSound.clickSound, fileType.bgm)
     : '';
   const hoverSrc = item.args.hoverStyle?.image || src;
+  const activeSrc = item.args.activeStyle?.image || '';
   const menu = item as ButtonItem;
   const imgStyle: CSSProperties = {};
   const clickTimerRef = useRef<any>();
@@ -314,55 +440,100 @@ export const Button = ({
   };
 
   const interactable = typeof onClick === 'function' && typeof onMouseEnter === 'function';
+  const onMouseHoverAnimationIn = () => {
+    if (interactable) {
+      clearTimeout(clickTimerRef.current);
+      setClicked(true);
+      clickedTimeRef.current = Date.now();
+    }
+  };
+  const onMouseHoverAnimationOut = () => {
+    if (interactable) {
+      const duration = Date.now() - clickedTimeRef.current;
+
+      setTimeout(
+        () => {
+          setClicked(false);
+          setTimeout(() => {
+            clickCallback();
+          }, 320);
+        },
+        duration - 350 > 0 ? 0 : 350 - duration,
+      );
+    }
+  };
 
   return (
     <CustomContainer
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onMouseDown={
-        interactable
-          ? () => {
-              clearTimeout(clickTimerRef.current);
-              setClicked(true);
-              clickedTimeRef.current = Date.now();
-            }
-          : undefined
-      }
-      onMouseUp={
-        interactable
-          ? () => {
-              const duration = Date.now() - clickedTimeRef.current;
-
-              setTimeout(
-                () => {
-                  setClicked(false);
-                  setTimeout(() => {
-                    clickCallback();
-                  }, 320);
-                },
-                duration - 350 > 0 ? 0 : 350 - duration,
-              );
-            }
-          : undefined
-      }
+      onMouseEnter={() => {
+        setHover(true);
+        onMouseEnter?.();
+      }}
+      onMouseLeave={() => {
+        setHover(false);
+        onMouseLeave?.();
+      }}
+      onMouseDown={() => {
+        onMouseHoverAnimationIn();
+        setActive(true);
+        setHover(false);
+        onMouseDown?.();
+      }}
+      onMouseUp={() => {
+        onMouseHoverAnimationOut();
+        setActive(false);
+        setHover(false);
+        setIsTextMouseOut(false);
+        onMouseUp?.();
+      }}
+      onMouseOut={() => {
+        if (isTextMouseOut) {
+          setTimeout(() => {
+            setActive(false);
+            setIsTextMouseOut(false);
+          }, 2000);
+        } else {
+          setActive(false);
+          setIsTextMouseOut(false);
+        }
+      }}
       defaultClass={`${defaultClass} ${clicked ? 'btn-clicked' : ''}`}
       defaultHoverClass={defaultHoverClass}
+      defaultActiveClass={defaultActiveClass}
       style={_style}
       hoverStyle={hoverStyle}
+      activeStyle={activeStyle}
       key={key}
+      isACtiveStatus={active}
     >
       {!!src && (
         <CustomImage
           nId={key}
           src={assetSetter(checked ? hoverSrc : src, fileType.ui)}
           hoverSrc={hoverSrc ? assetSetter(hoverSrc, fileType.ui) : ''}
+          activeSrc={activeSrc ? assetSetter(activeSrc, fileType.ui) : ''}
           style={imgStyle}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          isHoverStatus={hover}
+          isACtiveStatus={active}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
         />
       )}
       {menu.content ? (
-        <CustomText text={menu.content} defaultClass={defaultTextClass} style={textStyle} />
+        <CustomText
+          key={key}
+          text={menu.content}
+          defaultClass={defaultTextClass}
+          activeStyle={activeStyle}
+          style={textStyle}
+          isACtiveStatus={active}
+          isHoverStatus={hover}
+          onMouseDown={() => {
+            if (src) setIsTextMouseOut(true);
+          }}
+        />
       ) : (
         !src && defaultText
       )}
@@ -443,6 +614,7 @@ export const OptionSliderCustome = ({
   min,
   max,
   className,
+  isUpdate,
 }: {
   defaultClass?: string;
   item: SliderContainerItem;
@@ -450,6 +622,7 @@ export const OptionSliderCustome = ({
   min?: number;
   max?: number;
   className?: string;
+  isUpdate?: boolean;
 } & ISlider) => {
   if (item.args.hide) return null;
   const { playSeEnter } = useSoundEffect();
@@ -463,7 +636,7 @@ export const OptionSliderCustome = ({
 
   useEffect(() => {
     calcSlideBg();
-  }, [initValue]);
+  }, [initValue, isUpdate]);
 
   useEffect(() => {
     const thumbStyle = parseStyleArg(item.args.sliderThumb);
@@ -480,13 +653,14 @@ export const OptionSliderCustome = ({
   function calcSlideBg() {
     const inputBg = document.getElementById(`${uniqueID}-bg`);
     if (inputBg !== null) {
+      const screenSizeWidth = updateScreenSize().width;
+      const num = screenSizeWidth === 2560 ? 2 : 3;
+      const scale = screenSizeWidth === 2560 ? 0.5 : 0.3333;
       if (uniqueID === 'light') {
-        const num = updateScreenSize().width === 2560 ? 2 : 3;
         const normalizedValue = (Number(initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
         const progressBarWidth = normalizedValue * ((item.args.style?.width || 342) * num) + 'px'; // 将 0-1 映射到 0-684px 范围
         inputBg.style.width = progressBarWidth;
       } else {
-        const scale = updateScreenSize().width === 2560 ? 0.5 : 0.3333;
         inputBg.style.width = ((Number(initValue.toString()) / 100) * (item.args.style?.width || 342)) / scale + 'px';
       }
     }
@@ -544,6 +718,8 @@ export const Indicator = ({
   onClickNext = () => {},
   nextIconDefaultClass,
   prevIconDefaultClass,
+  isExtraIndicator,
+  isShowNumber,
 }: {
   item: IndicatorContainerItem;
   defaultClass?: string;
@@ -563,20 +739,24 @@ export const Indicator = ({
   onClickNext?: () => void;
   nextIconDefaultClass?: string;
   prevIconDefaultClass?: string;
+  isExtraIndicator?: boolean;
+  isShowNumber?: boolean;
 }) => {
   if (item.args.hide) return null;
   const style = parseStyleArg(item.args.style);
+
+  const contentImg = isExtraIndicator ? item.args.style?.image : item.args.indicatorStyle?.image;
 
   const indicatorList = useMemo(
     () =>
       Array.from({ length: pageLength }).map(
         (_, index) =>
           ({
-            content: item.args.indicatorStyle?.image ? '' : (index + 1).toString(),
+            content: contentImg ? '' : (index + 1).toString(),
             key: '' as any,
             args: {
               hide: false,
-              style: item.args.indicatorStyle || {},
+              style: isExtraIndicator ? item.args?.style || {} : item.args.indicatorStyle || {},
               hoverStyle: item.args.indicatorHoverStyle,
             },
           } satisfies ButtonItem),

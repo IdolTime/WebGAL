@@ -1,5 +1,5 @@
 import { IEffect, IStageState } from '@/store/stageInterface';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { logger } from '@/Core/util/logger';
 import { generateUniversalSoftInAnimationObj } from '@/Core/controller/stage/pixi/animations/universalSoftIn';
 import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
@@ -11,6 +11,10 @@ import { fetchFileAsArrayBuffer } from '@/Core/util/fetchFileAsArrayBuffer';
 
 export function useSetFigure(stageState: IStageState) {
   const { figNameLeft, figName, figNameRight, freeFigure, live2dMotion, live2dExpression } = stageState;
+
+  const freeFigureKeys = useMemo(() => {
+    return freeFigure.map((item) => item.key).join(',');
+  }, [freeFigure]);
 
   /**
    * 同步 motion
@@ -180,9 +184,6 @@ export function useSetFigure(stageState: IStageState) {
     if (currentFigures) {
       for (const existFigure of currentFigures) {
         if (
-          existFigure.key === 'popImg-left' ||
-          existFigure.key === 'popImg-center' ||
-          existFigure.key === 'popImg-right' ||
           existFigure.key === 'fig-left' ||
           existFigure.key === 'fig-center' ||
           existFigure.key === 'fig-right' ||
@@ -199,7 +200,7 @@ export function useSetFigure(stageState: IStageState) {
         }
       }
     }
-  }, [freeFigure]);
+  }, [freeFigureKeys]);
 }
 
 function removeFig(figObj: IStageObject, enterTikerKey: string, effects: IEffect[]) {

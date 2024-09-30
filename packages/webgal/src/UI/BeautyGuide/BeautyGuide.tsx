@@ -12,11 +12,10 @@ import {
   CollectionInfo,
   contentListItem,
 } from '@/Core/UIConfigTypes';
-// import { GameMenuItem } from '@/store/guiInterface';
-// import { sceneParser } from '@/Core/parser/sceneParser';
 import { Button, BgImage } from '@/UI/Components/Base';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { parseStyleArg, parseImagesArg, parseVideosArg } from '@/Core/parser/utils';
+import { px2 } from '@/Core/parser/utils';
 
 import styles from './beautyGuide.module.scss';
 
@@ -29,22 +28,23 @@ export const BeautyGuide: FC = () => {
   const GUIState = useSelector((state: RootState) => state.GUI);
   const { playSeClick, playSeEnter } = useSoundEffect();
   const [personalInfo, setPersonalInfo] = useState<CollectionInfo | null>(null);
+  const [collectionList, setCollectionList] = useState<Array<CollectionInfo>>([]);
+  const [detailsStyle, setDetailsStyle] = useState<Record<string, CSSProperties>>({});
+  const [currentDetailStyle, setCurrentDetailStyle] = useState<CSSProperties | null>(null);
+  const [detailsInfoStyle, setDetailsInfoStyle] = useState<Record<string, CSSProperties>>({});
+  const [imgStyle, setImgStyle] = useState<Record<string, CSSProperties>>({});
+  const [infoTextStyle, setInfoTextStyle] = useState<CSSProperties | null>({});
 
   const collectionUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.collection],
   ) as CollectionSceneUIConfig;
-
-  const [collectionList, setCollectionList] = useState<Array<CollectionInfo>>([]);
-  const [detailsStyle, setDetailsStyle] = useState<Record<string, CSSProperties>>({});
-  const [currentDetailStyle, setCurrentDetailStyle] = useState<CSSProperties | null>(null);
-
-  const [imgStyle, setImgStyle] = useState<Record<string, CSSProperties>>({});
 
   useEffect(() => {
     if (GUIState.showBeautyGuide) {
       const list: CollectionInfo[] = [];
       const others = collectionUIConfigs?.other ?? {};
       const styleObj = {};
+      const styleInfoStyle = {};
       let index = 1;
 
       Object.entries(others).forEach(([key, infoVal]) => {
@@ -53,6 +53,12 @@ export const BeautyGuide: FC = () => {
           let style = (infoVal as CollectionInfoItem)?.args?.style ?? {};
           const images = (infoVal as CollectionInfoItem)?.args?.images;
           const videos = (infoVal as CollectionInfoItem)?.args?.videos;
+
+          // @ts-ignore
+          styleInfoStyle[`Collection_img_info${index}`] = {
+            color: style?.customColor,
+            fontSize: style?.customFontSize ? `${px2(style.customFontSize)}px` : '',
+          };
           // @ts-ignore
           style = parseStyleArg(style) as CSSProperties;
           // @ts-ignore
@@ -81,6 +87,7 @@ export const BeautyGuide: FC = () => {
         }
       });
 
+      setDetailsInfoStyle(styleInfoStyle);
       setDetailsStyle(styleObj);
       setImgStyle(styleObj);
       setCollectionList(list);
@@ -93,6 +100,7 @@ export const BeautyGuide: FC = () => {
   const handleGoback = () => {
     playSeClick();
     setPersonalInfo(null);
+    setInfoTextStyle({});
     dispatch(
       setVisibility({
         component: 'showBeautyGuide',
@@ -108,6 +116,7 @@ export const BeautyGuide: FC = () => {
     playSeClick();
     setPersonalInfo(infoData);
     setCurrentDetailStyle(detailsStyle[`Collection_img${index + 1}`]);
+    setInfoTextStyle(detailsInfoStyle[`Collection_img_info${index + 1}`]);
     dispatch(
       setVisibility({
         component: 'showBeautyGuideDetail',
@@ -128,7 +137,14 @@ export const BeautyGuide: FC = () => {
           <div className={styles.beautyGuide_header}>
             <Button
               item={collectionUIConfigs.buttons.Collection_back_button}
-              defaultClass={`${styles.goback} interactive`}
+              defaultClass={`
+                ${styles.goback} 
+                ${
+                  collectionUIConfigs.buttons.Collection_back_button?.args?.style?.image
+                    ? styles.hideDefalutGobackBg
+                    : ''
+                } 
+                interactive`}
               onClick={handleGoback}
               onMouseEnter={playSeEnter}
             />
@@ -156,6 +172,7 @@ export const BeautyGuide: FC = () => {
         <BeautyGuideDetail
           info={personalInfo}
           infoItemStyle={currentDetailStyle}
+          infoTextStyle={infoTextStyle}
           detailRightDescBgStyle={collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_desc_bg]}
         />
       )}

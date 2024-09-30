@@ -43,9 +43,9 @@ const initState: ISavesData = {
   allUnlockAchieveList: [],
   allStorylineData: [],
   unlockAffinityData: [],
+  uiSeAudioElement: null,
   gameScounds: {}, // 游戏内音效
   menuScounds: {}, // 菜单内音效
-  uiSeAudioElement: null,
 };
 
 interface ISaveStoryLine {
@@ -140,12 +140,12 @@ const saveDataSlice = createSlice({
     saveAllUnlockAchieveList: (state, action: PayloadAction<IUnlockAchieveItem[]>) => {
       state.allUnlockAchieveList = action.payload;
     },
+    updateAffinityData: (state, action: PayloadAction<ISaveAffinity[]>) => {
+      state.unlockAffinityData = action.payload;
+    },
     saveAllStorylineData: (state, action: PayloadAction<ISaveStoryLineData[]>) => {
       // @ts-ignore
       state.allStorylineData = action.payload;
-    },
-    updateAffinityData: (state, action: PayloadAction<ISaveAffinity[]>) => {
-      state.unlockAffinityData = action.payload;
     },
     setSaveStatus: (state, action: PayloadAction<ISetSavePayload>) => {
       // @ts-ignore

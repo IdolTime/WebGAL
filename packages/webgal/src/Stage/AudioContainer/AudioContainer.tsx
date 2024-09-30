@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
-import { saveActions } from '@/store/savesReducer'
+import { saveActions } from '@/store/savesReducer';
 import { setStage } from '@/store/stageReducer';
+import { setCurrentPlayAudio } from '@/store/GUIReducer';
 import { logger } from '@/Core/util/logger';
 import { getAudioUrl } from '@/Core/util/getAudioUrl';
 
@@ -101,16 +102,27 @@ export const AudioContainer = () => {
 
   useEffect(() => {
     if (uiSoundEffects === '') return;
-    
-    const setEffects = async () => {     
+    const currentPlayAudioElement: HTMLAudioElement = webgalStore.getState().GUI
+      .currentPlayAudio as unknown as HTMLAudioElement;
+    const hasCustomClickSe = webgalStore.getState().stage.hasCustomClickSe;
+
+    if (currentPlayAudioElement) {
+      currentPlayAudioElement?.pause();
+      currentPlayAudioElement.volume = 0;
+      currentPlayAudioElement?.remove?.();
+      webgalStore.dispatch(setCurrentPlayAudio(null));
+    }
+
+    const setEffects = async () => {
       const url = await getAudioUrl(uiSoundEffects);
       const uiSeAudioElement = document.createElement('audio');
       uiSeAudioElement.src = url;
-      webgalStore.dispatch(saveActions.setSaveStatus({ 
-        key: 'uiSeAudioElement', 
-        value: uiSeAudioElement 
-      }));
-      
+      webgalStore.dispatch(setCurrentPlayAudio(uiSeAudioElement));
+      // if (hasCustomClickSe) {
+      //   uiSeAudioElement.id = `uiSe-clickSe`
+      //   webgalStore.dispatch(setStage({ key: 'hasCustomClickSe', value: false }));
+      // }
+
       uiSeAudioElement.load();
       uiSeAudioElement.loop = false;
       // 设置音量

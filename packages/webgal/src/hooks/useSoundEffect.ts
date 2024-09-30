@@ -2,15 +2,13 @@ import { useDispatch } from 'react-redux';
 import { EnumScoundType } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
-import { saveActions } from '@/store/savesReducer';
-
+import { setCurrentPlayAudio } from '@/store/GUIReducer';
 
 import page_flip_1 from '@/assets/se/page-flip-1.mp3';
 import switch_1 from '@/assets/se/switch-1.mp3';
 import mouse_enter from '@/assets/se/mouse-enter.mp3';
 import dialog_se from '@/assets/se/dialog.mp3';
 import click_se from '@/assets/se/click.mp3';
-
 
 /**
  * 调用音效
@@ -19,56 +17,47 @@ const useSoundEffect = () => {
   const dispatch = useDispatch();
   let playSeEntering = false;
 
-  
-  const playSoundEffect = (
-    soundData: boolean | string | undefined, 
-    defaultSound: string,
-    customSe?: string // 自定义的音效
-  ) => {
-    const uiSeAudioEle: HTMLAudioElement | null = webgalStore.getState().saveData.uiSeAudioElement;
+  const playSoundEffect = (soundData: boolean | string | undefined, defaultSound: string) => {
+    const uiSeAudioEle: HTMLAudioElement | null = webgalStore.getState().GUI.currentPlayAudio;
 
     if (soundData && typeof soundData === 'boolean') return;
-    
-    if (uiSeAudioEle && !customSe) {
+
+    if (uiSeAudioEle) {
       uiSeAudioEle?.pause?.();
       uiSeAudioEle.volume = 0;
       uiSeAudioEle?.remove?.();
 
-      webgalStore.dispatch(saveActions.setSaveStatus({ 
-        key: 'uiSeAudioElement', value: null 
-      }));
+      webgalStore.dispatch(setCurrentPlayAudio(null));
     }
 
-    if (customSe) {
-      dispatch(setStage({ key: 'uiSe', value: customSe }));
-    }
-        
     dispatch(setStage({ key: 'uiSe', value: soundData || defaultSound }));
     playSeEntering = false;
-};
+  };
 
+  // 滑动音效
   const playSeEnter = () => {
-    if (playSeEntering) return
+    if (playSeEntering) return;
     playSeEntering = true;
     const saveData = webgalStore.getState().saveData;
     // 判断是否在游戏内
-    const soundData = webgalStore.getState().GUI.isInGaming 
+    const soundData = webgalStore.getState().GUI.isInGaming
       ? saveData.gameScounds?.[EnumScoundType.Move]
-      : saveData.menuScounds?.[EnumScoundType.Move]
+      : saveData.menuScounds?.[EnumScoundType.Move];
 
     playSoundEffect(soundData, mouse_enter);
     // dispatch(setStage({ key: 'uiSe', value: mouse_enter }));
   };
 
-
-  const playSeClick = (customSe?: string) => {
+  // 点击音效
+  const playSeClick = (customClickSound?: string) => {
     const saveData = webgalStore.getState().saveData;
-    const soundData = webgalStore.getState().GUI.isInGaming 
+    const soundData = webgalStore.getState().GUI.isInGaming
       ? saveData.gameScounds?.[EnumScoundType.Click]
       : saveData.menuScounds?.[EnumScoundType.Click];
 
-    playSoundEffect(soundData, click_se, customSe);
-    // dispatch(setStage({ key: 'uiSe', value: customSe || click_se }));
+    customClickSound
+      ? dispatch(setStage({ key: 'uiSe', value: customClickSound }))
+      : playSoundEffect(soundData, click_se);
   };
 
   const playSeSwitch = () => {
@@ -80,8 +69,8 @@ const useSoundEffect = () => {
   };
 
   const playSeDialogOpen = () => {
-    const saveData = webgalStore.getState().saveData
-    const soundData = webgalStore.getState().GUI.isInGaming 
+    const saveData = webgalStore.getState().saveData;
+    const soundData = webgalStore.getState().GUI.isInGaming
       ? saveData.gameScounds?.[EnumScoundType.Alert]
       : saveData.menuScounds?.[EnumScoundType.Alert];
 
@@ -89,10 +78,9 @@ const useSoundEffect = () => {
     // dispatch(setStage({ key: 'uiSe', value: dialog_se }));
   };
 
-
   const playSeError = () => {
-    const saveData = webgalStore.getState().saveData
-    const soundData = webgalStore.getState().GUI.isInGaming 
+    const saveData = webgalStore.getState().saveData;
+    const soundData = webgalStore.getState().GUI.isInGaming
       ? saveData.gameScounds?.[EnumScoundType.Error]
       : saveData.menuScounds?.[EnumScoundType.Error];
 

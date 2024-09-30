@@ -31,6 +31,8 @@ const Title: FC = () => {
   const { playSeEnter, playSeClick } = useSoundEffect();
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
   const applyStyle = useApplyStyle('UI/Title/title.scss');
 
   const sdk_loadUserInfo = () => {
@@ -84,20 +86,27 @@ const Title: FC = () => {
 
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
-      startGame();
-      dispatch(setshowFavorited(false));
+      // playSeClick();
+      setTimeout(() => {
+        startGame();
+        dispatch(setshowFavorited(false));
+      }, 16);
     },
     [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_storyline_button]: () => {
       enterStoryLine();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_extra_button]: () => {
       dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_collection_button]: () => {
       enterBeautyGuide();
+      // playSeClick();
     },
     [TitleSceneButtonKey.Game_continue_button]: () => {
       dispatch(setVisibility({ component: 'showTitle', visibility: false }));
@@ -109,6 +118,7 @@ const Title: FC = () => {
       dispatch(setMenuPanelTag(MenuPanelTag.Option));
     },
     [TitleSceneButtonKey.Game_load_button]: () => {
+      // playSeClick();
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));
       dispatch(setMenuPanelTag(MenuPanelTag.Load));
     },
@@ -117,6 +127,19 @@ const Title: FC = () => {
     },
     [TitleSceneButtonKey.Game_affinity_button]: () => {
       dispatch(setVisibility({ component: 'showAffinity', visibility: true }));
+    },
+    [TitleSceneButtonKey.Game_link_button]: () => {
+      const linkStr = TitleUIConfigs.buttons[TitleSceneButtonKey.Game_link_button].args?.buttonLink?.link ?? '';
+      // playSeClick();
+      if (linkStr) {
+        if (isSafari) {
+          const newWindow = window.open('', '_blank');
+          // @ts-ignore
+          newWindow.location.href = linkStr;
+        } else {
+          window.open(linkStr);
+        }
+      }
     },
   };
 

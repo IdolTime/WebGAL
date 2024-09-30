@@ -53,7 +53,7 @@ export const initState: IStageState = {
   popUpImageNameLeft: '', // 弹窗图片_左 文件地址（相对或绝对）
   popUpImageNameRight: '', // 弹窗图片_右 文件地址（相对或绝对）
   freePopUpImage: [], // 弹窗图片
-  popUpImageAssociatedAnimation: [],  // 弹窗图片动画
+  popUpImageAssociatedAnimation: [], // 弹窗图片动画
   popImgLive2dMotion: [],
   popImgLive2dExpression: [],
   showText: '', // 文字
@@ -73,6 +73,9 @@ export const initState: IStageState = {
   currentPlayAudio: null,
   uiSe: '', // 用户界面音效 文件地址（相对或绝对）
   gameSe: '', // 游戏内页面音效 文件地址（相对或绝对）
+  hasCustomClickSe: false,
+  gameScounds: [], // 游戏内音效
+  menuScounds: [], // 菜单内音效
   miniAvatar: '', // 小头像 文件地址（相对或绝对）
   GameVar: {}, // 游戏内变量
   effects: [], // 应用的效果
@@ -199,6 +202,19 @@ const stageSlice = createSlice({
       } else {
         // 新加
         if (newFigure.name !== '') currentFreeFigures.push(newFigure);
+      }
+    },
+    setFreePopupImageBykey: (state, action: PayloadAction<IFreeFigure>) => {
+      const currentFreePopupImages = state.freePopUpImage;
+      const newPopupImage = action.payload;
+      const index = currentFreePopupImages.findIndex((popupImage) => popupImage.key === newPopupImage.key);
+
+      if (index >= 0) {
+        currentFreePopupImages[index].basePosition = newPopupImage.basePosition;
+        currentFreePopupImages[index].name = newPopupImage.name;
+      } else {
+        // 新加
+        if (newPopupImage.name !== '') currentFreePopupImages.push(newPopupImage);
       }
     },
     setLive2dMotion: (state, action: PayloadAction<ILive2DMotion>) => {

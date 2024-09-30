@@ -95,6 +95,8 @@ export const initState: IGuiState = {
     Achievement_back_button: initStateAchievement,
     Achievement_title: initStateAchievement,
   },
+  currentPlayAudio: null, // 当前播放的音频
+  playingVideo: false
 };
 
 /**
@@ -153,6 +155,10 @@ const GUISlice = createSlice({
     setAchievementUI: (state, action: PayloadAction<any>) => {
       state.achievementUI = action.payload;
     },
+    setCurrentPlayAudio: (state, action: PayloadAction<HTMLAudioElement | null>) => {
+      // @ts-ignore
+      state.currentPlayAudio = action.payload;
+    },
   },
 });
 
@@ -167,5 +173,6 @@ export const {
   setGameR18,
   setEscMenus,
   setAchievementUI,
+  setCurrentPlayAudio,
 } = GUISlice.actions;
 export default GUISlice.reducer;

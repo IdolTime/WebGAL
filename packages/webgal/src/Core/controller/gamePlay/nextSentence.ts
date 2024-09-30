@@ -20,16 +20,24 @@ export const nextSentence = () => {
 
   // 如果当前显示标题，那么不进行下一句
   const GUIState = webgalStore.getState().GUI;
-  if (GUIState.showTitle) {
+  if (GUIState.showTitle && !GUIState.showStoryLine && !GUIState.showAchievement) {
+    logger.warn('标题页面不允许下一句。');
     return;
   }
 
   // 第一步，检查是否存在 blockNext 的演出
   let isBlockingNext = false;
   WebGAL.gameplay.performController.performList.forEach((e) => {
-    if (e.blockingNext() && !WebGAL.gameplay.isFast && !WebGAL.gameplay.isSyncingWithOrigine) {
-      // 阻塞且没有结束的演出
-      isBlockingNext = true;
+    if (e.blockingNext()) {
+      if (e.performName.startsWith('videoPlay')) {
+        if (!WebGAL.gameplay.isFast && !WebGAL.gameplay.isSyncingWithOrigine) {
+          // 阻塞且没有结束的演出
+          isBlockingNext = true;
+        }
+      } else {
+        // 阻塞且没有结束的演出
+        isBlockingNext = true;
+      }
     }
   });
   if (isBlockingNext) {
@@ -64,7 +72,7 @@ export const nextSentence = () => {
   }
 
   // 不处于 allSettled 状态，清除所有普通演出，强制进入settled。
-  logger.warn('提前结束被触发，现在清除普通演出');
+  logger.debug('提前结束被触发，现在清除普通演出');
   let isGoNext = false;
   for (let i = 0; i < WebGAL.gameplay.performController.performList.length; i++) {
     const e = WebGAL.gameplay.performController.performList[i];
@@ -73,6 +81,7 @@ export const nextSentence = () => {
         isGoNext = true;
       }
       if (!e.skipNextCollect) {
+        // 由于提前结束使用的不是 unmountPerform 标准 API，所以不会触发两次 nextSentence
         e.stopFunction();
         clearTimeout(e.stopTimeout as unknown as number);
         WebGAL.gameplay.performController.performList.splice(i, 1);
@@ -81,6 +90,7 @@ export const nextSentence = () => {
     }
   }
   if (isGoNext) {
+    // 由于不使用 unmountPerform 标准 API，这里需要手动收集一下 isGoNext
     nextSentence();
   }
 };

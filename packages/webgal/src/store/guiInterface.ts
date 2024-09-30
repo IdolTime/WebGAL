@@ -49,13 +49,23 @@ export interface IGuiState {
   achievementUI: {
     [key in EnumAchievementUIKey]: GameMenuItem;
   };
+  currentPlayAudio: HTMLAudioElement | null; // 当前播放的音频
+  playingVideo: boolean; // 是否正在播放视频
 }
 
 export type componentsVisibility = Pick<
   IGuiState,
   Exclude<
     keyof IGuiState,
-    'currentMenuTag' | 'titleBg' | 'titleBgm' | 'logoImage' | 'theme' | 'gameMenus' | 'escMenus' | 'achievementUI'
+    | 'currentMenuTag'
+    | 'titleBg'
+    | 'titleBgm'
+    | 'logoImage'
+    | 'theme'
+    | 'gameMenus'
+    | 'escMenus'
+    | 'achievementUI'
+    | 'currentPlayAudio'
   >
 >;
 // 标题资源
@@ -89,6 +99,19 @@ export enum GameMenuKey {
   Game_option_button = 'Game_option_button', // 设置
   Game_load_button = 'Game_load_button', // 读取
   Game_continue_button = 'Game_continue_button', // 继续游戏
+  Game_link_button = 'Game_link_button',
+}
+
+export interface IStyle {
+  x?: number;
+  y?: number;
+  scale?: number;
+  image?: string;
+  fontSize?: number;
+  fontColor?: string;
+  countdown?: number;
+  width?: number;
+  height?: number;
 }
 
 export interface IStyle {

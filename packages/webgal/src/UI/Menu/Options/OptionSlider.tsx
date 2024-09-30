@@ -24,11 +24,12 @@ export const OptionSlider = (props: ISlider) => {
       const normalizedValue = (Number(props.initValue) - 50) / 50; // 将值从 50-100 映射到 0-1 范围
       const progressBarWidth = normalizedValue * 684 + 'px'; // 将 0-1 映射到 0-684px 范围
       inputBg.style.width = progressBarWidth;
-    } else if (inputBg !== null) {
-      inputBg.style.width = ((Number(props.initValue?.toString()) / 100) * 342) / 0.5 + 'px';
+    } else {
+      if (inputBg !== null) {
+        inputBg.style.width = ((Number(props.initValue?.toString()) / 100) * 342) / 0.5 + 'px';
+      }
     }
   }
-
   return (
     <div className="Option_WebGAL_slider">
       <input

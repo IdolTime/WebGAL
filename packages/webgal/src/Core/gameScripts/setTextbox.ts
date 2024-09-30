@@ -2,6 +2,7 @@ import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
+import { getRandomPerformName } from '../Modules/perform/performController';
 
 /**
  * 语句执行的模板代码
@@ -14,7 +15,7 @@ export function setTextbox(sentence: ISentence): IPerform {
     webgalStore.dispatch(setStage({ key: 'isDisableTextbox', value: false }));
   }
   return {
-    performName: 'none',
+    performName: getRandomPerformName(),
     duration: 0,
     isHoldOn: false,
     stopFunction: () => {},

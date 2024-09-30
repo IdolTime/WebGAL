@@ -14,11 +14,12 @@ export function clearScreen(sentence: ISentence): IPerform {
   const dispatch = webgalStore.dispatch;
   const stageState = webgalStore.getState().stage;
   stopAllPerform();
-  const goNextWhenOver = sentence.args.find((e) => e.key === 'next')?.value === 'true';
 
   dispatch(
     resetStageState({
       ...stageState,
+      freeFigure: [],
+      freePopUpImage: [],
       figNameLeft: '',
       figNameRight: '',
       figName: '',
@@ -41,6 +42,5 @@ export function clearScreen(sentence: ISentence): IPerform {
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
-    goNextWhenOver,
   };
 }

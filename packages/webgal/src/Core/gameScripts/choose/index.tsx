@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { changeScene } from '@/Core/controller/scene/changeScene';
 import { jmp } from '@/Core/gameScripts/label/jmp';
 import ReactDOM from 'react-dom';
-import React, { CSSProperties, useRef } from 'react';
+import React, { CSSProperties } from 'react';
 import styles from './choose.module.scss';
 import { webgalStore } from '@/store/store';
 import { textFont } from '@/store/userDataInterface';
@@ -15,7 +15,7 @@ import ProgressBarBackground from '@/assets/imgs/progress-bar-bg.png';
 import ProgressBar from '@/assets/imgs/progress-bar.png';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
-import { parseStyleArg } from '@/Core/parser/utils';
+import { parseStyleArg, px2 } from '@/Core/parser/utils';
 import { sleep } from '@/Core/util/sleep';
 
 class ChooseOption {
@@ -151,7 +151,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       .filter((e, i) => whenChecker(e.showCondition))
       .map((e, i) => {
         const enable = whenChecker(e.enableCondition);
-        let className = styles.Choose_item + ' interactive';
+        let className = enable ? `${styles.Choose_item} interactive` : styles.Choose_item_disabled;
         let clickedTime = Date.now();
         const onClick = () => {
           // if (!enable || timer.current) {
@@ -332,18 +332,27 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
           img.onload = function () {
             let ele = document.getElementById(id);
-            img.style.width = img.naturalWidth + 'px';
-            img.style.height = img.naturalHeight + 'px';
+            let imgElements = ele?.querySelectorAll('img');
+            imgElements?.forEach(function (img) {
+              img.remove();
+            });
+
+            const imgWidth = px2(img.naturalWidth) + 'px';
+            const imgHeight = px2(img.naturalHeight) + 'px';
+            img.style.width = imgWidth;
+            img.style.height = imgHeight;
             img.style.position = 'absolute';
             img.alt = e.text;
 
             if (ele) {
-              ele.style.width = img.naturalWidth + 'px';
-              ele.style.height = img.naturalHeight + 'px';
-              setTimeout(() => {
-                ele?.prepend(img);
-                ele = null;
-              }, 32);
+              ele.style.width = imgWidth;
+              ele.style.height = imgHeight;
+              ele?.prepend(img);
+              ele = null;
+              // setTimeout(() => {
+              //   ele?.prepend(img);
+              //   ele = null;
+              // }, 50);
             }
           };
 
