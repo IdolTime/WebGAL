@@ -37,7 +37,6 @@ const Title: FC = () => {
     const token = sessionStorage.getItem('sdk-token');
     // @ts-ignore
     window.globalThis.getUserInfo(token).then((res: any) => {
-      console.log('getUserInfo success : ', res);
       const gameInfo: any = webgalStore.getState().storeData.gameInfo;
       const { acoinBalance } = res.data;
       const { paymentAmount, id } = gameInfo;

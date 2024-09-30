@@ -63,6 +63,7 @@ export const webSocketFunc = () => {
       const command = message.message;
       const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
       const sentence = scene.sentenceList[0];
+      // @ts-ignore
       runScript(sentence);
     }
     if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {

@@ -181,6 +181,14 @@ export const infoFetcher = (url: string) => {
             }
             break;
           }
+          case 'Game_Js_Link': {
+            WebGAL.gameJsLink = args[0];
+            break;
+          }
+          case 'Game_Css_Link': {
+            WebGAL.gameCssLink = args[0];
+            break;
+          }
 
           case EecMenuKey.Esc_continueGame_button:
           case EecMenuKey.Esc_backToLevel_button:

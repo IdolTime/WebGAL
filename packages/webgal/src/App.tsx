@@ -2,7 +2,7 @@ import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect, useState } from 'react';
 import { initializeScript, initClickAnimation } from './Core/initializeScript';
-import { initGCPSDK } from './Core/initGCPSDK';
+import { initGCPSDK, initSdkLink, reportData } from './Core/initGCPSDK';
 import { platform_getGameDetail, platform_getUserInfo } from '@/Core/platformMessage';
 import { webgalStore } from '@/store/store';
 import Menu from '@/UI/Menu/Menu';
@@ -24,7 +24,6 @@ import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from './store/userDataReducer';
-import { getEditorGameDetail, getGameInfo, getPaymentConfigList } from './services/store';
 import { setGameInfo, setIsEditorPreviewMode, setUserInfo } from './store/storeReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
@@ -59,33 +58,13 @@ function App() {
         platform_getGameDetail();
         return;
       }
-      // if (is_terre) {
-      //   getGameInfo().then((res) => {
-      //     if (res.code === 0) {
-      //       // @ts-ignore
-      //       window.pubsub.publish('gameInfoReady');
-      //     } else {
-      //       // @ts-ignore
-      //       window.pubsub.publish('gameInfoReady');
-      //       showGlogalDialog({
-      //         title: '获取游戏信息失败\n请刷新页面！',
-      //         rightText: '确定',
-      //         rightFunc: () => {
-      //           window.location.reload();
-      //         },
-      //       });
-      //     }
-      //   });
-      //   getPaymentConfigList();
-      //   return;
-      // }
-
       const gameId = new URLSearchParams(window.location.search).get('gameId');
       // @ts-ignore
       window.globalThis.getGameDetail(gameId, token).then((res: any) => {
         // @ts-ignore
         window.pubsub.publish('gameInfoReady');
         webgalStore.dispatch(setGameInfo(res.data));
+        reportData(res.data);
       });
     };
 
@@ -106,21 +85,8 @@ function App() {
         }
         // 编辑器-iframe
         if (is_terre) {
-          getEditorGameDetail().then((res) => {
-            // @ts-ignore
-            window.pubsub.publish('gameInfoReady');
-            const authorInfoStr = localStorage.getItem('editorUserInfo') || '{}';
-            const authorInfo = JSON.parse(authorInfoStr);
-
-            if (res.code === 0) {
-              if (res.data.authorId !== authorInfo.userId) {
-                // dispatch(setIsEditorPreviewMode(false));
-                // setLoggedIn(false);
-                // alert('不可预览非本人的游戏');
-                // return;
-              }
-            }
-          });
+          // @ts-ignore
+          window.pubsub.publish('gameInfoReady');
           return;
         }
         // @ts-ignore
@@ -162,6 +128,7 @@ function App() {
         // @ts-ignore
         window.pubsub.publish('gameInfoReady');
         webgalStore.dispatch(setGameInfo(data.data.response.data));
+        reportData(data.data.response.data);
       }
     });
     // 登录
@@ -175,14 +142,22 @@ function App() {
       initLoginInfo(token);
       return;
     }
-    // @ts-ignore
-    window.globalThis.openLoginDialog().then((res) => {
-      initLoginInfo(res.token);
-      sessionStorage.setItem('sdk-token', res.token);
-      sessionStorage.setItem('sdk-userId', res.userId);
-      window.location.reload();
-    });
+    setTimeout(() => {
+      // @ts-ignore
+      window.globalThis.openLoginDialog().then((res) => {
+        initLoginInfo(res.token);
+        sessionStorage.setItem('sdk-token', res.token);
+        sessionStorage.setItem('sdk-userId', res.userId);
+        window.location.reload();
+      });
+    }, 1000);
   };
+
+  useEffect(() => {
+    initSdkLink(() => {
+      sdk_init();
+    });
+  }, [WebGAL.gameJsLink, WebGAL.gameCssLink]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -200,7 +175,6 @@ function App() {
       initLoginInfo(token);
       return;
     }
-    sdk_init();
   }, []);
 
   useFullScreen();
