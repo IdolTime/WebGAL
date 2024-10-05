@@ -52,7 +52,15 @@ export const Backlog = () => {
           style={{ animationDelay: `${20 * (WebGAL.backlogManager.getBacklog().length - i)}ms` }}
           key={'backlogItem' + backlogItem.currentStageState.showText + backlogItem.saveScene.currentSentenceId}
         >
-          <div className={styles.backlog_content_container}>
+          <div
+            className={styles.backlog_content_container}
+            onClick={(e) => {
+              playSeClick();
+              jumpFromBacklog(i);
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             <div className={styles.backlog_func_area}>
               {/* <div
                 onClick={(e) => {c
@@ -119,15 +127,7 @@ export const Backlog = () => {
                 </div>
               ) : null}
             </div>
-            <div
-              className={styles.backlog_item_content}
-              onClick={(e) => {
-                playSeClick();
-                jumpFromBacklog(i);
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-            >
+            <div className={styles.backlog_item_content}>
               <span className={styles.backlog_item_content_text}>{showTextElementList}</span>
             </div>
           </div>

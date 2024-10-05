@@ -162,7 +162,6 @@ export const BottomControlPanel = () => {
             className={`${styles.singleButton} ${styles.singleButton_fast} interactive`}
             title="快进"
             onClick={() => {
-              if (GUIStore.playingVideo) return
               switchFast();
               playSeClick();
             }}

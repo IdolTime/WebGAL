@@ -66,6 +66,7 @@ export const nextSentence = () => {
         i--;
       }
     }
+    logger.warn('所有普通演出已经结束，现在清除状态表的演出序列');
     webgalStore.dispatch(resetStageState(newStageState));
     scriptExecutor();
     return;

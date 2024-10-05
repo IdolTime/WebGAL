@@ -199,6 +199,42 @@ code {
   opacity: 0;
 }
 
+.video-loading,
+.video-error {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9999;
+  
+  svg {
+    animation: spin 2s linear infinite; /* 应用spin动画 */
+  }
+}
+
+.video-error {
+  color: #fff;
+  font-size: px2(32);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+/* 定义spin动画 */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); /* 初始状态 */
+  }
+  100% {
+    transform: rotate(360deg); /* 旋转一圈 */
+  }
+}
+
 @keyframes test2F {
   0% {
     background-image: url('@/assets/imgs/click0.png');
