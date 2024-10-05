@@ -254,13 +254,23 @@ const BeautyGuideDetail: FC<IProps> = (props: IProps) => {
             <div className={styles.thumbnailWrapper}>
               <div>
                 {thumbnailData?.map((item: contentListItem, index: number) => {
+                  const thumbnailStyleObj = collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]?.args?.style ?? {};
+                  let backgroundImage; // 如果有自定义图片，则使用自定义图片
+                  let backgroundRepeat;
+                  if (thumbnailStyleObj?.customImage) {
+                    backgroundImage = `url(${assetSetter(thumbnailStyleObj.customImage, fileType.ui)})`;
+                    backgroundRepeat = 'no-repeat';
+                  }
+
                   return (
                     <div
                       key={`thumbnail-${index}`}
                       className={styles.thumbnail_box}
-                      style={
-                        parseStyleArg(collectionUIConfigs.other[CollectionSceneOtherKey.Collection_detail_right_thumbnail_bg]?.args?.style)
-                      }
+                      style={{
+                        ...parseStyleArg(thumbnailStyleObj),
+                        backgroundImage,
+                        backgroundRepeat
+                      }}
                       onClick={() => {
                         if (item.type === ContentTypeEnum.Placeholder) return
                         setCurrentContent(item);

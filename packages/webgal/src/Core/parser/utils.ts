@@ -122,6 +122,10 @@ export function parseStyleArg(styleObj?: Style): CSSProperties {
     if (styleObj.fontColor === undefined && styleObj.customFontSize !== undefined) {
       style.fontSize = px2(styleObj.customFontSize) + 'px';
     }
+    if (styleObj.customImage !== undefined) {
+      // @ts-ignore
+      style.customImage = styleObj.customImage
+    }
   }
 
   return style;
