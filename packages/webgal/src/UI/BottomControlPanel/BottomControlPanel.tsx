@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -20,6 +20,7 @@ import gamingContinueIcon from '@/assets/imgs/gaming-continue.png';
 import gamingStopIcon from '@/assets/imgs/gaming-stop.png';
 
 import styles from './bottomControlPanel.module.scss';
+import { IPerform } from '@/Core/Modules/perform/performInterface';
 
 
 export const BottomControlPanel = () => {
@@ -29,7 +30,7 @@ export const BottomControlPanel = () => {
 
   const GUIStore = useSelector((state: RootState) => state.GUI);
   const stageState = useSelector((state: RootState) => state.stage);
-
+  const debounceRef = useRef(false);
 
   const { playSeEnter, playSeClick, playSeDialogOpen } = useSoundEffect();
   const [isPause, setIsPause] = useState<boolean>(false); // 是否暂停
@@ -191,10 +192,13 @@ export const BottomControlPanel = () => {
   const handleSkip = () => {
     if (isDisableClick()) return
     let isNext = true;
+    let currentVideoPerformName = '';
     WebGAL.gameplay?.performController?.performList?.forEach((e) => {
       // 如果当前语句是选择语句，则不跳过
       if (e.performName === 'choose') {
         isNext = false;
+      } else if (e.performName.startsWith('videoPlay.')) {
+        currentVideoPerformName = e.performName;
       }
     });
 
@@ -202,17 +206,19 @@ export const BottomControlPanel = () => {
       return;
     }
 
+    if (debounceRef.current) return;
+    debounceRef.current = true;
+
     playSeClick();
-    const url = WebGAL.videoManager.currentPlayingVideo;
-    WebGAL.videoManager.destroy(url);
-    WebGAL.gameplay.isFast = true;
-    WebGAL.gameplay.isSyncingWithOrigine = true;
+
+    if (currentVideoPerformName) {
+      WebGAL.gameplay.performController.unmountPerform(currentVideoPerformName);
+    }
 
     nextSentence();
     setTimeout(() => {
-      WebGAL.gameplay.isFast = false;
-      WebGAL.gameplay.isSyncingWithOrigine = false;
-    }, 1000);
+      debounceRef.current = false;
+    }, 2500);
   };
 
   /**
