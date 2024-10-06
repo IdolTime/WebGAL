@@ -142,6 +142,8 @@ export const playVideo = (sentence: ISentence): IPerform => {
         WebGAL.videoManager.seek(url, 0.03);
         WebGAL.videoManager.setVolume(url, bgmVol);
         WebGAL.videoManager.setLoop(url, loopValue);
+        // @ts-ignore
+         window?.pubsub?.publish('loading', { loading: false });
         const sceneList = chooseContent
           ? chooseContent
               .slice(7)

@@ -95,8 +95,10 @@ export const Load: FC = () => {
     const saveElement = (
       <div
         onClick={() => {
-          loadGame(i);
           playSeClick();
+          // @ts-ignore
+          window?.pubsub?.publish('loading', { loading: true });
+          loadGame(i);
         }}
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
