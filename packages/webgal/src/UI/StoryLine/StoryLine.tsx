@@ -113,7 +113,10 @@ export const StoryLine: FC = () => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
     dispatch(saveActions.setIsShowUnlock(true));
-    loadGameFromStageData(saveData.videoData as ISaveData);
+    loadGameFromStageData(saveData.videoData as ISaveData).finally(() => {
+      // @ts-ignore
+      window?.pubsub?.publish('loading', { loading: false });
+    });
   };
 
   function getImagePath(url: string) {
@@ -181,7 +184,13 @@ export const StoryLine: FC = () => {
                 key={`storyLine-${index}`}
                 className={`${styles.storyLine_item} interactive`}
                 style={styleObj}
-                onClick={(e) => handlPlay(e, item)}
+                onClick={(e) => {
+                  // @ts-ignore
+                  window?.pubsub?.publish('loading', { loading: true });
+                  setTimeout(() => {
+                    handlPlay(e, item)
+                  }, 200);
+                }}
               >
                 <SourceImg src={getImagePath(thumbnailUrl)} style={sourceImgStyle} />
                 <div className={styles.info_card}>

@@ -17,6 +17,8 @@ import { VideoManager } from '../Modules/video';
  * 播放一段视频 * @param sentence
  */
 export const playVideo = (sentence: ISentence): IPerform => {
+  // @ts-ignore
+  window?.pubsub?.publish('loading', { loading: true });
   const userDataState = webgalStore.getState().userData;
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
