@@ -138,8 +138,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
         WebGAL.videoManager.seek(url, 0.03);
         WebGAL.videoManager.setVolume(url, bgmVol);
         WebGAL.videoManager.setLoop(url, loopValue);
-        // @ts-ignore
-         window?.pubsub?.publish('loading', { loading: false });
         const sceneList = chooseContent
           ? chooseContent
               .slice(7)
@@ -244,6 +242,8 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.playVideo(url);
+        // @ts-ignore
+        window?.pubsub?.publish('loading', { loading: false });
 
         // 从缓存数据中查找 改视频是否收藏过
         const saveData = webgalStore.getState().saveData.saveData || [];
