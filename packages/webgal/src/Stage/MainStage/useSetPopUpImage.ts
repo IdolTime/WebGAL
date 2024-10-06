@@ -45,9 +45,9 @@ export function useSetPopUpImage(stageState: IStageState) {
      */
     const thisPopupKey = 'popImg-center';
     const softInAniKey = 'popImg-center-softin';
-    const thisBgKey = 'bg-popImg';
+    // const thisBgKey = 'bg-popImg';
     if (popUpImageName !== '') {
-      addPopupImg('image', thisBgKey, defaultBg, 'center');
+      // addPopupImg('image', thisBgKey, defaultBg, 'center');
 
       const currentPopupCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisPopupKey);
       if (currentPopupCenter) {
