@@ -133,16 +133,18 @@ export const StoryLine: FC = () => {
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine} id="camera">
-          <Button
-            item={storylineUIConfigs.buttons.Storyline_back_button}
-            defaultClass={`
+        <div className={styles.storyLine} id="camera" style={hasBGImage ? { backgroundImage: 'none' } : {}}>
+          {!GUIState.showProgressAndAchievement && (
+            <Button
+              item={storylineUIConfigs.buttons.Storyline_back_button}
+              defaultClass={`
               ${styles.goBack} 
               ${storylineUIConfigs.buttons.Storyline_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
               interactive`}
-            onClick={handlGoBack}
-            onMouseEnter={playSeEnter}
-          />
+              onClick={handlGoBack}
+              onMouseEnter={playSeEnter}
+            />
+          )}
           <SourceImg src={achieveStage.storylineBg} style={bgStyle} />
           {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
             const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;

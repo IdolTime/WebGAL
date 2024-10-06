@@ -265,9 +265,10 @@ export const Achievement: FC = () => {
       {GUIState.showAchievement && (
         <div className={styles.achievement} id="camera" style={hasBGImage ? { backgroundImage: 'none' } : {}}>
           {/* 头部 */}
-          <Button
-            item={achivementUIConfigs.buttons.Achievement_back_button}
-            defaultClass={`
+          {!GUIState.showProgressAndAchievement && (
+            <Button
+              item={achivementUIConfigs.buttons.Achievement_back_button}
+              defaultClass={`
               ${styles.goback} 
               ${
                 achivementUIConfigs.buttons.Achievement_back_button?.args?.style?.image
@@ -275,9 +276,10 @@ export const Achievement: FC = () => {
                   : ''
               } 
               interactive`}
-            onClick={handleGoBack}
-            onMouseEnter={playSeEnter}
-          />
+              onClick={handleGoBack}
+              onMouseEnter={playSeEnter}
+            />
+          )}
 
           {/* 已获得成就  */}
           {renderInfoAchievement()}

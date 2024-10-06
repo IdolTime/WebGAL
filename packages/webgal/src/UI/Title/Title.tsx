@@ -106,30 +106,28 @@ const Title: FC = () => {
         }}
         onMouseEnter={playSeEnter}
       />
-      {GUIState.showTitle && (
-        <div>
-          <BgImage
-            defaultClass={applyStyle('Title_main', styles.Title_main)}
-            item={TitleUIConfigs.other[TitleSceneOtherKey.Title_img]}
-          />
-          <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
-            {Object.keys(TitleUIConfigs.buttons).map((key) => {
-              let _key = key as TitleSceneButtonKey;
-              let buttonConfigItem = TitleUIConfigs.buttons[_key];
-              return (
-                <Button
-                  key={_key}
-                  item={buttonConfigItem}
-                  defaultClass={`${styles.Title_button} interactive`}
-                  defaultTextClass={styles.Title_button_text}
-                  onClick={clickCallbackMap[_key]}
-                  onMouseEnter={playSeEnter}
-                />
-              );
-            })}
-          </div>
+      <div style={{ opacity: GUIState.showTitle ? 1 : 0, zIndex: GUIState.showTitle ? 1 : -99 }}>
+        <BgImage
+          defaultClass={applyStyle('Title_main', styles.Title_main)}
+          item={TitleUIConfigs.other[TitleSceneOtherKey.Title_img]}
+        />
+        <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
+          {Object.keys(TitleUIConfigs.buttons).map((key) => {
+            let _key = key as TitleSceneButtonKey;
+            let buttonConfigItem = TitleUIConfigs.buttons[_key];
+            return (
+              <Button
+                key={_key}
+                item={buttonConfigItem}
+                defaultClass={`${styles.Title_button} interactive`}
+                defaultTextClass={styles.Title_button_text}
+                onClick={clickCallbackMap[_key]}
+                onMouseEnter={playSeEnter}
+              />
+            );
+          })}
         </div>
-      )}
+      </div>
     </>
   );
 };

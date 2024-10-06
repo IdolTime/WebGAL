@@ -9,7 +9,7 @@
     align-items: center;
     z-index: 999999;
     backdrop-filter: blur(5px);
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0.5);
 
     svg {
         animation: spin 2s linear infinite; /* 应用spin动画 */
