@@ -157,7 +157,7 @@ export const BottomControlPanel = () => {
           >
             <span className={styles.autoIcon} />
           </span>
-          <span
+          {/* <span
             id="Button_ControlPanel_fast"
             className={`${styles.singleButton} ${styles.singleButton_fast} interactive`}
             title="快进"
@@ -186,7 +186,7 @@ export const BottomControlPanel = () => {
             onMouseEnter={playSeEnter}
           >
             <span className={styles.fastIcon} />
-          </span>
+          </span> */}
           <span
             className={`${styles.singleButton} interactive`}
             title="剧情回顾"
