@@ -45,9 +45,9 @@ export async function generateCurrentStageData(
     canvas2.remove();
   }
 
-  if (isSavePreviewImage && !newName) {
+  // 当前视频文件缩略图封面截取
+  if (isSavePreviewImage && webgalStore.getState().GUI.playingVideo) {
     const videoItem = WebGAL.videoManager.videosByKey[WebGAL.videoManager.currentPlayingVideo];
-
     if (videoItem) {
       urlToSave = videoItem.poster;
     }
