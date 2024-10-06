@@ -156,6 +156,9 @@ export const playVideo = (sentence: ISentence): IPerform => {
           // 如果为鉴赏模式下播放视频，播放完后自动跳转到鉴赏模式页面
           if (isLoadVideo) {
             webgalStore.dispatch(setVisibility({ component: 'showExtra', visibility: true }));
+            if (webgalStore.getState().GUI.isShowGameMenu) {
+              webgalStore.dispatch(setVisibility({ component: 'isShowGameMenu', visibility: false }));
+            }
             return;
           }
 

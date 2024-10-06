@@ -14,7 +14,6 @@ import { px2, parseStyleArg } from '@/Core/parser/utils';
 import { Scene, StorylineSceneUIConfig } from '@/Core/UIConfigTypes';
 import { Button } from '../Components/Base';
 import { sceneFetcher } from '@/Core/controller/scene/sceneFetcher';
-import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { sceneNameType } from '@/Core/Modules/scene';
 import { sceneParser } from '@/Core/parser/sceneParser';
 import { SourceImg } from '../Components/SourceImg';
@@ -112,6 +111,7 @@ export const StoryLine: FC = () => {
   const handlPlay = (e: React.MouseEvent, saveData: ISaveStoryLineData) => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
+    dispatch(saveActions.setShowStoryline(true));
     dispatch(saveActions.setIsShowUnlock(true));
     loadGameFromStageData(saveData.videoData as ISaveData);
   };

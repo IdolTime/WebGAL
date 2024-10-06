@@ -932,6 +932,7 @@ export interface Style {
   alignPosition?: string;
   customColor?: string;
   customFontSize?: number;
+  customImage?: string;
 }
 
 export type ButtonKey =
