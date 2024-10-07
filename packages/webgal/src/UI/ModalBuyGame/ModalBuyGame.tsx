@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import BuyGameBg from '@/assets/imgs/buy-game-bg.png';
-import ModalClose from '@/assets/imgs/modal-close.png';
 import styles from './buyGame.module.scss';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { SourceImg } from '../Components/SourceImg';
 import { buyGame } from '@/services/store';
 import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
 import { px2 } from '@/Core/parser/utils';

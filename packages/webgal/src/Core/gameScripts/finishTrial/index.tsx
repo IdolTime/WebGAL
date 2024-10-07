@@ -7,7 +7,6 @@ import { WebGAL } from '@/Core/WebGAL';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyGame, getGameInfo } from '@/services/store';
 import { getRandomPerformName } from '../../Modules/perform/performController';
-import BuyGameSuccess from '@/assets/imgs/buy-game-success.png';
 import { sleep } from '@/Core/util/sleep';
 
 /**
