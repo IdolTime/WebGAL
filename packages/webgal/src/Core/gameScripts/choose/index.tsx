@@ -17,6 +17,7 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
 import { parseStyleArg, px2 } from '@/Core/parser/utils';
 import { sleep } from '@/Core/util/sleep';
+import axios from 'axios';
 
 class ChooseOption {
   /**
@@ -135,6 +136,8 @@ class ChooseOption {
  */
 export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
+  let isChooseEvent: boolean = false;
+  let chooseEventId: string = '';
   const loadingRef: { current: Record<string, boolean> } = { current: {} };
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e, loadingRef));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
@@ -144,6 +147,23 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };
+
+  sentence?.args?.forEach((arg) => {
+    // 是否开启了选项埋点
+    if (arg.key === 'isChooseEvent') {
+      isChooseEvent = !!arg.value
+    }
+    // 选项埋点事件id
+    if (arg.key === 'chooseEventId') {
+      chooseEventId = arg.value?.toString()
+    }
+  })
+
+  if(isChooseEvent && chooseEventId) {
+    // 埋点上报
+    console.log(isChooseEvent, chooseEventId)
+    debugger;
+  }
 
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {

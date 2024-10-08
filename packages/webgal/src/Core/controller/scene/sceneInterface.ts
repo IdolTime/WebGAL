@@ -48,6 +48,7 @@ export enum commandType {
   unlockAffinity, // 解锁亲密度
   popUpImage, // 弹窗图片
   clearScreen, // 清屏
+  eventData, // 埋点数据
 }
 
 /**
