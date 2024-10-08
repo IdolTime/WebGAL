@@ -53,6 +53,7 @@ export class SceneManager {
   public sceneData: ISceneData = cloneDeep(initSceneData);
   public sceneAssetsList: Record<string, Record<string, 'success' | 'error' | 'loading'>> = {};
   public sceneAssetsLoadedList: Record<string, boolean> = {};
+  public lockSceneWrite = false;
 
   public resetScene() {
     this.sceneData.currentSentenceId = 0;
