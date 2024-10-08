@@ -6,12 +6,9 @@ import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { WebGAL } from '@/Core/WebGAL';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { getRandomPerformName } from '../../Modules/perform/performController';
-<<<<<<< HEAD
 import { platform_isCanStart, platform_getGameDetail } from '@/Core/platformMessage';
 import { LogPaySuccess } from '@/Core/log';
-=======
 import { sleep } from '@/Core/util/sleep';
->>>>>>> develop/idol_avg
 
 /**
  * 结束试玩

@@ -164,49 +164,6 @@ const Title: FC = () => {
         }}
         onMouseEnter={playSeEnter}
       />
-<<<<<<< HEAD
-      {GUIState.showTitle && (
-        <div>
-          <BgImage
-            defaultClass={applyStyle('Title_main', styles.Title_main)}
-            item={TitleUIConfigs.other[TitleSceneOtherKey.Title_img]}
-          />
-          <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
-            {Object.keys(TitleUIConfigs.buttons).map((key) => {
-              let _key = key as TitleSceneButtonKey;
-              let buttonConfigItem = TitleUIConfigs.buttons[_key];
-              return (
-                <Button
-                  key={_key}
-                  item={buttonConfigItem}
-                  defaultClass={`${styles.Title_button} interactive`}
-                  defaultTextClass={styles.Title_button_text}
-                  onClick={() => {
-                    const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
-                    // @ts-ignore
-                    const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
-                    if (isPreviewMode || is_terre) {
-                      clickCallbackMap[_key]();
-                    } else {
-                      const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};
-                      const { paymentMode } = gameInfo;
-                      // 付费 & 不是试玩
-                      if (paymentMode === 'paid' && isNotTryPlay()) {
-                        loadGameDetail(() => {
-                          clickCallbackMap[_key]();
-                        });
-                      } else {
-                        // 免费 || 付费&试玩
-                        clickCallbackMap[_key]();
-                      }
-                    }
-                  }}
-                  onMouseEnter={playSeEnter}
-                />
-              );
-            })}
-          </div>
-=======
       <div style={{ opacity: GUIState.showTitle ? 1 : 0, zIndex: GUIState.showTitle ? 1 : -99 }}>
         <BgImage
           defaultClass={applyStyle('Title_main', styles.Title_main)}
@@ -222,12 +179,30 @@ const Title: FC = () => {
                 item={buttonConfigItem}
                 defaultClass={`${styles.Title_button} interactive`}
                 defaultTextClass={styles.Title_button_text}
-                onClick={clickCallbackMap[_key]}
+                onClick={() => {
+                  const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
+                  // @ts-ignore
+                  const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
+                  if (isPreviewMode || is_terre) {
+                    clickCallbackMap[_key]();
+                  } else {
+                    const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};
+                    const { paymentMode } = gameInfo;
+                    // 付费 & 不是试玩
+                    if (paymentMode === 'paid' && isNotTryPlay()) {
+                      loadGameDetail(() => {
+                        clickCallbackMap[_key]();
+                      });
+                    } else {
+                      // 免费 || 付费&试玩
+                      clickCallbackMap[_key]();
+                    }
+                  }
+                }}
                 onMouseEnter={playSeEnter}
               />
             );
           })}
->>>>>>> develop/idol_avg
         </div>
       </div>
     </>

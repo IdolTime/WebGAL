@@ -49,7 +49,7 @@ export enum commandType {
   popUpImage, // 弹窗图片
   clearScreen, // 清屏
   showUI, // 显示UI
-  eventData, // 事件数据
+  eventData, // 埋点数据
 }
 
 /**
