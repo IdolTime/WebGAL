@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setShowStoryLine } from '@/store/GUIReducer';
+import { setShowStoryLine, setVisibility } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
@@ -113,6 +113,7 @@ export const StoryLine: FC = () => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
     dispatch(saveActions.setIsShowUnlock(true));
+    dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
     loadGameFromStageData(saveData.videoData as ISaveData).finally(() => {
       // @ts-ignore
       window?.pubsub?.publish('loading', { loading: false });
