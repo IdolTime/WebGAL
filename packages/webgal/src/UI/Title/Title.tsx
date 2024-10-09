@@ -19,6 +19,9 @@ import { BgImage, Button } from '../Components/Base';
 import { Scene, TitleSceneButtonKey, TitleSceneOtherKey, TitleSceneUIConfig } from '@/Core/UIConfigTypes';
 import { platform_isCanStart } from '@/Core/platformMessage';
 import { LogPaySuccess } from '@/Core/log';
+import { apiStartGameEvent } from '@/services/eventData';
+import { getLocalDate } from '@/utils/date';
+import { startEvent } from '@/utils/trackEvent';
 
 /**
  * 标题页
@@ -33,6 +36,7 @@ const Title: FC = () => {
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const minutes2 = 1000 * 60 * 2
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
 
@@ -96,7 +100,16 @@ const Title: FC = () => {
       setTimeout(() => {
         startGame();
         dispatch(setshowFavorited(false));
+        /** 埋点上报 */
+        const params = {
+          thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+          productId: WebGAL.gameId + '',
+          onlineTime: getLocalDate()
+        }
+        apiStartGameEvent(params)
       }, 16);
+
+      startEvent()
     },
     [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();

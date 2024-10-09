@@ -1,7 +1,8 @@
-import axios from 'axios';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
-import { webgalStore } from '@/store/store';
+import { apiEditorChapterEvent } from '@/services/eventData';
+import { WebGAL } from '@/Core/WebGAL';
+import { getLocalDate } from '@/utils/date';
 
 
 /**
@@ -9,30 +10,16 @@ import { webgalStore } from '@/store/store';
  * @param sentence
  */
 export const eventData = (sentence: ISentence): IPerform => {
-    const eventId = sentence.content
-    console.log('上报数据', eventId);
-    debugger;
-    if (eventId) {
-
-        const token = sessionStorage.getItem('sdk-token');
-        // @ts-ignore
-        window.globalThis.getUserInfo(token).then((res: any) => {
-          const gameInfo: any = webgalStore.getState().storeData.gameInfo;
-          const { acoinBalance } = res.data;
-          const { paymentAmount, id } = gameInfo;
-        })
-
-
-        const url = 'https://test-api.idoltime.games/'
-        axios.post(url, {
-        //   record: JSON.stringify(reportInfo),
-        }).then(() => {
-          console.log('上报成功')
-        }).catch((err) => {
-          console.error('上报失败', err)
-        });
+    const chapterId = sentence.content;
+    
+    /** 编辑器章节语句 埋点上报  */ 
+    const params = {
+        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+        productId: WebGAL.gameId + '',
+        chapterId: Number(chapterId),
+        reportTime: getLocalDate(),
     }
-
+    apiEditorChapterEvent(params);
 
   return {
     performName: 'none',

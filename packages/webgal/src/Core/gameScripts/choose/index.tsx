@@ -17,11 +17,9 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
 import { parseStyleArg, px2 } from '@/Core/parser/utils';
 import { sleep } from '@/Core/util/sleep';
-<<<<<<< HEAD
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
-=======
-import axios from 'axios';
->>>>>>> 70f47603... feature: 新增埋点语句&选项分支增加埋点开关功能
+import { apiEditorChapterEvent } from '@/services/eventData';
+import { getLocalDate } from '@/utils/date';
 
 class ChooseOption {
   /**
@@ -140,8 +138,8 @@ class ChooseOption {
  */
 export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
-  let isChooseEvent: boolean = false;
-  let chooseEventId: string = '';
+  let isChooseEvent = false;
+  let chooseEventId = '';
   const loadingRef: { current: Record<string, boolean> } = { current: {} };
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e, loadingRef));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
@@ -152,27 +150,29 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
     current: null as ReturnType<typeof setTimeout> | null,
   };
 
-<<<<<<< HEAD
   // 停止快进功能
   stopFast();
-=======
   sentence?.args?.forEach((arg) => {
     // 是否开启了选项埋点
     if (arg.key === 'isChooseEvent') {
-      isChooseEvent = !!arg.value
+      isChooseEvent = !!arg.value;
     }
     // 选项埋点事件id
     if (arg.key === 'chooseEventId') {
-      chooseEventId = arg.value?.toString()
+      chooseEventId = arg.value?.toString();
     }
-  })
+  });
 
-  if(isChooseEvent && chooseEventId) {
-    // 埋点上报
-    console.log(isChooseEvent, chooseEventId)
-    debugger;
+  if (isChooseEvent && chooseEventId) {
+    /** 编辑器章节语句 埋点上报  */
+    const params = {
+      thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+      productId: String(WebGAL.gameId),
+      optionId: Number(chooseEventId),
+      reportTime: getLocalDate(),
+    };
+    apiEditorChapterEvent(params);
   }
->>>>>>> 70f47603... feature: 新增埋点语句&选项分支增加埋点开关功能
 
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {
