@@ -8,6 +8,7 @@ import { RootState } from '@/store/store';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
+import { stopEvent } from '@/utils/trackEvent';
 
 export const GameMenuPanel = () => {
   const t = useTrans('gaming.');
@@ -105,6 +106,7 @@ export const GameMenuPanel = () => {
         setComponentVisibility('isShowGameMenu', false);
         setComponentVisibility('isInGaming', false);
         backToTitle();
+        stopEvent();
       },
     });
   };
