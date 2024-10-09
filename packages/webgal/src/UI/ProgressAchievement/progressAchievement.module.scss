@@ -37,7 +37,8 @@
     left: px2(102px);
     top: px2(12px);
     height: px2(708px);
-    width: px2(3024px);
+    // width: px2(3024px);
+    width: calc(100% - px2(102px)) !important;
 
     *::-webkit-scrollbar {
       width: px2(17px) !important;  /* 滚动条宽度 */

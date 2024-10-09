@@ -15,7 +15,6 @@ $default_pregress__bg_height: 200px;
   bottom: 0;
   z-index: 99;
   overflow: auto;
-  // background: #000;
   animation: bg_animation .5s forwards;
   background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
 
@@ -48,8 +47,8 @@ $default_pregress__bg_height: 200px;
 
   .achievement_content {
     position: absolute;
-    top: 50%;
-    left: 10%;
+    top: px2(350px); //50%;
+    left: px2(187.5px); //10%;
     transform: translateY(-50%);
     z-index: 101;
 
@@ -118,6 +117,9 @@ $default_pregress__bg_height: 200px;
   .achievement_list {
     width: 100%;
     height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 
     .achievement_item {
       position: absolute;
@@ -155,7 +157,6 @@ $default_pregress__bg_height: 200px;
         }
 
         .info_card {
-          // opacity: 1;
           display: flex;
           z-index: 9;
           transition: all 0.3s;
