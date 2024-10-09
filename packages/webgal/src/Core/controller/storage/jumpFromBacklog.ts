@@ -3,7 +3,7 @@ import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { IStageState } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
+import { initState, resetStageState } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -12,6 +12,9 @@ import uniqWith from 'lodash/uniqWith';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { sleep } from '@/Core/util/sleep';
+import { clearScreen } from '@/Core/gameScripts/clearScreen';
+import { stopFast } from '../gamePlay/fastSkip';
 
 /**
  * 恢复演出
@@ -27,31 +30,42 @@ export const restorePerform = () => {
  * 从 backlog 跳转至一个先前的状态
  * @param index
  */
-export const jumpFromBacklog = (index: number) => {
+export const jumpFromBacklog = async (index: number, refetchScene = true) => {
+  stopFast();
   const dispatch = webgalStore.dispatch;
   // 获得存档文件
   const backlogFile = WebGAL.backlogManager.getBacklog()[index];
   logger.debug('读取的backlog数据', backlogFile);
-  // 重新获取并同步场景状态
-  sceneFetcher(backlogFile.saveScene.sceneUrl).then(async (rawScene) => {
-    const scene = await WebGAL.sceneManager.setCurrentScene(
-      rawScene,
-      backlogFile.saveScene.sceneName,
-      backlogFile.saveScene.sceneUrl,
-    );
-    if (scene) {
-      // 开始场景的预加载
-      const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
-      WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
-      const subSceneListUniq = uniqWith(subSceneList); // 去重
-      scenePrefetcher(subSceneListUniq);
-    }
-  });
-  WebGAL.sceneManager.sceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
-  WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
-
   // 强制停止所有演出
   stopAllPerform();
+  dispatch(resetStageState(initState));
+
+  // @ts-ignore
+  window.pubsub.publish('loading', { loading: true });
+  await sleep(2000);
+
+  // 重新获取并同步场景状态
+  if (refetchScene) {
+    sceneFetcher(backlogFile.saveScene.sceneUrl).then(async (rawScene) => {
+      const scene = await WebGAL.sceneManager.setCurrentScene(
+        rawScene,
+        backlogFile.saveScene.sceneName,
+        backlogFile.saveScene.sceneUrl,
+      );
+      // @ts-ignore
+      window.pubsub.publish('loading', { loading: false });
+
+      if (scene) {
+        // 开始场景的预加载
+        const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
+        WebGAL.sceneManager.settledScenes.push(WebGAL.sceneManager.sceneData.currentScene.sceneUrl); // 放入已加载场景列表，避免递归加载相同场景
+        const subSceneListUniq = uniqWith(subSceneList); // 去重
+        scenePrefetcher(subSceneListUniq);
+      }
+    });
+  }
+  WebGAL.sceneManager.sceneData.currentSentenceId = backlogFile.saveScene.currentSentenceId;
+  WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(backlogFile.saveScene.sceneStack);
 
   // 弹出backlog项目到指定状态
   for (let i = WebGAL.backlogManager.getBacklog().length - 1; i > index; i--) {
@@ -69,9 +83,11 @@ export const jumpFromBacklog = (index: number) => {
   // 恢复演出
   setTimeout(restorePerform, 0);
 
-  // 关闭backlog界面
-  dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
+  setTimeout(() => {
+    // 关闭backlog界面
+    dispatch(setVisibility({ component: 'showBacklog', visibility: false }));
 
-  // 重新显示 TextBox
-  dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+    // 重新显示 TextBox
+    dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
+  }, 32);
 };
