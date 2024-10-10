@@ -4,22 +4,22 @@ import { apiEditorChapterEvent } from '@/services/eventData';
 import { WebGAL } from '@/Core/WebGAL';
 import { getLocalDate } from '@/utils/date';
 
-
 /**
  * 数据埋点 执行到该语句 上报一次埋点数据
  * @param sentence
  */
 export const eventData = (sentence: ISentence): IPerform => {
-    const chapterId = sentence.content;
-    
-    /** 编辑器章节语句 埋点上报  */ 
-    const params = {
-        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-        productId: WebGAL.gameId + '',
-        chapterId: Number(chapterId),
-        reportTime: getLocalDate(),
-    }
-    apiEditorChapterEvent(params);
+  const chapterId = sentence.content;
+
+  /** 编辑器章节语句 埋点上报  */
+  const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
+  const params = {
+    thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+    productId: String(WebGAL.gameId) || gameId,
+    chapterId: Number(chapterId),
+    reportTime: getLocalDate(),
+  };
+  apiEditorChapterEvent(params);
 
   return {
     performName: 'none',

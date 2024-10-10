@@ -36,7 +36,7 @@ const Title: FC = () => {
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const minutes2 = 1000 * 60 * 2
+  const minutes2 = 1000 * 60 * 2;
 
   const applyStyle = useApplyStyle('UI/Title/title.scss');
 
@@ -101,9 +101,10 @@ const Title: FC = () => {
         startGame();
         dispatch(setshowFavorited(false));
         /** 埋点上报 */
+        const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
         const params = {
           thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-          productId: String(WebGAL.gameId),
+          productId: String(WebGAL.gameId) || gameId,
           onlineTime: getLocalDate(),
         };
         apiStartGameEvent(params);

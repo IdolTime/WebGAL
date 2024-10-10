@@ -165,9 +165,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
   if (isChooseEvent && chooseEventId) {
     /** 编辑器章节语句 埋点上报  */
+    const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
     const params = {
       thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-      productId: String(WebGAL.gameId),
+      productId: String(WebGAL.gameId) || gameId,
       optionId: Number(chooseEventId),
       reportTime: getLocalDate(),
     };
