@@ -26,7 +26,7 @@ export function ExtraCg() {
     <div className={styles.cgMain}>
       <div className={styles.cgContainer}>
         {list.map((e, i) => {
-          return <ExtraCgElement name={e.name} imgUrl={e.url} key={i.toString() + e.url} />;
+          return <ExtraCgElement name={e.name} url={e.url} key={i.toString() + e.url} />;
         })}
         {Array.from({ length: 6 - list.length }).map((e, i) => {
           return (
