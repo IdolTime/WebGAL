@@ -1,5 +1,6 @@
 import { initGCPSDK, initSdkLink } from './initGCPSDK';
 import { WebGAL } from '@/Core/WebGAL';
+import { LogPaySuccess } from '@/Core/log';
 import axios from 'axios';
 
 export const masoupuSdkInit = () => {
@@ -70,7 +71,10 @@ export const masoupuSdkCheck = (cb: Function) => {
         // 购买
         // @ts-ignore
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-          window.location.reload();
+          LogPaySuccess(paymentAmount);
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
         });
       }
     });
