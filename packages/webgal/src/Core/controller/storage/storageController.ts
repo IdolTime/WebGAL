@@ -5,15 +5,17 @@ import { webgalStore } from '@/store/store';
 import { initState, resetUserData } from '@/store/userDataReducer';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { getSavesFromCloud, uploadSavesToCloud } from './savesController';
 
 /**
  * 写入本地存储
  */
 export const setStorage = debounce(() => {
   const userDataState = webgalStore.getState().userData;
-  localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
-    logger.info('写入本地存储');
-  });
+  // localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
+  //   logger.info('写入本地存储');
+  // });
+  uploadSavesToCloud(WebGAL.gameKey, userDataState);
 }, 100);
 
 /**
@@ -54,18 +56,17 @@ function debounce<T, K>(func: (...args: T[]) => K, wait: number) {
 }
 
 export const dumpToStorageFast = () => {
-  const userDataState = webgalStore.getState().userData;
-  localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
-    localforage.getItem(WebGAL.gameKey).then((newUserData) => {
-      // @ts-ignore
-      newUserData && !!newUserData.token && delete newUserData.token;
-      // 如果没有数据，初始化
-      if (!newUserData) {
-        setStorage();
-        return;
-      }
-      webgalStore.dispatch(resetUserData(newUserData as IUserData));
-    });
+  setStorageAsync().then(async () => {
+    await getSavesFromCloud(1);
+    const newUserData = webgalStore.getState().userData;
+    // @ts-ignore
+    newUserData && !!newUserData.token && delete newUserData.token;
+    // 如果没有数据，初始化
+    if (!newUserData) {
+      setStorage();
+      return;
+    }
+    webgalStore.dispatch(resetUserData(newUserData as IUserData));
     logger.info('同步本地存储');
   });
 };
@@ -86,15 +87,16 @@ function checkUserDataProperty(userData: any) {
 
 export async function setStorageAsync() {
   const userDataState = webgalStore.getState().userData;
-  return await localforage.setItem(WebGAL.gameKey, userDataState);
+  // return await localforage.setItem(WebGAL.gameKey, userDataState);
+  return await uploadSavesToCloud(WebGAL.gameKey, userDataState);
 }
 
 export async function getStorageAsync() {
-  const newUserData = await localforage.getItem(WebGAL.gameKey);
+  await getSavesFromCloud(1);
+  const newUserData = webgalStore.getState().userData;
   if (!newUserData || !checkUserDataProperty(newUserData)) {
-    const userDataState = webgalStore.getState().userData;
     logger.warn('现在重置数据');
-    return await localforage.setItem(WebGAL.gameKey, userDataState);
+    return await setStorageAsync();
   } else webgalStore.dispatch(resetUserData(newUserData as IUserData));
   return;
 }

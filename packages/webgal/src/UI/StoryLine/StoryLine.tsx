@@ -51,11 +51,16 @@ export const StoryLine: FC = () => {
   const [achieveStage, setAchieveStage] = useState<IStoryLinStageItem>(defaultStoryLinStageItem);
 
   useEffect(() => {
-    getStorylineFromStorage();
+    // @ts-ignore
+    const d = window.pubsub.subscribe('gameInfoReady', () => {
+      getStorylineFromStorage();
+    });
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
       initStoryline();
     }
+
+    return d;
   }, [GUIState.showStoryLine]);
 
   async function initStoryline() {

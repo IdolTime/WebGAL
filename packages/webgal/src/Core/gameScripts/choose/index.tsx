@@ -17,6 +17,7 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { buyChapter, getIsBuy } from '@/services/store';
 import { parseStyleArg, px2 } from '@/Core/parser/utils';
 import { sleep } from '@/Core/util/sleep';
+import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 
 class ChooseOption {
   /**
@@ -144,6 +145,9 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };
+
+  // 停止快进功能
+  stopFast();
 
   // 运行时计算JSX.Element[]
   const runtimeBuildList = (chooseListFull: ChooseOption[]) => {

@@ -21,6 +21,7 @@ import {
   dumpFastSaveToStorage,
   dumpSavesToStorage,
   dumpUnlickAchieveToStorage,
+  uploadSavesToCloud,
 } from '@/Core/controller/storage/savesController';
 
 interface IExportGameData {
@@ -71,9 +72,8 @@ export function System() {
           rightText: t('$common.yes'),
           leftFunc: () => {},
           rightFunc: async () => {
-            await localforage.setItem(WebGAL.gameKey, saveAsObj.userData).then(() => {
-              logger.info(t('gameSave.dialogs.import.tip'));
-            });
+            await uploadSavesToCloud(WebGAL.gameKey, saveAsObj.saves);
+            logger.info(t('gameSave.dialogs.import.tip'));
             getStorage();
             webgalStore.dispatch(saveActions.replaceSaveGame(saveAsObj.saves.saveData));
             webgalStore.dispatch(saveActions.setFastSave(saveAsObj.saves.quickSaveData));

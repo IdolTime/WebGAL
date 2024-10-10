@@ -3,74 +3,298 @@ import { WebGAL } from '@/Core/WebGAL';
 import { logger } from '@/Core/util/logger';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer';
-import { ISaveAffinity, ISaveData, ISaveStoryLineData } from '@/store/userDataInterface';
+import { ISaveAffinity, ISaveData, ISaveStoryLineData, IUserData } from '@/store/userDataInterface';
 import { IUnlockAchieveItem } from '@/store/stageInterface';
+import { request } from '@/utils/request';
+import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
+import { resetUserData } from '@/store/userDataReducer';
 
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
+  // for (let i = startIndex; i <= endIndex; i++) {
+  //   const save = webgalStore.getState().saveData.saveData[i];
+  //   if (save) {
+  //     localforage.setItem(`${WebGAL.gameKey}-saves${i}`, save).then(() => {
+  //       logger.info(`存档${i}写入本地存储`);
+  //     });
+  //   }
+  // }
+  dumpSavesToCloud(startIndex, endIndex);
+}
+
+// Function to dump saves to cloud
+export async function dumpSavesToCloud(startIndex: number, endIndex: number) {
+  const promises: any = [];
+  const failedUploads: Record<string, ISaveData> = {};
+
+  // @ts-ignore
+  window.pubsub.publish('loading', { loading: true });
+
   for (let i = startIndex; i <= endIndex; i++) {
     const save = webgalStore.getState().saveData.saveData[i];
     if (save) {
-      localforage.setItem(`${WebGAL.gameKey}-saves${i}`, save).then(() => {
-        logger.info(`存档${i}写入本地存储`);
-      });
+      const uploadPromise = request
+        .post('/editor/game/file_save', {
+          gId: WebGAL.gameId, // Your game ID
+          fileType: 2,
+          key: `${WebGAL.gameKey}-saves${i}`,
+          value: JSON.stringify(save),
+        })
+        .then((res) => {
+          if (res.data.code === 0) {
+            logger.info(`存档${i}上传成功`);
+            // @ts-ignore
+            window.pubsub.publish('toaster', { show: true, text: '存档上传成功' });
+          } else {
+            throw new Error(res.data.message);
+          }
+        })
+        .catch((error) => {
+          logger.error(`存档${i}上传失败: ${error.message}`);
+          failedUploads[`${WebGAL.gameKey}-saves${i}`] = save; // Store the index of the failed save
+        });
+
+      promises.push(uploadPromise);
     }
+  }
+
+  // Execute all the requests in parallel
+  await Promise.all(promises).finally(() => {
+    // @ts-ignore
+    window.pubsub.publish('loading', { loading: false });
+  });
+
+  const failedLen = Object.values(failedUploads).length;
+
+  // If any uploads failed, alert the user and allow retry
+  if (failedLen > 0) {
+    showGlogalDialog({
+      title: '存档上传失败',
+      content: `共${failedLen}个存档上传失败, 重试吗?`,
+      leftText: '取消',
+      rightText: '重试',
+      leftFunc: () => {},
+      rightFunc: () => {
+        retryFailedUploads(failedUploads, 2);
+      },
+    });
   }
 }
 
+export async function uploadSavesToCloud(key: string, save: any, silent = true) {
+  const promises: any = [];
+  const failedUploads: Record<string, ISaveData> = {};
+
+  // @ts-ignore
+  silent && window.pubsub.publish('loading', { loading: true });
+
+  if (save) {
+    const uploadPromise = request
+      .post('/editor/game/file_save', {
+        gId: WebGAL.gameId, // Your game ID
+        fileType: 1,
+        key: key,
+        value: JSON.stringify(save),
+      })
+      .then((res) => {
+        if (res.data.code === 0) {
+          logger.info(`存档${key}上传到云存储`);
+        } else {
+          throw new Error(res.data.message);
+        }
+      })
+      .catch((error) => {
+        logger.error(`存档${key}上传失败: ${error.message}`);
+        failedUploads[key] = save; // Store the index of the failed save
+      });
+
+    promises.push(uploadPromise);
+  }
+
+  // Execute all the requests in parallel
+  await Promise.all(promises).finally(() => {
+    // @ts-ignore
+    silent && window.pubsub.publish('loading', { loading: false });
+  });
+
+  const failedLen = Object.values(failedUploads).length;
+
+  // If any uploads failed, alert the user and allow retry
+  if (failedLen) {
+    showGlogalDialog({
+      title: '存档上传失败',
+      content: `共${failedUploads.length}个存档上传失败, 重试吗?`,
+      leftText: '取消',
+      rightText: '重试',
+      leftFunc: () => {},
+      rightFunc: () => {
+        retryFailedUploads(failedUploads, 1);
+      },
+    });
+  }
+}
+
+// Retry failed uploads
+async function retryFailedUploads(failedIndices: Record<string, ISaveData>, fileType: number) {
+  const keys = Object.keys(failedIndices);
+  const retryPromises = keys.map((key) => {
+    const save = failedIndices[key];
+    if (save) {
+      return request
+        .post('/editor/game/file_save', {
+          gId: WebGAL.gameId, // Your game ID
+          fileType: 1,
+          key,
+          value: JSON.stringify(save),
+        })
+        .then((res) => {
+          if (res.data.code === 0) {
+            logger.info(`存档${key}重新上传成功`);
+          } else {
+            throw new Error(res.data.message);
+          }
+        })
+        .catch((error) => {
+          logger.error(`存档${key}重新上传失败: ${error.message}`);
+        });
+    }
+
+    return Promise.resolve();
+  });
+
+  // Retry all failed uploads
+  await Promise.all(retryPromises);
+}
+
 export async function getSavesFromStorage(startIndex: number, endIndex: number) {
-  for (let i = startIndex; i <= endIndex; i++) {
-    const save = await localforage.getItem(`${WebGAL.gameKey}-saves${i}`);
-    // localforage.getItem(`${WebGAL.gameKey}-saves${i}`).then((save) => {
-    webgalStore.dispatch(saveActions.saveGame({ index: i, saveData: save as ISaveData }));
-    logger.info(`存档${i}读取自本地存储`);
-    // });
+  logger.info(`获取存档${startIndex}-${endIndex}`);
+  await getSavesFromCloud(2);
+}
+
+export async function getSavesFromCloud(fileType: number) {
+  // @ts-ignore
+  window.pubsub.publish('loading', { loading: true });
+  try {
+    const response = await request.post('/editor/game/file_list', {
+      page: 1,
+      pageSize: 30,
+      fileType,
+      gId: WebGAL.gameId,
+    });
+    const data = response.data.data;
+
+    if (response.data.code === 0) {
+      const saves: {
+        key: string;
+        value: string;
+      }[] = data.data;
+      for (const save of saves) {
+        const parsedSave = JSON.parse(save.value);
+        if (save.key === `${WebGAL.gameKey}-saves-fast`) {
+          webgalStore.dispatch(saveActions.setFastSave(parsedSave as ISaveData));
+        } else if (new RegExp(`${WebGAL.gameKey}-saves[0-9]+`).test(save.key)) {
+          webgalStore.dispatch(
+            saveActions.saveGame({
+              index: Number(save.key.replace(`${WebGAL.gameKey}-saves`, '')),
+              saveData: parsedSave as ISaveData,
+            }),
+          );
+        } else if (save.key === `${WebGAL.gameKey}-storyline`) {
+          webgalStore.dispatch(saveActions.setStorylineListFromStorage(parsedSave as ISaveStoryLineData[]));
+        } else if (save.key === `${WebGAL.gameKey}-unlock-affinity`) {
+          webgalStore.dispatch(saveActions.updateAffinityData(parsedSave as ISaveAffinity[]));
+        } else if (save.key === `${WebGAL.gameKey}-unlock-achieve`) {
+          webgalStore.dispatch(saveActions.setUnlockAchieveData(parsedSave as IUnlockAchieveItem[]));
+        } else if (save.key === WebGAL.gameKey) {
+          webgalStore.dispatch(resetUserData(parsedSave as IUserData));
+        }
+      }
+    } else {
+      console.error(response.data.message);
+      throw new Error(response.data.message);
+    }
+  } catch (error: any) {
+    showGlogalDialog({
+      title: '读取存档失败',
+      content: error.message,
+      leftText: '取消',
+      rightText: '重试',
+      leftFunc: () => {},
+      rightFunc: () => {
+        getSavesFromCloud(fileType);
+      },
+    });
+  } finally {
+    // @ts-ignore
+    window.pubsub.publish('loading', { loading: false });
+  }
+}
+
+export async function deleteSaveFromCloud(key: string) {
+  try {
+    await request.post('/editor/game/file_remove', {
+      key,
+      gId: WebGAL.gameId, // Your game ID
+    });
+    logger.info(`存档${key}删除自云存储`);
+  } catch (error: any) {
+    logger.error(`存档${key}删除失败: ${error.message}`);
   }
 }
 
 export async function dumpFastSaveToStorage() {
   const save = webgalStore.getState().saveData.quickSaveData;
-  await localforage.setItem(`${WebGAL.gameKey}-saves-fast`, save);
-  logger.info(`快速存档写入本地存储`);
+  await uploadSavesToCloud(`${WebGAL.gameKey}-saves-fast`, save);
+  // await localforage.setItem(`${WebGAL.gameKey}-saves-fast`, save);
+  // logger.info(`快速存档写入本地存储`);
 }
 
 export async function getFastSaveFromStorage() {
-  const save = await localforage.getItem(`${WebGAL.gameKey}-saves-fast`);
-  webgalStore.dispatch(saveActions.setFastSave(save as ISaveData));
-  logger.info(`快速存档读取自本地存储`);
+  logger.info(`获取快速存档`);
+  // const save = await localforage.getItem(`${WebGAL.gameKey}-saves-fast`);
+  // webgalStore.dispatch(saveActions.setFastSave(save as ISaveData));
+  await getSavesFromCloud(1);
 }
 
 export async function dumpStorylineToStorage() {
   const data = webgalStore.getState().saveData.unlockStorylineList;
-  await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
-  logger.info(`故事线 >> 写入本地存储`);
+  await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
+  // await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
+  // logger.info(`故事线 >> 写入本地存储`);
 }
 
 export async function getStorylineFromStorage() {
-  const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
-  webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
-  logger.info(`故事线 >> 读取自本地存储`);
+  logger.info(`获取故事线存档`);
+  // const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
+  // webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
+  await getSavesFromCloud(1);
 }
 
 export async function dumpUnlockAffinityToStorage() {
   const data = webgalStore.getState().saveData.unlockAffinityData;
-  await localforage.setItem(`${WebGAL.gameKey}-unlock-affinity`, { data });
-  logger.info(`解锁亲密度 >> 写入本地存储`);
+  await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-affinity`, { data });
+  // await localforage.setItem(`${WebGAL.gameKey}-unlock-affinity`, { data });
+  // logger.info(`解锁亲密度 >> 写入本地存储`);
 }
 
 export async function getUnlockAffinityFromStorage() {
-  const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-affinity`);
-  webgalStore.dispatch(saveActions.updateAffinityData((res?.data ?? []) as ISaveAffinity[]));
-  logger.info(`解锁亲密度 >> 读取本地存储`);
+  logger.info(`获取亲密度存档`);
+  // const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-affinity`);
+  // webgalStore.dispatch(saveActions.updateAffinityData((res?.data ?? []) as ISaveAffinity[]));
+  // logger.info(`解锁亲密度 >> 读取本地存储`);
+  await getSavesFromCloud(1);
 }
 
 export async function dumpUnlickAchieveToStorage() {
   const data = webgalStore.getState().saveData.unlockAchieveData;
-  await localforage.setItem(`${WebGAL.gameKey}-unlock-achieve`, { data });
-  logger.info(`解锁成就 >>> 写入本地存储`);
+  await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-achieve`, { data });
+  // await localforage.setItem(`${WebGAL.gameKey}-unlock-achieve`, { data });
+  // logger.info(`解锁成就 >>> 写入本地存储`);
 }
 
 export async function getUnlickAchieveFromStorage() {
-  const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-achieve`);
-  webgalStore.dispatch(saveActions.setUnlockAchieveData((res?.data || []) as IUnlockAchieveItem[]));
-  logger.info(`解锁成就 >>> 读取本地存储`);
+  logger.info(`获取承接存档`);
+  await getSavesFromCloud(1);
+  // const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-achieve`);
+  // webgalStore.dispatch(saveActions.setUnlockAchieveData((res?.data || []) as IUnlockAchieveItem[]));
+  // logger.info(`解锁成就 >>> 读取本地存储`);
 }
