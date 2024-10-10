@@ -47,6 +47,8 @@ export const ProgressAchievement: FC = () => {
   useEffect(() => {
     if (GUIState.showProgressAndAchievement) {
       enterStoryLine();
+    } else {
+      setTab('chapter');
     }
   }, [GUIState.showProgressAndAchievement]);
 
