@@ -150,6 +150,29 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
     current: null as ReturnType<typeof setTimeout> | null,
   };
 
+  sentence?.args?.forEach((arg) => {
+    // 是否开启了选项埋点
+    if (arg.key === 'isChooseEvent') {
+      isChooseEvent = !!arg.value
+    }
+    // 选项埋点事件id
+    if (arg.key === 'chooseEventId') {
+      chooseEventId = arg.value?.toString()
+    }
+  })
+
+  if(isChooseEvent && chooseEventId) {
+    /** 编辑器章节语句 埋点上报  */
+    const params = {
+        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+        productId: WebGAL.gameId + '',
+        optionId: Number(chooseEventId),
+        reportTime: getLocalDate(),
+    }
+    apiEditorChapterEvent(params);
+
+  }
+
   // 停止快进功能
   stopFast();
   sentence?.args?.forEach((arg) => {
@@ -354,6 +377,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         }
 
         if (e.style?.image) {
+          let imgTop = '';
+          // 备注：特殊图片处理
+          if (e.style?.image.includes('-idle.png') || e.style?.image.includes('-active.png')) {
+            imgTop = '-18px';
+          }
+
           className = `${styles.Choose_item_image} interactive`;
           const imgUrl = assetSetter(e.style.image, fileType.ui);
           const id = `img-option-${i}`;
@@ -372,6 +401,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             img.style.width = imgWidth;
             img.style.height = imgHeight;
             img.style.position = 'absolute';
+            if (imgTop) img.style.top = imgTop;
             img.alt = e.text;
 
             if (ele) {

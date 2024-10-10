@@ -84,7 +84,20 @@ const FlvPlayer = ({
     };
   }, [url]);
 
-  return <video ref={videoRef} {...otherProps} style={{ width: '100%', height: 'auto' }} />;
+  return (
+    <video
+      ref={videoRef}
+      {...otherProps}
+      style={{ width: '100%', height: 'auto' }}
+      onClick={(e) => {
+        e.stopPropagation();
+        // e.preventDefault();
+        if (otherProps.onClick) {
+          otherProps.onClick(e);
+        }
+      }}
+    />
+  );
 };
 
 export default FlvPlayer;
