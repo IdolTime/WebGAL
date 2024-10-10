@@ -199,7 +199,7 @@ export async function getSavesFromCloud(fileType: number) {
             }),
           );
         } else if (save.key === `${WebGAL.gameKey}-storyline`) {
-          webgalStore.dispatch(saveActions.setStorylineListFromStorage(parsedSave as ISaveStoryLineData[]));
+          webgalStore.dispatch(saveActions.setStorylineListFromStorage(parsedSave.data as ISaveStoryLineData[]));
         } else if (save.key === `${WebGAL.gameKey}-unlock-affinity`) {
           webgalStore.dispatch(saveActions.updateAffinityData(parsedSave as ISaveAffinity[]));
         } else if (save.key === `${WebGAL.gameKey}-unlock-achieve`) {

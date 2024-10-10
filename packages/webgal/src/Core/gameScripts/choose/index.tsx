@@ -328,6 +328,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         }
 
         if (e.style?.image) {
+          let imgTop = '';
+          // 备注：特殊图片处理
+          if (e.style?.image.includes('sitong-idle.png')) {
+            imgTop = '-18px';
+          }
+          
           className = `${styles.Choose_item_image} interactive`;
           const imgUrl = assetSetter(e.style.image, fileType.ui);
           const id = `img-option-${i}`;
@@ -346,6 +352,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             img.style.width = imgWidth;
             img.style.height = imgHeight;
             img.style.position = 'absolute';
+            if (imgTop) img.style.top = imgTop;
             img.alt = e.text;
 
             if (ele) {
