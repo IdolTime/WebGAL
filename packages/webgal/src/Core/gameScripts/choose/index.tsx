@@ -18,6 +18,8 @@ import { buyChapter, getIsBuy } from '@/services/store';
 import { parseStyleArg, px2 } from '@/Core/parser/utils';
 import { sleep } from '@/Core/util/sleep';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
+import { apiEditorChapterEvent } from '@/services/eventData';
+import { getLocalDate } from '@/utils/date';
 
 class ChooseOption {
   /**
@@ -136,6 +138,8 @@ class ChooseOption {
  */
 export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerform => {
   const chooseOptionScripts = sentence.content.split('|');
+  let isChooseEvent: boolean = false;
+  let chooseEventId: string = '';
   const loadingRef: { current: Record<string, boolean> } = { current: {} };
   const chooseOptions = chooseOptionScripts.map((e) => ChooseOption.parse(e, loadingRef));
   const fontFamily = webgalStore.getState().userData.optionData.textboxFont;
@@ -145,6 +149,29 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   let timer = {
     current: null as ReturnType<typeof setTimeout> | null,
   };
+
+  sentence?.args?.forEach((arg) => {
+    // 是否开启了选项埋点
+    if (arg.key === 'isChooseEvent') {
+      isChooseEvent = !!arg.value
+    }
+    // 选项埋点事件id
+    if (arg.key === 'chooseEventId') {
+      chooseEventId = arg.value?.toString()
+    }
+  })
+
+  if(isChooseEvent && chooseEventId) {
+    /** 编辑器章节语句 埋点上报  */
+    const params = {
+        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+        productId: WebGAL.gameId + '',
+        optionId: Number(chooseEventId),
+        reportTime: getLocalDate(),
+    }
+    apiEditorChapterEvent(params);
+
+  }
 
   // 停止快进功能
   stopFast();

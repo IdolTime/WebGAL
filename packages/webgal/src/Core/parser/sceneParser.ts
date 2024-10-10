@@ -45,6 +45,7 @@ import { changeAffinity } from '../gameScripts/changeAffinity';
 import { unlockAffinity } from '../gameScripts/unlockAffinity';
 import { popUpImage } from '@/Core/gameScripts/popUpImage';
 import { clearScreen } from '../gameScripts/clearScreen';
+import { eventData } from '@/Core/gameScripts/eventData'
 
 export const SCRIPT_TAG_MAP = defineScripts({
   intro: ScriptConfig(commandType.intro, intro),
@@ -88,6 +89,7 @@ export const SCRIPT_TAG_MAP = defineScripts({
   unlockAffinity: ScriptConfig(commandType.unlockAffinity, unlockAffinity),
   popUpImage: ScriptConfig(commandType.popUpImage, popUpImage),
   clearScreen: ScriptConfig(commandType.clearScreen, clearScreen),
+  eventData: ScriptConfig(commandType.eventData, eventData),
   // if: ScriptConfig(commandType.if, undefined, { next: true }),
 });
 
