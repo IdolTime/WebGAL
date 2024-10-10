@@ -330,7 +330,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         if (e.style?.image) {
           let imgTop = '';
           // 备注：特殊图片处理
-          if (e.style?.image.includes('sitong-idle.png')) {
+          if (e.style?.image.includes('-idle.png') || e.style?.image.includes('-active.png')) {
             imgTop = '-18px';
           }
           
