@@ -149,6 +149,9 @@ function App() {
       initLoginInfo(token);
       return;
     }
+    // @ts-ignore
+    const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
+    if (is_terre) return;
     setTimeout(() => {
       // @ts-ignore
       window.globalThis.openLoginDialog().then((res) => {
