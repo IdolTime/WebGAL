@@ -7,6 +7,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { getRandomPerformName } from '../../Modules/perform/performController';
 import { platform_isCanStart, platform_getGameDetail } from '@/Core/platformMessage';
+import { LogPaySuccess } from '@/Core/log';
 
 /**
  * 结束试玩
@@ -46,9 +47,18 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     };
   }
 
+  const nextStep = () => {
+    // @ts-ignore
+    window.pubsub.publish('toaster', { show: true });
+    WebGAL.gameplay.performController.unmountPerform('finishTrial');
+  };
+
   const submitBuy = () => {
     playSeClick();
     if (window !== window.top) {
+      // @ts-ignore
+      window.MessageSaveFunc = nextStep;
+      // @ts-ignore
       platform_isCanStart();
     } else {
       const token = sessionStorage.getItem('sdk-token');
@@ -80,7 +90,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
           //   WebGAL.gameplay.performController.unmountPerform('finishTrial');
           // }, 3000);
           window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-            console.log('openBuyGameDialog success : ', res);
+            LogPaySuccess({ paymentAmount, from: 'maosupusdk-avg-link' });
             // @ts-ignore
             window.pubsub.publish('toaster', { show: true });
             WebGAL.gameplay.performController.unmountPerform('finishTrial');
@@ -158,6 +168,11 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       }
       if (method === 'GET_GAME_DETAIL') {
         disposeGameRes(data.data.response.data);
+      }
+      if (method === 'BUY_GAME') {
+        // @ts-ignore
+        const { paymentAmount } = webgalStore.getState().storeData.gameInfo;
+        LogPaySuccess({ paymentAmount, from: 'maosupusdk-avg-platform' });
       }
       // todo
       // 关闭弹窗 消息

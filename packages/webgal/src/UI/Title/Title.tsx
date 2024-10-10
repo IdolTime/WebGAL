@@ -18,6 +18,7 @@ import { enterAchieve } from '@/Core/controller/achieve/achieve';
 import { BgImage, Button } from '../Components/Base';
 import { Scene, TitleSceneButtonKey, TitleSceneOtherKey, TitleSceneUIConfig } from '@/Core/UIConfigTypes';
 import { platform_isCanStart } from '@/Core/platformMessage';
+import { LogPaySuccess } from '@/Core/log';
 
 /**
  * 标题页
@@ -52,15 +53,20 @@ const Title: FC = () => {
         // 购买
         // @ts-ignore
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-          window.location.reload();
+          LogPaySuccess({ paymentAmount, from: 'maosupusdk-avg-link' });
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
         });
       }
     });
   };
 
-  const loadUserInfo = () => {
+  const loadUserInfo = (cb: Function) => {
     if (window !== window.top) {
       platform_isCanStart();
+      // @ts-ignore
+      window.MessageSaveFunc = cb;
     } else {
       sdk_loadUserInfo();
     }
@@ -72,7 +78,7 @@ const Title: FC = () => {
     if (gameInfo.isBuy) {
       cb();
     } else {
-      loadUserInfo();
+      loadUserInfo(cb);
     }
   };
 

@@ -33,6 +33,7 @@ import { ModalRecharge } from './UI/ModalRecharge';
 import { ProgressAchievement } from '@/UI/ProgressAchievement/ProgressAchievement';
 import { RootState } from './store/store';
 import { Affinity } from './UI/Affinity/Affinity';
+import { LogPaySuccess } from '@/Core/log';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -116,9 +117,10 @@ function App() {
   const platform_init = () => {
     window.addEventListener('message', (message: any) => {
       const data = message.data;
-      const { method } = message.data.data;
+      const { method, status } = message.data.data;
       if (method === 'IS_CAN_START') {
-        // todo 购买上报
+        // @ts-ignore
+        if (status) window.MessageSaveFunc();
       }
       if (method === 'GET_USER_INFO') {
         webgalStore.dispatch(setUserInfo(data.data.response.data));
@@ -129,6 +131,11 @@ function App() {
         window.pubsub.publish('gameInfoReady');
         webgalStore.dispatch(setGameInfo(data.data.response.data));
         reportData(data.data.response.data);
+      }
+      if (method === 'BUY_GAME') {
+        const gameInfo = webgalStore.getState().storeData.gameInfo;
+        // @ts-ignore
+        LogPaySuccess({ paymentAmount: gameInfo.paymentAmount, from: 'maosupusdk-avg-platform' });
       }
     });
     // 登录
