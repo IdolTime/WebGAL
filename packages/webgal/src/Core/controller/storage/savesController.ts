@@ -170,7 +170,15 @@ async function retryFailedUploads(failedIndices: Record<string, ISaveData>, file
 
 export async function getSavesFromStorage(startIndex: number, endIndex: number) {
   logger.info(`获取存档${startIndex}-${endIndex}`);
-  await getSavesFromCloud(2);
+  if (!WebGAL.gameId) {
+    for (let i = startIndex; i <= endIndex; i++) {
+      const save = await localforage.getItem(`${WebGAL.gameKey}-saves${i}`);
+      webgalStore.dispatch(saveActions.saveGame({ index: i, saveData: save as ISaveData }));
+      logger.info(`存档${i}读取自本地存储`);
+    }
+  } else {
+    await getSavesFromCloud(2);
+  }
 }
 
 export async function getSavesFromCloud(fileType: number) {

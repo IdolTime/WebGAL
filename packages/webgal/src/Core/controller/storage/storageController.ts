@@ -70,9 +70,7 @@ function debounce<T, K>(func: (...args: T[]) => K, wait: number) {
 }
 
 export const dumpToStorageFast = () => {
-  setStorageAsync().then(async () => {
-    await getSavesFromCloud(1);
-    const newUserData = webgalStore.getState().userData;
+  const callback = (newUserData: IUserData) => {
     // @ts-ignore
     newUserData && !!newUserData.token && delete newUserData.token;
     // 如果没有数据，初始化
@@ -82,6 +80,18 @@ export const dumpToStorageFast = () => {
     }
     webgalStore.dispatch(resetUserData(newUserData as IUserData));
     logger.info('同步本地存储');
+  };
+
+  setStorageAsync().then(async () => {
+    if (!WebGAL.gameId) {
+      let newUserData = localforage.getItem(WebGAL.gameKey);
+      // @ts-ignore
+      callback(newUserData as IUserData);
+    } else {
+      await getSavesFromCloud(1);
+      const newUserData = webgalStore.getState().userData;
+      callback(newUserData);
+    }
   });
 };
 
