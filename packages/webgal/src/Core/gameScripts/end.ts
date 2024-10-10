@@ -10,6 +10,7 @@ import { playBgm } from '@/Core/controller/stage/playBgm';
 import { WebGAL } from '@/Core/WebGAL';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
 import { saveActions } from '@/store/savesReducer';
+import { stopEvent } from '@/utils/trackEvent';
 
 /**
  * 结束游戏
@@ -33,6 +34,7 @@ export const end = (sentence: ISentence): IPerform => {
   dispatch(setVisibility({ component: 'showTitle', visibility: true }));
   dispatch(setVisibility({ component: 'isInGaming', visibility: false }));
   playBgm(webgalStore.getState().GUI.titleBgm);
+  stopEvent();
   return {
     performName: 'none',
     duration: 0,

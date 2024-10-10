@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useSEByWebgalStore } from '@/hooks/useSoundEffect';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { WebGAL } from '@/Core/WebGAL';
 import { buyGame, getRechargeList, getRechargeStatus, recharge } from '@/services/store';
 import { IRechargeItem } from '@/services/storeInterface';
+import { apiPaymantEvent } from '@/services/eventData';
 import { chunk } from 'lodash';
 import StarStoneIcon from '@/assets/imgs/xingshiIcon.webp';
 import ModalClose from '@/assets/imgs/modal-close.png';
+import { getLocalDate } from '@/utils/date';
 
 import styles from './modalRecharge.module.scss';
 import { SourceImg } from '../Components/SourceImg';
@@ -62,6 +65,15 @@ export function ModalRecharge() {
     if (res.code === 0) {
       const orderNo = res.data.order_no;
       checkPayStatus(orderNo);
+
+      /** 支付埋点  */
+      const params = {
+        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+        productId: WebGAL.gameId + '',
+        amount: selectedItem?.price ?? 0,
+        payTime: getLocalDate(),
+      }
+      apiPaymantEvent(params)
     } else {
       // @ts-ignore
       window.pubsub.publish('toaster', { show: true, text: res.message });
