@@ -11,7 +11,6 @@ import { parseStyleArg } from '@/Core/parser/utils';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
 import BarSlider from '@/assets/imgs/bar-checked.png';
-import { debounce } from 'lodash';
 import { SCREEN_CONSTANTS, updateScreenSize } from '@/Core/util/constants';
 
 import './slider.scss';
@@ -58,14 +57,14 @@ export const CustomText = ({
   let className = defaultClass;
   let _style = style;
 
-  const _onMouseEnter = debounce(() => {
+  const _onMouseEnter = () => {
     if (hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  }, 100);
+  };
 
   const _onMouseLeave = () => {
     setHover(false);
@@ -277,14 +276,14 @@ export const CustomContainer = ({
     if (!_activeStyle) _activeStyle = parseStyleArg(item.args.activeStyle);
   }
 
-  const _onMouseEnter = debounce(() => {
+  const _onMouseEnter = () => {
     if (_hoverStyle) {
       setHover(true);
     }
     if (onMouseEnter) {
       onMouseEnter();
     }
-  }, 100);
+  };
   const _onMouseLeave = () => {
     setHover(false);
     if (onMouseLeave) {
