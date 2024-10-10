@@ -60,8 +60,8 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
 
     // 获取到数据
     const saveData = webgalStore.getState().saveData;
-    const unlockItemIndex: number = saveData.unlockStorylineList?.findIndex(
-      (item) => item.storyLine.name === storyLineData['name'],
+    const unlockItemIndex: number = saveData?.unlockStorylineList?.findIndex(
+      (item) => item?.storyLine?.name === storyLineData['name'],
     );
 
     let unlockItem: ISaveStoryLineData | undefined;
