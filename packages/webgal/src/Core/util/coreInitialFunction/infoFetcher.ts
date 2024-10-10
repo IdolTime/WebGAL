@@ -19,8 +19,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
-import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { setStage } from '@/store/stageReducer';
+import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import {
   AchievementSceneButtonKey,
   AchievementSceneOtherKey,
@@ -153,9 +152,13 @@ export const infoFetcher = (url: string) => {
 
           case 'Game_key': {
             WebGAL.gameKey = args[0];
-            getStorage();
-            getFastSaveFromStorage();
-            getSavesFromStorage(0, 0);
+            // @ts-ignore
+            const dispose = window.pubsub.subscribe('gameInfoReady', () => {
+              getStorage();
+              // getFastSaveFromStorage();
+              getSavesFromStorage(0, 0);
+              dispose();
+            });
             break;
           }
 

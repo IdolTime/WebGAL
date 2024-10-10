@@ -46,11 +46,21 @@ export const startFast = () => {
   WebGAL.gameplay.isFast = true;
   setButton(true);
 
+  let fastCount = 0; // 计数器，记录快进次数
+
   const fastForward = () => {
+    if (fastCount >= 3) {
+      // 快进 3 次后停止快进
+      stopFast();
+      return;
+    }
+
     console.log('正在快进语句');
     nextSentence();
 
-    // 模拟 setInterval 的行为，递归调用 setTimeout
+    fastCount++; // 每次调用递增计数器
+
+    // 递归调用 setTimeout 实现重复快进
     WebGAL.gameplay.fastTimeout = setTimeout(fastForward, 200);
   };
 

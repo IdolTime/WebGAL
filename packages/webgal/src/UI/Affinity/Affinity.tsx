@@ -5,7 +5,7 @@ import { setShowStoryLine } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData, ISaveAffinity } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
-import { getStorylineFromStorage, getUnlockAffinityFromStorage } from '@/Core/controller/storage/savesController';
+import { getUnlockAffinityFromStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';

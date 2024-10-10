@@ -6,6 +6,7 @@ import { logger } from '@/Core/util/logger';
 import localforage from 'localforage';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { setStorage } from '../controller/storage/storageController';
 
 /**
  * 解锁cg
@@ -26,8 +27,9 @@ export const unlockCg = (sentence: ISentence): IPerform => {
   });
   logger.info(`解锁CG：${name}，路径：${url}，所属系列：${series}`);
   webgalStore.dispatch(unlockCgInUserData({ name, url, series }));
-  const userDataState = webgalStore.getState().userData;
-  localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
+  // const userDataState = webgalStore.getState().userData;
+  // localforage.setItem(WebGAL.gameKey, userDataState).then(() => {});
+  setStorage();
   return {
     performName: 'none',
     duration: 0,

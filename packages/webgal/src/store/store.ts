@@ -21,5 +21,8 @@ export const webgalStore = configureStore({
   }),
 });
 
+// @ts-ignore
+window.webgalStore = webgalStore;
+
 // 在 TS 中的类型声明
 export type RootState = ReturnType<typeof webgalStore.getState>;
