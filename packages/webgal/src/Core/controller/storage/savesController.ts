@@ -9,6 +9,9 @@ import { request } from '@/utils/request';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { resetUserData } from '@/store/userDataReducer';
 
+let lastGetType1SavesTime = 0;
+let lastGetType2SavesTime = 0;
+
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   if (!WebGAL.gameId) {
     for (let i = startIndex; i <= endIndex; i++) {
@@ -182,8 +185,17 @@ export async function getSavesFromStorage(startIndex: number, endIndex: number) 
 }
 
 export async function getSavesFromCloud(fileType: number) {
-  // @ts-ignore
-  fileType === 2 && window.pubsub.publish('loading', { loading: true });
+  if (fileType === 1 && Date.now() - lastGetType1SavesTime < 3000) return;
+  if (fileType === 2 && Date.now() - lastGetType2SavesTime < 3000) return;
+
+  if (fileType === 2) {
+    // @ts-ignore
+    window.pubsub.publish('loading', { loading: true });
+    lastGetType2SavesTime = Date.now();
+  } else {
+    lastGetType1SavesTime = Date.now();
+  }
+
   try {
     const response = await request.post('/editor/game/file_list', {
       page: 1,
@@ -210,11 +222,11 @@ export async function getSavesFromCloud(fileType: number) {
             }),
           );
         } else if (save.key === `${WebGAL.gameKey}-storyline`) {
-          webgalStore.dispatch(saveActions.setStorylineListFromStorage(parsedSave as ISaveStoryLineData[]));
+          webgalStore.dispatch(saveActions.setStorylineListFromStorage(parsedSave.data as ISaveStoryLineData[]));
         } else if (save.key === `${WebGAL.gameKey}-unlock-affinity`) {
-          webgalStore.dispatch(saveActions.updateAffinityData(parsedSave as ISaveAffinity[]));
+          webgalStore.dispatch(saveActions.updateAffinityData(parsedSave.data as ISaveAffinity[]));
         } else if (save.key === `${WebGAL.gameKey}-unlock-achieve`) {
-          webgalStore.dispatch(saveActions.setUnlockAchieveData(parsedSave as IUnlockAchieveItem[]));
+          webgalStore.dispatch(saveActions.setUnlockAchieveData(parsedSave.data as IUnlockAchieveItem[]));
         } else if (save.key === WebGAL.gameKey) {
           webgalStore.dispatch(resetUserData(parsedSave as IUserData));
         }
@@ -224,6 +236,7 @@ export async function getSavesFromCloud(fileType: number) {
       throw new Error(response.data.message);
     }
   } catch (error: any) {
+    console.error(error);
     showGlogalDialog({
       title: '读取存档失败',
       content: error.message,

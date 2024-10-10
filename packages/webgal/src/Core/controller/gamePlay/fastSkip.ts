@@ -49,8 +49,8 @@ export const startFast = () => {
   let fastCount = 0; // 计数器，记录快进次数
 
   const fastForward = () => {
-    if (fastCount >= 2) {
-      // 快进 3 次后停止快进
+    if (fastCount >= 9) {
+      // 快进 10 次后停止快进
       stopFast();
       return;
     }
