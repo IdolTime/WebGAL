@@ -103,13 +103,13 @@ const Title: FC = () => {
         /** 埋点上报 */
         const params = {
           thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-          productId: WebGAL.gameId + '',
-          onlineTime: getLocalDate()
-        }
-        apiStartGameEvent(params)
+          productId: String(WebGAL.gameId),
+          onlineTime: getLocalDate(),
+        };
+        apiStartGameEvent(params);
       }, 16);
 
-      startEvent()
+      startEvent();
     },
     [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();
