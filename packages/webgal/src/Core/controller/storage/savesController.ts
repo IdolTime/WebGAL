@@ -10,14 +10,17 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { resetUserData } from '@/store/userDataReducer';
 
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
-  // for (let i = startIndex; i <= endIndex; i++) {
-  //   const save = webgalStore.getState().saveData.saveData[i];
-  //   if (save) {
-  //     localforage.setItem(`${WebGAL.gameKey}-saves${i}`, save).then(() => {
-  //       logger.info(`存档${i}写入本地存储`);
-  //     });
-  //   }
-  // }
+  if (!WebGAL.gameId) {
+    for (let i = startIndex; i <= endIndex; i++) {
+      const save = webgalStore.getState().saveData.saveData[i];
+      if (save) {
+        localforage.setItem(`${WebGAL.gameKey}-saves${i}`, save).then(() => {
+          logger.info(`存档${i}写入本地存储`);
+        });
+      }
+    }
+    return;
+  }
   dumpSavesToCloud(startIndex, endIndex);
 }
 
@@ -172,7 +175,7 @@ export async function getSavesFromStorage(startIndex: number, endIndex: number) 
 
 export async function getSavesFromCloud(fileType: number) {
   // @ts-ignore
-  window.pubsub.publish('loading', { loading: true });
+  fileType === 2 && window.pubsub.publish('loading', { loading: true });
   try {
     const response = await request.post('/editor/game/file_list', {
       page: 1,
@@ -243,58 +246,83 @@ export async function deleteSaveFromCloud(key: string) {
 
 export async function dumpFastSaveToStorage() {
   const save = webgalStore.getState().saveData.quickSaveData;
-  await uploadSavesToCloud(`${WebGAL.gameKey}-saves-fast`, save);
-  // await localforage.setItem(`${WebGAL.gameKey}-saves-fast`, save);
-  // logger.info(`快速存档写入本地存储`);
+  if (!WebGAL.gameId) {
+    await localforage.setItem(`${WebGAL.gameKey}-saves-fast`, save);
+    logger.info(`快速存档写入本地存储`);
+  } else {
+    await uploadSavesToCloud(`${WebGAL.gameKey}-saves-fast`, save);
+  }
 }
 
 export async function getFastSaveFromStorage() {
   logger.info(`获取快速存档`);
-  // const save = await localforage.getItem(`${WebGAL.gameKey}-saves-fast`);
-  // webgalStore.dispatch(saveActions.setFastSave(save as ISaveData));
-  await getSavesFromCloud(1);
+  if (!WebGAL.gameId) {
+    const save = await localforage.getItem(`${WebGAL.gameKey}-saves-fast`);
+    webgalStore.dispatch(saveActions.setFastSave(save as ISaveData));
+  } else {
+    await getSavesFromCloud(1);
+  }
 }
 
 export async function dumpStorylineToStorage() {
   const data = webgalStore.getState().saveData.unlockStorylineList;
-  await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
-  // await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
-  // logger.info(`故事线 >> 写入本地存储`);
+  if (!WebGAL.gameId) {
+    await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
+    logger.info(`故事线 >> 写入本地存储`);
+  } else {
+    await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
+  }
 }
 
 export async function getStorylineFromStorage() {
-  logger.info(`获取故事线存档`);
-  // const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
-  // webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
-  await getSavesFromCloud(1);
+  if (!WebGAL.gameId) {
+    logger.info(`获取故事线存档`);
+    const res: any = await localforage.getItem(`${WebGAL.gameKey}-storyline`);
+    webgalStore.dispatch(saveActions.setStorylineListFromStorage((res?.data ?? []) as ISaveStoryLineData[]));
+  } else {
+    await getSavesFromCloud(1);
+  }
 }
 
 export async function dumpUnlockAffinityToStorage() {
   const data = webgalStore.getState().saveData.unlockAffinityData;
-  await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-affinity`, { data });
-  // await localforage.setItem(`${WebGAL.gameKey}-unlock-affinity`, { data });
-  // logger.info(`解锁亲密度 >> 写入本地存储`);
+  if (!WebGAL.gameId) {
+    await localforage.setItem(`${WebGAL.gameKey}-unlock-affinity`, { data });
+    logger.info(`解锁亲密度 >> 写入本地存储`);
+  } else {
+    await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-affinity`, { data });
+  }
 }
 
 export async function getUnlockAffinityFromStorage() {
   logger.info(`获取亲密度存档`);
-  // const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-affinity`);
-  // webgalStore.dispatch(saveActions.updateAffinityData((res?.data ?? []) as ISaveAffinity[]));
-  // logger.info(`解锁亲密度 >> 读取本地存储`);
-  await getSavesFromCloud(1);
+  if (!WebGAL.gameId) {
+    const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-affinity`);
+    webgalStore.dispatch(saveActions.updateAffinityData((res?.data ?? []) as ISaveAffinity[]));
+    logger.info(`解锁亲密度 >> 读取本地存储`);
+  } else {
+    await getSavesFromCloud(1);
+  }
 }
 
 export async function dumpUnlickAchieveToStorage() {
   const data = webgalStore.getState().saveData.unlockAchieveData;
-  await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-achieve`, { data });
-  // await localforage.setItem(`${WebGAL.gameKey}-unlock-achieve`, { data });
-  // logger.info(`解锁成就 >>> 写入本地存储`);
+  if (!WebGAL.gameId) {
+    await localforage.setItem(`${WebGAL.gameKey}-unlock-achieve`, { data });
+    logger.info(`解锁成就 >>> 写入本地存储`);
+  } else {
+    await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-achieve`, { data });
+  }
 }
 
 export async function getUnlickAchieveFromStorage() {
   logger.info(`获取承接存档`);
-  await getSavesFromCloud(1);
-  // const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-achieve`);
-  // webgalStore.dispatch(saveActions.setUnlockAchieveData((res?.data || []) as IUnlockAchieveItem[]));
-  // logger.info(`解锁成就 >>> 读取本地存储`);
+
+  if (!WebGAL.gameId) {
+    const res: any = await localforage.getItem(`${WebGAL.gameKey}-unlock-achieve`);
+    webgalStore.dispatch(saveActions.setUnlockAchieveData((res?.data || []) as IUnlockAchieveItem[]));
+    logger.info(`解锁成就 >>> 读取本地存储`);
+  } else {
+    await getSavesFromCloud(1);
+  }
 }
