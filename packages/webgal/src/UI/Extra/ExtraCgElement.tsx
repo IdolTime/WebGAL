@@ -33,6 +33,7 @@ export function ExtraCgElement(props: IProps) {
           onClick={() => {
             showFull.set(!showFull.value);
             playSeClick();
+            bgmNode.volume = bgmVol;
           }}
           className={`${styles.showFullContainer} interactive`}
           onMouseEnter={playSeEnter}
@@ -64,6 +65,7 @@ export function ExtraCgElement(props: IProps) {
       <div
         onClick={() => {
           showFull.set(!showFull.value);
+          bgmNode.volume = 0;
           playSeClick();
         }}
         onMouseEnter={playSeEnter}
