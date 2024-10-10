@@ -40,7 +40,7 @@ export const contentParser = (
     case commandType.unlockBgm:
       return assetSetter(contentRaw, fileType.bgm);
     case commandType.unlockCg:
-      return assetSetter(contentRaw, fileType.background);
+      // return assetSetter(contentRaw, fileType.background);
     default:
       return contentRaw;
   }
