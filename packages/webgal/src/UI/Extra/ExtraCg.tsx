@@ -5,10 +5,8 @@ import { RootState } from '@/store/store';
 import './extraCG_animation_List.scss';
 import { ExtraCgElement } from '@/UI/Extra/ExtraCgElement';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import footerLeft from '@/assets/imgs/cg-bottom-left.png';
-import footerRight from '@/assets/imgs/cg-bottom-right.png';
-import footerChecked from '@/assets/imgs/cg-bottom-checked.png';
-import footerUncheck from '@/assets/imgs/cg-bottom-uncheck.png';
+import footerChecked from '@/assets/imgs/point-active.png';
+import footerUncheck from '@/assets/imgs/point-default.png';
 import cgLock from '@/assets/imgs//cg-lock.png';
 
 export function ExtraCg() {

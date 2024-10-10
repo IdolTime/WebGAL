@@ -1,3 +1,6 @@
+cd packages/webgal
+sh write-img-path.sh
+cd ../..
 # 安装依赖并构建
 yarn
 yarn build

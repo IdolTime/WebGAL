@@ -36,11 +36,13 @@ const defaultAchieveStageItem: IAchieveStageItem = {
  * @constructor
  */
 export const Achievement: FC = () => {
+  const dispatch = useDispatch();
   const { playSeClick, playSeEnter } = useSoundEffect();
   const GUIState = useSelector((state: RootState) => state.GUI);
-  const StageState = useSelector((state: RootState) => state.stage);
   const saveData = useSelector((state: RootState) => state.saveData);
-  const dispatch = useDispatch();
+  const achivementUIConfigs = useSelector(
+    (state: RootState) => state.GUI.gameUIConfigs[Scene.achievement],
+  ) as AchievementSceneUIConfig;
 
   const [textStyle, setTextStyle] = useState<GameMenuItem | null>(null);
   const [progressBgStyle, setProgressBgStyle] = useState<GameMenuItem | null>(null);
@@ -49,15 +51,11 @@ export const Achievement: FC = () => {
 
   const [achieveStage, setAchieveStage] = useState<IAchieveStageItem>(defaultAchieveStageItem);
   const hasBGImage = achieveStage?.achieveBg;
-
   const [unlockedData, setUnlockedData] = useState({
     unlocked: 0,
     allTotal: 0,
     currentProgress: '0%',
   });
-  const achivementUIConfigs = useSelector(
-    (state: RootState) => state.GUI.gameUIConfigs[Scene.achievement],
-  ) as AchievementSceneUIConfig;
 
   useEffect(() => {
     if (GUIState.showAchievement) {
@@ -265,9 +263,10 @@ export const Achievement: FC = () => {
       {GUIState.showAchievement && (
         <div className={styles.achievement} id="camera" style={hasBGImage ? { backgroundImage: 'none' } : {}}>
           {/* 头部 */}
-          <Button
-            item={achivementUIConfigs.buttons.Achievement_back_button}
-            defaultClass={`
+          {!GUIState.showProgressAndAchievement && (
+            <Button
+              item={achivementUIConfigs.buttons.Achievement_back_button}
+              defaultClass={`
               ${styles.goback} 
               ${
                 achivementUIConfigs.buttons.Achievement_back_button?.args?.style?.image
@@ -275,9 +274,10 @@ export const Achievement: FC = () => {
                   : ''
               } 
               interactive`}
-            onClick={handleGoBack}
-            onMouseEnter={playSeEnter}
-          />
+              onClick={handleGoBack}
+              onMouseEnter={playSeEnter}
+            />
+          )}
 
           {/* 已获得成就  */}
           {renderInfoAchievement()}

@@ -5,23 +5,28 @@ import { webgalStore } from '@/store/store';
 import { initState, resetUserData } from '@/store/userDataReducer';
 
 import { WebGAL } from '@/Core/WebGAL';
+import { getSavesFromCloud, uploadSavesToCloud } from './savesController';
 
 /**
  * 写入本地存储
  */
 export const setStorage = debounce(() => {
   const userDataState = webgalStore.getState().userData;
-  localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
-    logger.info('写入本地存储');
-  });
+  if (!WebGAL.gameId) {
+    localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
+      logger.info('写入本地存储');
+    });
+  } else {
+    uploadSavesToCloud(WebGAL.gameKey, userDataState);
+  }
 }, 100);
 
 /**
  * 从本地存储获取数据
  */
 export const getStorage = debounce(() => {
-  localforage.getItem(WebGAL.gameKey).then((newUserData) => {
-    // @ts-ignore
+  let newUserData: any;
+  const callback = (newUserData: IUserData) => {
     newUserData && !!newUserData.token && delete newUserData.token;
     // 如果没有数据或者属性不完全，重新初始化
     if (!newUserData || !checkUserDataProperty(newUserData)) {
@@ -30,7 +35,18 @@ export const getStorage = debounce(() => {
       return;
     }
     webgalStore.dispatch(resetUserData(newUserData as IUserData));
-  });
+  };
+
+  if (!WebGAL.gameId) {
+    newUserData = localforage.getItem(WebGAL.gameKey).then((newUserData) => {
+      callback(newUserData as IUserData);
+    });
+  } else {
+    getSavesFromCloud(1).then(() => {
+      newUserData = webgalStore.getState().userData;
+      callback(newUserData);
+    });
+  }
 }, 100);
 
 /**
@@ -54,19 +70,28 @@ function debounce<T, K>(func: (...args: T[]) => K, wait: number) {
 }
 
 export const dumpToStorageFast = () => {
-  const userDataState = webgalStore.getState().userData;
-  localforage.setItem(WebGAL.gameKey, userDataState).then(() => {
-    localforage.getItem(WebGAL.gameKey).then((newUserData) => {
-      // @ts-ignore
-      newUserData && !!newUserData.token && delete newUserData.token;
-      // 如果没有数据，初始化
-      if (!newUserData) {
-        setStorage();
-        return;
-      }
-      webgalStore.dispatch(resetUserData(newUserData as IUserData));
-    });
+  const callback = (newUserData: IUserData) => {
+    // @ts-ignore
+    newUserData && !!newUserData.token && delete newUserData.token;
+    // 如果没有数据，初始化
+    if (!newUserData) {
+      setStorage();
+      return;
+    }
+    webgalStore.dispatch(resetUserData(newUserData as IUserData));
     logger.info('同步本地存储');
+  };
+
+  setStorageAsync().then(async () => {
+    if (!WebGAL.gameId) {
+      let newUserData = localforage.getItem(WebGAL.gameKey);
+      // @ts-ignore
+      callback(newUserData as IUserData);
+    } else {
+      await getSavesFromCloud(1);
+      const newUserData = webgalStore.getState().userData;
+      callback(newUserData);
+    }
   });
 };
 
@@ -86,15 +111,27 @@ function checkUserDataProperty(userData: any) {
 
 export async function setStorageAsync() {
   const userDataState = webgalStore.getState().userData;
-  return await localforage.setItem(WebGAL.gameKey, userDataState);
+
+  if (!WebGAL.gameId) {
+    return await localforage.setItem(WebGAL.gameKey, userDataState);
+  }
+
+  return await uploadSavesToCloud(WebGAL.gameKey, userDataState);
 }
 
 export async function getStorageAsync() {
-  const newUserData = await localforage.getItem(WebGAL.gameKey);
+  let newUserData: any;
+
+  if (!WebGAL.gameId) {
+    newUserData = await localforage.getItem(WebGAL.gameKey);
+  } else {
+    await getSavesFromCloud(1);
+    newUserData = webgalStore.getState().userData;
+  }
+
   if (!newUserData || !checkUserDataProperty(newUserData)) {
-    const userDataState = webgalStore.getState().userData;
     logger.warn('现在重置数据');
-    return await localforage.setItem(WebGAL.gameKey, userDataState);
+    return await setStorageAsync();
   } else webgalStore.dispatch(resetUserData(newUserData as IUserData));
   return;
 }

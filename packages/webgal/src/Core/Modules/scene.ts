@@ -53,6 +53,7 @@ export class SceneManager {
   public sceneData: ISceneData = cloneDeep(initSceneData);
   public sceneAssetsList: Record<string, Record<string, 'success' | 'error' | 'loading'>> = {};
   public sceneAssetsLoadedList: Record<string, boolean> = {};
+  public lockSceneWrite = false;
 
   public resetScene() {
     this.sceneData.currentSentenceId = 0;
@@ -65,6 +66,16 @@ export class SceneManager {
     // getUnlickAchieveFromStorage();
     return new Promise((r) => {
       let parsedScene: { current: IScene | null } = { current: null };
+      let markRef = {
+        current: {
+          sceneReady: false,
+          gameReady: false,
+          params: {
+            sceneName: '',
+            sentenceList: [] as ISentence[],
+          },
+        },
+      };
       let timer: ReturnType<typeof setTimeout> | null = null;
 
       if (loading && !this.sceneAssetsLoadedList[scenaName]) {
@@ -83,13 +94,16 @@ export class SceneManager {
               if (parsedScene.current) {
                 this.sceneData.currentScene = parsedScene.current;
               }
+
               const sentenceList = this.sceneData?.currentScene?.sentenceList ?? [];
-              if (scenaName === sceneNameType.Storyline) {
-                this.getAllStorylineList(sentenceList);
-              } else if (scenaName === sceneNameType.Achieve) {
-                this.getAllUnlockAchieveList(sentenceList);
-              } else if (scenaName === sceneNameType.Affinity) {
-                getUnlockAffinityFromStorage();
+              markRef.current.sceneReady = true;
+              markRef.current.params = {
+                sceneName: scenaName,
+                sentenceList,
+              };
+
+              if (markRef.current.sceneReady) {
+                this.checkCallback(scenaName, sentenceList);
               }
 
               if (loading) {
@@ -105,8 +119,27 @@ export class SceneManager {
         },
       );
 
+      // @ts-ignore
+      const dispose2 = window.pubsub.subscribe('gameInfoReady', () => {
+        markRef.current.gameReady = true;
+        if (markRef.current.sceneReady) {
+          this.checkCallback(markRef.current.params.sceneName, markRef.current.params.sentenceList);
+        }
+        dispose2();
+      });
+
       parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
     });
+  }
+
+  private checkCallback(scenaName: string, sentenceList: ISentence[]) {
+    if (scenaName === sceneNameType.Storyline) {
+      this.getAllStorylineList(sentenceList);
+    } else if (scenaName === sceneNameType.Achieve) {
+      this.getAllUnlockAchieveList(sentenceList);
+    } else if (scenaName === sceneNameType.Affinity) {
+      getUnlockAffinityFromStorage();
+    }
   }
 
   // 得到所有解锁故事线数据

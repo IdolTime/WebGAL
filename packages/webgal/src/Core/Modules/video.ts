@@ -1,6 +1,7 @@
 import FlvJs from 'flv.js';
 // @ts-ignore
 import CryptoJS from 'crypto-js';
+import { loadingSVGStr } from '@/UI/Components/LoadingSvg';
 
 function arrayBufferToWordArray(arrayBuffer: ArrayBuffer) {
   const uint8Array = new Uint8Array(arrayBuffer);
@@ -142,6 +143,40 @@ export class VideoManager {
 
     videoContainerTag.appendChild(videoTag);
     document.getElementById('videoContainer')?.appendChild(videoContainerTag);
+
+    // 视频需要缓冲时触发
+    videoTag.addEventListener('waiting', () => {
+      const loadingNode = videoContainerTag.querySelector('.video-loading');
+
+      if (!loadingNode) {
+        const loading = document.createElement('div');
+        loading.className = 'video-loading';
+        loading.innerHTML = loadingSVGStr;
+        videoContainerTag.appendChild(loading);
+      }
+    });
+
+    // 视频可以播放时触发
+    videoTag.addEventListener('canplay', () => {
+      const loadingNode = videoContainerTag.querySelector('.video-loading');
+      if (loadingNode) {
+        videoContainerTag.removeChild(loadingNode);
+      }
+    });
+
+    // 视频加载失败时触发
+    videoTag.addEventListener('error', () => {
+      const loadingNode = videoContainerTag.querySelector('.video-loading');
+      if (loadingNode) {
+        videoContainerTag.removeChild(loadingNode);
+      }
+
+      // 你可以在这里添加更多的错误处理逻辑，比如显示一个错误消息
+      const errorNode = document.createElement('div');
+      errorNode.className = 'video-error';
+      errorNode.textContent = '视频加载失败，请稍后重试。';
+      videoContainerTag.appendChild(errorNode);
+    });
 
     this.videosByKey[url] = {
       // @ts-ignore

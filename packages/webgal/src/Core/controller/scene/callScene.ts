@@ -13,6 +13,10 @@ import { WebGAL } from '@/Core/WebGAL';
  * @param sceneName 场景名称
  */
 export const callScene = (sceneUrl: string, sceneName: string) => {
+  if (WebGAL.sceneManager.lockSceneWrite) {
+    return;
+  }
+  WebGAL.sceneManager.lockSceneWrite = true;
   // 先将本场景压入场景栈
   WebGAL.sceneManager.sceneData.sceneStack.push({
     sceneName: WebGAL.sceneManager.sceneData.currentScene.sceneName,
@@ -20,9 +24,9 @@ export const callScene = (sceneUrl: string, sceneName: string) => {
     continueLine: WebGAL.sceneManager.sceneData.currentSentenceId,
   });
   // 场景写入到运行时
-  sceneFetcher(sceneUrl).then(async (rawScene) => {
-    const scene = await WebGAL.sceneManager.setCurrentScene(rawScene, sceneName, sceneUrl, true);
-    if (scene) {
+  sceneFetcher(sceneUrl)
+    .then((rawScene) => {
+      WebGAL.sceneManager.sceneData.currentScene = sceneParser(rawScene, sceneName, sceneUrl);
       WebGAL.sceneManager.sceneData.currentSentenceId = 0;
       // 开始场景的预加载
       const subSceneList = WebGAL.sceneManager.sceneData.currentScene.subSceneList;
@@ -30,7 +34,11 @@ export const callScene = (sceneUrl: string, sceneName: string) => {
       const subSceneListUniq = uniqWith(subSceneList); // 去重
       scenePrefetcher(subSceneListUniq);
       logger.debug('现在调用场景，调用结果：', WebGAL.sceneManager.sceneData);
+      WebGAL.sceneManager.lockSceneWrite = false;
       nextSentence();
-    }
-  });
+    })
+    .catch((e) => {
+      logger.error('场景调用错误', e);
+      WebGAL.sceneManager.lockSceneWrite = false;
+    });
 };

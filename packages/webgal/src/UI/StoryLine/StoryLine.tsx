@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setShowStoryLine } from '@/store/GUIReducer';
+import { setShowStoryLine, setVisibility } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
@@ -51,11 +51,16 @@ export const StoryLine: FC = () => {
   const [achieveStage, setAchieveStage] = useState<IStoryLinStageItem>(defaultStoryLinStageItem);
 
   useEffect(() => {
-    getStorylineFromStorage();
+    // @ts-ignore
+    const d = window.pubsub.subscribe('gameInfoReady', () => {
+      getStorylineFromStorage();
+    });
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
       initStoryline();
     }
+
+    return d;
   }, [GUIState.showStoryLine]);
 
   async function initStoryline() {
@@ -113,7 +118,11 @@ export const StoryLine: FC = () => {
     e.stopPropagation();
     dispatch(setShowStoryLine(false));
     dispatch(saveActions.setIsShowUnlock(true));
-    loadGameFromStageData(saveData.videoData as ISaveData);
+    dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
+    loadGameFromStageData(saveData.videoData as ISaveData).finally(() => {
+      // @ts-ignore
+      window?.pubsub?.publish('loading', { loading: false });
+    });
   };
 
   function getImagePath(url: string) {
@@ -133,16 +142,18 @@ export const StoryLine: FC = () => {
   return (
     <>
       {GUIState.showStoryLine && (
-        <div className={styles.storyLine} id="camera">
-          <Button
-            item={storylineUIConfigs.buttons.Storyline_back_button}
-            defaultClass={`
+        <div className={styles.storyLine} id="camera" style={hasBGImage ? { backgroundImage: 'none' } : {}}>
+          {!GUIState.showProgressAndAchievement && (
+            <Button
+              item={storylineUIConfigs.buttons.Storyline_back_button}
+              defaultClass={`
               ${styles.goBack} 
               ${storylineUIConfigs.buttons.Storyline_back_button?.args?.style?.image ? styles.hideDefalutGobackBg : ''} 
               interactive`}
-            onClick={handlGoBack}
-            onMouseEnter={playSeEnter}
-          />
+              onClick={handlGoBack}
+              onMouseEnter={playSeEnter}
+            />
+          )}
           <SourceImg src={achieveStage.storylineBg} style={bgStyle} />
           {unlockStorylineList?.map((item: ISaveStoryLineData, index) => {
             const { name, thumbnailUrl, x, y, isUnlock, isHideName } = item.storyLine;
@@ -179,7 +190,13 @@ export const StoryLine: FC = () => {
                 key={`storyLine-${index}`}
                 className={`${styles.storyLine_item} interactive`}
                 style={styleObj}
-                onClick={(e) => handlPlay(e, item)}
+                onClick={(e) => {
+                  // @ts-ignore
+                  window?.pubsub?.publish('loading', { loading: true });
+                  setTimeout(() => {
+                    handlPlay(e, item)
+                  }, 200);
+                }}
               >
                 <SourceImg src={getImagePath(thumbnailUrl)} style={sourceImgStyle} />
                 <div className={styles.info_card}>

@@ -17,6 +17,7 @@ axiosInstance.interceptors.request.use(
       ? {
           ...config.headers,
           editorToken,
+          source: 'editor',
         }
       : {
           ...config.headers,

@@ -19,8 +19,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { initKey } from '@/Core/controller/storage/fastSaveLoad';
 import { WebgalParser } from '@/Core/parser/sceneParser';
-import { getFastSaveFromStorage, getSavesFromStorage } from '@/Core/controller/storage/savesController';
-import { setStage } from '@/store/stageReducer';
+import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import {
   AchievementSceneButtonKey,
   AchievementSceneOtherKey,
@@ -49,6 +48,9 @@ import {
 } from '@/Core/UIConfigTypes';
 import { createCursorAnimation } from '@/Core/parser/utils';
 import { logger } from '@/Core/util/logger';
+import { assetsPrefetcher } from '../prefetcher/assetsPrefetcher';
+import { IAsset } from '@/Core/controller/scene/sceneInterface';
+import { defaultImages } from '../defaultImages';
 
 declare global {
   interface Window {
@@ -64,6 +66,7 @@ const boolMap = new Map<string | boolean, boolean>([
   [true, true],
   [false, false],
 ]);
+let customUIImgs: IAsset[] = [];
 
 /**
  * 获取游戏信息
@@ -72,10 +75,22 @@ const boolMap = new Map<string | boolean, boolean>([
 export const infoFetcher = (url: string) => {
   const GUIState = webgalStore.getState().GUI;
   const dispatch = webgalStore.dispatch;
+  customUIImgs = [];
   axios.get(url).then((r) => {
     let gameConfigRaw: string = r.data;
     const gameConfig = WebgalParser.parseConfig(gameConfigRaw);
     logger.info('获取到游戏信息', gameConfig);
+    // 预加载默认UI
+    console.log('预加载默认UI图片');
+    assetsPrefetcher(
+      defaultImages.map((img) => ({
+        name: img,
+        type: fileType.ui,
+        url: './assets/' + img,
+        lineNumber: 0,
+      })),
+      '__default-ui__.txt',
+    );
     if (GUIState) {
       const gameUIConfigs = { ...GUIState.gameUIConfigs };
       // @ts-ignore
@@ -137,9 +152,13 @@ export const infoFetcher = (url: string) => {
 
           case 'Game_key': {
             WebGAL.gameKey = args[0];
-            getStorage();
-            getFastSaveFromStorage();
-            getSavesFromStorage(0, 0);
+            // @ts-ignore
+            const dispose = window.pubsub.subscribe('gameInfoReady', () => {
+              getStorage();
+              // getFastSaveFromStorage();
+              getSavesFromStorage(0, 0);
+              dispose();
+            });
             break;
           }
 
@@ -308,6 +327,8 @@ export const infoFetcher = (url: string) => {
       hasAchievement && dispatch(setAchievementUI(achievementUI));
     }
     window?.renderPromise?.();
+    console.log('预加载自定义UI图片');
+    assetsPrefetcher(customUIImgs, '__custom-ui__.txt');
     // @ts-ignore
     window.pubsub.publish('gameReady');
     delete window.renderPromise;
@@ -350,6 +371,19 @@ function parseUIIConfigOptions(newOptions: SceneUIConfig, scene: Scene, item: We
 
         if (e.key === 'style' && swapImageContent) {
           style.image = swapImageContent;
+          customUIImgs.push({
+            name: style.image,
+            type: fileType.background,
+            url: assetSetter(style.image, fileType.background) as string,
+            lineNumber: 0,
+          });
+        } else if (style.image) {
+          customUIImgs.push({
+            name: style.image,
+            type: fileType.ui,
+            url: assetSetter(style.image, fileType.ui) as string,
+            lineNumber: 0,
+          });
         }
 
         parsedArgs[e.key] = style;
@@ -448,18 +482,14 @@ function getStyle(uiKey: string, args: string[], options: { key: string; value: 
   };
 }
 
-function parseSound (options: { key: string, value: string | number | boolean }[]) {
-  const config: Record<string, string | boolean> = {}
+function parseSound(options: { key: string; value: string | number | boolean }[]) {
+  const config: Record<string, string | boolean> = {};
   options.forEach((option) => {
     if (typeof option.value === 'string') {
       const values = option.value?.split(',') ?? [];
-      config[option.key] = values?.length
-        ? !!boolMap.get(values[0]) || assetSetter(values[1], fileType.bgm)
-        : false;
+      config[option.key] = values?.length ? !!boolMap.get(values[0]) || assetSetter(values[1], fileType.bgm) : false;
     } else {
-      config[option.key] = typeof option.value === 'boolean'
-        ? !!boolMap.get(option.value) 
-        : false;
+      config[option.key] = typeof option.value === 'boolean' ? !!boolMap.get(option.value) : false;
     }
   });
 

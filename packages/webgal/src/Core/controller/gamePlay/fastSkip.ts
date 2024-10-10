@@ -29,9 +29,9 @@ export const stopFast = () => {
   }
   WebGAL.gameplay.isFast = false;
   setButton(false);
-  if (WebGAL.gameplay.fastInterval !== null) {
-    clearInterval(WebGAL.gameplay.fastInterval);
-    WebGAL.gameplay.fastInterval = null;
+  if (WebGAL.gameplay.fastTimeout !== null) {
+    clearTimeout(WebGAL.gameplay.fastTimeout);
+    WebGAL.gameplay.fastTimeout = null;
   }
 };
 
@@ -42,12 +42,29 @@ export const startFast = () => {
   if (isFast()) {
     return;
   }
+
   WebGAL.gameplay.isFast = true;
   setButton(true);
-  WebGAL.gameplay.fastInterval = setInterval(() => {
+
+  let fastCount = 0; // 计数器，记录快进次数
+
+  const fastForward = () => {
+    if (fastCount >= 9) {
+      // 快进 10 次后停止快进
+      stopFast();
+      return;
+    }
+
     console.log('正在快进语句');
     nextSentence();
-  }, SYSTEM_CONFIG.fast_timeout);
+
+    fastCount++; // 每次调用递增计数器
+
+    // 递归调用 setTimeout 实现重复快进
+    WebGAL.gameplay.fastTimeout = setTimeout(fastForward, 200);
+  };
+
+  fastForward();
 };
 
 // 判断是否是快进模式

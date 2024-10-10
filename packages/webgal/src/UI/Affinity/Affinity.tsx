@@ -1,11 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setShowStoryLine } from '@/store/GUIReducer';
+import { setShowStoryLine, setVisibility } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData, ISaveAffinity } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
-import { getStorylineFromStorage, getUnlockAffinityFromStorage } from '@/Core/controller/storage/savesController';
+import { getUnlockAffinityFromStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
@@ -23,6 +23,7 @@ import { SourceImg } from '../Components/SourceImg';
  */
 export const Affinity: FC = () => {
   const { playSeClick, playSeEnter } = useSoundEffect();
+  const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const unlockAffinityList = useSelector((state: RootState) => state.saveData.unlockAffinityData);
   const affinityUIConfigs = useSelector(
@@ -32,6 +33,8 @@ export const Affinity: FC = () => {
   useEffect(() => {
     if (GUIState.showAffinity) {
       getUnlockAffinityFromStorage();
+    } else {
+      dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
     }
   }, [GUIState.showAffinity]);
 

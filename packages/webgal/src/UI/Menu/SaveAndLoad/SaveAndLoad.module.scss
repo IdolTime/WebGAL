@@ -105,7 +105,7 @@
 .Save_Load_content_element {
   width: px2(411px);
   height: px2(254px);
-  animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out;
+  animation: Elements_in 1s ease-out forwards, Elements_in_transform 1s ease-out !important;
   opacity: 0;
   transition: transform 0.25s, box-shadow 0.25s;
   position: relative;
@@ -188,8 +188,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url('@/assets/imgs/border-active.png');
-  z-index: 12;
+  background-image: url('@/assets/imgs/checked.png');
+  z-index: 13;
   transition: all ease 0.3s;
 }
 

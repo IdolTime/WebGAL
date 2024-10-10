@@ -5,12 +5,12 @@ import styles from '@/UI/Extra/extra.module.scss';
 import { useValue } from '@/hooks/useValue';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import { setGuiAsset } from '@/store/GUIReducer';
-import soundunselect from '@/assets/imgs/sound-unselect.png';
+import soundunselect from '@/assets/imgs/sound-icon.png';
 import soundChoose from '@/assets/imgs/sound-choose.png';
 import bgmLocked from '@/assets/imgs//bgm-locked-bg.png';
 import bgmUnlocked from '@/assets/imgs//bgm-unlock-bg.png';
-import footerChecked from '@/assets/imgs//cg-bottom-checked.png';
-import footerUncheck from '@/assets/imgs//cg-bottom-uncheck.png';
+import footerChecked from '@/assets/imgs/point-active.png';
+import footerUncheck from '@/assets/imgs/point-default.png';
 
 export function ExtraBgm() {
   const { playSeClick, playSeEnter } = useSoundEffect();

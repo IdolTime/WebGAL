@@ -7,7 +7,6 @@ import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { WebGAL } from '@/Core/WebGAL';
 import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
-import { stopAll } from '@/Core/controller/gamePlay/fastSkip';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
@@ -18,7 +17,8 @@ import { VideoManager } from '../Modules/video';
  * 播放一段视频 * @param sentence
  */
 export const playVideo = (sentence: ISentence): IPerform => {
-  stopAll();
+  // @ts-ignore
+  window?.pubsub?.publish('loading', { loading: true });
   const userDataState = webgalStore.getState().userData;
   const mainVol = userDataState.optionData.volumeMain;
   const vocalVol = mainVol * 0.01 * userDataState.optionData.vocalVolume * 0.01;
@@ -31,7 +31,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
   let id = '';
   const optionId = Date.now();
   webgalStore.dispatch(setshowFavorited(false));
-  webgalStore.dispatch(setVisibility({ component: 'playingVideo', visibility: true }));
   webgalStore.dispatch(setStage({ key: 'showText', value: '' }));
   webgalStore.dispatch(setStage({ key: 'showName', value: '' }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
@@ -65,7 +64,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
   const performInitName: string = 'videoPlay.' + (id || getRandomPerformName());
 
   if (hideVideo) {
-    webgalStore.dispatch(setVisibility({ component: 'playingVideo', visibility: false }));
     if (!id) {
       WebGAL.videoManager.destroy(WebGAL.videoManager.currentPlayingVideo);
     } else {
@@ -246,6 +244,8 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.playVideo(url);
+        // @ts-ignore
+        window?.pubsub?.publish('loading', { loading: false });
 
         // 从缓存数据中查找 改视频是否收藏过
         const saveData = webgalStore.getState().saveData.saveData || [];
@@ -281,7 +281,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
           } else {
             // 视频播放完成后，隐藏当前设置的显示变量
             const showValueList = webgalStore.getState().stage.showValueList;
-            webgalStore.dispatch(setVisibility({ component: 'playingVideo', visibility: false }));
             if (showValueList?.length) {
               const name = webgalStore.getState().stage.showValueName;
               const newShowValueList = showValueList.filter((item) => item.showValueName !== name);

@@ -6,8 +6,6 @@ import { IStageObject } from '@/Core/controller/stage/pixi/PixiController';
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { fetchFileAsArrayBuffer } from '@/Core/util/fetchFileAsArrayBuffer';
 
-import defaultBg from '@/assets/imgs/popupImageBorder.png';
-
 export function useSetPopUpImage(stageState: IStageState) {
   const {
     popUpImageName,
@@ -45,10 +43,8 @@ export function useSetPopUpImage(stageState: IStageState) {
      */
     const thisPopupKey = 'popImg-center';
     const softInAniKey = 'popImg-center-softin';
-    const thisBgKey = 'bg-popImg';
+    // const thisBgKey = 'bg-popImg';
     if (popUpImageName !== '') {
-      addPopupImg('image', thisBgKey, defaultBg, 'center');
-
       const currentPopupCenter = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisPopupKey);
       if (currentPopupCenter) {
         if (currentPopupCenter.sourceUrl !== popUpImageName) {

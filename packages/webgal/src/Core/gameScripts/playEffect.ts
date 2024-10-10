@@ -26,6 +26,18 @@ export const playEffect = (sentence: ISentence): IPerform => {
     performInitName = `effect-sound-${id}`;
     WebGAL.gameplay.performController.unmountPerform(performInitName, true);
     isLoop = true;
+
+    if (!sentence.content) {
+      return {
+        performName: 'none',
+        duration: 0,
+        isHoldOn: false,
+        stopFunction: () => {},
+        blockingNext: () => false,
+        blockingAuto: () => true,
+        stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+      };
+    }
   }
   let isOver = false;
   return {
