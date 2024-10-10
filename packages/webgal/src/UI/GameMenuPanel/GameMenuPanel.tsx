@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMenuPanelTag, setVisibility } from '@/store/GUIReducer';
 import { componentsVisibility, MenuPanelTag } from '@/store/guiInterface';
-import { RootState } from '@/store/store';
+import { RootState, webgalStore } from '@/store/store';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
@@ -27,7 +27,7 @@ export const GameMenuPanel = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: { keyCode: number }) => {
-      if (event.keyCode === 27) {
+      if (event.keyCode === 27 && webgalStore.getState().GUI.isInGaming) {
         // 在这里处理 ESC 按键按下的事件
         playSeClick();
         setComponentVisibility('isShowGameMenu', !GUIStore.isShowGameMenu);

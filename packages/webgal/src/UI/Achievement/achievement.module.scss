@@ -177,8 +177,8 @@ $default_pregress__bg_height: 200px;
 
       .info_card {
         position: absolute;
-        top: -30px;
-        left: 100px;
+        top: 0; //-30px;
+        left: px2(90px); //100px;
         width: 500px;
         min-height: 200px;
         padding: 1em;
