@@ -8,7 +8,7 @@ import { setSlPage } from '@/store/userDataReducer';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { getSavesFromCloud, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 import { px2 } from '@/Core/parser/utils';
 import { LoadSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
@@ -28,7 +28,6 @@ export const Save: FC = () => {
       <div
         onClick={() => {
           dispatch(setSlPage(i));
-          setStorage();
           playSePageChange();
         }}
         onMouseEnter={playSeEnter}
@@ -55,8 +54,8 @@ export const Save: FC = () => {
   const end = start + 5;
 
   useEffect(() => {
-    getSavesFromStorage(start, end);
-  }, [start, end]);
+    getSavesFromCloud(2);
+  }, []);
 
   let animationIndex = 0;
   for (let i = start; i <= end; i++) {
@@ -99,7 +98,6 @@ export const Save: FC = () => {
               leftFunc: () => {},
               rightFunc: () => {
                 saveGame(i);
-                setStorage();
               },
             });
           } else {

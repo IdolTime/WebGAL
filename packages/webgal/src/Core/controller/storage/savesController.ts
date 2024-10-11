@@ -200,11 +200,14 @@ export async function getSavesFromStorage(startIndex: number, endIndex: number) 
   }
 }
 
-export async function getSavesFromCloud(fileType: number) {
+export async function getSavesFromCloud(fileType: number, page = 1, pageSize = 10) {
   if (fileType === 1 && Date.now() - lastGetType1SavesTime < 3000) return;
-  if (fileType === 2 && Date.now() - lastGetType2SavesTime < 3000) return;
+  if (fileType === 2 && page === 1 && Date.now() - lastGetType2SavesTime < 3000) return;
 
   if (fileType === 2) {
+    if (page > 3) {
+      return;
+    }
     // @ts-ignore
     window.pubsub.publish('loading', { loading: true });
     lastGetType2SavesTime = Date.now();
@@ -215,8 +218,8 @@ export async function getSavesFromCloud(fileType: number) {
   try {
     const response = await request.post('/editor/game/file_list', {
       userId: getUserId(),
-      page: 1,
-      pageSize: 30,
+      page,
+      pageSize,
       fileType,
       gId: WebGAL.gameId,
     });
@@ -248,6 +251,15 @@ export async function getSavesFromCloud(fileType: number) {
           webgalStore.dispatch(saveActions.setUnlockAchieveData(parsedSave.data as IUnlockAchieveItem[]));
         } else if (save.key === WebGAL.gameKey) {
           webgalStore.dispatch(resetUserData(parsedSave as IUserData));
+        }
+      }
+
+      if (fileType === 2) {
+        const currentSavesLength = webgalStore.getState().saveData.saveData.filter((x) => x).length;
+        console.log(33333, JSON.parse(JSON.stringify(currentSavesLength)));
+
+        if (currentSavesLength < data.total) {
+          await getSavesFromCloud(2, page + 1, pageSize);
         }
       }
     } else {
