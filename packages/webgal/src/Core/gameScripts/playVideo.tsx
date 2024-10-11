@@ -9,7 +9,7 @@ import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
-import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
+import { setshowFavorited, setVisibility, setPlayingVideo } from '@/store/GUIReducer';
 import { updateShowValueList, setStage } from '@/store/stageReducer';
 import { VideoManager } from '../Modules/video';
 
@@ -246,6 +246,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
         WebGAL.videoManager.playVideo(url);
         // @ts-ignore
         window?.pubsub?.publish('loading', { loading: false });
+        webgalStore.dispatch(setPlayingVideo(true)); // 设置视频播放状态
 
         // 从缓存数据中查找 改视频是否收藏过
         const saveData = webgalStore.getState().saveData.saveData || [];
@@ -281,6 +282,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
           } else {
             // 视频播放完成后，隐藏当前设置的显示变量
             const showValueList = webgalStore.getState().stage.showValueList;
+            webgalStore.dispatch(setPlayingVideo(false)); // 设置视频播放状态
             if (showValueList?.length) {
               const name = webgalStore.getState().stage.showValueName;
               const newShowValueList = showValueList.filter((item) => item.showValueName !== name);

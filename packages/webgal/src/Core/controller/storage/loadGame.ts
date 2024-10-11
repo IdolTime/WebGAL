@@ -30,6 +30,8 @@ export const loadGame = (index: number, isLoadVideo = false) => {
 
 export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = false) {
   if (!stageData) {
+    // @ts-ignore
+    window?.pubsub?.publish('loading', { loading: false });
     logger.info('暂无存档');
     return;
   }
@@ -54,6 +56,8 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
     const subSceneListUniq = uniqWith(subSceneList); // 去重
     scenePrefetcher(subSceneListUniq);
   } catch (error) {
+    // @ts-ignore
+    window?.pubsub?.publish('loading', { loading: false });
     logger.error('场景加载失败', error);
     return;
   }

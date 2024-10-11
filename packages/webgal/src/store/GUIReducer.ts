@@ -159,6 +159,9 @@ const GUISlice = createSlice({
       // @ts-ignore
       state.currentPlayAudio = action.payload;
     },
+    setPlayingVideo: (state, action: PayloadAction<boolean>) => {
+      state.playingVideo = action.payload;
+    },
   },
 });
 
@@ -174,5 +177,6 @@ export const {
   setEscMenus,
   setAchievementUI,
   setCurrentPlayAudio,
+  setPlayingVideo,
 } = GUISlice.actions;
 export default GUISlice.reducer;
