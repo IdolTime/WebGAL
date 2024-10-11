@@ -1,5 +1,5 @@
 export const SYSTEM_CONFIG = {
-  backlog_size: 200,
+  backlog_size: 20,
   fast_timeout: 50,
 };
 export const PERFORM_CONFIG = {

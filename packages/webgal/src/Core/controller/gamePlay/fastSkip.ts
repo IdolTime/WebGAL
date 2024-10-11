@@ -4,7 +4,6 @@ import styles from '@/UI/BottomControlPanel/bottomControlPanel.module.scss';
 import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 
 import { WebGAL } from '@/Core/WebGAL';
-import { SYSTEM_CONFIG } from '@/config';
 
 /**
  * 设置 fast 按钮的激活与否
