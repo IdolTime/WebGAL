@@ -52,8 +52,8 @@ export const StoryLine: FC = () => {
 
   useEffect(() => {
     // @ts-ignore
-    const d = window.pubsub.subscribe('gameInfoReady', () => {
-      getStorylineFromStorage();
+    const d = window.pubsub.subscribe('gameInfoReady', (success: boolean) => {
+      success && getStorylineFromStorage();
     });
     if (GUIState.showStoryLine) {
       dispatch(saveActions.setShowStoryline(false));
@@ -194,7 +194,7 @@ export const StoryLine: FC = () => {
                   // @ts-ignore
                   window?.pubsub?.publish('loading', { loading: true });
                   setTimeout(() => {
-                    handlPlay(e, item)
+                    handlPlay(e, item);
                   }, 200);
                 }}
               >

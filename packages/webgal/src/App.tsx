@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { initializeScript, initClickAnimation } from './Core/initializeScript';
 import { initGCPSDK, initSdkLink, reportData } from './Core/initGCPSDK';
 import { platform_getGameDetail, platform_getUserInfo } from '@/Core/platformMessage';
-import { webgalStore } from '@/store/store';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
@@ -31,7 +30,7 @@ import { Toaster } from './UI/Toaster/Toaster';
 import { ModalBuyGame } from './UI/ModalBuyGame/ModalBuyGame';
 import { ModalRecharge } from './UI/ModalRecharge';
 import { ProgressAchievement } from '@/UI/ProgressAchievement/ProgressAchievement';
-import { RootState } from './store/store';
+import { RootState, webgalStore } from './store/store';
 import { Affinity } from './UI/Affinity/Affinity';
 import { LogPaySuccess } from '@/Core/log';
 
@@ -63,7 +62,7 @@ function App() {
       // @ts-ignore
       window.globalThis.getGameDetail(gameId, token).then((res: any) => {
         // @ts-ignore
-        window.pubsub.publish('gameInfoReady');
+        window.pubsub.publish('gameInfoReady', true);
         webgalStore.dispatch(setGameInfo(res.data));
         reportData(res.data);
       });
@@ -81,19 +80,19 @@ function App() {
         // 平台-iframe
         if (window !== window.top && !is_terre) {
           // @ts-ignore
-          window.pubsub.publish('gameInfoReady');
+          window.pubsub.publish('gameInfoReady', true);
           return;
         }
         // 编辑器-iframe
         if (is_terre) {
           // @ts-ignore
-          window.pubsub.publish('gameInfoReady');
+          window.pubsub.publish('gameInfoReady', true);
           return;
         }
         // @ts-ignore
         window.globalThis.getUserInfo(token).then((res: any) => {
           // @ts-ignore
-          window.pubsub.publish('gameInfoReady');
+          window.pubsub.publish('gameInfoReady', true);
         });
       } else {
         loadGameDetail();
@@ -128,7 +127,7 @@ function App() {
       }
       if (method === 'GET_GAME_DETAIL') {
         // @ts-ignore
-        window.pubsub.publish('gameInfoReady');
+        window.pubsub.publish('gameInfoReady', true);
         webgalStore.dispatch(setGameInfo(data.data.response.data));
         reportData(data.data.response.data);
       }
@@ -150,8 +149,8 @@ function App() {
       return;
     }
     // @ts-ignore
-    const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
-    if (is_terre) return;
+    // const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
+    // if (is_terre) return;
     setTimeout(() => {
       // @ts-ignore
       window.globalThis.openLoginDialog().then((res) => {

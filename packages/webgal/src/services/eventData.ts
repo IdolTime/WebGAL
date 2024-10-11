@@ -10,6 +10,7 @@ interface IPaymantEvent {
     productId: string; // 产品id
     amount: number; // 支付金额
     payTime: string; // 支付时间
+    channel: number; // 自己平台 channel=0 | sdk channel=1
 }
 
 /**
@@ -26,6 +27,7 @@ interface IOnlineEvent {
     thirdUserId: string; // 三方平台用户id
     productId: string; // 产品id
     onlineTime: string; // 上报时间
+    channel: number; // 自己平台 channel=0 | sdk channel=1
 }
 /**
  * 玩家开始游戏上报 --埋点
@@ -41,6 +43,7 @@ interface IUserOnlineLogEvent {
     thirdUserId: string; // 三方平台用户id
     productId: string; // 产品id
     reportTime: string; // 上报时间
+    channel: number; // 自己平台 channel=0 | sdk channel=1
 }
 /**
  * 玩家在线记录数据上报 --埋点 (每隔2分钟上报一次)
@@ -58,6 +61,7 @@ interface IEditorChapterEvent {
     chapterId?: number; // 章节id
     optionId?: number; // 选项id
     reportTime: string; // 上报时间
+    channel: number; // 自己平台 channel=0 | sdk channel=1
 }
 /**
  * 编辑器上报--埋点

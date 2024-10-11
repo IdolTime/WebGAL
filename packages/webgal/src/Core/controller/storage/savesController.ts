@@ -12,6 +12,14 @@ import { resetUserData } from '@/store/userDataReducer';
 let lastGetType1SavesTime = 0;
 let lastGetType2SavesTime = 0;
 
+const getUserId = () => {
+  if (WebGAL.channel === '0') {
+    return String(webgalStore.getState().userData.userInfo?.userId || 0);
+  }
+
+  return sessionStorage.getItem('sdk-userId') as string;
+};
+
 export function dumpSavesToStorage(startIndex: number, endIndex: number) {
   if (!WebGAL.gameId) {
     for (let i = startIndex; i <= endIndex; i++) {
@@ -40,6 +48,7 @@ export async function dumpSavesToCloud(startIndex: number, endIndex: number) {
     if (save) {
       const uploadPromise = request
         .post('/editor/game/file_save', {
+          userId: getUserId(),
           gId: WebGAL.gameId, // Your game ID
           fileType: 2,
           key: `${WebGAL.gameKey}-saves${i}`,
@@ -96,6 +105,7 @@ export async function uploadSavesToCloud(key: string, save: any, silent = true) 
   if (save) {
     const uploadPromise = request
       .post('/editor/game/file_save', {
+        userId: getUserId(),
         gId: WebGAL.gameId, // Your game ID
         fileType: 1,
         key: key,
@@ -147,6 +157,7 @@ async function retryFailedUploads(failedIndices: Record<string, ISaveData>, file
     if (save) {
       return request
         .post('/editor/game/file_save', {
+          userId: getUserId(),
           gId: WebGAL.gameId, // Your game ID
           fileType: 1,
           key,
@@ -196,8 +207,11 @@ export async function getSavesFromCloud(fileType: number) {
     lastGetType1SavesTime = Date.now();
   }
 
+  console.trace(1111);
+
   try {
     const response = await request.post('/editor/game/file_list', {
+      userId: getUserId(),
       page: 1,
       pageSize: 30,
       fileType,
@@ -256,6 +270,7 @@ export async function getSavesFromCloud(fileType: number) {
 export async function deleteSaveFromCloud(key: string) {
   try {
     await request.post('/editor/game/file_remove', {
+      userId: getUserId(),
       key,
       gId: WebGAL.gameId, // Your game ID
     });

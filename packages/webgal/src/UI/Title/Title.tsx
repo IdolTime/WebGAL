@@ -106,6 +106,7 @@ const Title: FC = () => {
           thirdUserId: sessionStorage.getItem('sdk-userId') as string,
           productId: String(WebGAL.gameId) || gameId,
           onlineTime: getLocalDate(),
+          channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
         };
         apiStartGameEvent(params);
       }, 16);

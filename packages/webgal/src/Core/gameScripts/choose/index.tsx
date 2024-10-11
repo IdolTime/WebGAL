@@ -168,6 +168,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         productId: WebGAL.gameId + '',
         optionId: Number(chooseEventId),
         reportTime: getLocalDate(),
+        channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
     }
     apiEditorChapterEvent(params);
 

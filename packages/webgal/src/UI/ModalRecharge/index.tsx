@@ -72,6 +72,7 @@ export function ModalRecharge() {
         productId: WebGAL.gameId + '',
         amount: selectedItem?.price ?? 0,
         payTime: getLocalDate(),
+        channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
       }
       apiPaymantEvent(params)
     } else {

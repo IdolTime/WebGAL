@@ -111,6 +111,10 @@ export interface IUserData {
   optionData: IOptionData; // 用户设置选项数据
   appreciationData: IAppreciation;
   token?: string;
+  userInfo?: {
+    nickName: string;
+    userId: number;
+  };
 }
 
 export interface ISetUserDataPayload {

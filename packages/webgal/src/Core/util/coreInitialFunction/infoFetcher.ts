@@ -153,11 +153,13 @@ export const infoFetcher = (url: string) => {
           case 'Game_key': {
             WebGAL.gameKey = args[0];
             // @ts-ignore
-            const dispose = window.pubsub.subscribe('gameInfoReady', () => {
-              getStorage();
-              // getFastSaveFromStorage();
-              getSavesFromStorage(0, 0);
-              dispose();
+            const dispose = window.pubsub.subscribe('gameInfoReady', (success: boolean) => {
+              if (success) {
+                getStorage();
+                // getFastSaveFromStorage();
+                getSavesFromStorage(0, 0);
+                dispose();
+              }
             });
             break;
           }
