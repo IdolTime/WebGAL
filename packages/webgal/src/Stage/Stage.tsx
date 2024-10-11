@@ -134,7 +134,7 @@ export const Stage: FC = () => {
         onMouseMove={(e) => !GUIState.showControls && updateControlsVisibility(e, stageState, GUIState, dispatch)}
       />
       <IntroContainer />
-      {GUIState.showProgressAndAchievement && <ExtraContainer />}
+      {!GUIState.showProgressAndAchievement && <ExtraContainer />}
     </div>
   );
 };
