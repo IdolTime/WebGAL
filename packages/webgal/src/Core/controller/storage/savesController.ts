@@ -11,6 +11,9 @@ import { resetUserData } from '@/store/userDataReducer';
 
 let lastGetType1SavesTime = 0;
 let lastGetType2SavesTime = 0;
+let lastStorylineSaveTime = 0;
+let lastAffinitySaveTime = 0;
+let lastAchiveSaveTime = 0;
 
 const getUserId = () => {
   if (WebGAL.channel === '0') {
@@ -207,8 +210,6 @@ export async function getSavesFromCloud(fileType: number) {
     lastGetType1SavesTime = Date.now();
   }
 
-  console.trace(1111);
-
   try {
     const response = await request.post('/editor/game/file_list', {
       userId: getUserId(),
@@ -225,7 +226,9 @@ export async function getSavesFromCloud(fileType: number) {
         value: string;
       }[] = data.data;
       for (const save of saves) {
-        const parsedSave = JSON.parse(save.value);
+        const v = escapeContentQuotes(save.value);
+
+        const parsedSave = JSON.parse(v);
         if (save.key === `${WebGAL.gameKey}-saves-fast`) {
           webgalStore.dispatch(saveActions.setFastSave(parsedSave as ISaveData));
         } else if (new RegExp(`${WebGAL.gameKey}-saves[0-9]+`).test(save.key)) {
@@ -306,6 +309,9 @@ export async function dumpStorylineToStorage() {
     await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
     logger.info(`故事线 >> 写入本地存储`);
   } else {
+    if (Date.now() - lastStorylineSaveTime < 3000) return;
+    lastStorylineSaveTime = Date.now();
+    console.log(333333, data);
     await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
   }
 }
@@ -326,6 +332,8 @@ export async function dumpUnlockAffinityToStorage() {
     await localforage.setItem(`${WebGAL.gameKey}-unlock-affinity`, { data });
     logger.info(`解锁亲密度 >> 写入本地存储`);
   } else {
+    if (Date.now() - lastAffinitySaveTime < 3000) return;
+    lastAffinitySaveTime = Date.now();
     await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-affinity`, { data });
   }
 }
@@ -347,6 +355,8 @@ export async function dumpUnlickAchieveToStorage() {
     await localforage.setItem(`${WebGAL.gameKey}-unlock-achieve`, { data });
     logger.info(`解锁成就 >>> 写入本地存储`);
   } else {
+    if (Date.now() - lastAchiveSaveTime < 3000) return;
+    lastAchiveSaveTime = Date.now();
     await uploadSavesToCloud(`${WebGAL.gameKey}-unlock-achieve`, { data });
   }
 }
@@ -361,4 +371,11 @@ export async function getUnlickAchieveFromStorage() {
   } else {
     await getSavesFromCloud(1);
   }
+}
+
+function escapeContentQuotes(str: string) {
+  return str.replace(/\"content\":\"(.*?)\"(,|})/g, function (match, p1, p2) {
+    const escapedContent = p1.replace(/\"/g, '\\"');
+    return `"content":"${escapedContent}"${p2}`;
+  });
 }
