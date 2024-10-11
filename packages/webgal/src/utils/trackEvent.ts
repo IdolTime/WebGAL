@@ -9,10 +9,11 @@ let timer: NodeJS.Timer | undefined;
 // 启动定时器，每2分钟请求一次数据
 export function startEvent() {
 
-    if (!timer) {
+    if (timer) {
       clearInterval(timer);
-      requestData()
     }
+
+    requestData()
 
     function requestData() {
       const params = {
