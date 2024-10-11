@@ -135,7 +135,7 @@ function App() {
       if (method === 'BUY_GAME') {
         const gameInfo = webgalStore.getState().storeData.gameInfo;
         // @ts-ignore
-        LogPaySuccess({ paymentAmount: gameInfo.paymentAmount, from: 'maosupusdk-avg-platform' });
+        LogPaySuccess({ paymentAmount: gameInfo.paymentAmount });
       }
     });
     // 登录

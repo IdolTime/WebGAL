@@ -91,7 +91,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
           //   WebGAL.gameplay.performController.unmountPerform('finishTrial');
           // }, 3000);
           window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-            LogPaySuccess({ paymentAmount, from: 'maosupusdk-avg-link' });
+            LogPaySuccess({ paymentAmount });
             // @ts-ignore
             window.pubsub.publish('toaster', { show: true });
             WebGAL.gameplay.performController.unmountPerform('finishTrial');
@@ -173,7 +173,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       if (method === 'BUY_GAME') {
         // @ts-ignore
         const { paymentAmount } = webgalStore.getState().storeData.gameInfo;
-        LogPaySuccess({ paymentAmount, from: 'maosupusdk-avg-platform' });
+        LogPaySuccess({ paymentAmount });
       }
       // todo
       // 关闭弹窗 消息

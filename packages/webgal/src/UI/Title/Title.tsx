@@ -57,7 +57,7 @@ const Title: FC = () => {
         // 购买
         // @ts-ignore
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
-          LogPaySuccess({ paymentAmount, from: 'maosupusdk-avg-link' });
+          LogPaySuccess({ paymentAmount });
           setTimeout(() => {
             window.location.reload();
           }, 100);

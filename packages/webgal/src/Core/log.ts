@@ -5,13 +5,13 @@ const url = 'https://test-api.idoltime.games/third_payment_record_report';
 
 // sdk支付完成上报
 export const LogPaySuccess = (params: any) => {
-  const { paymentAmount, from } = params;
+  const { paymentAmount } = params;
   const reportInfo = {
     thirdUserId: sessionStorage.getItem('sdk-userId'),
     productId: WebGAL.gameId,
     payTime: new Date(),
     amount: paymentAmount,
-    from,
+    channel: 1,
   };
   axios.post(url, {
     record: JSON.stringify(reportInfo),
