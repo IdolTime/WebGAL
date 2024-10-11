@@ -26,7 +26,8 @@ export const setStorage = debounce(() => {
  */
 export const getStorage = debounce(() => {
   let newUserData: any;
-  const callback = (newUserData: IUserData) => {
+  const callback = (_newUserData: IUserData) => {
+    const newUserData = { ..._newUserData };
     newUserData && !!newUserData.token && delete newUserData.token;
     // 如果没有数据或者属性不完全，重新初始化
     if (!newUserData || !checkUserDataProperty(newUserData)) {
@@ -70,7 +71,8 @@ function debounce<T, K>(func: (...args: T[]) => K, wait: number) {
 }
 
 export const dumpToStorageFast = () => {
-  const callback = (newUserData: IUserData) => {
+  const callback = (_newUserData: IUserData) => {
+    const newUserData = { ..._newUserData };
     // @ts-ignore
     newUserData && !!newUserData.token && delete newUserData.token;
     // 如果没有数据，初始化
