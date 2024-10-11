@@ -14,27 +14,17 @@ export function startEvent() {
       thirdUserId: sessionStorage.getItem('sdk-userId') as string,
       productId: String(WebGAL.gameId) || gameId,
       reportTime: getLocalDate(),
+      channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
     };
     apiUserOnlineLogEvent(params);
   }
 
-    if (timer) {
-      clearInterval(timer);
-    }
+  if (timer) {
+    clearInterval(timer);
+  }
 
-    requestData()
-
-    function requestData() {
-      const params = {
-          thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-          productId: WebGAL.gameId + '',
-          reportTime: getLocalDate(),
-          channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
-        }
-        apiUserOnlineLogEvent(params)
-    }
-
-    timer = setInterval(requestData, 2 * 60 * 1000); // 2分钟 = 2 * 60 * 1000 毫秒
+  requestData();
+  timer = setInterval(requestData, 2 * 60 * 1000); // 2分钟 = 2 * 60 * 1000 毫秒
 }
 
 // 清除定时器

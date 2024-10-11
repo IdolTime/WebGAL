@@ -153,25 +153,24 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
   sentence?.args?.forEach((arg) => {
     // 是否开启了选项埋点
     if (arg.key === 'isChooseEvent') {
-      isChooseEvent = !!arg.value
+      isChooseEvent = !!arg.value;
     }
     // 选项埋点事件id
     if (arg.key === 'chooseEventId') {
-      chooseEventId = arg.value?.toString()
+      chooseEventId = arg.value?.toString();
     }
-  })
+  });
 
-  if(isChooseEvent && chooseEventId) {
+  if (isChooseEvent && chooseEventId) {
     /** 编辑器章节语句 埋点上报  */
     const params = {
-        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-        productId: WebGAL.gameId + '',
-        optionId: Number(chooseEventId),
-        reportTime: getLocalDate(),
-        channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
-    }
+      thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+      productId: String(WebGAL.gameId),
+      optionId: Number(chooseEventId),
+      reportTime: getLocalDate(),
+      channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
+    };
     apiEditorChapterEvent(params);
-
   }
 
   // 停止快进功能
@@ -195,6 +194,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
       productId: String(WebGAL.gameId) || gameId,
       optionId: Number(chooseEventId),
       reportTime: getLocalDate(),
+      channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
     };
     apiEditorChapterEvent(params);
   }

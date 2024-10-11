@@ -18,7 +18,7 @@ export const eventData = (sentence: ISentence): IPerform => {
     productId: String(WebGAL.gameId) || gameId,
     chapterId: Number(chapterId),
     reportTime: getLocalDate(),
-    channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
+    channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
   };
   apiEditorChapterEvent(params);
 
