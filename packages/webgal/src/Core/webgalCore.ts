@@ -14,6 +14,7 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public gameId = 0;
+  public channel = '0';
   public events = new Events();
   public videoManager = new VideoManager();
 }

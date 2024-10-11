@@ -20,17 +20,18 @@ import { Achievement } from '@/UI/Achievement';
 import { BeautyGuide } from '@/UI/BeautyGuide/BeautyGuide';
 import { ModalR18 } from '@/UI/ModalR18/ModalR18';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from './store/userDataReducer';
+import { setToken, setUserInfo } from './store/userDataReducer';
 import { getEditorGameDetail, getGameInfo, getPaymentConfigList } from './services/store';
-import { setGameInfo, setIsEditorPreviewMode, setPaymentConfigurationList } from './store/storeReducer';
+import { setIsEditorPreviewMode } from './store/storeReducer';
 import { WebGAL } from '@/Core/WebGAL';
 import PixiStage from '@/Core/controller/stage/pixi/PixiController';
 import { Toaster } from './UI/Toaster/Toaster';
 import { ModalBuyGame } from './UI/ModalBuyGame/ModalBuyGame';
 import { ModalRecharge } from './UI/ModalRecharge';
 import { ProgressAchievement } from '@/UI/ProgressAchievement/ProgressAchievement';
-import { RootState } from './store/store';
+import { RootState, webgalStore } from './store/store';
 import { Affinity } from './UI/Affinity/Affinity';
+import { getUserInfo } from './services/user';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -41,7 +42,10 @@ function App() {
     initClickAnimation();
     initializeScript();
     const token = localStorage.getItem('editor-token');
-    const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
+    const queryParams = new URLSearchParams(window.location.search);
+    const tokenFromQuery = queryParams.get('token');
+    const channel = queryParams.get('channel') || '0';
+    WebGAL.channel = channel;
     if (tokenFromQuery || token) {
       setLoggedIn(true);
       dispatch(setToken(tokenFromQuery || ''));
@@ -60,10 +64,12 @@ function App() {
         WebGAL.gameplay.pixiStage = new PixiStage();
         if (refObject.current.previewModeValue) {
           getEditorGameDetail().then((res) => {
-            // @ts-ignore
-            window.pubsub.publish('gameInfoReady');
             const authorInfoStr = localStorage.getItem('editorUserInfo') || '{}';
             const authorInfo = JSON.parse(authorInfoStr);
+            webgalStore.dispatch(setUserInfo(authorInfo));
+
+            // @ts-ignore
+            window.pubsub.publish('gameInfoReady', true);
 
             if (res.code === 0) {
               if (res.data.authorId !== authorInfo.userId) {
@@ -75,15 +81,15 @@ function App() {
             }
           });
         } else {
-          getGameInfo().then((res) => {
-            if (res.code === 0) {
+          Promise.all([getGameInfo(), getUserInfo()]).then(([res1, res2]) => {
+            if (res1.code === 0 && res2.code === 0) {
               // @ts-ignore
-              window.pubsub.publish('gameInfoReady');
+              window.pubsub.publish('gameInfoReady', true);
             } else {
               // @ts-ignore
-              window.pubsub.publish('gameInfoReady');
+              window.pubsub.publish('gameInfoReady', false);
               showGlogalDialog({
-                title: '获取游戏信息失败\n请刷新页面！',
+                title: res1.code !== 0 ? '获取游戏信息失败\n请稍后重试！' : '获取用户信息失败\n请稍后重试！',
                 rightText: '确定',
                 rightFunc: () => {
                   window.location.reload();

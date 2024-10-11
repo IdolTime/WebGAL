@@ -16,7 +16,7 @@ import {
   textFont,
   textSize,
   voiceOption,
-  videoSizeOption
+  videoSizeOption,
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -38,7 +38,7 @@ const initialOptionSet: IOptionData = {
   voiceInterruption: voiceOption.yes,
   fullScreen: fullScreenOption.off,
   uiLight: 100, // UI亮度
-  videoSize: videoSizeOption.Size720P
+  videoSize: videoSizeOption.Size720P,
 };
 
 // 初始化用户数据
@@ -50,6 +50,10 @@ export const initState: IUserData = {
     cg: [],
   },
   token: '',
+  userInfo: {
+    nickName: '',
+    userId: 0,
+  },
 };
 
 const userDataSlice = createSlice({
@@ -139,6 +143,9 @@ const userDataSlice = createSlice({
     setToken(state, action: PayloadAction<string>) {
       state.token = action.payload;
     },
+    setUserInfo(state, action: PayloadAction<{ userId: number; nickName: string }>) {
+      state.userInfo = action.payload;
+    },
   },
 });
 
@@ -153,5 +160,6 @@ export const {
   resetOptionSet,
   resetAllData,
   setToken,
+  setUserInfo,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;

@@ -120,12 +120,14 @@ export class SceneManager {
       );
 
       // @ts-ignore
-      const dispose2 = window.pubsub.subscribe('gameInfoReady', () => {
-        markRef.current.gameReady = true;
-        if (markRef.current.sceneReady) {
-          this.checkCallback(markRef.current.params.sceneName, markRef.current.params.sentenceList);
+      const dispose2 = window.pubsub.subscribe('gameInfoReady', (success: boolean) => {
+        if (success) {
+          markRef.current.gameReady = true;
+          if (markRef.current.sceneReady) {
+            this.checkCallback(markRef.current.params.sceneName, markRef.current.params.sentenceList);
+          }
+          dispose2();
         }
-        dispose2();
       });
 
       parsedScene.current = sceneParser(rawScene, scenaName, sceneUrl);
