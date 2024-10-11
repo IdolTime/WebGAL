@@ -16,7 +16,7 @@ interface IPaymantEvent {
  * 玩家支付上报 --埋点
  */
 export const apiPaymantEvent = async (data: IPaymantEvent) => {
-    await request.post('/editor/third_payment_record_report', data)
+    await request.post('/third_payment_record_report', data)
     .then(() => { console.log('玩家支付上报成功！') })
     .catch((err: any) => { console.error('玩家支付上报失败: ', err) })
 }
@@ -31,7 +31,7 @@ interface IOnlineEvent {
  * 玩家开始游戏上报 --埋点
  */
 export const apiStartGameEvent = async (data: IOnlineEvent) => {
-    await request.post('/editor/third_user_online_report', data)
+    await request.post('/third_user_online_report', data)
     .then(() => { console.log('开始游戏上报成功！') })
     .catch((err: any) => { console.error('开始游戏上报失败: ', err) })
 }
@@ -46,7 +46,7 @@ interface IUserOnlineLogEvent {
  * 玩家在线记录数据上报 --埋点 (每隔2分钟上报一次)
  */
 export const apiUserOnlineLogEvent = async (data: IUserOnlineLogEvent) => {
-    await request.post('/editor/third_user_online_log_report', data) // /third_user_online_log_report
+    await request.post('/third_user_online_log_report', data) // /third_user_online_log_report
     .then(() => { console.log('玩家在线记录 上报成功！') })
     .catch((err: any) => { console.error('玩家在线记录 上报失败: ', err) })
 }
@@ -63,7 +63,7 @@ interface IEditorChapterEvent {
  * 编辑器上报--埋点
  */
 export const apiEditorChapterEvent = async (data: IEditorChapterEvent) => {
-    await request.post('/editor/third_product_chapter_report', data)
+    await request.post('/third_product_chapter_report', data)
     .then(() => { console.log('编辑器章节 上报成功！') })
     .catch((err: any) => { console.error('编辑器章节 上报失败: ', err) })
 }
