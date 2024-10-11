@@ -7,7 +7,7 @@ import { RootState } from '@/store/store';
 import { setSlPage } from '@/store/userDataReducer';
 import useTrans from '@/hooks/useTrans';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import { getSavesFromStorage } from '@/Core/controller/storage/savesController';
+import { getSavesFromCloud, getSavesFromStorage } from '@/Core/controller/storage/savesController';
 import { setVisibility } from '@/store/GUIReducer';
 import { px2 } from '@/Core/parser/utils';
 import {
@@ -34,7 +34,6 @@ export const Load: FC = () => {
       <div
         onClick={() => {
           dispatch(setSlPage(i));
-          setStorage();
           playSePageChange();
         }}
         onMouseEnter={playSeEnter}
@@ -59,8 +58,8 @@ export const Load: FC = () => {
   const end = start + 5;
 
   useEffect(() => {
-    getSavesFromStorage(start, end);
-  }, [start, end]);
+    getSavesFromCloud(2);
+  }, []);
 
   let animationIndex = 0;
   for (let i = start; i <= end; i++) {
@@ -122,7 +121,6 @@ export const Load: FC = () => {
       index = index < 4 ? index + 1 : 1;
     }
     dispatch(setSlPage(index));
-    setStorage();
     playSePageChange();
   };
 

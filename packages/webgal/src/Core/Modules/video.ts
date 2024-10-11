@@ -190,15 +190,57 @@ export class VideoManager {
     // 视频加载失败时触发
     videoTag.addEventListener('error', () => {
       const loadingNode = videoContainerTag.querySelector('.video-loading');
+      const prevErrorNode = videoContainerTag.querySelector('.video-error');
       if (loadingNode) {
         videoContainerTag.removeChild(loadingNode);
       }
 
-      // 你可以在这里添加更多的错误处理逻辑，比如显示一个错误消息
+      if (prevErrorNode) {
+        videoContainerTag.removeChild(prevErrorNode);
+      }
+
+      const fullScreenTag = document.getElementById('fullScreenPerform');
+
+      // 显示错误信息和重新加载按钮
       const errorNode = document.createElement('div');
+      const pNode = document.createElement('p');
+      const buttonNode = document.createElement('div');
+
       errorNode.className = 'video-error';
-      errorNode.textContent = '视频加载失败，请稍后重试。';
+      pNode.innerHTML = '视频加载失败，请稍后重试。';
+      buttonNode.innerHTML = '重新加载';
+      buttonNode.className = 'video-retry-button interactive';
+
+      if (fullScreenTag && videoContainerTag.style.opacity === '1') {
+        fullScreenTag.style.zIndex = '15';
+      }
+
+      errorNode.appendChild(pNode);
+      errorNode.appendChild(buttonNode);
+
       videoContainerTag.appendChild(errorNode);
+
+      buttonNode.onclick = () => {
+        // 移除错误信息
+        if (errorNode) {
+          videoContainerTag.removeChild(errorNode);
+        }
+
+        const loading = document.createElement('div');
+        loading.className = 'video-loading';
+        loading.innerHTML = loadingSVGStr;
+        videoContainerTag.appendChild(loading);
+        videoTag.src = '';
+        videoTag.load();
+
+        if (fullScreenTag) {
+          fullScreenTag.style.zIndex = 'auto';
+        }
+
+        this.videosByKey[url].waitCommands.playVideo = true;
+        // 重新加载视频
+        this.fetchVideo(url, videoTag, videoType);
+      };
     });
 
     if (playWhenLoaded) {
@@ -208,95 +250,7 @@ export class VideoManager {
       };
     }
 
-    fetch(url)
-      .then((res) => {
-        if (res.status > 200) {
-          return null;
-        }
-        return res.arrayBuffer();
-      })
-      .then(async (dataBuffer) => {
-        if (!dataBuffer) {
-          return;
-        }
-
-        const marker = 'ENCRYPTED';
-        const markerLength = marker.length;
-        const signatureArray = new Uint8Array(dataBuffer.slice(0, markerLength));
-
-        let isEncrypted = false;
-        for (let i = 0; i < markerLength; i++) {
-          if (String.fromCharCode(signatureArray[i]) !== marker[i]) {
-            isEncrypted = false;
-            break;
-          }
-          isEncrypted = true;
-        }
-
-        let videoBlob;
-        if (isEncrypted) {
-          const encryptedData = dataBuffer.slice(markerLength);
-
-          if (window.crypto?.subtle) {
-            const key = new Uint8Array([
-              0x40, 0xe6, 0xad, 0x42, 0x9a, 0x13, 0x02, 0x0a, 0x07, 0xbe, 0x29, 0x0c, 0x5e, 0xf1, 0xd7, 0xdc, 0x7e,
-              0x45, 0xe5, 0xc4, 0xbf, 0x34, 0xd5, 0x4a, 0x56, 0x64, 0x28, 0x26, 0x27, 0x94, 0x6e, 0x4d,
-            ]);
-            const iv = new Uint8Array([
-              0x9d, 0x6b, 0xac, 0x74, 0xc6, 0x4e, 0xe8, 0x71, 0x4e, 0x79, 0x59, 0xce, 0xf7, 0x52, 0x71, 0xd0,
-            ]);
-            videoBlob = await decryptVideo(encryptedData, key, iv, videoType);
-          } else {
-            const key = '40e6ad429a13020a07be290c5ef1d7dc7e45e5c4bf34d54a5664282627946e4d';
-            const iv = '9d6bac74c64ee8714e7959cef75271d0';
-            videoBlob = await decryptVideoInChunks(encryptedData, key, iv, videoType);
-          }
-        } else {
-          videoBlob = new Blob([new Uint8Array(dataBuffer)], {
-            type: `video/${videoType === 'mp4' ? 'mp4' : 'x-flv'}`,
-          });
-        }
-
-        const flvPlayer = FlvJs.createPlayer({
-          type: url.endsWith('.mp4') ? 'mp4' : 'flv',
-          url: URL.createObjectURL(videoBlob),
-        });
-        flvPlayer.attachMediaElement(videoTag);
-        flvPlayer.load();
-        const videoKeyItem = {
-          ...this.videosByKey[url],
-          player: flvPlayer,
-        };
-
-        this.videosByKey[url] = videoKeyItem;
-
-        videoTag.onloadeddata = () => {
-          const waitCommands = Object.keys(videoKeyItem.waitCommands);
-
-          if (videoKeyItem) {
-            const canvas2 = document.createElement('canvas');
-            const context = canvas2.getContext('2d');
-            canvas2.width = 480;
-            canvas2.height = 270;
-            context!.drawImage(videoTag, 0, 0, 480, 270);
-            const url = canvas2.toDataURL('image/webp', 0.5);
-            canvas2.remove();
-
-            videoKeyItem.poster = url;
-          }
-
-          if (waitCommands.length) {
-            waitCommands.forEach((command) => {
-              if (!videoKeyItem) {
-                console.log('没有找到视频缓存资源', url);
-                return;
-              }
-              // @ts-ignore
-              this[command](url, videoKeyItem.waitCommands[command]);
-            });
-          }
-        };
-      });
+    this.fetchVideo(url, videoTag, videoType);
   }
 
   public pauseVideo(key: string): void {
@@ -315,6 +269,12 @@ export class VideoManager {
       if (videoContainerTag) {
         videoContainerTag.style.opacity = '1';
         videoContainerTag.style.zIndex = keepVideo ? '6' : '11';
+        if (videoContainerTag.querySelector('.video-error')) {
+          const fullScreenTag = document.getElementById('fullScreenPerform');
+          if (fullScreenTag) {
+            fullScreenTag.style.zIndex = '16';
+          }
+        }
       }
     } else if (!videoItem) {
       this.preloadVideo(key, true);
@@ -475,5 +435,97 @@ export class VideoManager {
         this.checkProgress(key);
       }, 100);
     }
+  }
+
+  private fetchVideo(url: string, videoTag: HTMLVideoElement, videoType: 'mp4' | 'flv'): void {
+    fetch(url)
+      .then((res) => {
+        if (res.status > 200) {
+          return null;
+        }
+        return res.arrayBuffer();
+      })
+      .then(async (dataBuffer) => {
+        if (!dataBuffer) {
+          return;
+        }
+
+        const marker = 'ENCRYPTED';
+        const markerLength = marker.length;
+        const signatureArray = new Uint8Array(dataBuffer.slice(0, markerLength));
+
+        let isEncrypted = false;
+        for (let i = 0; i < markerLength; i++) {
+          if (String.fromCharCode(signatureArray[i]) !== marker[i]) {
+            isEncrypted = false;
+            break;
+          }
+          isEncrypted = true;
+        }
+
+        let videoBlob;
+        if (isEncrypted) {
+          const encryptedData = dataBuffer.slice(markerLength);
+
+          if (window.crypto?.subtle) {
+            const key = new Uint8Array([
+              0x40, 0xe6, 0xad, 0x42, 0x9a, 0x13, 0x02, 0x0a, 0x07, 0xbe, 0x29, 0x0c, 0x5e, 0xf1, 0xd7, 0xdc, 0x7e,
+              0x45, 0xe5, 0xc4, 0xbf, 0x34, 0xd5, 0x4a, 0x56, 0x64, 0x28, 0x26, 0x27, 0x94, 0x6e, 0x4d,
+            ]);
+            const iv = new Uint8Array([
+              0x9d, 0x6b, 0xac, 0x74, 0xc6, 0x4e, 0xe8, 0x71, 0x4e, 0x79, 0x59, 0xce, 0xf7, 0x52, 0x71, 0xd0,
+            ]);
+            videoBlob = await decryptVideo(encryptedData, key, iv, videoType);
+          } else {
+            const key = '40e6ad429a13020a07be290c5ef1d7dc7e45e5c4bf34d54a5664282627946e4d';
+            const iv = '9d6bac74c64ee8714e7959cef75271d0';
+            videoBlob = await decryptVideoInChunks(encryptedData, key, iv, videoType);
+          }
+        } else {
+          videoBlob = new Blob([new Uint8Array(dataBuffer)], {
+            type: `video/${videoType === 'mp4' ? 'mp4' : 'x-flv'}`,
+          });
+        }
+
+        const flvPlayer = FlvJs.createPlayer({
+          type: url.endsWith('.mp4') ? 'mp4' : 'flv',
+          url: URL.createObjectURL(videoBlob),
+        });
+        flvPlayer.attachMediaElement(videoTag);
+        flvPlayer.load();
+        const videoKeyItem = {
+          ...this.videosByKey[url],
+          player: flvPlayer,
+        };
+
+        this.videosByKey[url] = videoKeyItem;
+
+        videoTag.onloadeddata = () => {
+          const waitCommands = Object.keys(videoKeyItem.waitCommands);
+
+          if (videoKeyItem) {
+            const canvas2 = document.createElement('canvas');
+            const context = canvas2.getContext('2d');
+            canvas2.width = 480;
+            canvas2.height = 270;
+            context!.drawImage(videoTag, 0, 0, 480, 270);
+            const url = canvas2.toDataURL('image/webp', 0.5);
+            canvas2.remove();
+
+            videoKeyItem.poster = url;
+          }
+
+          if (waitCommands.length) {
+            waitCommands.forEach((command) => {
+              if (!videoKeyItem) {
+                console.log('没有找到视频缓存资源', url);
+                return;
+              }
+              // @ts-ignore
+              this[command](url, videoKeyItem.waitCommands[command]);
+            });
+          }
+        };
+      });
   }
 }

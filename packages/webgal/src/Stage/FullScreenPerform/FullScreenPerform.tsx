@@ -12,7 +12,11 @@ export const FullScreenPerform = () => {
     top = '12%';
   }
   return (
-    <div className={styles.FullScreenPerform_main} style={{ width: stageWidth, height: stageHeight, top: top }}>
+    <div
+      id="fullScreenPerform"
+      className={styles.FullScreenPerform_main}
+      style={{ width: stageWidth, height: stageHeight, top: top }}
+    >
       <div id="videoContainer" />
     </div>
   );
