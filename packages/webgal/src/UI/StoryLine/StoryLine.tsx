@@ -119,10 +119,7 @@ export const StoryLine: FC = () => {
     dispatch(setShowStoryLine(false));
     dispatch(saveActions.setIsShowUnlock(true));
     dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
-    loadGameFromStageData(saveData.videoData as ISaveData).finally(() => {
-      // @ts-ignore
-      window?.pubsub?.publish('loading', { loading: false });
-    });
+    loadGameFromStageData(saveData.videoData as ISaveData);
   };
 
   function getImagePath(url: string) {

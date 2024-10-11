@@ -100,4 +100,3 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
    */
   setEbg(webgalStore.getState().stage.bgName);
 }
-
