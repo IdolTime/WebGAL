@@ -14,10 +14,11 @@ export const eventData = (sentence: ISentence): IPerform => {
     
     /** 编辑器章节语句 埋点上报  */ 
     const params = {
-        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
-        productId: WebGAL.gameId + '',
-        chapterId: Number(chapterId),
-        reportTime: getLocalDate(),
+      thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+      productId: WebGAL.gameId + '',
+      chapterId: Number(chapterId),
+      reportTime: getLocalDate(),
+      channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
     }
     apiEditorChapterEvent(params);
 
