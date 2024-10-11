@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { WebGAL } from '@/Core/WebGAL';
 
-const url = 'https://test-api.idoltime.games/editor/third/payment_record_report';
+const url = 'https://test-api.idoltime.games/editor/third_payment_record_report';
 
 // sdk支付完成上报
 export const LogPaySuccess = (params: any) => {
