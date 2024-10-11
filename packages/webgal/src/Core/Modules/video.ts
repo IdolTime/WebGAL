@@ -74,6 +74,7 @@ export class VideoManager {
       player: FlvJs.Player;
       id: string;
       progressTimer: ReturnType<typeof setTimeout> | null;
+      loadingTimer: ReturnType<typeof setTimeout> | undefined;
       waitCommands: {
         showVideo?: boolean;
         playVideo?: boolean;
@@ -144,20 +145,42 @@ export class VideoManager {
     videoContainerTag.appendChild(videoTag);
     document.getElementById('videoContainer')?.appendChild(videoContainerTag);
 
+    this.videosByKey[url] = {
+      // @ts-ignore
+      player: null,
+      id,
+      progressTimer: null,
+      loadingTimer: undefined,
+      waitCommands: {},
+      events: {
+        ended: {
+          callbacks: [],
+          handler: onEndedHandler,
+        },
+      },
+    };
+
     // 视频需要缓冲时触发
     videoTag.addEventListener('waiting', () => {
-      const loadingNode = videoContainerTag.querySelector('.video-loading');
+      // 设置一个延迟的定时器，等待 2 秒后再显示加载动画
+      this.videosByKey[url].loadingTimer = setTimeout(() => {
+        const loadingNode = videoContainerTag.querySelector('.video-loading');
 
-      if (!loadingNode) {
-        const loading = document.createElement('div');
-        loading.className = 'video-loading';
-        loading.innerHTML = loadingSVGStr;
-        videoContainerTag.appendChild(loading);
-      }
+        if (!loadingNode) {
+          const loading = document.createElement('div');
+          loading.className = 'video-loading';
+          loading.innerHTML = loadingSVGStr;
+          videoContainerTag.appendChild(loading);
+        }
+      }, 2000); // 延迟 2 秒显示加载动画
     });
 
     // 视频可以播放时触发
     videoTag.addEventListener('canplay', () => {
+      // 清除等待显示 loading 的定时器
+      clearTimeout(this.videosByKey[url].loadingTimer);
+
+      // 移除加载动画
       const loadingNode = videoContainerTag.querySelector('.video-loading');
       if (loadingNode) {
         videoContainerTag.removeChild(loadingNode);
@@ -177,20 +200,6 @@ export class VideoManager {
       errorNode.textContent = '视频加载失败，请稍后重试。';
       videoContainerTag.appendChild(errorNode);
     });
-
-    this.videosByKey[url] = {
-      // @ts-ignore
-      player: null,
-      id,
-      progressTimer: null,
-      waitCommands: {},
-      events: {
-        ended: {
-          callbacks: [],
-          handler: onEndedHandler,
-        },
-      },
-    };
 
     if (playWhenLoaded) {
       this.videosByKey[url].waitCommands = {

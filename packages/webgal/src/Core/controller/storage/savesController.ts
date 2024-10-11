@@ -102,8 +102,10 @@ export async function uploadSavesToCloud(key: string, save: any, silent = true) 
   const promises: any = [];
   const failedUploads: Record<string, ISaveData> = {};
 
-  // @ts-ignore
-  silent && window.pubsub.publish('loading', { loading: true });
+  if (!silent) {
+    // @ts-ignore
+    window.pubsub.publish('loading', { loading: true });
+  }
 
   if (save) {
     const uploadPromise = request
