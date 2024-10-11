@@ -19,7 +19,8 @@ export function startEvent() {
       const params = {
           thirdUserId: sessionStorage.getItem('sdk-userId') as string,
           productId: WebGAL.gameId + '',
-          reportTime: getLocalDate()
+          reportTime: getLocalDate(),
+          channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
         }
         apiUserOnlineLogEvent(params)
     }
