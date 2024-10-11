@@ -18,7 +18,22 @@ export function startEvent() {
     apiUserOnlineLogEvent(params);
   }
 
-  timer = setInterval(requestData, 2 * 60 * 1000); // 2分钟 = 2 * 60 * 1000 毫秒
+    if (timer) {
+      clearInterval(timer);
+    }
+
+    requestData()
+
+    function requestData() {
+      const params = {
+          thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+          productId: WebGAL.gameId + '',
+          reportTime: getLocalDate()
+        }
+        apiUserOnlineLogEvent(params)
+    }
+
+    timer = setInterval(requestData, 2 * 60 * 1000); // 2分钟 = 2 * 60 * 1000 毫秒
 }
 
 // 清除定时器

@@ -46,7 +46,7 @@ interface IUserOnlineLogEvent {
  * 玩家在线记录数据上报 --埋点 (每隔2分钟上报一次)
  */
 export const apiUserOnlineLogEvent = async (data: IUserOnlineLogEvent) => {
-    await request.post('/third_user_online_log_report', data) // /third_user_online_log_report
+    await request.post('/third_user_online_log_report', data)
     .then(() => { console.log('玩家在线记录 上报成功！') })
     .catch((err: any) => { console.error('玩家在线记录 上报失败: ', err) })
 }
