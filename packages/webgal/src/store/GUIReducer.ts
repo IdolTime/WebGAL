@@ -96,7 +96,7 @@ export const initState: IGuiState = {
     Achievement_title: initStateAchievement,
   },
   currentPlayAudio: null, // 当前播放的音频
-  playingVideo: false
+  playingVideo: false,
 };
 
 /**
@@ -112,7 +112,7 @@ const GUISlice = createSlice({
      * @param action 改变显示状态的Action
      */
     setVisibility: (state, action: PayloadAction<setVisibilityPayload>) => {
-      getStorage();
+      // getStorage();
       const { component, visibility } = action.payload;
       state[component] = visibility;
     },
@@ -122,7 +122,7 @@ const GUISlice = createSlice({
      * @param action 改变当前选中项的Action
      */
     setMenuPanelTag: (state, action: PayloadAction<MenuPanelTag>) => {
-      getStorage();
+      // getStorage();
       state.currentMenuTag = action.payload;
     },
     /**
