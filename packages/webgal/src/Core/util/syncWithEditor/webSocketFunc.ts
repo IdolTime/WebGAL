@@ -53,25 +53,29 @@ export const webSocketFunc = () => {
   };
   socket.onmessage = (e) => {
     // logger.info('收到信息', e.data);
-    const str: string = e.data;
-    const data: IDebugMessage = JSON.parse(str);
-    const message = data.data;
-    if (message.command === DebugCommand.JUMP) {
-      syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
-    }
-    if (message.command === DebugCommand.EXE_COMMAND) {
-      const command = message.message;
-      const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
-      const sentence = scene.sentenceList[0];
-      // @ts-ignore
-      runScript(sentence);
-    }
-    if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
-      const title = document.getElementById('Title_enter_page');
-      if (title) {
-        title.style.display = 'none';
+    try {
+      const str: string = e.data;
+      const data: IDebugMessage = JSON.parse(str);
+      const message = data.data;
+      if (message.command === DebugCommand.JUMP) {
+        syncWithOrigine(message.sceneMsg.scene, message.sceneMsg.sentence);
       }
-      WebGAL.events.styleUpdate.emit();
+      if (message.command === DebugCommand.EXE_COMMAND) {
+        const command = message.message;
+        const scene = WebgalParser.parse(command, 'temp.txt', 'temp.txt');
+        const sentence = scene.sentenceList[0];
+        // @ts-ignore
+        runScript(sentence);
+      }
+      if (message.command === DebugCommand.REFETCH_TEMPLATE_FILES) {
+        const title = document.getElementById('Title_enter_page');
+        if (title) {
+          title.style.display = 'none';
+        }
+        WebGAL.events.styleUpdate.emit();
+      }
+    } catch (error) {
+      console.warn(error);
     }
   };
   socket.onerror = (e) => {

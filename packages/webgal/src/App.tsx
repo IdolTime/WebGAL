@@ -1,6 +1,6 @@
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { initializeScript, initClickAnimation } from './Core/initializeScript';
 import { initGCPSDK, initSdkLink, reportData } from './Core/initGCPSDK';
 import { platform_getGameDetail, platform_getUserInfo } from '@/Core/platformMessage';
@@ -38,79 +38,64 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
+  // @ts-ignore
+  const isCurrentPageInIframe = window.self !== window.top;
+  const refObject = useRef({
+    gameReady: false,
+    previewMode: false,
+    previewModeValue: false,
+  });
+  const callCheckCallbackTimer = useRef<ReturnType<typeof setTimeout> | null>();
+
+  const loadGameDetail = (token: string) => {
+    // 平台-iframe
+    if (isCurrentPageInIframe) {
+      platform_getGameDetail();
+      return;
+    }
+    const gameId = new URLSearchParams(window.location.search).get('gameId');
+    // @ts-ignore
+    window.globalThis.getGameDetail(gameId, token).then((res: any) => {
+      // @ts-ignore
+      window.pubsub.publish('gameInfoReady', true);
+      webgalStore.dispatch(setGameInfo(res.data));
+      reportData(res.data);
+    });
+  };
+
+  const checkCallback = (token: string) => {
+    // 轮询游戏是否ready & 预览模式
+    if (!refObject.current.gameReady && !refObject.current.previewMode) {
+      callCheckCallbackTimer.current = setTimeout(() => {
+        checkCallback(token);
+      }, 100);
+
+      return;
+    }
+
+    if (callCheckCallbackTimer.current) {
+      clearTimeout(callCheckCallbackTimer.current);
+      callCheckCallbackTimer.current = null;
+    }
+
+    /**
+     * 启动Pixi
+     */
+    WebGAL.gameplay.pixiStage = new PixiStage();
+    // 本地编辑器会走这个条件
+    if (refObject.current.previewModeValue) {
+      // @ts-ignore
+      window.pubsub.publish('gameInfoReady', true);
+    } else {
+      loadGameDetail(token);
+    }
+  };
 
   const initLoginInfo = (token?: any) => {
     setLoggedIn(true);
     dispatch(setToken(token || ''));
-    let refObject = {
-      current: {
-        gameReady: false,
-        previewMode: false,
-        previewModeValue: false,
-      },
-    };
 
-    const loadGameDetail = () => {
-      // @ts-ignore
-      const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
-      // 平台-iframe
-      if (window !== window.top && !is_terre) {
-        platform_getGameDetail();
-        return;
-      }
-      const gameId = new URLSearchParams(window.location.search).get('gameId');
-      // @ts-ignore
-      window.globalThis.getGameDetail(gameId, token).then((res: any) => {
-        // @ts-ignore
-        window.pubsub.publish('gameInfoReady', true);
-        webgalStore.dispatch(setGameInfo(res.data));
-        reportData(res.data);
-      });
-    };
-
-    const checkCallback = () => {
-      if (refObject.current.gameReady && !refObject.current.previewMode) return;
-      /**
-       * 启动Pixi
-       */
-      WebGAL.gameplay.pixiStage = new PixiStage();
-      if (refObject.current.previewModeValue) {
-        // @ts-ignore
-        const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
-        // 平台-iframe
-        if (window !== window.top && !is_terre) {
-          // @ts-ignore
-          window.pubsub.publish('gameInfoReady', true);
-          return;
-        }
-        // 编辑器-iframe
-        if (is_terre) {
-          // @ts-ignore
-          window.pubsub.publish('gameInfoReady', true);
-          return;
-        }
-        // @ts-ignore
-        window.globalThis.getUserInfo(token).then((res: any) => {
-          // @ts-ignore
-          window.pubsub.publish('gameInfoReady', true);
-        });
-      } else {
-        loadGameDetail();
-      }
-    };
-    // @ts-ignore
-    window.pubsub.subscribe('gameReady', () => {
-      refObject.current.gameReady = true;
-      checkCallback();
-    });
-
-    // @ts-ignore
-    window.pubsub.subscribe('isPreviewMode', (value) => {
-      refObject.current.previewMode = true;
-      refObject.current.previewModeValue = value;
-      dispatch(setIsEditorPreviewMode(value));
-      checkCallback();
-    });
+    checkCallback(token);
   };
 
   const platform_init = () => {
@@ -173,17 +158,34 @@ function App() {
       initClickAnimation();
       initializeScript();
     }, 1000);
+
+    // @ts-ignore 从websocket接口查询是否连接到编辑器，value为true时表示已连接, 视为预览模式
+    const dispose = window.pubsub.subscribe('isPreviewMode', (value) => {
+      refObject.current.previewMode = true;
+      refObject.current.previewModeValue = value;
+      dispatch(setIsEditorPreviewMode(value));
+
+      // 在iframe中且不是编辑器预览模式
+      if (isCurrentPageInIframe && !value) {
+        platform_init();
+        return;
+      }
+
+      // 在编辑器预览中
+      // if (value) {
+      //   const token = localStorage.getItem('editor-token');
+      //   initLoginInfo(token);
+      //   return;
+      // }
+
+      dispose();
+    });
+
     // @ts-ignore
-    const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
-    if (window !== window.top && !is_terre) {
-      platform_init();
-      return;
-    }
-    if (is_terre) {
-      const token = localStorage.getItem('editor-token');
-      initLoginInfo(token);
-      return;
-    }
+    const dispose2 = window.pubsub.subscribe('gameReady', () => {
+      refObject.current.gameReady = true;
+      dispose2();
+    });
   }, []);
 
   useFullScreen();
