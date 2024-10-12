@@ -196,9 +196,7 @@ const Title: FC = () => {
                 defaultTextClass={styles.Title_button_text}
                 onClick={() => {
                   const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
-                  // @ts-ignore
-                  const is_terre = window?.top[0]?.origin.indexOf('localhost') > -1;
-                  if (isPreviewMode || is_terre) {
+                  if (isPreviewMode) {
                     clickCallbackMap[_key]();
                   } else {
                     const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};

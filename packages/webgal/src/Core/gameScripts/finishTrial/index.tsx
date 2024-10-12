@@ -181,10 +181,10 @@ export const finishTrial = (sentence: ISentence): IPerform => {
 
     const gameId = new URLSearchParams(window.location.search).get('gameId');
     const token = sessionStorage.getItem('sdk-token');
+    const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
+    const isCurrentPageInIframe = window.self !== window.top;
 
-    // @ts-ignore
-    const is_terre = window?.top[0]?.origin?.indexOf('localhost') > -1;
-    const isPlatIframe = window !== window.top && !is_terre;
+    const isPlatIframe = isCurrentPageInIframe && !isPreviewMode;
     if (isPlatIframe && isTryPlay()) {
       platform_getGameDetail();
       return;
