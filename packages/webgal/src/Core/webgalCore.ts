@@ -6,6 +6,8 @@ import { Gameplay } from './Modules/gamePlay';
 import { Events } from '@/Core/Modules/events';
 import { VideoManager } from './Modules/video';
 
+const channel = new URLSearchParams(window.location.search).get('channel');
+
 export class WebgalCore {
   public sceneManager = new SceneManager();
   public backlogManager = new BacklogManager(this.sceneManager);
@@ -14,7 +16,7 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public gameId = 0;
-  public channel = '0';
+  public channel = channel || '0';
   public events = new Events();
   public videoManager = new VideoManager();
   public gameJsLink = '';
