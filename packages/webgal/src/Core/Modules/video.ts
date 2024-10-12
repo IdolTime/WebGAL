@@ -95,10 +95,24 @@ export class VideoManager {
   public idURLMap: Record<string, string> = {};
   public currentPlayingVideo = '';
   private videoIndex = 0;
+  private tempNodes: HTMLDivElement[] = [];
 
   public constructor() {
     this.videosByKey = {};
     this.currentPlayingVideo = '';
+    // @ts-ignore
+    const dispose = window.pubsub.subscribe('gameInfoReady', (ready: boolean) => {
+      if (ready) {
+        const videoWrapper = document.getElementById('videoContainer');
+        if (this.tempNodes.length && videoWrapper) {
+          for (const node of this.tempNodes) {
+            videoWrapper.appendChild(node);
+          }
+          this.tempNodes = [];
+        }
+        dispose();
+      }
+    });
   }
 
   public preloadVideo(url: string, playWhenLoaded = false) {
@@ -143,7 +157,14 @@ export class VideoManager {
     };
 
     videoContainerTag.appendChild(videoTag);
-    document.getElementById('videoContainer')?.appendChild(videoContainerTag);
+    const videoWrapper = document.getElementById('videoContainer');
+
+    // 游戏还未开始，dom节点还没准备好
+    if (videoWrapper) {
+      videoWrapper.appendChild(videoContainerTag);
+    } else {
+      this.tempNodes.push(videoContainerTag);
+    }
 
     this.videosByKey[url] = {
       // @ts-ignore
