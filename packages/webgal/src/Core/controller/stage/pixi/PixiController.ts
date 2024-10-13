@@ -389,94 +389,97 @@ export default class PixiStage {
    * @param url 背景图片url
    */
   // eslint-disable-next-line max-params
-  public addBg(key: string, url: string, bgX?: number, bgY?: number) {
-    const loader = this.assetLoader;
-    // 准备用于存放这个背景的 Container
-    const thisBgContainer = new WebGALPixiContainer();
+  public async addBg(key: string, url: string, bgX?: number, bgY?: number) {
+    return new Promise((resolve) => {
+      const loader = this.assetLoader;
+      // 准备用于存放这个背景的 Container
+      const thisBgContainer = new WebGALPixiContainer();
 
-    // 是否有相同 key 的背景
-    const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
-    const isBgSet = setBgIndex >= 0;
+      // 是否有相同 key 的背景
+      const setBgIndex = this.backgroundObjects.findIndex((e) => e.key === key);
+      const isBgSet = setBgIndex >= 0;
 
-    // 已经有一个这个 key 的背景存在了
-    if (isBgSet) {
-      // 挤占
-      this.removeStageObjectByKey(key);
-    }
-
-    // GIF转换
-    // eslint-disable-next-line max-params
-    const transformToGIFAnimation = (url: string, bgSprite: any, bgX?: number, bgY?: number) => {
-      fetch(url)
-        .then((res) => res.arrayBuffer())
-        .then(AnimatedGIF.fromBuffer)
-        .then((image) => {
-          // 设置 GIF 图像的宽度和高度
-          if (bgSprite) {
-            image.transform = bgSprite.transform;
-          }
-          if (bgX) image.width = px2(bgX);
-          if (bgY) image.height = px2(bgY);
-          thisBgContainer.addChild(image);
-        });
-    };
-
-    // 挂载
-    this.backgroundContainer.addChild(thisBgContainer);
-    const bgUuid = uuid();
-    this.backgroundObjects.push({
-      uuid: bgUuid,
-      key: key,
-      pixiContainer: thisBgContainer,
-      sourceUrl: url,
-      sourceType: url.includes('.gif') ? 'gif' : 'img',
-      sourceExt: this.getExtName(url),
-    });
-
-    // 完成图片加载后执行的函数
-    const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-
-      const texture = loader.resources?.[url]?.texture;
-      if (texture && this.getStageObjByUuid(bgUuid)) {
-        /**
-         * 重设大小
-         */
-        const originalWidth = texture.width;
-        const originalHeight = texture.height;
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
-        const targetScale = Math.max(scaleX, scaleY);
-        const bgSprite = new PIXI.Sprite(texture);
-        bgSprite.scale.x = targetScale;
-        bgSprite.scale.y = targetScale;
-        bgSprite.anchor.set(0.5);
-
-        if (url.includes('.gif')) {
-          transformToGIFAnimation(url, bgSprite, bgX, bgY);
-          return;
-        }
-
-        bgSprite.position.y = this.stageHeight / 2;
-        thisBgContainer.setBaseX(this.stageWidth / 2);
-        thisBgContainer.setBaseY(this.stageHeight / 2);
-        thisBgContainer.pivot.set(0, this.stageHeight / 2);
-
-        // 挂载
-        thisBgContainer.addChild(bgSprite);
+      // 已经有一个这个 key 的背景存在了
+      if (isBgSet) {
+        // 挤占
+        this.removeStageObjectByKey(key);
       }
-    };
 
-    /**
-     * 加载器部分
-     */
-    this.cacheGC();
-    if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup);
-    } else {
-      // 复用
-      setup();
-    }
+      // GIF转换
+      // eslint-disable-next-line max-params
+      const transformToGIFAnimation = (url: string, bgSprite: any, bgX?: number, bgY?: number) => {
+        fetch(url)
+          .then((res) => res.arrayBuffer())
+          .then(AnimatedGIF.fromBuffer)
+          .then((image) => {
+            // 设置 GIF 图像的宽度和高度
+            if (bgSprite) {
+              image.transform = bgSprite.transform;
+            }
+            if (bgX) image.width = px2(bgX);
+            if (bgY) image.height = px2(bgY);
+            thisBgContainer.addChild(image);
+          });
+      };
+
+      // 挂载
+      this.backgroundContainer.addChild(thisBgContainer);
+      const bgUuid = uuid();
+      this.backgroundObjects.push({
+        uuid: bgUuid,
+        key: key,
+        pixiContainer: thisBgContainer,
+        sourceUrl: url,
+        sourceType: url.includes('.gif') ? 'gif' : 'img',
+        sourceExt: this.getExtName(url),
+      });
+      resolve(true);
+
+      // 完成图片加载后执行的函数
+      const setup = () => {
+        // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+
+        const texture = loader.resources?.[url]?.texture;
+        if (texture && this.getStageObjByUuid(bgUuid)) {
+          /**
+           * 重设大小
+           */
+          const originalWidth = texture.width;
+          const originalHeight = texture.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          const targetScale = Math.max(scaleX, scaleY);
+          const bgSprite = new PIXI.Sprite(texture);
+          bgSprite.scale.x = targetScale;
+          bgSprite.scale.y = targetScale;
+          bgSprite.anchor.set(0.5);
+
+          if (url.includes('.gif')) {
+            transformToGIFAnimation(url, bgSprite, bgX, bgY);
+            return;
+          }
+
+          bgSprite.position.y = this.stageHeight / 2;
+          thisBgContainer.setBaseX(this.stageWidth / 2);
+          thisBgContainer.setBaseY(this.stageHeight / 2);
+          thisBgContainer.pivot.set(0, this.stageHeight / 2);
+
+          // 挂载
+          thisBgContainer.addChild(bgSprite);
+        }
+      };
+
+      /**
+       * 加载器部分
+       */
+      this.cacheGC();
+      if (!loader.resources?.[url]?.texture) {
+        this.loadAsset(url, setup);
+      } else {
+        // 复用
+        setup();
+      }
+    });
   }
 
   /**
@@ -488,129 +491,132 @@ export default class PixiStage {
    */
   // eslint-disable-next-line max-params
   public addFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center', isApng = false) {
-    const loader = this.assetLoader;
-    // 准备用于存放这个立绘的 Container
-    const thisFigureContainer = new WebGALPixiContainer();
+    return new Promise((resolve) => {
+      const loader = this.assetLoader;
+      // 准备用于存放这个立绘的 Container
+      const thisFigureContainer = new WebGALPixiContainer();
 
-    // 是否有相同 key 的立绘
-    const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
-    const isFigSet = setFigIndex >= 0;
+      // 是否有相同 key 的立绘
+      const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+      const isFigSet = setFigIndex >= 0;
 
-    // 已经有一个这个 key 的立绘存在了
-    if (isFigSet) {
-      this.removeStageObjectByKey(key);
-    }
+      // 已经有一个这个 key 的立绘存在了
+      if (isFigSet) {
+        this.removeStageObjectByKey(key);
+      }
 
-    // 挂载
-    this.figureContainer.addChild(thisFigureContainer);
-    const figureUuid = uuid();
-    this.figureObjects.push({
-      uuid: figureUuid,
-      key: key,
-      pixiContainer: thisFigureContainer,
-      sourceUrl: url,
-      sourceType: 'img',
-      sourceExt: this.getExtName(url),
-    });
+      // 挂载
+      this.figureContainer.addChild(thisFigureContainer);
+      const figureUuid = uuid();
+      this.figureObjects.push({
+        uuid: figureUuid,
+        key: key,
+        pixiContainer: thisFigureContainer,
+        sourceUrl: url,
+        sourceType: 'img',
+        sourceExt: this.getExtName(url),
+      });
+      resolve(true);
 
-    // 完成图片加载后执行的函数
-    const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      const texture = loader.resources?.[url]?.texture;
-      let delays: number[] = [];
+      // 完成图片加载后执行的函数
+      const setup = () => {
+        // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+        const texture = loader.resources?.[url]?.texture;
+        let delays: number[] = [];
 
-      if (texture && this.getStageObjByUuid(figureUuid)) {
-        const resource = loader.resources[url];
-        const explosionTextures: any[] = [];
-
-        if (isApng) {
-          // @ts-ignore
-          const { frameDelay, textures, frameCount } = resource;
-          delays = frameDelay;
-          Object.values(textures || []).forEach((v) => {
-            explosionTextures.push(v);
-          });
-        }
-
-        /**
-         * 重设大小
-         */
-        const showAndPlay = (textures: any[]) => {
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.min(scaleX, scaleY);
-          const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
-
-          figureSprite.scale.x = targetScale;
-          figureSprite.scale.y = targetScale;
-
-          figureSprite.anchor.set(0.5);
-          figureSprite.position.y = this.stageHeight / 2;
-          const targetWidth = originalWidth * targetScale;
-          const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-          }
-
-          if (presetPosition === 'center') {
-            thisFigureContainer.setBaseX(this.stageWidth / 2);
-          }
-          if (presetPosition === 'left') {
-            thisFigureContainer.setBaseX(targetWidth / 2);
-          }
-          if (presetPosition === 'right') {
-            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-          }
+        if (texture && this.getStageObjByUuid(figureUuid)) {
+          const resource = loader.resources[url];
+          const explosionTextures: any[] = [];
 
           if (isApng) {
-            const sprite = figureSprite as PIXI.AnimatedSprite;
-            // 自定义播放速度的函数
-            let currentFrame = 0;
-            let direction = 1;
-            const updateFrame = () => {
-              if (this.apngTimer[key]) {
-                clearTimeout(this.apngTimer[key]);
-                this.apngTimer[key] = null;
-              }
-              sprite.gotoAndStop(currentFrame);
-              this.apngTimer[key] = setTimeout(() => {
-                if (currentFrame === textures.length - 1) {
-                  direction = -1;
-                }
-                if (currentFrame === 0) {
-                  direction = 1;
-                }
-                currentFrame += direction;
-                updateFrame();
-              }, delays[currentFrame]); // 设置下一个帧的显示时长
-            };
-
-            // 开始播放动画
-            updateFrame();
+            // @ts-ignore
+            const { frameDelay, textures, frameCount } = resource;
+            delays = frameDelay;
+            Object.values(textures || []).forEach((v) => {
+              explosionTextures.push(v);
+            });
           }
 
-          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+          /**
+           * 重设大小
+           */
+          const showAndPlay = (textures: any[]) => {
+            const originalWidth = texture.width;
+            const originalHeight = texture.height;
+            const scaleX = this.stageWidth / originalWidth;
+            const scaleY = this.stageHeight / originalHeight;
+            const targetScale = Math.min(scaleX, scaleY);
+            const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
 
-          thisFigureContainer.addChild(figureSprite);
-        };
+            figureSprite.scale.x = targetScale;
+            figureSprite.scale.y = targetScale;
 
-        showAndPlay(explosionTextures);
+            figureSprite.anchor.set(0.5);
+            figureSprite.position.y = this.stageHeight / 2;
+            const targetWidth = originalWidth * targetScale;
+            const targetHeight = originalHeight * targetScale;
+            thisFigureContainer.setBaseY(this.stageHeight / 2);
+            if (targetHeight < this.stageHeight) {
+              thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+            }
+
+            if (presetPosition === 'center') {
+              thisFigureContainer.setBaseX(this.stageWidth / 2);
+            }
+            if (presetPosition === 'left') {
+              thisFigureContainer.setBaseX(targetWidth / 2);
+            }
+            if (presetPosition === 'right') {
+              thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+            }
+
+            if (isApng) {
+              const sprite = figureSprite as PIXI.AnimatedSprite;
+              // 自定义播放速度的函数
+              let currentFrame = 0;
+              let direction = 1;
+              const updateFrame = () => {
+                if (this.apngTimer[key]) {
+                  clearTimeout(this.apngTimer[key]);
+                  this.apngTimer[key] = null;
+                }
+                sprite.gotoAndStop(currentFrame);
+                this.apngTimer[key] = setTimeout(() => {
+                  if (currentFrame === textures.length - 1) {
+                    direction = -1;
+                  }
+                  if (currentFrame === 0) {
+                    direction = 1;
+                  }
+                  currentFrame += direction;
+                  updateFrame();
+                }, delays[currentFrame]); // 设置下一个帧的显示时长
+              };
+
+              // 开始播放动画
+              updateFrame();
+            }
+
+            thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+
+            thisFigureContainer.addChild(figureSprite);
+          };
+
+          showAndPlay(explosionTextures);
+        }
+      };
+
+      /**
+       * 加载器部分
+       */
+      this.cacheGC();
+      if (!loader.resources?.[url]?.texture) {
+        this.loadAsset(url, setup, '', isApng);
+      } else {
+        // 复用
+        setup();
       }
-    };
-
-    /**
-     * 加载器部分
-     */
-    this.cacheGC();
-    if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup, '', isApng);
-    } else {
-      // 复用
-      setup();
-    }
+    });
   }
 
   /**
@@ -622,134 +628,137 @@ export default class PixiStage {
    */
   // eslint-disable-next-line max-params
   public addPopupImg(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center', isApng = false) {
-    const loader = this.assetLoader;
-    // 准备用于存放这个弹窗图片的 Container
-    const thisFigureContainer = new WebGALPixiContainer();
+    return new Promise((resolve) => {
+      const loader = this.assetLoader;
+      // 准备用于存放这个弹窗图片的 Container
+      const thisFigureContainer = new WebGALPixiContainer();
 
-    // 是否有相同 key 的弹窗图片
-    const setPopupIndex = this.popupObjects.findIndex((e) => e.key === key);
-    const isPopupSet = setPopupIndex >= 0;
+      // 是否有相同 key 的弹窗图片
+      const setPopupIndex = this.popupObjects.findIndex((e) => e.key === key);
+      const isPopupSet = setPopupIndex >= 0;
 
-    // 已经有一个这个 key 的立绘存在了
-    if (isPopupSet) {
-      this.removeStageObjectByKey(key);
-    }
+      // 已经有一个这个 key 的立绘存在了
+      if (isPopupSet) {
+        this.removeStageObjectByKey(key);
+      }
 
-    // 挂载
-    this.figureContainer.addChild(thisFigureContainer);
-    const popupId = uuid();
-    this.popupObjects.push({
-      uuid: popupId,
-      key: key,
-      pixiContainer: thisFigureContainer,
-      sourceUrl: url,
-      sourceType: 'img',
-      sourceExt: this.getExtName(url),
-    });
+      // 挂载
+      this.figureContainer.addChild(thisFigureContainer);
+      const popupId = uuid();
+      this.popupObjects.push({
+        uuid: popupId,
+        key: key,
+        pixiContainer: thisFigureContainer,
+        sourceUrl: url,
+        sourceType: 'img',
+        sourceExt: this.getExtName(url),
+      });
+      resolve(true);
 
-    // 完成图片加载后执行的函数
-    const setup = () => {
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      const texture = loader.resources?.[url]?.texture;
-      let delays: number[] = [];
+      // 完成图片加载后执行的函数
+      const setup = () => {
+        // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+        const texture = loader.resources?.[url]?.texture;
+        let delays: number[] = [];
 
-      if (texture && this.getStageObjByUuid(popupId)) {
-        const resource = loader.resources[url];
-        const explosionTextures: any[] = [];
-
-        if (isApng) {
-          // @ts-ignore
-          const { frameDelay, textures, frameCount } = resource;
-          delays = frameDelay;
-          Object.values(textures || []).forEach((v) => {
-            explosionTextures.push(v);
-          });
-        }
-
-        /**
-         * 重设大小
-         */
-        const showAndPlay = (textures: any[]) => {
-          const originalWidth = texture.width;
-          const originalHeight = texture.height;
-          const scaleX = this.stageWidth / originalWidth;
-          const scaleY = this.stageHeight / originalHeight;
-          const targetScale = Math.min(scaleX, scaleY);
-          const popupSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
-
-          popupSprite.scale.x = 2;
-          popupSprite.scale.y = 2;
-
-          popupSprite.anchor.set(0.5);
-          popupSprite.position.y = this.stageHeight / 2;
-          const targetWidth = originalWidth * targetScale;
-          const targetHeight = originalHeight * targetScale;
-          thisFigureContainer.setBaseY(this.stageHeight / 2);
-          if (targetHeight < this.stageHeight) {
-            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-          }
-
-          // CG图片尺寸统一为680X420
-          popupSprite.x = 680;
-          popupSprite.y = 420;
-
-          const num = updateScreenSize().width === 2560 ? 2 : 3;
-          const axesY = 90 * num;
-          const axesX =
-            (presetPosition === 'center' && 300 * num) ||
-            (presetPosition === 'left' && 20) ||
-            (presetPosition === 'right' && 300 * num * 2 - 20) ||
-            0;
-
-          thisFigureContainer.setBaseX(axesX);
-          thisFigureContainer.setBaseY(axesY);
+        if (texture && this.getStageObjByUuid(popupId)) {
+          const resource = loader.resources[url];
+          const explosionTextures: any[] = [];
 
           if (isApng) {
-            const sprite = popupSprite as PIXI.AnimatedSprite;
-            // 自定义播放速度的函数
-            let currentFrame = 0;
-            let direction = 1;
-            const updateFrame = () => {
-              if (this.apngTimer[key]) {
-                clearTimeout(this.apngTimer[key]);
-                this.apngTimer[key] = null;
-              }
-              sprite.gotoAndStop(currentFrame);
-              this.apngTimer[key] = setTimeout(() => {
-                if (currentFrame === textures.length - 1) {
-                  direction = -1;
-                }
-                if (currentFrame === 0) {
-                  direction = 1;
-                }
-                currentFrame += direction;
-                updateFrame();
-              }, delays[currentFrame]); // 设置下一个帧的显示时长
-            };
-
-            // 开始播放动画
-            updateFrame();
+            // @ts-ignore
+            const { frameDelay, textures, frameCount } = resource;
+            delays = frameDelay;
+            Object.values(textures || []).forEach((v) => {
+              explosionTextures.push(v);
+            });
           }
 
-          thisFigureContainer.pivot.set(0, 0);
+          /**
+           * 重设大小
+           */
+          const showAndPlay = (textures: any[]) => {
+            const originalWidth = texture.width;
+            const originalHeight = texture.height;
+            const scaleX = this.stageWidth / originalWidth;
+            const scaleY = this.stageHeight / originalHeight;
+            const targetScale = Math.min(scaleX, scaleY);
+            const popupSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
 
-          thisFigureContainer.addChild(popupSprite);
-        };
+            popupSprite.scale.x = 2;
+            popupSprite.scale.y = 2;
 
-        showAndPlay(explosionTextures);
+            popupSprite.anchor.set(0.5);
+            popupSprite.position.y = this.stageHeight / 2;
+            const targetWidth = originalWidth * targetScale;
+            const targetHeight = originalHeight * targetScale;
+            thisFigureContainer.setBaseY(this.stageHeight / 2);
+            if (targetHeight < this.stageHeight) {
+              thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+            }
+
+            // CG图片尺寸统一为680X420
+            popupSprite.x = 680;
+            popupSprite.y = 420;
+
+            const num = updateScreenSize().width === 2560 ? 2 : 3;
+            const axesY = 90 * num;
+            const axesX =
+              (presetPosition === 'center' && 300 * num) ||
+              (presetPosition === 'left' && 20) ||
+              (presetPosition === 'right' && 300 * num * 2 - 20) ||
+              0;
+
+            thisFigureContainer.setBaseX(axesX);
+            thisFigureContainer.setBaseY(axesY);
+
+            if (isApng) {
+              const sprite = popupSprite as PIXI.AnimatedSprite;
+              // 自定义播放速度的函数
+              let currentFrame = 0;
+              let direction = 1;
+              const updateFrame = () => {
+                if (this.apngTimer[key]) {
+                  clearTimeout(this.apngTimer[key]);
+                  this.apngTimer[key] = null;
+                }
+                sprite.gotoAndStop(currentFrame);
+                this.apngTimer[key] = setTimeout(() => {
+                  if (currentFrame === textures.length - 1) {
+                    direction = -1;
+                  }
+                  if (currentFrame === 0) {
+                    direction = 1;
+                  }
+                  currentFrame += direction;
+                  updateFrame();
+                }, delays[currentFrame]); // 设置下一个帧的显示时长
+              };
+
+              // 开始播放动画
+              updateFrame();
+            }
+
+            thisFigureContainer.pivot.set(0, 0);
+
+            thisFigureContainer.addChild(popupSprite);
+          };
+
+          showAndPlay(explosionTextures);
+        }
+      };
+
+      /**
+       * 加载器部分
+       */
+      this.cacheGC();
+      if (!loader.resources?.[url]?.texture) {
+        this.loadAsset(url, setup, '', isApng);
+      } else {
+        // 复用
+        setup();
       }
-    };
-
-    /**
-     * 加载器部分
-     */
-    this.cacheGC();
-    if (!loader.resources?.[url]?.texture) {
-      this.loadAsset(url, setup, '', isApng);
-    } else {
-      // 复用
-      setup();
-    }
+    });
   }
 
   /**
@@ -759,89 +768,91 @@ export default class PixiStage {
    * @param presetPosition
    */
   public addSpineFigure(key: string, url: string, presetPosition: 'left' | 'center' | 'right' = 'center') {
-    const spineId = `spine-${url}`;
-    const loader = this.assetLoader;
-    // 准备用于存放这个立绘的 Container
-    const thisFigureContainer = new WebGALPixiContainer();
+    return new Promise((resolve) => {
+      const spineId = `spine-${url}`;
+      const loader = this.assetLoader;
+      // 准备用于存放这个立绘的 Container
+      const thisFigureContainer = new WebGALPixiContainer();
 
-    // 是否有相同 key 的立绘
-    const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
-    const isFigSet = setFigIndex >= 0;
+      // 是否有相同 key 的立绘
+      const setFigIndex = this.figureObjects.findIndex((e) => e.key === key);
+      const isFigSet = setFigIndex >= 0;
 
-    // 已经有一个这个 key 的立绘存在了
-    if (isFigSet) {
-      this.removeStageObjectByKey(key);
-    }
-
-    // 挂载
-    this.figureContainer.addChild(thisFigureContainer);
-    const figureUuid = uuid();
-    this.figureObjects.push({
-      uuid: figureUuid,
-      key: key,
-      pixiContainer: thisFigureContainer,
-      sourceUrl: url,
-      sourceType: 'live2d',
-      sourceExt: this.getExtName(url),
-    });
-
-    // 完成图片加载后执行的函数
-    const setup = () => {
-      console.log(this.assetLoader.resources);
-      const spineResource: any = this.assetLoader.resources?.[spineId];
-      // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
-      if (spineResource && this.getStageObjByUuid(figureUuid)) {
-        const figureSpine = new Spine(spineResource.spineData);
-        const transY = spineResource?.spineData?.y ?? 0;
-        /**
-         * 重设大小
-         */
-        console.log(figureSpine);
-        const originalWidth = figureSpine.width;
-        const originalHeight = figureSpine.height;
-        const scaleX = this.stageWidth / originalWidth;
-        const scaleY = this.stageHeight / originalHeight;
-        // 我也不知道为什么啊啊啊啊
-        figureSpine.y = -(scaleY * transY) / 2;
-        console.log(figureSpine.state);
-        figureSpine.state.setAnimation(0, '07', true);
-        const targetScale = Math.min(scaleX, scaleY);
-        const figureSprite = new PIXI.Sprite();
-        figureSprite.addChild(figureSpine);
-        figureSprite.scale.x = targetScale;
-        figureSprite.scale.y = targetScale;
-        figureSprite.anchor.set(0.5);
-        figureSprite.position.y = this.stageHeight / 2;
-        const targetWidth = originalWidth * targetScale;
-        const targetHeight = originalHeight * targetScale;
-        thisFigureContainer.setBaseY(this.stageHeight / 2);
-        if (targetHeight < this.stageHeight) {
-          thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
-        }
-        if (presetPosition === 'center') {
-          thisFigureContainer.setBaseX(this.stageWidth / 2);
-        }
-        if (presetPosition === 'left') {
-          thisFigureContainer.setBaseX(targetWidth / 2);
-        }
-        if (presetPosition === 'right') {
-          thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
-        }
-        thisFigureContainer.pivot.set(0, this.stageHeight / 2);
-        thisFigureContainer.addChild(figureSprite);
+      // 已经有一个这个 key 的立绘存在了
+      if (isFigSet) {
+        this.removeStageObjectByKey(key);
       }
-    };
 
-    /**
-     * 加载器部分
-     */
-    this.cacheGC();
-    if (!loader.resources?.[url]) {
-      this.loadAsset(url, setup, spineId);
-    } else {
-      // 复用
-      setup();
-    }
+      // 挂载
+      this.figureContainer.addChild(thisFigureContainer);
+      const figureUuid = uuid();
+      this.figureObjects.push({
+        uuid: figureUuid,
+        key: key,
+        pixiContainer: thisFigureContainer,
+        sourceUrl: url,
+        sourceType: 'live2d',
+        sourceExt: this.getExtName(url),
+      });
+      resolve(true);
+
+      // 完成图片加载后执行的函数
+      const setup = () => {
+        console.log(this.assetLoader.resources);
+        const spineResource: any = this.assetLoader.resources?.[spineId];
+        // TODO：找一个更好的解法，现在的解法是无论是否复用原来的资源，都设置一个延时以让动画工作正常！
+        if (spineResource && this.getStageObjByUuid(figureUuid)) {
+          const figureSpine = new Spine(spineResource.spineData);
+          const transY = spineResource?.spineData?.y ?? 0;
+          /**
+           * 重设大小
+           */
+          const originalWidth = figureSpine.width;
+          const originalHeight = figureSpine.height;
+          const scaleX = this.stageWidth / originalWidth;
+          const scaleY = this.stageHeight / originalHeight;
+          // 我也不知道为什么啊啊啊啊
+          figureSpine.y = -(scaleY * transY) / 2;
+          console.log(figureSpine.state);
+          figureSpine.state.setAnimation(0, '07', true);
+          const targetScale = Math.min(scaleX, scaleY);
+          const figureSprite = new PIXI.Sprite();
+          figureSprite.addChild(figureSpine);
+          figureSprite.scale.x = targetScale;
+          figureSprite.scale.y = targetScale;
+          figureSprite.anchor.set(0.5);
+          figureSprite.position.y = this.stageHeight / 2;
+          const targetWidth = originalWidth * targetScale;
+          const targetHeight = originalHeight * targetScale;
+          thisFigureContainer.setBaseY(this.stageHeight / 2);
+          if (targetHeight < this.stageHeight) {
+            thisFigureContainer.setBaseY(this.stageHeight / 2 + this.stageHeight - targetHeight / 2);
+          }
+          if (presetPosition === 'center') {
+            thisFigureContainer.setBaseX(this.stageWidth / 2);
+          }
+          if (presetPosition === 'left') {
+            thisFigureContainer.setBaseX(targetWidth / 2);
+          }
+          if (presetPosition === 'right') {
+            thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
+          }
+          thisFigureContainer.pivot.set(0, this.stageHeight / 2);
+          thisFigureContainer.addChild(figureSprite);
+        }
+      };
+
+      /**
+       * 加载器部分
+       */
+      this.cacheGC();
+      if (!loader.resources?.[url]) {
+        this.loadAsset(url, setup, spineId);
+      } else {
+        // 复用
+        setup();
+      }
+    });
   }
 
   /**

@@ -256,7 +256,6 @@ export async function getSavesFromCloud(fileType: number, page = 1, pageSize = 1
 
       if (fileType === 2) {
         const currentSavesLength = webgalStore.getState().saveData.saveData.filter((x) => x).length;
-        console.log(33333, JSON.parse(JSON.stringify(currentSavesLength)));
 
         if (currentSavesLength < data.total) {
           await getSavesFromCloud(2, page + 1, pageSize);
@@ -325,7 +324,6 @@ export async function dumpStorylineToStorage() {
   } else {
     if (Date.now() - lastStorylineSaveTime < 3000) return;
     lastStorylineSaveTime = Date.now();
-    console.log(333333, data);
     await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
   }
 }

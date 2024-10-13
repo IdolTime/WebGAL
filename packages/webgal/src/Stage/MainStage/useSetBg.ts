@@ -6,6 +6,7 @@ import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 
 import { getEnterExitAnimation } from '@/Core/Modules/animationFunctions';
 import { WebGAL } from '@/Core/WebGAL';
+import { sleep } from '@/Core/util/sleep';
 
 export function useSetBg(stageState: IStageState) {
   const bgName = stageState.bgName;
@@ -14,29 +15,31 @@ export function useSetBg(stageState: IStageState) {
    * 设置背景
    */
   useEffect(() => {
-    const thisBgKey = 'bg-main';
-    if (bgName !== '') {
-      const { bgX, bgY } = stageState;
-      const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
-      if (currentBg) {
-        if (currentBg.sourceUrl !== bgName) {
-          removeBg(currentBg);
+    const callback = async () => {
+      const thisBgKey = 'bg-main';
+      if (bgName !== '') {
+        const { bgX, bgY } = stageState;
+        const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
+        if (currentBg) {
+          if (currentBg.sourceUrl !== bgName) {
+            removeBg(currentBg);
+          }
         }
-      }
-      WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName, bgX, bgY);
-      setEbg(bgName);
-      logger.debug('重设背景');
-      setTimeout(() => {
+        await Promise.all([WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName, bgX, bgY), sleep(50)]);
+        setEbg(bgName);
+        logger.debug('重设背景');
         const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);
         WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, 'bg-main-softin', thisBgKey, stageState.effects);
         setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects('bg-main-softin'), duration);
-      }, 32);
-    } else {
-      const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
-      if (currentBg) {
-        removeBg(currentBg);
+      } else {
+        const currentBg = WebGAL.gameplay.pixiStage?.getStageObjByKey(thisBgKey);
+        if (currentBg) {
+          removeBg(currentBg);
+        }
       }
-    }
+    };
+
+    callback();
   }, [bgName]);
 }
 

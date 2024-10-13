@@ -2,7 +2,7 @@ import { ISaveData } from '@/store/userDataInterface';
 import { logger } from '../../util/logger';
 import { sceneFetcher } from '../scene/sceneFetcher';
 import { webgalStore } from '@/store/store';
-import { resetStageState } from '@/store/stageReducer';
+import { initState, resetStageState } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { restorePerform } from './jumpFromBacklog';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -13,6 +13,7 @@ import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { WebGAL } from '@/Core/WebGAL';
 import { saveActions } from '@/store/savesReducer';
+import { sleep } from '@/Core/util/sleep';
 
 /**
  * 读取游戏存档
@@ -36,6 +37,15 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
     return;
   }
   const loadFile = stageData;
+
+  // 强制停止所有演出
+  stopAllPerform();
+  webgalStore.dispatch(resetStageState(initState));
+  WebGAL.gameplay.resetPixiStage();
+
+  // @ts-ignore
+  window.pubsub.publish('loading', { loading: true });
+  await sleep(500);
 
   // 重新获取并同步场景状态
   try {
@@ -64,9 +74,6 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
 
   WebGAL.sceneManager.sceneData.currentSentenceId = loadFile.sceneData.currentSentenceId;
   WebGAL.sceneManager.sceneData.sceneStack = cloneDeep(loadFile.sceneData.sceneStack);
-
-  // 强制停止所有演出
-  stopAllPerform();
 
   // 恢复backlog
   const newBacklog = loadFile.backlog;
