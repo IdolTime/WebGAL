@@ -25,6 +25,7 @@ export const resetStage = (resetBacklog: boolean, resetSceneAndVar = true, reset
   // 清空所有演出和timeOut
   WebGAL.gameplay.performController.removeAllPerform();
   WebGAL.gameplay.resetGamePlay();
+  WebGAL.gameplay.resetPixiStage();
 
   // 清空舞台状态表
   const initSceneDataCopy = cloneDeep(initState);

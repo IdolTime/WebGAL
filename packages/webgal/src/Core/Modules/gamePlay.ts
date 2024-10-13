@@ -27,4 +27,8 @@ export class Gameplay {
     if (autoTimeout !== null) clearInterval(autoTimeout);
     this.autoTimeout = null;
   }
+
+  public resetPixiStage() {
+    this.pixiStage = new PixiStage();
+  }
 }

@@ -13,7 +13,6 @@ import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 
 import { WebGAL } from '@/Core/WebGAL';
 import { sleep } from '@/Core/util/sleep';
-import { clearScreen } from '@/Core/gameScripts/clearScreen';
 import { stopFast } from '../gamePlay/fastSkip';
 
 /**
@@ -39,10 +38,11 @@ export const jumpFromBacklog = async (index: number, refetchScene = true) => {
   // 强制停止所有演出
   stopAllPerform();
   dispatch(resetStageState(initState));
+  WebGAL.gameplay.resetPixiStage();
 
   // @ts-ignore
   window.pubsub.publish('loading', { loading: true });
-  await sleep(2000);
+  await sleep(500);
 
   // 重新获取并同步场景状态
   if (refetchScene) {
