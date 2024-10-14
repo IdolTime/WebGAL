@@ -100,15 +100,6 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       });
     }
   };
-
-  const isTryPlay = () => {
-    const sceneData = WebGAL.sceneManager.sceneData;
-    const res = sceneData.currentScene.sentenceList.filter((item: any) => {
-      return item.commandRaw === 'finishTrial' && item.content === 'true';
-    });
-    return res.length > 0;
-  };
-
   const checkBuy = (refresh = false) => {
     timer.current = setTimeout(
       () => {
@@ -131,19 +122,18 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       // @ts-ignore
       window.pubsub.publish('loading', { loading: false });
       if (res) {
-        const { paymentMode, isBuy } = res;
+        const { paymentMode, isBuy, paymentAmount } = res;
         // 已经付费
         if (paymentMode === 'paid' && isBuy) {
           // @ts-ignore
           shouldDisplayModal.current = false;
           WebGAL.gameplay.performController.unmountPerform('finishTrial');
         } else {
-          const _info = webgalStore.getState().storeData.gameInfo;
           showGlogalDialog({
             title: `试玩结束`,
             type: 'pay',
             // @ts-ignore
-            content: `可以花费${_info?.paymentAmount}`,
+            content: `可以花费${paymentAmount}`,
             suffixContent: '购买完整版继续游玩',
             leftText: '否',
             rightText: '是',
@@ -185,7 +175,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     const isCurrentPageInIframe = window.self !== window.top;
 
     const isPlatIframe = isCurrentPageInIframe && !isPreviewMode;
-    if (isPlatIframe && isTryPlay()) {
+    if (isPlatIframe) {
       platform_getGameDetail();
       return;
     }

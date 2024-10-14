@@ -19,4 +19,5 @@ export class WebgalCore {
   public videoManager = new VideoManager();
   public gameJsLink = '';
   public gameCssLink = '';
+  public isFinishTrial = '0'; // 是否试玩
 }

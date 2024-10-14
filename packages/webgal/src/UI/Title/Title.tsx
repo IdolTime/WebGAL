@@ -86,14 +86,6 @@ const Title: FC = () => {
     }
   };
 
-  const isNotTryPlay = () => {
-    const sceneData = WebGAL.sceneManager.sceneData;
-    const res = sceneData.currentScene.sentenceList.filter((item: any) => {
-      return item.commandRaw === 'finishTrial' && item.content === 'true';
-    });
-    return res.length === 0;
-  };
-
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
       // playSeClick();
@@ -202,7 +194,7 @@ const Title: FC = () => {
                     const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};
                     const { paymentMode } = gameInfo;
                     // 付费 & 不是试玩
-                    if (paymentMode === 'paid' && isNotTryPlay()) {
+                    if (paymentMode === 'paid' && WebGAL.isFinishTrial === '1') {
                       loadGameDetail(() => {
                         clickCallbackMap[_key]();
                       });
