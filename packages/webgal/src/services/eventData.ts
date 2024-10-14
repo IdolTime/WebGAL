@@ -62,6 +62,7 @@ interface IEditorChapterEvent {
     optionId?: number; // 选项id
     reportTime: string; // 上报时间
     channel: number; // 自己平台 channel=0 | sdk channel=1
+    optionName: string; // 选项名称
 }
 /**
  * 编辑器上报--埋点
