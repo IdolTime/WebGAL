@@ -20,7 +20,7 @@ export const enterStoryLine = async () => {
   // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Storyline, sceneUrl);
 
-  nextSentence();
+  // nextSentence();
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
 };
@@ -39,7 +39,7 @@ export const enterAffinity = async () => {
   // webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: false }));
   await WebGAL.sceneManager.setCurrentScene(rawScene, sceneNameType.Affinity, sceneUrl);
 
-  nextSentence();
+  // nextSentence();
   webgalStore.dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
   webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: false }));
 };

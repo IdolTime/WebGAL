@@ -43,6 +43,8 @@ export const ExtraContainer = () => {
     });
   }, [stageState.showValueList, barLayoutList]);
 
+  if (guiState.isInGaming) return null;
+
   return (
     <>
       {stageState.showValueList.map((item, i) => {
