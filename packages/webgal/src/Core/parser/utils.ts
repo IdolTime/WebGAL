@@ -283,14 +283,16 @@ export function createCursorAnimation(cursor: { imgs: string[]; interval: number
   const styleArr = [keyframes];
 
   if (type === 'normal') {
+    // 备注：持续时间使用 ${cursor.interval * cursor.imgs.length}ms 在部分安卓端浏览器会有闪屏现象
+    // 持续时间先改为0ms 试试
     styleArr.push(
-      `#root { animation: cursor-animation ${cursor.interval * cursor.imgs.length}ms infinite steps(${
+      `#root { animation: cursor-animation 0ms infinite steps(${
         cursor.imgs.length
       }); }`,
     );
   } else {
     styleArr.push(
-      `.interactive { animation: active-cursor-animation ${cursor.interval * cursor.imgs.length}ms infinite steps(${
+      `.interactive { animation: active-cursor-animation 0ms infinite steps(${
         cursor.imgs.length
       }); }`,
     );
