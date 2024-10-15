@@ -168,9 +168,9 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
     if(isChooseEvent && chooseEventId) {
       /** 编辑器章节语句 埋点上报  */
       const params = {
-          thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+          thirdUserId: sessionStorage.getItem('sdk-userId') as string || '',
           productId: WebGAL.gameId + '',
-          optionId: Number(chooseEventId),
+          optionId: chooseEventId + '',
           reportTime: getLocalDate(),
           channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
           optionName

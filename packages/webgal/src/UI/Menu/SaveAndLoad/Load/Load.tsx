@@ -18,6 +18,7 @@ import {
   LoadSceneOtherKey,
 } from '@/Core/UIConfigTypes';
 import { BgImage, Button } from '@/UI/Components/Base';
+import { startEvent } from '@/utils/trackEvent';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
@@ -98,6 +99,7 @@ export const Load: FC = () => {
           // @ts-ignore
           window?.pubsub?.publish('loading', { loading: true });
           loadGame(i);
+          startEvent();
         }}
         onMouseEnter={playSeEnter}
         key={'loadElement_' + i}
