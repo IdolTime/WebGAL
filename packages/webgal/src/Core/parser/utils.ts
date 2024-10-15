@@ -282,23 +282,31 @@ export function createCursorAnimation(cursor: { imgs: string[]; interval: number
 
   const styleArr = [keyframes];
 
-  if (type === 'normal') {
-    // 备注：持续时间使用 ${cursor.interval * cursor.imgs.length}ms 在部分安卓端浏览器会有闪屏现象
-    // 持续时间先改为0ms 试试
-    styleArr.push(
-      `#root { animation: cursor-animation 0ms infinite steps(${
-        cursor.imgs.length
-      }); }`,
-    );
-  } else {
-    styleArr.push(
-      `.interactive { animation: active-cursor-animation 0ms infinite steps(${
-        cursor.imgs.length
-      }); }`,
-    );
+  if (!isMobile()) {
+    if (type === 'normal') {
+      styleArr.push(
+        `#root { animation: cursor-animation ${cursor.interval * cursor.imgs.length}ms infinite steps(${
+          cursor.imgs.length
+        }); }`,
+      );
+    } else {
+      styleArr.push(
+        `.interactive { animation: active-cursor-animation ${cursor.interval * cursor.imgs.length}ms infinite steps(${
+          cursor.imgs.length
+        }); }`,
+      );
+    }
   }
 
   styleSheet.innerHTML = styleArr.join('\n');
 
   document.head.appendChild(styleSheet);
 }
+
+
+function isMobile() {
+  return navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  );
+}
+
