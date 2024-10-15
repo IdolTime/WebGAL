@@ -150,15 +150,16 @@ export const finishTrial = (sentence: ISentence): IPerform => {
 
     window.addEventListener('message', (message: any) => {
       const data = message.data;
-      const { method } = message.data.data;
+      const { method, status, response } = data.data;
+      if (!method) return;
       if (method === 'IS_CAN_START') {
-        console.log('message.data.data', message.data.data);
+        console.log('message.data.data', data);
         // @ts-ignore
         window.pubsub.publish('toaster', { show: true });
         WebGAL.gameplay.performController.unmountPerform('finishTrial');
       }
       if (method === 'GET_GAME_DETAIL') {
-        disposeGameRes(data.data.response.data);
+        disposeGameRes(response.data);
       }
       if (method === 'BUY_GAME') {
         // @ts-ignore

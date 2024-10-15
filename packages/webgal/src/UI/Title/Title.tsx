@@ -194,7 +194,7 @@ const Title: FC = () => {
                     const gameInfo: any = webgalStore.getState().storeData.gameInfo || {};
                     const { paymentMode } = gameInfo;
                     // 付费 & 不是试玩
-                    if (paymentMode === 'paid' && WebGAL.isFinishTrial === '1') {
+                    if (paymentMode === 'paid' && WebGAL.isFinishTrial === '0') {
                       loadGameDetail(() => {
                         clickCallbackMap[_key]();
                       });

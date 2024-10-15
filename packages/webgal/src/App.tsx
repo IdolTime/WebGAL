@@ -101,20 +101,21 @@ function App() {
   const platform_init = () => {
     window.addEventListener('message', (message: any) => {
       const data = message.data;
-      const { method, status } = message.data.data;
+      const { method, status, response } = data.data;
+      if (!method) return;
       if (method === 'IS_CAN_START') {
         // @ts-ignore
         if (status) window.MessageSaveFunc();
       }
       if (method === 'GET_USER_INFO') {
-        webgalStore.dispatch(setUserInfo(data.data.response.data));
+        webgalStore.dispatch(setUserInfo(response.data));
         initLoginInfo();
       }
       if (method === 'GET_GAME_DETAIL') {
         // @ts-ignore
         window.pubsub.publish('gameInfoReady', true);
-        webgalStore.dispatch(setGameInfo(data.data.response.data));
-        reportData(data.data.response.data);
+        webgalStore.dispatch(setGameInfo(response.data));
+        reportData(response.data);
       }
       if (method === 'BUY_GAME') {
         const gameInfo = webgalStore.getState().storeData.gameInfo;
@@ -124,6 +125,11 @@ function App() {
     });
     // 登录
     platform_getUserInfo();
+  };
+
+  const isPlatIframe = () => {
+    const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
+    return isCurrentPageInIframe && !isPreviewMode;
   };
 
   const sdk_init = () => {
@@ -148,6 +154,8 @@ function App() {
   };
 
   useEffect(() => {
+    const bool = isPlatIframe();
+    if (bool) return;
     initSdkLink(() => {
       sdk_init();
     });
