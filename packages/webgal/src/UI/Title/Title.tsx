@@ -95,7 +95,7 @@ const Title: FC = () => {
         /** 埋点上报 */
         const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
         const params = {
-          thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+          thirdUserId: (sessionStorage.getItem('sdk-userId') as string) || '',
           productId: String(WebGAL.gameId) || gameId,
           onlineTime: getLocalDate(),
           channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
@@ -125,6 +125,7 @@ const Title: FC = () => {
       dispatch(setVisibility({ component: 'showTitle', visibility: false }));
       dispatch(setVisibility({ component: 'isInGaming', visibility: true }));
       continueGame();
+      startEvent();
     },
     [TitleSceneButtonKey.Game_option_button]: () => {
       dispatch(setVisibility({ component: 'showMenuPanel', visibility: true }));

@@ -18,6 +18,7 @@ import { nextSentence } from '@/Core/controller/gamePlay/nextSentence';
 import { sceneNameType } from '@/Core/Modules/scene';
 import { sceneParser } from '@/Core/parser/sceneParser';
 import { SourceImg } from '../Components/SourceImg';
+import { startEvent } from '@/utils/trackEvent';
 
 interface IStoryLinStageItem {
   storylineBg: string;
@@ -120,6 +121,7 @@ export const StoryLine: FC = () => {
     dispatch(saveActions.setIsShowUnlock(true));
     dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
     loadGameFromStageData(saveData.videoData as ISaveData);
+    startEvent();
   };
 
   function getImagePath(url: string) {

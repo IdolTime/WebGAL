@@ -68,7 +68,7 @@ export function ModalRecharge() {
 
       /** 支付埋点  */
       const params = {
-        thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+        thirdUserId: sessionStorage.getItem('sdk-userId') as string || '',
         productId: WebGAL.gameId + '',
         amount: selectedItem?.price ?? 0,
         payTime: getLocalDate(),

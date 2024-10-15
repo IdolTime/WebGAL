@@ -58,10 +58,11 @@ export const apiUserOnlineLogEvent = async (data: IUserOnlineLogEvent) => {
 interface IEditorChapterEvent {
     thirdUserId: string; // 三方平台用户id
     productId: string; // 产品id
-    chapterId?: number; // 章节id
-    optionId?: number; // 选项id
+    chapterId?: string; // 章节id
+    optionId?: string; // 选项id
     reportTime: string; // 上报时间
     channel: number; // 自己平台 channel=0 | sdk channel=1
+    optionName: string; // 选项名称
 }
 /**
  * 编辑器上报--埋点

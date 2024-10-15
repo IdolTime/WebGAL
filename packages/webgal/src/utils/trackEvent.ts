@@ -8,10 +8,16 @@ let timer: NodeJS.Timer | undefined;
 
 // 启动定时器，每2分钟请求一次数据
 export function startEvent() {
+  if (timer) {
+    clearInterval(timer);
+  }
+
+  requestData();
+
   function requestData() {
     const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
     const params = {
-      thirdUserId: sessionStorage.getItem('sdk-userId') as string,
+      thirdUserId: (sessionStorage.getItem('sdk-userId') as string) || '',
       productId: String(WebGAL.gameId) || gameId,
       reportTime: getLocalDate(),
       channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
@@ -19,11 +25,6 @@ export function startEvent() {
     apiUserOnlineLogEvent(params);
   }
 
-  if (timer) {
-    clearInterval(timer);
-  }
-
-  requestData();
   timer = setInterval(requestData, 2 * 60 * 1000); // 2分钟 = 2 * 60 * 1000 毫秒
 }
 
