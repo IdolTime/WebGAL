@@ -109,6 +109,7 @@ function App() {
       }
       if (method === 'GET_USER_INFO') {
         webgalStore.dispatch(setUserInfo(response.data));
+        sessionStorage.setItem('sdk-userId', response.data.userId);
         initLoginInfo();
       }
       if (method === 'GET_GAME_DETAIL') {
