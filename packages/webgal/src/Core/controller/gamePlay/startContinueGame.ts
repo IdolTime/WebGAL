@@ -96,12 +96,14 @@ export async function continueGame() {
     // 恢复记录
     await loadFastSaveGame();
     return;
-  
+  }
+
   if (
     WebGAL.sceneManager.sceneData.currentScene.sceneName === sceneNameType.Start &&
     WebGAL.sceneManager.sceneData.currentSentenceId === 0
   ) {
     // 如果游戏没有开始，开始游戏
+
     nextSentence();
   } else {
     restorePerform();
