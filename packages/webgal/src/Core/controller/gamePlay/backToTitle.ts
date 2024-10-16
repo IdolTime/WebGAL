@@ -1,13 +1,14 @@
 import { webgalStore } from '@/store/store';
 import { setStage } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
-import { saveActions } from '@/store/savesReducer'
+import { saveActions } from '@/store/savesReducer';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
 import { stopAuto } from '@/Core/controller/gamePlay/autoPlay';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { setEbg } from '@/Core/gameScripts/changeBg/setEbg';
+import { fastSaveGame } from '../storage/fastSaveLoad';
 
-export const backToTitle = () => {
+export const backToTitle = async () => {
   const dispatch = webgalStore.dispatch;
   stopAllPerform();
   stopAuto();
@@ -23,4 +24,5 @@ export const backToTitle = () => {
    * 重设为标题背景
    */
   setEbg(webgalStore.getState().GUI.titleBg);
+  await fastSaveGame();
 };
