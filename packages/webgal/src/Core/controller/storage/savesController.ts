@@ -231,7 +231,7 @@ export async function getSavesFromCloud(fileType: number, page = 1, pageSize = 1
         value: string;
       }[] = data.data;
       for (const save of saves) {
-        const v = escapeContentQuotes(save.value);
+        const v = escapeContentAndValueQuotes(save.value);
 
         const parsedSave = JSON.parse(v);
         if (save.key === `${WebGAL.gameKey}-saves-fast`) {
@@ -385,9 +385,13 @@ export async function getUnlickAchieveFromStorage() {
   }
 }
 
-function escapeContentQuotes(str: string) {
-  return str.replace(/\"content\":\"(.*?)\"(,|})/g, function (match, p1, p2) {
-    const escapedContent = p1.replace(/\"/g, '\\"');
-    return `"content":"${escapedContent}"${p2}`;
+function escapeContentAndValueQuotes(str: string) {
+  // 扩展正则表达式以同时匹配 content 和 value 字段
+  // eslint-disable-next-line max-params
+  return str.replace(/\"(content|value)\":\"(.*?)\"(,|})/g, function (match, field, value, delimiter) {
+    // 转义内部的双引号
+    const escapedValue = value.replace(/\"/g, '\\"');
+    // 返回匹配结果，确保 content 和 value 字段都能正确处理
+    return `"${field}":"${escapedValue}"${delimiter}`;
   });
 }
