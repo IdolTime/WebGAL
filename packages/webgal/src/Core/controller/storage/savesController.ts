@@ -229,7 +229,7 @@ export async function getSavesFromCloud(fileType: number, page = 1, pageSize = 1
       const saves: {
         key: string;
         value: string;
-      }[] = data.data;
+      }[] = data.data || [];
       for (const save of saves) {
         const v = escapeContentAndValueQuotes(save.value);
 
