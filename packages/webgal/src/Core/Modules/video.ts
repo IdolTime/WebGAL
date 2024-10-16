@@ -71,6 +71,7 @@ export class VideoManager {
   public videosByKey: Record<
     string,
     {
+      isPlaying: boolean;
       player: FlvJs.Player;
       id: string;
       progressTimer: ReturnType<typeof setTimeout> | null;
@@ -273,12 +274,21 @@ export class VideoManager {
 
     this.fetchVideo(url, videoTag, videoType);
   }
-
+  // 暂停视频
   public pauseVideo(key: string): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
+      videoItem.isPlaying = false;
+      if (this.currentPlayingVideo === key) {
+        this.currentPlayingVideo = '';
+      }
     }
+  }
+
+  // 检查当前是否有视频在播放
+  public isAnyVideoPlaying(): boolean {
+    return Object.values(this.videosByKey).some((videoItem) => videoItem.isPlaying);
   }
 
   public showVideo(key: string, keepVideo?: boolean): void {
@@ -304,18 +314,28 @@ export class VideoManager {
     }
   }
 
+  // 播放视频
   public playVideo(key: string): void {
     const videoItem = this.videosByKey[key];
     this.currentPlayingVideo = key;
 
     if (videoItem?.player) {
       videoItem.player.play();
+      videoItem.isPlaying = true;
       this.checkProgress(key);
     } else if (!videoItem) {
       this.preloadVideo(key, true);
     } else {
       videoItem.waitCommands.playVideo = true;
     }
+
+    // 监听视频播放结束事件
+    videoItem.player.on('ended', () => {
+      videoItem.isPlaying = false;
+      if (this.currentPlayingVideo === key) {
+        this.currentPlayingVideo = '';
+      }
+    });
   }
 
   public setLoop(key: string, loopValue: boolean): void {
