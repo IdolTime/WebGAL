@@ -7,6 +7,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { WebGAL } from '@/Core/WebGAL';
 import { saveActions } from '@/store/savesReducer';
 import { dumpFastSaveToStorage, getFastSaveFromStorage } from '@/Core/controller/storage/savesController';
+import { sceneNameType, specialSceneNameType } from '@/Core/Modules/scene';
 
 export let fastSaveGameKey = '';
 export let isFastSaveKey = '';
@@ -20,12 +21,17 @@ export function initKey() {
 
 /**
  * 用于紧急回避时的数据存储 & 快速保存
+ * TODO: 判断当前执行文本，剔除特殊
  */
 export async function fastSaveGame() {
-  const saveData: ISaveData = await generateCurrentStageData(-1, false);
-  const newSaveData = cloneDeep(saveData);
-  webgalStore.dispatch(saveActions.setFastSave(newSaveData));
-  await dumpFastSaveToStorage();
+  const sceneName = WebGAL.sceneManager.sceneData.currentScene.sceneName;
+  // 特殊文本不保存快照
+  if (!Object.values(specialSceneNameType).includes(sceneName as specialSceneNameType)) {
+    const saveData: ISaveData = await generateCurrentStageData(-1, false);
+    const newSaveData = cloneDeep(saveData);
+    webgalStore.dispatch(saveActions.setFastSave(newSaveData));
+    await dumpFastSaveToStorage();
+  }
 }
 
 /**
