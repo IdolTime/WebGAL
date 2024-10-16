@@ -318,13 +318,13 @@ export async function getFastSaveFromStorage() {
 
 export async function dumpStorylineToStorage() {
   const data = webgalStore.getState().saveData.unlockStorylineList;
-  if (!WebGAL.gameId) {
+  if (!WebGAL.gameId && data?.length > 0) {
     await localforage.setItem(`${WebGAL.gameKey}-storyline`, { data });
     logger.info(`故事线 >> 写入本地存储`);
   } else {
     if (Date.now() - lastStorylineSaveTime < 3000) return;
     lastStorylineSaveTime = Date.now();
-    await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
+    if (data?.length > 0) await uploadSavesToCloud(`${WebGAL.gameKey}-storyline`, { data });
   }
 }
 
