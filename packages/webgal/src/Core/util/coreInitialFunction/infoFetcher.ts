@@ -46,7 +46,7 @@ import {
   CollectionSceneOtherKey,
   SliderItemKey,
 } from '@/Core/UIConfigTypes';
-import { createCursorAnimation } from '@/Core/parser/utils';
+import { createCursorAnimation, isMobile } from '@/Core/parser/utils';
 import { logger } from '@/Core/util/logger';
 import { assetsPrefetcher } from '../prefetcher/assetsPrefetcher';
 import { IAsset } from '@/Core/controller/scene/sceneInterface';
@@ -131,9 +131,12 @@ export const infoFetcher = (url: string) => {
             const normalCursor = JSON.parse(normalCursorString);
             const activeCursor = JSON.parse(activeCursorString);
 
-            // 调用函数创建动画
-            createCursorAnimation(normalCursor, 'normal');
-            createCursorAnimation(activeCursor, 'active');
+            // 修复移动端部分点击闪烁问题，判断移动端时，不创建鼠标光标动画；
+            if (!isMobile()) {
+              // 调用函数创建动画
+              createCursorAnimation(normalCursor, 'normal');
+              createCursorAnimation(activeCursor, 'active');
+            }
 
             break;
           }
