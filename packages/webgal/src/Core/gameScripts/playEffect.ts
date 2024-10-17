@@ -12,7 +12,7 @@ import { getAudioUrl } from '../util/getAudioUrl';
  * @param sentence 语句
  */
 export const playEffect = (sentence: ISentence): IPerform => {
-  logger.debug('play SE');
+  logger.debug('play SE', sentence);
   // 如果有ID，这里被覆写，一般用于循环的情况
   // 有循环参数且有 ID，就循环
   let performInitName = 'effect-sound';
@@ -27,7 +27,7 @@ export const playEffect = (sentence: ISentence): IPerform => {
     WebGAL.gameplay.performController.unmountPerform(performInitName, true);
     isLoop = true;
 
-    if (!sentence.content) {
+    if (!url) {
       return {
         performName: 'none',
         duration: 0,
@@ -76,8 +76,13 @@ export const playEffect = (sentence: ISentence): IPerform => {
           isHoldOn: isLoop,
           skipNextCollect: true,
           stopFunction: () => {
+            setTimeout(() => {
+              WebGAL.gameplay.performController.erasePerformFromState(performInitName);
+            }, 16);
             // 演出已经结束了，所以不用播放效果音了
             seElement.pause();
+            seElement.src = '';
+            seElement.load();
           },
           blockingNext: () => false,
           blockingAuto: () => {

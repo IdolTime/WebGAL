@@ -6,6 +6,7 @@ import { ISaveStoryLine, ISaveStoryLineData } from '@/store/userDataInterface';
 import { getStorylineFromStorage, dumpStorylineToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
+import { isInGame } from 'webgal/src/Core/parser/utils';
 
 /**
  * 解锁故事线
@@ -16,7 +17,9 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
   console.log('解锁故事线 >>>>>>>> start : ', { sentence });
 
   const asyncAction = async () => {
-    await getCurrentVideoStageDataForStoryLine()
+    if (webgalStore.getState().GUI.isInGaming) {
+      await getCurrentVideoStageDataForStoryLine()
+    }
     // 读取本地解锁数据
     await getStorylineFromStorage();
 
@@ -46,7 +49,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       }
     });
 
-    if (!storyLineData['name']) {
+    if (!storyLineData['name'] || !isInGame()) {
       return {
         performName: 'none',
         duration: 0,
@@ -75,7 +78,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       x: storyLineData['x'] || 0,
       y: storyLineData['y'] || 0,
       isHideName: storyLineData['isHideName'] || false,
-      isUnlock: unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline || false, // ?
+      isUnlock: unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline
     };
 
     // 没有数据 或者 没有找到 > 存储到本地缓存
