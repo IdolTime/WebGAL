@@ -30,7 +30,7 @@ export const getStorage = debounce(() => {
     const newUserData = { ..._newUserData };
     newUserData && !!newUserData.token && delete newUserData.token;
     // 如果没有数据或者属性不完全，重新初始化
-    if (!newUserData || !checkUserDataProperty(newUserData)) {
+    if (!newUserData || !checkUserDataProperty(newUserData, true)) {
       logger.warn('现在重置数据');
       setStorage();
       return;
@@ -101,9 +101,14 @@ export const dumpToStorageFast = () => {
  * 检查用户数据属性是否齐全
  * @param userData 需要检查的数据
  */
-function checkUserDataProperty(userData: any) {
+function checkUserDataProperty(userData: any, ignoreToken?: boolean) {
   let result = true;
   for (const key in initState) {
+    // 忽略token属性
+    if (ignoreToken && key === 'token') {
+      continue;
+    }
+
     if (!userData.hasOwnProperty(key)) {
       result = false;
     }
