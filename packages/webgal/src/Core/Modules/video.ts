@@ -288,7 +288,7 @@ export class VideoManager {
   public resumePausedVideo(): void {
     if (this.currentPlayingVideo) {
       const videoItem = this.videosByKey[this.currentPlayingVideo];
-      if (!videoItem.isPlaying) {
+      if (videoItem && !videoItem.isPlaying) {
         videoItem.player.play();
         videoItem.isPlaying = true;
       }
