@@ -42,6 +42,7 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
 
   // 强制停止所有演出
   stopAllPerform();
+  WebGAL.resetAnimationManager();
   webgalStore.dispatch(resetStageState(initState));
   WebGAL.gameplay.resetPixiStage();
 

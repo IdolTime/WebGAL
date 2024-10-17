@@ -40,6 +40,7 @@ export const jumpFromBacklog = async (index: number, refetchScene = true) => {
   logger.debug('读取的backlog数据', backlogFile);
   // 强制停止所有演出
   stopAllPerform();
+  WebGAL.resetAnimationManager();
   dispatch(resetStageState(initState));
   WebGAL.gameplay.resetPixiStage();
 

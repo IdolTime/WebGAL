@@ -20,4 +20,8 @@ export class WebgalCore {
   public gameJsLink = '';
   public gameCssLink = '';
   public isFinishTrial = '0'; // 是否试玩
+
+  public resetAnimationManager() {
+    this.animationManager = new AnimationManager();
+  }
 }

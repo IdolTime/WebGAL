@@ -51,6 +51,7 @@ export const startFast = () => {
     if (!isFast()) {
       WebGAL.gameplay.fastTimeout && clearTimeout(WebGAL.gameplay.fastTimeout);
       WebGAL.gameplay.fastTimeout = null;
+      setButton(false);
       return; // 如果已经不是快进状态，停止递归调用
     }
 
