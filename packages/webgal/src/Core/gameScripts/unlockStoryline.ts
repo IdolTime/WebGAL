@@ -6,6 +6,7 @@ import { ISaveStoryLine, ISaveStoryLineData } from '@/store/userDataInterface';
 import { getStorylineFromStorage, dumpStorylineToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
+import { isInGame } from 'webgal/src/Core/parser/utils';
 
 /**
  * 解锁故事线
@@ -48,7 +49,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       }
     });
 
-    if (!storyLineData['name'] || !webgalStore.getState().GUI.isInGaming) {
+    if (!storyLineData['name'] || !isInGame()) {
       return {
         performName: 'none',
         duration: 0,
