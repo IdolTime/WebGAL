@@ -158,6 +158,10 @@ export const Backlog = () => {
       setTimeout(() => {
         setIsDisableScroll(false);
       }, 0);
+
+      if (WebGAL.videoManager.isAnyVideoPlaying()) {
+        WebGAL.videoManager.pauseVideo(WebGAL.videoManager.currentPlayingVideo);
+      }
     } else {
       /* 隐藏历史记录触发 */
       // 这里是为了让backlog的z-index降低
@@ -169,6 +173,7 @@ export const Backlog = () => {
         // 700是和动画一样的延时 保险起见多个80ms
         // 不加也没啥 问题不大
       }, 700 + 80);
+      WebGAL.videoManager.resumePausedVideo();
     }
   }, [GUIStore.showBacklog]);
   return (

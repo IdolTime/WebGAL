@@ -103,7 +103,7 @@ export const say = (sentence: ISentence): IPerform => {
   }
   getCurrentVideoStageDataForStoryLine();
   return {
-    performName: performInitName,
+    performName: 'say.' + performInitName,
     duration: sentenceDelay + endDelay,
     isHoldOn: false,
     stopFunction: () => {

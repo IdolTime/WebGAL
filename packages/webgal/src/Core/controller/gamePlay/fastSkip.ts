@@ -48,8 +48,14 @@ export const startFast = () => {
   let fastCount = 0; // 计数器，记录快进次数
 
   const fastForward = () => {
-    if (fastCount >= 9) {
-      // 快进 10 次后停止快进
+    if (!isFast()) {
+      WebGAL.gameplay.fastTimeout && clearTimeout(WebGAL.gameplay.fastTimeout);
+      WebGAL.gameplay.fastTimeout = null;
+      return; // 如果已经不是快进状态，停止递归调用
+    }
+
+    if (fastCount >= 19) {
+      // 快进 20 次后停止快进
       stopFast();
       return;
     }

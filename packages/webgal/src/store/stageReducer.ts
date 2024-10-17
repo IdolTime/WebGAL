@@ -183,6 +183,9 @@ const stageSlice = createSlice({
         }
       }
     },
+    removeAllPerform: (state, action: PayloadAction<undefined>) => {
+      state.PerformList = [];
+    },
     removeAllPixiPerforms: (state, action: PayloadAction<undefined>) => {
       for (let i = 0; i < state.PerformList.length; i++) {
         const performItem: IRunPerform = state.PerformList[i];
@@ -304,6 +307,9 @@ const stageSlice = createSlice({
     updateShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem[]>) => {
       state.showAffinityChangeList = action.payload;
     },
+    removeAffinityChange: (state, action: PayloadAction<number>) => {
+      state.showAffinityChangeList = state.showAffinityChangeList.filter((item) => item.key !== action.payload);
+    },
   },
 });
 
@@ -319,6 +325,8 @@ export const {
   updateShowValueList,
   addShowAffinityChangeList,
   updateShowAffinityChangeList,
+  removeAffinityChange,
+  removeAllPerform,
 } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;
