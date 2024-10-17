@@ -57,6 +57,9 @@ const Title: FC = () => {
         // 购买
         // @ts-ignore
         window.globalThis.openBuyGameDialog(token, id).then((res: any) => {
+          if (res.action === 'CLOSE_DIALOG') {
+            return;
+          }
           LogPaySuccess({ paymentAmount });
           setTimeout(() => {
             window.location.reload();
