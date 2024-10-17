@@ -28,6 +28,12 @@ export const GameMenuPanel = () => {
     dispatch(setVisibility({ component, visibility }));
   };
 
+  const pauseIfVideoPlaying = () => {
+    if (WebGAL.videoManager.isAnyVideoPlaying()) {
+      WebGAL.videoManager.pauseVideo(WebGAL.videoManager.currentPlayingVideo);
+    }
+  };
+
   useEffect(() => {
     const handleKeyPress = (event: { keyCode: number }) => {
       if (event.keyCode === 27 && webgalStore.getState().GUI.isInGaming) {
@@ -69,8 +75,7 @@ export const GameMenuPanel = () => {
    */
   const handleSave = () => {
     // 如果当前在播放视频则暂停
-    const isLoadVideo = WebGAL.videoManager.isAnyVideoPlaying();
-    console.log('是否在播放视频', isLoadVideo);
+    pauseIfVideoPlaying();
     playSeClick();
     setMenuPanel(MenuPanelTag.Save);
     setComponentVisibility('isShowGameMenu', false);
@@ -82,8 +87,7 @@ export const GameMenuPanel = () => {
    */
   const handleRead = () => {
     // 如果当前在播放视频则暂停
-    const isLoadVideo = WebGAL.videoManager.isAnyVideoPlaying();
-    console.log('是否在播放视频', isLoadVideo);
+    pauseIfVideoPlaying();
     setMenuPanel(MenuPanelTag.Load);
     setComponentVisibility('isShowGameMenu', false);
     setComponentVisibility('showMenuPanel', true);
@@ -95,8 +99,7 @@ export const GameMenuPanel = () => {
    */
   const handleSetting = () => {
     // 如果当前在播放视频则暂停
-    const isLoadVideo = WebGAL.videoManager.isAnyVideoPlaying();
-    console.log('是否在播放视频', isLoadVideo);
+    pauseIfVideoPlaying();
     setMenuPanel(MenuPanelTag.Option);
     setComponentVisibility('isShowGameMenu', false);
     setComponentVisibility('showMenuPanel', true);

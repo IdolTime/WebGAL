@@ -274,14 +274,23 @@ export class VideoManager {
 
     this.fetchVideo(url, videoTag, videoType);
   }
+
   // 暂停视频
   public pauseVideo(key: string): void {
     const videoItem = this.videosByKey[key];
     if (videoItem?.player) {
       videoItem.player.pause();
       videoItem.isPlaying = false;
-      if (this.currentPlayingVideo === key) {
-        this.currentPlayingVideo = '';
+    }
+  }
+
+  // 恢复暂停视频
+  public resumePausedVideo(): void {
+    if (this.currentPlayingVideo) {
+      const videoItem = this.videosByKey[this.currentPlayingVideo];
+      if (!videoItem.isPlaying) {
+        videoItem.player.play();
+        videoItem.isPlaying = true;
       }
     }
   }

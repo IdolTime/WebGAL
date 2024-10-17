@@ -11,6 +11,7 @@ import useSoundEffect from '@/hooks/useSoundEffect';
 import { setVisibility } from '@/store/GUIReducer';
 import { OptionSceneButtonKey, OptionSceneOtherKey, OptionSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { Button } from '@/UI/Components/Base';
+import { WebGAL } from '@/Core/WebGAL';
 
 export const Options: FC = () => {
   useEffect(getStorage, []);
@@ -27,6 +28,7 @@ export const Options: FC = () => {
         defaultClass={`${styles.Save_back} interactive`}
         onClick={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+          WebGAL.videoManager.resumePausedVideo();
         }}
         onMouseEnter={playSeEnter}
       />
