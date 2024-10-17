@@ -116,7 +116,7 @@ export const Achievement: FC = () => {
 
     setTimeout(() => {
       initData();
-    }, 100);
+    }, 300);
   }
 
   async function initData() {
