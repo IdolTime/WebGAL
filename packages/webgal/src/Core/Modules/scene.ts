@@ -30,6 +30,15 @@ export enum sceneNameType {
   /** 好感度场景 */
   Affinity = 'affinity.txt',
 }
+// 特殊场景
+export enum specialSceneNameType {
+  /** 成就场景 */
+  Achieve = 'achieve.txt',
+  /** 故事线场景 */
+  Storyline = 'storyline.txt',
+  /** 好感度场景 */
+  Affinity = 'affinity.txt',
+}
 
 /**
  * 初始化场景数据

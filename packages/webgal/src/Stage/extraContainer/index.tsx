@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { IShowAffinityChangeItem } from '@/store/stageInterface';
-import { updateShowAffinityChangeList } from '@/store/stageReducer';
+import { removeAffinityChange, updateShowAffinityChangeList } from '@/store/stageReducer';
 
 import styles from './extraContainer.module.scss';
 
@@ -151,9 +151,7 @@ function AffinityItem({ item }: { item: IShowAffinityChangeItem }) {
       }, 1000);
 
       setTimeout(() => {
-        const list = webgalStore.getState().stage.showAffinityChangeList;
-        const newList = list.filter((e) => e.key !== item.key);
-        webgalStore.dispatch(updateShowAffinityChangeList(newList));
+        webgalStore.dispatch(removeAffinityChange(item.key));
       }, 3032);
     }
   }, [rolePicLayout, numberPicLayout]);

@@ -14,19 +14,21 @@ import { WebGAL } from '@/Core/WebGAL';
 import { setOptionData } from '@/store/userDataReducer';
 import { setStorage } from '@/Core/controller/storage/storageController';
 import { fullScreenOption } from '@/store/userDataInterface';
+import { assetSetter } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { sceneNameType } from '@/Core/Modules/scene';
 
 // options备用
 export interface HotKeyType {
   MouseRight?: {} | boolean;
   MouseWheel?: {} | boolean;
   Ctrl?: boolean;
-  isDisableCtrl?: boolean
+  isDisableCtrl?: boolean;
   Esc?:
-  | {
-    href: string;
-    nav: 'replace' | 'push';
-  }
-  | boolean;
+    | {
+        href: string;
+        nav: 'replace' | 'push';
+      }
+    | boolean;
   AutoSave?: {} | boolean;
 }
 
@@ -190,7 +192,7 @@ export function usePanic() {
  * ctrl控制快进
  * @param isDisableCtrl 是否禁用
  */
-export function useSkip(isDisableCtrl: boolean = false) {
+export function useSkip(isDisableCtrl = false) {
   // 因为document事件只绑定一次 为了防止之后更新GUIStore时取不到最新值
   // 使用Ref共享GUIStore
   const GUIStore = useGenSyncRef((state: RootState) => state.GUI);

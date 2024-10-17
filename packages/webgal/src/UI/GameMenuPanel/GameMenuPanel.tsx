@@ -9,6 +9,8 @@ import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import useTrans from '@/hooks/useTrans';
 import { stopEvent } from '@/utils/trackEvent';
+import { VideoManager } from '@/Core/Modules/video';
+import { WebGAL } from '@/Core/WebGAL';
 
 export const GameMenuPanel = () => {
   const t = useTrans('gaming.');
@@ -24,6 +26,12 @@ export const GameMenuPanel = () => {
   const dispatch = useDispatch();
   const setComponentVisibility = (component: keyof componentsVisibility, visibility: boolean) => {
     dispatch(setVisibility({ component, visibility }));
+  };
+
+  const pauseIfVideoPlaying = () => {
+    if (WebGAL.videoManager.isAnyVideoPlaying()) {
+      WebGAL.videoManager.pauseVideo(WebGAL.videoManager.currentPlayingVideo);
+    }
   };
 
   useEffect(() => {
@@ -66,6 +74,8 @@ export const GameMenuPanel = () => {
    * 保存
    */
   const handleSave = () => {
+    // 如果当前在播放视频则暂停
+    pauseIfVideoPlaying();
     playSeClick();
     setMenuPanel(MenuPanelTag.Save);
     setComponentVisibility('isShowGameMenu', false);
@@ -76,6 +86,8 @@ export const GameMenuPanel = () => {
    * 读取
    */
   const handleRead = () => {
+    // 如果当前在播放视频则暂停
+    pauseIfVideoPlaying();
     setMenuPanel(MenuPanelTag.Load);
     setComponentVisibility('isShowGameMenu', false);
     setComponentVisibility('showMenuPanel', true);
@@ -86,6 +98,8 @@ export const GameMenuPanel = () => {
    * 设置
    */
   const handleSetting = () => {
+    // 如果当前在播放视频则暂停
+    pauseIfVideoPlaying();
     setMenuPanel(MenuPanelTag.Option);
     setComponentVisibility('isShowGameMenu', false);
     setComponentVisibility('showMenuPanel', true);

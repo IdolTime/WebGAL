@@ -22,6 +22,7 @@ import { LogPaySuccess } from '@/Core/log';
 import { apiStartGameEvent } from '@/services/eventData';
 import { getLocalDate } from '@/utils/date';
 import { startEvent } from '@/utils/trackEvent';
+import { getUserId } from '@/Core/controller/storage/savesController';
 
 /**
  * 标题页
@@ -98,8 +99,8 @@ const Title: FC = () => {
         /** 埋点上报 */
         const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
         const params = {
-          thirdUserId: (sessionStorage.getItem('sdk-userId') as string) || '',
-          productId: String(WebGAL.gameId) || gameId,
+          thirdUserId: getUserId(),
+          productId: String(WebGAL.gameId),
           onlineTime: getLocalDate(),
           channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
         };

@@ -20,6 +20,7 @@ import { sleep } from '@/Core/util/sleep';
 import { stopFast } from '@/Core/controller/gamePlay/fastSkip';
 import { apiEditorChapterEvent } from '@/services/eventData';
 import { getLocalDate } from '@/utils/date';
+import { getUserId } from '@/Core/controller/storage/savesController';
 
 class ChooseOption {
   /**
@@ -166,11 +167,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
 
   function chooseEvent(optionName: string) {
     if (isChooseEvent && chooseEventId) {
-      const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
-      /** 编辑器章节语句 埋点上报  */
+      /** 编辑器分支选项语句 埋点上报  */
       const params = {
-        thirdUserId: (sessionStorage.getItem('sdk-userId') as string) || '',
-        productId: String(WebGAL.gameId) || gameId,
+        thirdUserId: getUserId(),
+        productId: String(WebGAL.gameId),
         optionId: String(chooseEventId),
         reportTime: getLocalDate(),
         channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
@@ -209,7 +209,7 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
             } else {
               jmp(e.jump);
             }
-            chooseEvent(e.text)
+            chooseEvent(e.text);
             isJumpRef.current = false;
             WebGAL.gameplay.performController.unmountPerform('choose');
           };

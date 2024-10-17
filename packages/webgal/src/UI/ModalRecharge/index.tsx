@@ -10,6 +10,7 @@ import { chunk } from 'lodash';
 import StarStoneIcon from '@/assets/imgs/xingshiIcon.webp';
 import ModalClose from '@/assets/imgs/modal-close.png';
 import { getLocalDate } from '@/utils/date';
+import { getUserId } from '@/Core/controller/storage/savesController';
 
 import styles from './modalRecharge.module.scss';
 import { SourceImg } from '../Components/SourceImg';
@@ -68,7 +69,7 @@ export function ModalRecharge() {
 
       /** 支付埋点  */
       const params = {
-        thirdUserId: sessionStorage.getItem('sdk-userId') as string || '',
+        thirdUserId: getUserId(),
         productId: WebGAL.gameId + '',
         amount: selectedItem?.price ?? 0,
         payTime: getLocalDate(),
