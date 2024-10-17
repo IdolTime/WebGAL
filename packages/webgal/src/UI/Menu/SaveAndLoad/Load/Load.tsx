@@ -19,6 +19,7 @@ import {
 } from '@/Core/UIConfigTypes';
 import { BgImage, Button } from '@/UI/Components/Base';
 import { startEvent } from '@/utils/trackEvent';
+import { WebGAL } from '@/Core/WebGAL';
 
 export const Load: FC = () => {
   const { playSeClick, playSeEnter, playSePageChange } = useSoundEffect();
@@ -133,6 +134,7 @@ export const Load: FC = () => {
         defaultClass={`${styles.Common_back} interactive`}
         onClick={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+          WebGAL.videoManager.resumePausedVideo();
         }}
         onMouseEnter={playSeEnter}
       />
