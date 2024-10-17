@@ -13,6 +13,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { px2 } from '@/Core/parser/utils';
 import { LoadSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { Button } from '@/UI/Components/Base';
+import { WebGAL } from '@/Core/WebGAL';
 
 export const Save: FC = () => {
   const { playSeClick, playSePageChange, playSeEnter, playSeDialogOpen } = useSoundEffect();
@@ -138,6 +139,7 @@ export const Save: FC = () => {
         defaultClass={`${styles.Common_back} interactive`}
         onClick={() => {
           dispatch(setVisibility({ component: 'showMenuPanel', visibility: false }));
+          WebGAL.videoManager.resumePausedVideo();
         }}
         onMouseEnter={playSeEnter}
       />
