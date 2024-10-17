@@ -3,7 +3,7 @@ import { sceneFetcher } from '../scene/sceneFetcher';
 import { sceneParser } from '../../parser/sceneParser';
 import { IStageState } from '@/store/stageInterface';
 import { webgalStore } from '@/store/store';
-import { initState, resetStageState } from '@/store/stageReducer';
+import { initState, removeAllPerform, resetStageState } from '@/store/stageReducer';
 import { setVisibility } from '@/store/GUIReducer';
 import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { stopAllPerform } from '@/Core/controller/gamePlay/stopAllPerform';
@@ -20,7 +20,10 @@ import { stopFast } from '../gamePlay/fastSkip';
  */
 export const restorePerform = () => {
   const stageState = webgalStore.getState().stage;
-  stageState.PerformList.forEach((e) => {
+  const performListCopy = [...stageState.PerformList];
+  webgalStore.dispatch(removeAllPerform());
+
+  performListCopy.forEach((e) => {
     runScript(e.script);
   });
 };

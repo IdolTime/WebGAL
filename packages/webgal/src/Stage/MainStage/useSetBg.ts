@@ -25,7 +25,7 @@ export function useSetBg(stageState: IStageState) {
             removeBg(currentBg);
           }
         }
-        await Promise.all([WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName, bgX, bgY), sleep(50)]);
+        await Promise.all([WebGAL.gameplay.pixiStage?.addBg(thisBgKey, bgName, bgX, bgY), sleep(0)]);
         setEbg(bgName);
         logger.debug('重设背景');
         const { duration, animation } = getEnterExitAnimation('bg-main', 'enter', true);

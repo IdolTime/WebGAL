@@ -14,6 +14,7 @@ import { runScript } from '@/Core/controller/gamePlay/runScript';
 import { WebGAL } from '@/Core/WebGAL';
 import { saveActions } from '@/store/savesReducer';
 import { sleep } from '@/Core/util/sleep';
+import { stopFast } from '../gamePlay/fastSkip';
 
 /**
  * 读取游戏存档
@@ -37,6 +38,7 @@ export async function loadGameFromStageData(stageData: ISaveData, isLoadVideo = 
     return;
   }
   const loadFile = stageData;
+  stopFast();
 
   // 强制停止所有演出
   stopAllPerform();

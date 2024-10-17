@@ -93,6 +93,10 @@ export class PerformController {
     }
   }
 
+  public resetPerformList() {
+    this.performList = [];
+  }
+
   private goNextWhenOver() {
     let isBlockingAuto = false;
     this.performList?.forEach((e) => {
