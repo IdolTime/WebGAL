@@ -17,4 +17,8 @@ export class WebgalCore {
   public channel = '0';
   public events = new Events();
   public videoManager = new VideoManager();
+
+  public resetAnimationManager() {
+    this.animationManager = new AnimationManager();
+  }
 }

@@ -13,7 +13,7 @@ index b2e88ad..385c36f 100644
                  var url = resource.name || resource.url;
                  Object.assign(resource, registerAPNGTextures(url, APNGLoader.parse(url, resource.data), resource.metadata));
 diff --git a/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js b/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
-index d130534..4d4b992 100644
+index d130534..6f73552 100644
 --- a/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
 +++ b/node_modules/@tbminiapp/pixi-apng-textures/dist/esm/apng-textures.js
 @@ -5,9 +5,9 @@
@@ -29,15 +29,7 @@ index d130534..4d4b992 100644
  import UPNG from 'upng-js';
  
  /*! *****************************************************************************
-@@ -124,6 +124,7 @@ function registerAPNGTextures(url, resources, metadata) {
-         result.frameDelay.push(baseTexture.resource.delay);
-         result.textures[cacheID] = texture;
-     });
-+    PIXI.utils.TextureCache.abcd = 'efg'
-     result.frameCount = textures.length;
-     return result;
- }
-@@ -135,7 +136,7 @@ LoaderResource.setExtensionXhrType('apng', LoaderResource.XHR_RESPONSE_TYPE.BUFF
+@@ -135,7 +135,7 @@ LoaderResource.setExtensionXhrType('apng', LoaderResource.XHR_RESPONSE_TYPE.BUFF
   *
   * @ignore
   */
@@ -46,7 +38,7 @@ index d130534..4d4b992 100644
  /**
   * Loader plugin for handling apng texture container files.
   *
-@@ -157,11 +158,33 @@ var APNGLoader = /** @class */ (function () {
+@@ -157,11 +157,35 @@ var APNGLoader = /** @class */ (function () {
       * @param resource - loader resource that is checked to see if it is a apng file
       * @param next - callback Function to call when done
       */
@@ -76,15 +68,17 @@ index d130534..4d4b992 100644
 +                            delay: 0  // 普通 PNG 的 delay 设置为 0
 +                        });
 +                        Object.assign(resource, registerAPNGTextures(name, [pngTextureResource], resource.metadata));
++                        next();
 +                    } else {
 +                        Object.assign(resource, registerAPNGTextures(name, APNGLoader.parse(name, buffer), resource.metadata));
++                        next();
 +                    }
 +                }
 +                await fetchFileAsArrayBuffer(url);
              }
              catch (err) {
                  next(err);
-@@ -174,11 +197,7 @@ var APNGLoader = /** @class */ (function () {
+@@ -174,11 +198,7 @@ var APNGLoader = /** @class */ (function () {
        *  parse apng arraybuffer to APNGTextureResource
        *
        */
@@ -97,7 +91,7 @@ index d130534..4d4b992 100644
          var upngObj = UPNG.decode(buffer);
          var width = upngObj.width, height = upngObj.height, frames = upngObj.frames;
          var rgba = UPNG.toRGBA8(upngObj);
-@@ -200,9 +219,9 @@ var APNGLoader = /** @class */ (function () {
+@@ -200,9 +220,9 @@ var APNGLoader = /** @class */ (function () {
      };
      /** Checks whether the arrayBuffer contains a valid *.apng file. */
      APNGLoader.validate = function (url, buffer) {
