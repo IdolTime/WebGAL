@@ -1,6 +1,7 @@
 import { apiUserOnlineLogEvent } from '@/services/eventData';
 import { WebGAL } from '@/Core/WebGAL';
 import { getLocalDate } from '@/utils/date';
+import { getUserId } from '@/Core/controller/storage/savesController';
 
 
 //@ts-ignore
@@ -17,7 +18,7 @@ export function startEvent() {
 
     function requestData() {
       const params = {
-          thirdUserId: sessionStorage.getItem('sdk-userId') as string || '',
+          thirdUserId: getUserId(),
           productId: WebGAL.gameId + '',
           reportTime: getLocalDate(),
           channel: sessionStorage.getItem('sdk-userId') ? 1 : 0

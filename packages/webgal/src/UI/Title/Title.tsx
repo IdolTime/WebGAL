@@ -20,6 +20,7 @@ import { apiStartGameEvent } from '@/services/eventData';
 import { WebGAL } from '@/Core/WebGAL';
 import { getLocalDate } from '@/utils/date';
 import { startEvent } from '@/utils/trackEvent';
+import { getUserId } from '@/Core/controller/storage/savesController';
 
 /**
  * 标题页
@@ -45,7 +46,7 @@ const Title: FC = () => {
         dispatch(setshowFavorited(false));
         /** 埋点上报 */
         const params = {
-          thirdUserId: sessionStorage.getItem('sdk-userId') as string || '',
+          thirdUserId: getUserId(),
           productId: WebGAL.gameId + '',
           onlineTime: getLocalDate(),
           channel: sessionStorage.getItem('sdk-userId') ? 1 : 0

@@ -15,7 +15,7 @@ let lastStorylineSaveTime = 0;
 let lastAffinitySaveTime = 0;
 let lastAchiveSaveTime = 0;
 
-const getUserId = () => {
+export const getUserId = () => {
   if (WebGAL.channel === '0') {
     return String(webgalStore.getState().userData.userInfo?.userId || 0);
   }

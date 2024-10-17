@@ -3,6 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { apiEditorChapterEvent } from '@/services/eventData';
 import { WebGAL } from '@/Core/WebGAL';
 import { getLocalDate } from '@/utils/date';
+import { getUserId } from '@/Core/controller/storage/savesController';
 
 
 /**
@@ -14,7 +15,7 @@ export const eventData = (sentence: ISentence): IPerform => {
     
     /** 编辑器章节语句 埋点上报  */ 
     const params = {
-      thirdUserId: sessionStorage.getItem('sdk-userId') as string || '',
+      thirdUserId: getUserId(),
       productId: WebGAL.gameId + '',
       chapterId: chapterId + '',
       reportTime: getLocalDate(),
