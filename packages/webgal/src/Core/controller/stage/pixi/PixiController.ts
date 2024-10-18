@@ -546,7 +546,8 @@ export default class PixiStage {
             const scaleX = this.stageWidth / originalWidth;
             const scaleY = this.stageHeight / originalHeight;
             const targetScale = Math.min(scaleX, scaleY);
-            const figureSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
+            const shouldAnimate = isApng && textures?.length > 1;
+            const figureSprite = shouldAnimate ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
 
             figureSprite.scale.x = targetScale;
             figureSprite.scale.y = targetScale;
@@ -570,7 +571,7 @@ export default class PixiStage {
               thisFigureContainer.setBaseX(this.stageWidth - targetWidth / 2);
             }
 
-            if (isApng) {
+            if (shouldAnimate) {
               const sprite = figureSprite as PIXI.AnimatedSprite;
               // 自定义播放速度的函数
               let currentFrame = 0;
@@ -683,7 +684,8 @@ export default class PixiStage {
             const scaleX = this.stageWidth / originalWidth;
             const scaleY = this.stageHeight / originalHeight;
             const targetScale = Math.min(scaleX, scaleY);
-            const popupSprite = isApng ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
+            const shouldAnimate = isApng && textures?.length > 1;
+            const popupSprite = shouldAnimate ? new PIXI.AnimatedSprite(textures) : new PIXI.Sprite(texture);
 
             popupSprite.scale.x = 2;
             popupSprite.scale.y = 2;
@@ -712,7 +714,7 @@ export default class PixiStage {
             thisFigureContainer.setBaseX(axesX);
             thisFigureContainer.setBaseY(axesY);
 
-            if (isApng) {
+            if (shouldAnimate) {
               const sprite = popupSprite as PIXI.AnimatedSprite;
               // 自定义播放速度的函数
               let currentFrame = 0;
