@@ -39,6 +39,23 @@
   }
 }
 
+.videoBackIcon {
+  position: absolute;
+  left: px2(41px);
+  top: px2(15px);
+  cursor: pointer;
+  width: px2(53px);
+  height: px2(53px);
+
+  background-image: url('@/assets/imgs/back.png');
+  background-size: contain;
+
+  &:hover {
+    background-image: url('@/assets/imgs/back-r.png');
+  }
+}
+
+
 @keyframes extra_icon_softin {
   0% {
     background: rgba(255, 255, 255, 0);

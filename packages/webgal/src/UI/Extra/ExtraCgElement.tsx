@@ -2,10 +2,13 @@ import { useValue } from '@/hooks/useValue';
 import styles from '@/UI/Extra/extra.module.scss';
 import React from 'react';
 import useSoundEffect from '@/hooks/useSoundEffect';
-import cgUnLock from '@/assets/imgs//cg-unLock.png';
 import FlvPlayer from '../FlvPlayer';
 import FlvJs from 'flv.js';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { Button } from '../Components/Base';
+import { ExtraSceneOtherKey, ExtraSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 interface IProps {
   name: string;
@@ -21,6 +24,7 @@ export function ExtraCgElement(props: IProps) {
   const bgmNode = document.getElementById('currentBgm') as HTMLAudioElement;
   const url = assetSetter(props.url, isVideo ? fileType.video : fileType.background);
   const poster = isVideo && props.poster ? assetSetter(props.poster, fileType.image) : '';
+  const extraUIConfigs = useSelector((state: RootState) => state.GUI.gameUIConfigs[Scene.extra]) as ExtraSceneUIConfig;
 
   let bgmVol = 0;
 
@@ -28,18 +32,16 @@ export function ExtraCgElement(props: IProps) {
     bgmVol = bgmNode.volume;
   }
 
+  const handleGoBack = () => {
+    showFull.set(false);
+    playSeClick();
+    bgmNode.volume = bgmVol;
+  };
+
   return (
     <>
       {showFull.value && (
-        <div
-          onClick={() => {
-            showFull.set(!showFull.value);
-            playSeClick();
-            bgmNode.volume = bgmVol;
-          }}
-          className={`${styles.showFullContainer} interactive`}
-          onMouseEnter={playSeEnter}
-        >
+        <div className={`${styles.showFullContainer} interactive`} onMouseEnter={playSeEnter}>
           <div className={styles.showFullCgMain}>
             {isVideo ? (
               <FlvPlayer
@@ -61,6 +63,13 @@ export function ExtraCgElement(props: IProps) {
                 }}
               />
             )}
+            {/* 退出按钮复用 Extra_back_button */}
+            <Button
+              item={extraUIConfigs.buttons.Extra_back_button}
+              defaultClass={`${styles.videoBackIcon} interactive`}
+              onClick={handleGoBack}
+              onMouseEnter={playSeEnter}
+            />
           </div>
         </div>
       )}
