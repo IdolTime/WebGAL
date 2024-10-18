@@ -96,7 +96,6 @@ export const initState: IGuiState = {
     Achievement_title: initStateAchievement,
   },
   currentPlayAudio: null, // 当前播放的音频
-  playingVideo: false,
 };
 
 /**
@@ -159,9 +158,6 @@ const GUISlice = createSlice({
       // @ts-ignore
       state.currentPlayAudio = action.payload;
     },
-    setPlayingVideo: (state, action: PayloadAction<boolean>) => {
-      state.playingVideo = action.payload;
-    },
   },
 });
 
@@ -177,6 +173,5 @@ export const {
   setEscMenus,
   setAchievementUI,
   setCurrentPlayAudio,
-  setPlayingVideo,
 } = GUISlice.actions;
 export default GUISlice.reducer;

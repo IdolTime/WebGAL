@@ -96,6 +96,7 @@ export interface IAppreciationAsset {
   name: string;
   url: string;
   series: string;
+  poster?: string;
 }
 
 export interface IAppreciation {

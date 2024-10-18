@@ -9,9 +9,9 @@ import { choose } from './choose';
 import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
-import { setshowFavorited, setVisibility, setPlayingVideo } from '@/store/GUIReducer';
+import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
 import { updateShowValueList, setStage } from '@/store/stageReducer';
-import { VideoManager } from '../Modules/video';
+import { assetSetter, fileType } from '../util/gameAssetsAccess/assetSetter';
 
 /**
  * 播放一段视频 * @param sentence
@@ -37,6 +37,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
       console.log('快进状态尝试跳过视频');
     },
   };
+  let poster = '';
 
   sentence.args.forEach((e) => {
     if (e.key === 'choose') {
@@ -52,6 +53,8 @@ export const playVideo = (sentence: ISentence): IPerform => {
       loopValue = true;
     } else if (e.key === 'id') {
       id = e.value as string;
+    } else if (e.key === 'poster') {
+      poster = assetSetter(e.value as string, fileType.image);
     }
   });
 
@@ -81,6 +84,10 @@ export const playVideo = (sentence: ISentence): IPerform => {
       blockingAuto: () => true,
       stopTimeout: undefined,
     };
+  } else {
+    if (poster) {
+      WebGAL.videoManager.setPoster(sentence.content, poster);
+    }
   }
 
   const checkIfBlockingNext = () => {
@@ -242,10 +249,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
         }
 
         WebGAL.videoManager.playVideo(url);
-        // @ts-ignore
-        window?.pubsub?.publish('loading', { loading: false });
-        webgalStore.dispatch(setPlayingVideo(true)); // 设置视频播放状态
-
         // 从缓存数据中查找 改视频是否收藏过
         const saveData = webgalStore.getState().saveData.saveData || [];
         if (saveData?.length) {
@@ -280,7 +283,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
           } else {
             // 视频播放完成后，隐藏当前设置的显示变量
             const showValueList = webgalStore.getState().stage.showValueList;
-            webgalStore.dispatch(setPlayingVideo(false)); // 设置视频播放状态
             if (showValueList?.length) {
               const name = webgalStore.getState().stage.showValueName;
               const newShowValueList = showValueList.filter((item) => item.showValueName !== name);
