@@ -20,6 +20,7 @@ export interface ISavesData {
   allStorylineData: Array<ISaveStoryLineData>;
   gameScounds: Record<string, string | boolean>; // 游戏内音效
   menuScounds: Record<string, string | boolean>; // 菜单内音效
+  prevPlayVideo: string; // 上一次播放的视频
 }
 
 export interface ISetSavePayload {
@@ -42,6 +43,7 @@ const initState: ISavesData = {
   allStorylineData: [],
   gameScounds: {}, // 游戏内音效
   menuScounds: {}, // 菜单内音效
+  prevPlayVideo: '',
 };
 
 interface ISaveStoryLine {
@@ -144,9 +146,10 @@ const saveDataSlice = createSlice({
       state.allStorylineData = action.payload
     },
     setSaveStatus: (state, action: PayloadAction<ISetSavePayload>) => {
+      // alert(`setSaveStatus : ${action.payload.key} ---> ${action.payload.value}`);
       // @ts-ignore
       state[action.payload.key] = action.payload.value;
-    },
+    }
   },
 });
 

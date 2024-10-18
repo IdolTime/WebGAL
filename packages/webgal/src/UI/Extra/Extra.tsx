@@ -28,6 +28,8 @@ export function Extra() {
   useEffect(() => {
     if (showExtra) {
       dispatch(saveActions.setLoadVideo(true));
+    } else {
+      dispatch(saveActions.setSaveStatus({ key: 'prevPlayVideo', value: '' }));
     }
   }, [showExtra]);
 

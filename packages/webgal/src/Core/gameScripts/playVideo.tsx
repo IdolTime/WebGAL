@@ -11,6 +11,7 @@ import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
 import { updateShowValueList, setStage } from '@/store/stageReducer';
+import { saveActions } from '@/store/savesReducer';
 
 /**
  * 播放一段视频 * @param sentence
@@ -152,13 +153,33 @@ export const playVideo = (sentence: ISentence): IPerform => {
           scenePrefetcher(sceneList);
         }
 
-        const endPerform = () => {
+        const endPerform = (videoUrl?: string) => {
           // 如果为鉴赏模式下播放视频，播放完后自动跳转到鉴赏模式页面
           if (isLoadVideo) {
             webgalStore.dispatch(setVisibility({ component: 'showExtra', visibility: true }));
             if (webgalStore.getState().GUI.isShowGameMenu) {
               webgalStore.dispatch(setVisibility({ component: 'isShowGameMenu', visibility: false }));
             }
+            
+            webgalStore.dispatch(saveActions.setSaveStatus({ 
+              key: 'prevPlayVideo', 
+              value: videoUrl || url 
+            }));
+
+            const videoItem = WebGAL.videoManager.videosByKey[url];
+            if (videoItem?.player) {
+              videoItem.player.pause();
+              videoItem.player.volume = 0;
+              const videoContainer = document.getElementById(videoItem.id);
+              if (videoContainer) {
+                videoContainer.style.opacity = '0';
+                videoContainer.style.zIndex = '-99';
+              }
+              if (videoItem?.progressTimer) {
+                clearTimeout(videoItem.progressTimer);
+              }
+            }
+
             return;
           }
 
@@ -216,7 +237,13 @@ export const playVideo = (sentence: ISentence): IPerform => {
                 vocalElement.volume = vocalVol.toString();
               }
 
-              WebGAL.videoManager.destroy(url, noWait);
+              if (isLoadVideo) {
+                if (sentence.content !== webgalStore.getState().saveData.prevPlayVideo) {
+                  WebGAL.videoManager.destroy(url, noWait, isLoadVideo);
+                }
+              } else {
+                WebGAL.videoManager.destroy(url, noWait);
+              }
             }
           },
           blockingNext: checkIfBlockingNext,
@@ -290,7 +317,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               webgalStore.dispatch(updateShowValueList(newShowValueList));
             }
 
-            endPerform();
+            endPerform(url);
           }
         });
       }, 100);

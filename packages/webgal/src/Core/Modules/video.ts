@@ -1,6 +1,7 @@
 import FlvJs from 'flv.js';
 // @ts-ignore
 import CryptoJS from 'crypto-js';
+import { webgalStore } from '@/store/store';
 
 function arrayBufferToWordArray(arrayBuffer: ArrayBuffer) {
   const uint8Array = new Uint8Array(arrayBuffer);
@@ -337,6 +338,7 @@ export class VideoManager {
 
   public setVolume(key: string, volume: number): void {
     const videoItem = this.videosByKey[key];
+    debugger;
     if (videoItem?.player) {
       videoItem.player.volume = volume;
     } else {
@@ -346,23 +348,30 @@ export class VideoManager {
 
   public destroy(key: string, noWait = false, isLoadVideo = false): void {
     const videoItem = this.videosByKey[key];
+    console.log(webgalStore.getState().saveData.prevPlayVideo);
+    debugger;
+    // debugger;
     if (videoItem?.player) {
       videoItem.player.pause();
       videoItem.player.volume = 0;
       const videoContainer = document.getElementById(videoItem.id);
+      debugger;
 
       if (videoContainer) {
+        // debugger;
         videoContainer.style.opacity = '0';
         videoContainer.style.zIndex = '-99';
       }
 
       if (videoItem?.progressTimer) {
+        // debugger;
         clearTimeout(videoItem.progressTimer);
       }
 
       setTimeout(
         () => {
           try {
+            // debugger;
             const video = videoContainer?.getElementsByTagName('video');
             if (video?.length) {
               videoItem.player?.destroy();
