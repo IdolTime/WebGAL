@@ -58,6 +58,14 @@ input[type=range]::-moz-range-thumb {
   position: relative;
 }
 
+@supports (-ms-ime-align: auto) {
+  /* Edge 浏览器专属样式 */
+  input[type=range]::-webkit-slider-thumb {
+    border: none;
+    box-shadow: none;
+  }
+}
+
 .Option_WebGAL_slider {
   position: relative;
   .Rang_input {
