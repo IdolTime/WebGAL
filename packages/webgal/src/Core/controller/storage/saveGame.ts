@@ -21,11 +21,12 @@ export const saveGame = async (index: number, newName?: string, isChangeName?: b
  * 生成现在游戏的数据快照
  * @param index 游戏的档位
  */
+// eslint-disable-next-line max-params
 export async function generateCurrentStageData(
   index: number,
   isSavePreviewImage = true,
   newName?: string,
-  isChangeName?: boolean
+  isChangeName?: boolean,
 ): Promise<ISaveData> {
   const stageState = webgalStore.getState().stage;
   const saveBacklog = cloneDeep(WebGAL.backlogManager.getBacklog());
@@ -46,7 +47,7 @@ export async function generateCurrentStageData(
   }
 
   // 当前视频文件缩略图封面截取
-  if (isSavePreviewImage && webgalStore.getState().GUI.playingVideo) {
+  if (isSavePreviewImage && !!WebGAL.videoManager.currentPlayingVideo) {
     const videoItem = WebGAL.videoManager.videosByKey[WebGAL.videoManager.currentPlayingVideo];
     if (videoItem) {
       urlToSave = videoItem.poster;
@@ -56,7 +57,7 @@ export async function generateCurrentStageData(
   // 更改名称时缩略图不变
   if (isChangeName) {
     const currentSaveState: ISaveData[] = webgalStore.getState().saveData.saveData;
-    urlToSave = currentSaveState?.[index]?.previewImage ?? ''
+    urlToSave = currentSaveState?.[index]?.previewImage ?? '';
   }
 
   // 保存时间

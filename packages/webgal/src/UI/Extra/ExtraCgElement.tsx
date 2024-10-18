@@ -10,6 +10,7 @@ import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter'
 interface IProps {
   name: string;
   url: string;
+  poster?: string;
 }
 
 export function ExtraCgElement(props: IProps) {
@@ -19,6 +20,7 @@ export function ExtraCgElement(props: IProps) {
   const videoPlayerRef = React.useRef<FlvJs.FlvPlayer>(null);
   const bgmNode = document.getElementById('currentBgm') as HTMLAudioElement;
   const url = assetSetter(props.url, isVideo ? fileType.video : fileType.background);
+  const poster = isVideo && props.poster ? assetSetter(props.poster, fileType.image) : '';
 
   let bgmVol = 0;
 
@@ -73,15 +75,27 @@ export function ExtraCgElement(props: IProps) {
         className={`${styles.cgElement} ${styles.cgUnLockElement} interactive`}
       >
         {isVideo ? (
-          <div className={`${styles.videoContainer} ${styles.unlockedCGImg}`}>
-            <FlvPlayer
-              videoPlayerRef={videoPlayerRef}
-              url={url}
-              controls={false}
-              autoPlay={false}
-              muted
-              key={url + props.name}
-            />
+          <div
+            className={`${styles.videoContainer} ${styles.unlockedCGImg}`}
+            style={
+              poster
+                ? {
+                    background: `url('${poster}') no-repeat center center`,
+                    backgroundSize: `cover`,
+                  }
+                : undefined
+            }
+          >
+            {!poster && (
+              <FlvPlayer
+                videoPlayerRef={videoPlayerRef}
+                url={url}
+                controls={false}
+                autoPlay={false}
+                muted
+                key={url + props.name}
+              />
+            )}
             <span className={styles.playButtonIcon} />
           </div>
         ) : (

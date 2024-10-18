@@ -403,6 +403,7 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.pause();
       videoItem.player.volume = 0;
+      this.currentPlayingVideo = '';
       const videoContainer = document.getElementById(videoItem.id);
 
       if (videoContainer) {
@@ -463,6 +464,13 @@ export class VideoManager {
         this.destroy(key);
       }
     });
+  }
+
+  public setPoster(key: string, poster: string) {
+    const videoItem = this.videosByKey[key];
+    if (videoItem) {
+      videoItem.poster = poster;
+    }
   }
 
   private checkProgress(key: string) {
@@ -552,18 +560,6 @@ export class VideoManager {
 
         videoTag.onloadeddata = () => {
           const waitCommands = Object.keys(videoKeyItem.waitCommands);
-
-          if (videoKeyItem) {
-            const canvas2 = document.createElement('canvas');
-            const context = canvas2.getContext('2d');
-            canvas2.width = 480;
-            canvas2.height = 270;
-            context!.drawImage(videoTag, 0, 0, 480, 270);
-            const url = canvas2.toDataURL('image/webp', 0.5);
-            canvas2.remove();
-
-            videoKeyItem.poster = url;
-          }
 
           if (waitCommands.length) {
             waitCommands.forEach((command) => {
