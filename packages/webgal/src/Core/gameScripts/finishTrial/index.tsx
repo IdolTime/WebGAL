@@ -69,7 +69,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
         const gameInfo: any = webgalStore.getState().storeData.gameInfo;
         if (res.code === 401) {
           // @ts-ignore
-          window.reload();
+          window.location.reload();
           sessionStorage.setItem('sdk-token', '');
           return;
         }
@@ -152,12 +152,6 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       }
       if (method === 'GET_GAME_DETAIL') {
         disposeGameRes(response.data);
-      }
-      if (method === 'BUY_GAME') {
-        // @ts-ignore
-        const { paymentAmount } = webgalStore.getState().storeData.gameInfo;
-        LogPaySuccess({ paymentAmount });
-        nextStep();
       }
       if (['CHOOSE_MODEL_CLOSE', 'RECHARGE', 'RECHARGE_CLOSE', 'BUY_GAME_CLOSE'].includes(method)) {
         shouldDisplayModal.current = true;

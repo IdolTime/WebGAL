@@ -122,6 +122,14 @@ function App() {
         const gameInfo = webgalStore.getState().storeData.gameInfo;
         // @ts-ignore
         LogPaySuccess({ paymentAmount: gameInfo.paymentAmount });
+        if (WebGAL.isFinishTrial === '0') {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          // @ts-ignore
+          window.MessageSaveFunc();
+        }
       }
     });
     // 登录
