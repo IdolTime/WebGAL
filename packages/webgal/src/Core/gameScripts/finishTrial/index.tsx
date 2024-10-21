@@ -68,9 +68,9 @@ export const finishTrial = (sentence: ISentence): IPerform => {
         console.warn('getUserInfo success : ', res);
         const gameInfo: any = webgalStore.getState().storeData.gameInfo;
         if (res.code === 401) {
+          sessionStorage.setItem('sdk-token', '');
           // @ts-ignore
           window.location.reload();
-          sessionStorage.setItem('sdk-token', '');
           return;
         }
         const { acoinBalance } = res.data;
@@ -171,9 +171,9 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     // @ts-ignore
     window.globalThis.getGameDetail(gameId, token).then((res: any) => {
       if (res.code === 401) {
+        sessionStorage.setItem('sdk-token', '');
         // @ts-ignore
         window.location.reload();
-        sessionStorage.setItem('sdk-token', '');
         return;
       }
       console.warn('res', res.data);

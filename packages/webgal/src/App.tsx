@@ -57,9 +57,9 @@ function App() {
     // @ts-ignore
     window.globalThis.getGameDetail(gameId, token).then((res: any) => {
       if (res.code === 401) {
+        sessionStorage.setItem('sdk-token', '');
         // @ts-ignore
         window.location.reload();
-        sessionStorage.setItem('sdk-token', '');
         return;
       }
       // @ts-ignore
