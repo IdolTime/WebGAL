@@ -56,6 +56,12 @@ function App() {
     const gameId = new URLSearchParams(window.location.search).get('gameId');
     // @ts-ignore
     window.globalThis.getGameDetail(gameId, token).then((res: any) => {
+      if (res.code === 401) {
+        // @ts-ignore
+        window.location.reload();
+        sessionStorage.setItem('sdk-token', '');
+        return;
+      }
       // @ts-ignore
       window.pubsub.publish('gameInfoReady', true);
       webgalStore.dispatch(setGameInfo(res.data));

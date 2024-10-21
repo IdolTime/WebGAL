@@ -170,6 +170,12 @@ export const finishTrial = (sentence: ISentence): IPerform => {
     }
     // @ts-ignore
     window.globalThis.getGameDetail(gameId, token).then((res: any) => {
+      if (res.code === 401) {
+        // @ts-ignore
+        window.location.reload();
+        sessionStorage.setItem('sdk-token', '');
+        return;
+      }
       console.warn('res', res.data);
       disposeGameRes(res.data);
     });
