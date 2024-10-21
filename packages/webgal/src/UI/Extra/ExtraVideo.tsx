@@ -18,6 +18,7 @@ import { ExtraSceneOtherKey, ExtraSceneUIConfig, Scene } from '@/Core/UIConfigTy
 import { Button, Indicator } from '../Components/Base';
 import { parseStyleArg } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
+import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 
 let editNameVal = '';
 let editNameIndex = 0;
@@ -174,6 +175,8 @@ export const ExtraVideo: FC = () => {
     playSeClick();
     dispatch(setVisibility({ component: 'showExtra', visibility: false }));
     dispatch(saveActions.setLoadVideo(false));
+    dispatch(saveActions.setSaveStatus({ key: 'prevPlayVideo', value: '' }));
+    backToTitle()
   };
 
   return (

@@ -166,6 +166,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               value: videoUrl || url 
             }));
 
+            webgalStore.dispatch(setVisibility({ component: 'showTitle', visibility: true }));
             const videoItem = WebGAL.videoManager.videosByKey[url];
             if (videoItem?.player) {
               videoItem.player.pause();
