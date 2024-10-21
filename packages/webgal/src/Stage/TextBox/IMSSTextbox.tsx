@@ -24,7 +24,7 @@ export default function IMSSTextbox(props: ITextboxProps) {
     textAlign,
   } = props;
 
-  const applyStyle = useApplyStyle('Stage/TextBox/textbox.scss');
+  const applyStyle = useApplyStyle(''); // useApplyStyle('Stage/TextBox/textbox.scss');
 
   useEffect(() => {
     function settleText() {

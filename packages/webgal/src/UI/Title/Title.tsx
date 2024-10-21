@@ -39,8 +39,6 @@ const Title: FC = () => {
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   const minutes2 = 1000 * 60 * 2;
 
-  const applyStyle = useApplyStyle('UI/Title/title.scss');
-
   const sdk_loadUserInfo = () => {
     const token = sessionStorage.getItem('sdk-token');
     // @ts-ignore
@@ -90,6 +88,7 @@ const Title: FC = () => {
     }
   };
 
+  const applyStyle = useApplyStyle('');
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
       // playSeClick();
