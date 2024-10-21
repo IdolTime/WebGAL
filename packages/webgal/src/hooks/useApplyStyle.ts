@@ -9,7 +9,7 @@ import { RootState } from '@/store/store';
 import { IWebGALStyleObj } from 'idoltime-parser/build/types/styleParser';
 import { logger } from '@/Core/util/logger';
 
-export default function useApplyStyle(url: string) {
+export default function useApplyStyle(url: string, ) {
   const styleObject = useValue<IWebGALStyleObj>({ classNameStyles: {}, others: '' });
   const replaced = useSelector((state: RootState) => state.stage.replacedUIlable);
 
@@ -24,10 +24,16 @@ export default function useApplyStyle(url: string) {
   };
 
   const updateStyleFile = async () => {
-    logger.debug('更新 Scss 文件', url);
-    const resp = await axios.get(`game/template/${url}`);
-    const scssStr = resp.data;
-    styleObject.set(scss2cssinjsParser(scssStr));
+    if (url) {
+      logger.debug('更新 Scss 文件', url);
+      try {
+        const resp = await axios.get(`game/template/${url}`);
+        const scssStr = resp.data;
+        styleObject.set(scss2cssinjsParser(scssStr));
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   useEffect(() => {
