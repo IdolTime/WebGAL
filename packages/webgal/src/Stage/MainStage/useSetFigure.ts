@@ -30,7 +30,7 @@ export function useSetFigure(stageState: IStageState) {
           removeFig(currentFigCenter, softInAniKey, stageState.effects);
         }
       }
-      await Promise.all([addFigure(undefined, thisFigKey, figName, figPosition), sleep(32)]);
+      await Promise.all([addFigure(undefined, thisFigKey, figName, figPosition), sleep(0)]);
       logger.debug(`${figKeyMap[thisFigKey]}立绘已重设`);
       const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
@@ -62,14 +62,14 @@ export function useSetFigure(stageState: IStageState) {
         if (currentFigThisKey) {
           if (currentFigThisKey.sourceUrl !== fig.name) {
             removeFig(currentFigThisKey, softInAniKey, stageState.effects);
-            await Promise.all([addFigure(undefined, thisFigKey, fig.name, fig.basePosition), sleep(32)]);
+            await Promise.all([addFigure(undefined, thisFigKey, fig.name, fig.basePosition), sleep(0)]);
             logger.debug(`${fig.key}立绘已重设`);
             const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
             WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
             setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
           }
         } else {
-          await Promise.all([addFigure(undefined, thisFigKey, fig.name, fig.basePosition), sleep(32)]);
+          await Promise.all([addFigure(undefined, thisFigKey, fig.name, fig.basePosition), sleep(0)]);
           logger.debug(`${fig.key}立绘已重设`);
           const { duration, animation } = getEnterExitAnimation(thisFigKey, 'enter');
           WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisFigKey, stageState.effects);
