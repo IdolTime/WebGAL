@@ -23,9 +23,10 @@ input[type=range]::-moz-range-track {
   background: transparent;
 }
 
-/*滑块样式*/
+/* Webkit 浏览器的滑块样式 */
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   height: px2(46px);
   width: px2(42px);
   cursor: pointer;
@@ -34,10 +35,13 @@ input[type=range]::-webkit-slider-thumb {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/bar-thumb.png');
+  border: none; /* 去掉边框 */
+  box-shadow: none; /* 去掉阴影效果 */
   z-index: 3;
   position: relative;
 }
-/* Firefox 同上 */
+
+/* Firefox 浏览器的滑块样式 */
 input[type=range]::-moz-range-thumb {
   -moz-appearance: none;
   height: px2(46px);
@@ -48,8 +52,18 @@ input[type=range]::-moz-range-thumb {
   background-repeat: no-repeat;
   background-position: center;
   background-image: url('@/assets/imgs/bar-thumb.png');
+  border: none; /* 去掉边框 */
+  box-shadow: none; /* 去掉阴影效果 */
   z-index: 3;
   position: relative;
+}
+
+@supports (-ms-ime-align: auto) {
+  /* Edge 浏览器专属样式 */
+  input[type=range]::-webkit-slider-thumb {
+    border: none;
+    box-shadow: none;
+  }
 }
 
 .Option_WebGAL_slider {
