@@ -36,7 +36,7 @@ export function useSetPopUpImage(stageState: IStageState) {
           removePopup(currentPopupCenter, softInAniKey, stageState.effects);
         }
       }
-      await Promise.all([addPopupImg(undefined, thisPopupKey, popUpImageName, figPosition), sleep(32)]);
+      await Promise.all([addPopupImg(undefined, thisPopupKey, popUpImageName, figPosition), sleep(0)]);
       logger.debug(`${figKeyMap[thisPopupKey]}弹窗图片已重设`);
       const { duration, animation } = getEnterExitAnimation(thisPopupKey, 'enter');
       WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisPopupKey, stageState.effects);
@@ -68,7 +68,7 @@ export function useSetPopUpImage(stageState: IStageState) {
         if (currentPopupThisKey) {
           if (currentPopupThisKey.sourceUrl !== popImg.name) {
             removePopup(currentPopupThisKey, softInAniKey, stageState.effects);
-            await Promise.all([addPopupImg(undefined, thisPopupKey, popImg.name, popImg.basePosition), sleep(32)]);
+            await Promise.all([addPopupImg(undefined, thisPopupKey, popImg.name, popImg.basePosition), sleep(0)]);
             logger.debug(`${popImg.key}弹窗图片已重设`);
             const { duration, animation } = getEnterExitAnimation(thisPopupKey, 'enter');
             WebGAL.gameplay.pixiStage!.registerPresetAnimation(
@@ -80,7 +80,7 @@ export function useSetPopUpImage(stageState: IStageState) {
             setTimeout(() => WebGAL.gameplay.pixiStage!.removeAnimationWithSetEffects(softInAniKey), duration);
           }
         } else {
-          await Promise.all([addPopupImg(undefined, thisPopupKey, popImg.name, popImg.basePosition), sleep(32)]);
+          await Promise.all([addPopupImg(undefined, thisPopupKey, popImg.name, popImg.basePosition), sleep(0)]);
           logger.debug(`${popImg.key}弹窗图片已重设`);
           const { duration, animation } = getEnterExitAnimation(thisPopupKey, 'enter');
           WebGAL.gameplay.pixiStage!.registerPresetAnimation(animation, softInAniKey, thisPopupKey, stageState.effects);
