@@ -289,6 +289,7 @@ export const playVideo = (sentence: ISentence): IPerform => {
               webgalStore.dispatch(updateShowValueList(newShowValueList));
             }
 
+            webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
             endPerform();
           }
         });
