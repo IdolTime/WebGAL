@@ -25,7 +25,7 @@ export const Options: FC = () => {
   /** 防抖 */
   const debouncedHandleChange = useCallback(debounce(() => {
     setStorage()
-  }, 1000), []);
+  }, 5000), []);
 
   return (
     <div className={styles.Options_main}>
