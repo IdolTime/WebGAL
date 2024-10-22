@@ -39,7 +39,7 @@ const FlvPlayer = ({
             isEncrypted = true;
           }
 
-          const worker = new Worker(new URL('../../../public/worker.js', import.meta.url), { type: 'module' });
+          const worker = new Worker(new URL('../../public/worker.js', import.meta.url), { type: 'module' });
 
           const onVideoDecodedCallback = (videoBlob: any) => {
             const flvPlayer = flvjs.createPlayer({
