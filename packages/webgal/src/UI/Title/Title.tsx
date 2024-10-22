@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
@@ -35,9 +35,9 @@ const Title: FC = () => {
   const TitleUIConfigs = GUIState.gameUIConfigs[Scene.title] as TitleSceneUIConfig;
 
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const minutes2 = 1000 * 60 * 2
+  const minutes2 = 1000 * 60 * 2;
 
-  const applyStyle = useApplyStyle(''); //useApplyStyle('UI/Title/title.scss');
+  const applyStyle = useApplyStyle(''); // useApplyStyle('UI/Title/title.scss');
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
       // playSeClick();
@@ -47,14 +47,14 @@ const Title: FC = () => {
         /** 埋点上报 */
         const params = {
           thirdUserId: getUserId(),
-          productId: WebGAL.gameId + '',
+          productId: String(WebGAL.gameId),
           onlineTime: getLocalDate(),
-          channel: sessionStorage.getItem('sdk-userId') ? 1 : 0
-        }
-        apiStartGameEvent(params)
+          channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
+        };
+        apiStartGameEvent(params);
       }, 16);
 
-      startEvent()
+      startEvent();
     },
     [TitleSceneButtonKey.Game_achievement_button]: () => {
       enterAchieve();

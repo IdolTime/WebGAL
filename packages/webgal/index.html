@@ -36,8 +36,10 @@
 
         --options_light_main_top: 1020px;
         --options_light_main_left: 1244px;
+
     }
   </style>
+
   <script>
     function PubSub() {
       this.subscribers = {};
@@ -195,7 +197,9 @@
     /**
      * 在窗口大小改变时进行强制缩放
      */
-    const ua = navigator.userAgent;
+
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isAndroidDevice = /android/i.test(ua);  // 检测安卓设备
     const isIOSDevice = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
     function isSafari() {
       const ua = navigator.userAgent.toLowerCase();
@@ -318,6 +322,7 @@
           }, 100);
         }
       };
+      
     } else {
       // ios
       const meta = document.createElement('meta');
