@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
@@ -88,7 +88,7 @@ const Title: FC = () => {
     }
   };
 
-  const applyStyle = useApplyStyle('');
+  const applyStyle = useApplyStyle(''); // useApplyStyle('UI/Title/title.scss');
   const clickCallbackMap = {
     [TitleSceneButtonKey.Game_start_button]: () => {
       // playSeClick();

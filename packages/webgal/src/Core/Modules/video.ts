@@ -521,7 +521,38 @@ export class VideoManager {
           isEncrypted = true;
         }
 
-        let videoBlob;
+        const worker = new Worker(new URL('../../../public/worker.js', import.meta.url), { type: 'module' });
+
+        const onVideoDecodedCallback = (videoBlob: any) => {
+          const flvPlayer = FlvJs.createPlayer({
+            type: url.endsWith('.mp4') ? 'mp4' : 'flv',
+            url: URL.createObjectURL(videoBlob),
+          });
+          flvPlayer.attachMediaElement(videoTag);
+          flvPlayer.load();
+          const videoKeyItem = {
+            ...this.videosByKey[url],
+            player: flvPlayer,
+          };
+
+          this.videosByKey[url] = videoKeyItem;
+
+          videoTag.onloadeddata = () => {
+            const waitCommands = Object.keys(videoKeyItem.waitCommands);
+
+            if (waitCommands.length) {
+              waitCommands.forEach((command) => {
+                if (!videoKeyItem) {
+                  console.log('没有找到视频缓存资源', url);
+                  return;
+                }
+                // @ts-ignore
+                this[command](url, videoKeyItem.waitCommands[command]);
+              });
+            }
+          };
+        };
+
         if (isEncrypted) {
           const encryptedData = dataBuffer.slice(markerLength);
 
@@ -533,45 +564,28 @@ export class VideoManager {
             const iv = new Uint8Array([
               0x9d, 0x6b, 0xac, 0x74, 0xc6, 0x4e, 0xe8, 0x71, 0x4e, 0x79, 0x59, 0xce, 0xf7, 0x52, 0x71, 0xd0,
             ]);
-            videoBlob = await decryptVideo(encryptedData, key, iv, videoType);
+            worker.postMessage({ encryptedData, key, iv, type: videoType, supportCrypto: true });
+
+            // videoBlob = await decryptVideo(encryptedData, key, iv, videoType);
           } else {
             const key = '40e6ad429a13020a07be290c5ef1d7dc7e45e5c4bf34d54a5664282627946e4d';
             const iv = '9d6bac74c64ee8714e7959cef75271d0';
-            videoBlob = await decryptVideoInChunks(encryptedData, key, iv, videoType);
+            worker.postMessage({ encryptedData, key, iv, type: videoType, supportCrypto: false });
           }
+
+          worker.onmessage = (event) => {
+            if (event.data.blobData) {
+              onVideoDecodedCallback(event.data.blobData);
+            } else if (event.data.errorMessage) {
+              console.error(event.data.errorMessage + '：' + event.data.error.message);
+            }
+          };
         } else {
-          videoBlob = new Blob([new Uint8Array(dataBuffer)], {
+          const videoBlob = new Blob([new Uint8Array(dataBuffer)], {
             type: `video/${videoType === 'mp4' ? 'mp4' : 'x-flv'}`,
           });
+          onVideoDecodedCallback(videoBlob);
         }
-
-        const flvPlayer = FlvJs.createPlayer({
-          type: url.endsWith('.mp4') ? 'mp4' : 'flv',
-          url: URL.createObjectURL(videoBlob),
-        });
-        flvPlayer.attachMediaElement(videoTag);
-        flvPlayer.load();
-        const videoKeyItem = {
-          ...this.videosByKey[url],
-          player: flvPlayer,
-        };
-
-        this.videosByKey[url] = videoKeyItem;
-
-        videoTag.onloadeddata = () => {
-          const waitCommands = Object.keys(videoKeyItem.waitCommands);
-
-          if (waitCommands.length) {
-            waitCommands.forEach((command) => {
-              if (!videoKeyItem) {
-                console.log('没有找到视频缓存资源', url);
-                return;
-              }
-              // @ts-ignore
-              this[command](url, videoKeyItem.waitCommands[command]);
-            });
-          }
-        };
       });
   }
 }
