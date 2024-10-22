@@ -10,6 +10,7 @@ import useTrans from '@/hooks/useTrans';
 import useApplyStyle from '@/hooks/useApplyStyle';
 import { showGlogalDialog } from '@/UI/GlobalDialog/GlobalDialog';
 import { px2 } from '@/Core/parser/utils';
+import { saveActions } from '@/store/savesReducer';
 
 import styles from './gameMenuPanel.module.scss';
 
@@ -63,6 +64,7 @@ export const GameMenuPanel = () => {
       playSeClick();
       setComponentVisibility('isShowGameMenu', false);
       setComponentVisibility('isInGaming', false);
+      dispatch(saveActions.setSaveStatus({ key: 'prevPlayVideo', value: '' }));
       backToTitle();
     },
 
