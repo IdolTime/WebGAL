@@ -82,3 +82,10 @@
       opacity: 1;
   }
 }
+
+
+@media (max-width: 1080px) {
+  .Title_buttonList {
+    bottom: 200px; /* 将按钮的位置向上移动 */
+  }
+}
