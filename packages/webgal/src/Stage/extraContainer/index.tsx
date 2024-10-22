@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState, webgalStore } from '@/store/store';
 import { useEffect, useMemo, useState } from 'react';
-import { px2 } from '@/Core/parser/utils';
+import { isInGame, px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
 import { IShowAffinityChangeItem } from '@/store/stageInterface';
 import { removeAffinityChange, updateShowAffinityChangeList } from '@/store/stageReducer';
@@ -42,6 +42,10 @@ export const ExtraContainer = () => {
       }
     });
   }, [stageState.showValueList, barLayoutList]);
+
+  if (webgalStore.getState().GUI.isInGaming) {
+    return null;
+  }
 
   return (
     <>
