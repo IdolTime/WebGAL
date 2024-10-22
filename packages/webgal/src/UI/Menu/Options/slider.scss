@@ -1,14 +1,23 @@
 @import 'src/assets/style/px2.scss';
 input[type=range] {
   -webkit-appearance: none; /* 去掉底部的 track 默认样式，就是整个灰条 */
+  appearance: none;
   width: px2(376px);
   height: px2(26px);
   background: transparent; /* 否则在 Chrome 中是白色背景 */
   font-size: 100%;
+  border: none; /* 去掉边框 */
+  box-shadow: none; /* 去掉阴影效果 */
+  outline: none; /* 去掉焦点时的轮廓 */
+  -webkit-tap-highlight-color: transparent;
 }
-
+input[type=range]:active,
 input[type=range]:focus {
   outline: none; /* 去除获取焦点时蓝色的外边框，你也可以自己定制其他你想要的效果 */
+  border: none; /* 去掉边框 */
+  box-shadow: none; /* 去掉阴影效果 */
+  -webkit-appearance: none; /* 去掉底部的 track 默认样式，就是整个灰条 */
+  appearance: none;
 }
 
 /*轨道样式*/
