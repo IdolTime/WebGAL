@@ -1,5 +1,5 @@
-import { OggVorbisDecoder, OggVorbisDecodedAudio } from '@wasm-audio-decoders/ogg-vorbis';
-import { OggOpusDecoder, OggOpusDecodedAudio } from 'ogg-opus-decoder';
+import { OggVorbisDecodedAudio } from '@wasm-audio-decoders/ogg-vorbis';
+import { OggOpusDecodedAudio } from 'ogg-opus-decoder';
 
 export async function getAudioUrl(url: string): Promise<string> {
   // @ts-ignore
@@ -9,38 +9,33 @@ export async function getAudioUrl(url: string): Promise<string> {
 
   const response = await fetch(url);
   const arrayBuffer = await response.arrayBuffer();
-  const uint8BufferArray = new Uint8Array(arrayBuffer);
 
-  try {
-    // 尝试使用 Opus 解码
-    console.log('尝试使用 Opus 解码');
-    const audioUrl = await decodeOpus(uint8BufferArray);
-    return audioUrl;
-  } catch (err) {
-    console.log('Opus 解码失败，尝试使用 Vorbis 解码', err);
-    // 如果 Opus 解码失败，尝试使用 Vorbis 解码
-    try {
-      const audioUrl = await decodeVorbis(uint8BufferArray);
-      return audioUrl;
-    } catch (error) {
-      console.error('Vorbis 解码失败，无法获取音频', error);
-      return '';
-    }
-  }
-}
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(new URL('../../../public/audio-worker.js', import.meta.url), { type: 'module' });
 
-async function decodeVorbis(arrayBuffer: Uint8Array): Promise<string> {
-  const decoder = new OggVorbisDecoder();
-  await decoder.ready;
-  const audioData = await decoder.decode(arrayBuffer);
-  return createAudioUrl(audioData);
-}
+    worker.postMessage({ arrayBuffer });
 
-async function decodeOpus(arrayBuffer: Uint8Array): Promise<string> {
-  const decoder = new OggOpusDecoder();
-  await decoder.ready;
-  const audioData = await decoder.decode(arrayBuffer);
-  return createAudioUrl(audioData);
+    worker.onmessage = (e) => {
+      if (e.data.errorMessage) {
+        console.error(e.data.errorMessage, e.data.error);
+        reject(e.data.error);
+        worker.terminate();
+      } else if (e.data.message) {
+        console.info(e.data.message);
+      } else {
+        const audioData = e.data.audioData;
+
+        const audioUrl = createAudioUrl(audioData);
+        resolve(audioUrl);
+        worker.terminate();
+      }
+    };
+
+    worker.onerror = (err) => {
+      reject(new Error('Worker error: ' + err.message));
+      worker.terminate();
+    };
+  });
 }
 
 function createAudioUrl(audioData: OggOpusDecodedAudio | OggVorbisDecodedAudio): Promise<string> {
