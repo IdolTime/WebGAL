@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useCallback } from 'react';
 import styles from './options.module.scss';
 import { getStorage } from '@/Core/controller/storage/storageController';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { setVisibility } from '@/store/GUIReducer';
 import { OptionSceneButtonKey, OptionSceneOtherKey, OptionSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { Button } from '@/UI/Components/Base';
 import { WebGAL } from '@/Core/WebGAL';
+import debounce from 'lodash/debounce'
 
 export const Options: FC = () => {
   useEffect(getStorage, []);
@@ -20,6 +21,11 @@ export const Options: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const OptionUIConfigs = GUIState.gameUIConfigs[Scene.option] as OptionSceneUIConfig;
+
+  /** 防抖 */
+  const debouncedHandleChange = useCallback(debounce(() => {
+    setStorage()
+  }, 5000), []);
 
   return (
     <div className={styles.Options_main}>
@@ -77,7 +83,7 @@ export const Options: FC = () => {
             onChange={(event) => {
               const newValue = event.target.value;
               dispatch(setOptionData({ key: 'textSpeed', value: Number(newValue) }));
-              setStorage();
+              debouncedHandleChange();
             }}
           />
         </div>
@@ -95,7 +101,7 @@ export const Options: FC = () => {
               onChange={(event) => {
                 const newValue = event.target.value;
                 dispatch(setOptionData({ key: 'volumeMain', value: Number(newValue) }));
-                setStorage();
+                debouncedHandleChange();
               }}
             />
           </div>
@@ -110,7 +116,7 @@ export const Options: FC = () => {
               onChange={(event) => {
                 const newValue = event.target.value;
                 dispatch(setOptionData({ key: 'bgmVolume', value: Number(newValue) }));
-                setStorage();
+                debouncedHandleChange();
               }}
             />
           </div>
@@ -126,7 +132,7 @@ export const Options: FC = () => {
                 const newValue = event.target.value;
                 dispatch(setOptionData({ key: 'seVolume', value: Number(newValue) }));
                 dispatch(setOptionData({ key: 'uiSeVolume', value: Number(newValue) }));
-                setStorage();
+                debouncedHandleChange();
               }}
             />
           </div>
@@ -141,7 +147,7 @@ export const Options: FC = () => {
               onChange={(event) => {
                 const newValue = event.target.value;
                 dispatch(setOptionData({ key: 'vocalVolume', value: Number(newValue) }));
-                setStorage();
+                debouncedHandleChange();
               }}
             />
           </div>
