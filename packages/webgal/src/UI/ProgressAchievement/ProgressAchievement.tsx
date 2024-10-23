@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setShowStoryLine, setVisibility } from '@/store/GUIReducer';
+import { setShowStoryLine, setVisibility, updateShowValueList } from '@/store/GUIReducer';
 import { ISaveStoryLineData, ISaveData } from '@/store/userDataInterface';
 import { backToTitle } from '@/Core/controller/gamePlay/backToTitle';
 import { loadGameFromStageData } from '@/Core/controller/storage/loadGame';
@@ -44,6 +44,7 @@ export const ProgressAchievement: FC = () => {
   };
 
   useEffect(() => {
+    dispatch(updateShowValueList([]));
     if (GUIState.showProgressAndAchievement) {
       enterStoryLine();
     } else {

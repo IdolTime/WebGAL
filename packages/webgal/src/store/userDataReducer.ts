@@ -17,6 +17,7 @@ import {
   textSize,
   voiceOption,
   videoSizeOption,
+  IShowValueItem,
 } from '@/store/userDataInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -54,6 +55,7 @@ export const initState: IUserData = {
     nickName: '',
     userId: 0,
   },
+  showValues: [],
 };
 
 const userDataSlice = createSlice({
@@ -67,7 +69,17 @@ const userDataSlice = createSlice({
      */
     setUserData: (state, action: PayloadAction<ISetUserDataPayload>) => {
       const { key, value } = action.payload;
+      // @ts-ignore
       state[key] = value;
+    },
+    addShowValues: (state, action: PayloadAction<IShowValueItem>) => {
+      const showValuesObject = state.showValues.reduce((p, c) => {
+        p[c.key] = c;
+        return p;
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      }, {} as Record<string, IShowValueItem>);
+      showValuesObject[action.payload.key] = action.payload;
+      state.showValues = Object.values(showValuesObject);
     },
     unlockCgInUserData: (state, action: PayloadAction<IAppreciationAsset>) => {
       const { name, url, series, poster } = action.payload;
@@ -162,5 +174,6 @@ export const {
   resetAllData,
   setToken,
   setUserInfo,
+  addShowValues,
 } = userDataSlice.actions;
 export default userDataSlice.reducer;

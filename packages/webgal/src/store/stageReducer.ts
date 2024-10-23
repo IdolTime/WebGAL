@@ -12,10 +12,6 @@ import {
   ISetGameVar,
   ISetStagePayload,
   IStageState,
-  IUnlockAchieveObj,
-  IShowValueItem,
-  IShowValueListItem,
-  IShowAffinityChangeItem,
 } from '@/store/stageInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash/cloneDeep';
@@ -91,31 +87,6 @@ export const initState: IStageState = {
   enableFilm: '',
   isDisableTextbox: false,
   replacedUIlable: {},
-  storyLineBg: '', // 故事线背景
-  storyLineBgX: initGameScreen().defaultWidth, // 故事线背景长度
-  storyLineBgY: initGameScreen().defaultHeight, // 故事线背景宽度
-  achieveBg: '', // 成就背景
-  unlockAchieve: {
-    // 解锁成就
-    unlockname: '',
-    saveTime: '',
-    url: '',
-    x: 0,
-    y: 0,
-  },
-  achieveBgX: initGameScreen().defaultWidth,
-  achieveBgY: initGameScreen().defaultHeight,
-  unlockAchieves: [],
-  totalAchievements: 0, // 总成就数量
-  unlockedAchievements: 0, // 已获得的成就数量
-  // isShowUnlockAchieve: false,
-  isShowValueSwitch: false,
-  showValueName: '',
-  showValueAxisX: 0,
-  showValueAxisY: 0,
-  showValues: [],
-  showValueList: [],
-  showAffinityChangeList: [],
 };
 
 /**
@@ -275,58 +246,9 @@ const stageSlice = createSlice({
     replaceUIlable: (state, action: PayloadAction<[string, string]>) => {
       state.replacedUIlable[action.payload[0]] = action.payload[1];
     },
-    setStoryLineBg: (state, action: PayloadAction<string>) => {
-      state.storyLineBg = action.payload;
-    },
-    setAchieveBg: (state, action: PayloadAction<string>) => {
-      state.achieveBg = action.payload;
-    },
-    setUnlockAchieve: (state, action: PayloadAction<IUnlockAchieveObj>) => {
-      state.unlockAchieves.push(action.payload);
-    },
-    addShowValues: (state, action: PayloadAction<IShowValueItem>) => {
-      state.showValues.push(action.payload);
-    },
-    addShowValueList: (state, action: PayloadAction<IShowValueListItem>) => {
-      const index = state.showValueList.findIndex((e) => e.showValueName === action.payload.showValueName);
-
-      if (index > -1) {
-        const list = [...state.showValueList];
-        list[index] = action.payload;
-        state.showValueList = list;
-      } else {
-        state.showValueList = [...state.showValueList, action.payload];
-      }
-    },
-    updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
-      state.showValueList = action.payload;
-    },
-    addShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem>) => {
-      state.showAffinityChangeList = [...state.showAffinityChangeList, action.payload];
-    },
-    updateShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem[]>) => {
-      state.showAffinityChangeList = action.payload;
-    },
-    removeAffinityChange: (state, action: PayloadAction<number>) => {
-      state.showAffinityChangeList = state.showAffinityChangeList.filter((item) => item.key !== action.payload);
-    },
   },
 });
 
-export const {
-  resetStageState,
-  setStage,
-  setStageVar,
-  setAchieveBg,
-  setUnlockAchieve,
-  setStoryLineBg,
-  addShowValues,
-  addShowValueList,
-  updateShowValueList,
-  addShowAffinityChangeList,
-  updateShowAffinityChangeList,
-  removeAffinityChange,
-  removeAllPerform,
-} = stageSlice.actions;
+export const { resetStageState, setStage, setStageVar, removeAllPerform } = stageSlice.actions;
 export const stageActions = stageSlice.actions;
 export default stageSlice.reducer;

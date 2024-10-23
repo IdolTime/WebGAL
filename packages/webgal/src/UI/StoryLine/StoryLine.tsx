@@ -40,8 +40,6 @@ export const StoryLine: FC = () => {
   const { playSeClick, playSeEnter } = useSoundEffect();
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
-  const StageState = useSelector((state: RootState) => state.stage);
-  const saveData = useSelector((state: RootState) => state.saveData);
   const unlockStorylineList = useSelector((state: RootState) => state.saveData.allStorylineData);
   const storylineUIConfigs = useSelector(
     (state: RootState) => state.GUI.gameUIConfigs[Scene.storyline],
@@ -130,7 +128,7 @@ export const StoryLine: FC = () => {
     return assetSetter(url, fileType.ui);
   }
 
-  const hasBGImage = !!StageState.storyLineBg;
+  const hasBGImage = !!achieveStage.storylineBg;
   const bgStyle =
     typeof achieveStage.storylineBgX === 'number' && typeof achieveStage.storylineBgY === 'number'
       ? {

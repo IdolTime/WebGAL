@@ -3,20 +3,20 @@ import { RootState, webgalStore } from '@/store/store';
 import { useEffect, useMemo, useState } from 'react';
 import { isInGame, px2 } from '@/Core/parser/utils';
 import { assetSetter, fileType } from '@/Core/util/gameAssetsAccess/assetSetter';
-import { IShowAffinityChangeItem } from '@/store/stageInterface';
-import { removeAffinityChange, updateShowAffinityChangeList } from '@/store/stageReducer';
+import { IShowAffinityChangeItem } from '@/store/guiInterface';
+import { removeAffinityChange, updateShowAffinityChangeList } from '@/store/GUIReducer';
 
 import styles from './extraContainer.module.scss';
 
 export const ExtraContainer = () => {
-  const stageState = useSelector((state: RootState) => state.stage);
   const guiState = useSelector((state: RootState) => state.GUI);
+  const userDataState = useSelector((state: RootState) => state.userData);
   const [barBgLayoutList, setBarBgLayoutList] = useState<{ width: number; height: number }[]>([]);
   const [barLayoutList, setBarLayoutList] = useState<{ width: number; height: number }[]>([]);
 
   const dataMap = useMemo(() => {
     const map = new Map();
-    const showValues = stageState.showValues;
+    const showValues = userDataState.showValues;
 
     if (showValues?.length) {
       showValues.forEach((e) => {
@@ -25,10 +25,10 @@ export const ExtraContainer = () => {
     }
 
     return map;
-  }, [stageState]);
+  }, [userDataState]);
 
   useEffect(() => {
-    stageState.showValueList.forEach((e, i) => {
+    guiState.showValueList.forEach((e, i) => {
       if (e.isShowValueSwitch && barLayoutList[i]) {
         const value = dataMap.get(e.showValueName);
 
@@ -41,15 +41,11 @@ export const ExtraContainer = () => {
         }
       }
     });
-  }, [stageState.showValueList, barLayoutList]);
-
-  if (webgalStore.getState().GUI.isInGaming) {
-    return null;
-  }
+  }, [guiState.showValueList, barLayoutList]);
 
   return (
     <>
-      {stageState.showValueList.map((item, i) => {
+      {guiState.showValueList.map((item, i) => {
         if (item.isShowValueSwitch) {
           const barBgLayout = barBgLayoutList[i] || { width: 0, height: 0 };
           const barLayout = barLayoutList[i] || { width: 0, height: 0 };
@@ -120,7 +116,7 @@ export const ExtraContainer = () => {
 
         return null;
       })}
-      {stageState.showAffinityChangeList.map((item, i) => (
+      {guiState.showAffinityChangeList.map((item, i) => (
         <AffinityItem item={item} key={item.key} />
       ))}
     </>

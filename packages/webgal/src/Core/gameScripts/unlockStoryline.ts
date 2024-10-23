@@ -18,7 +18,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
 
   const asyncAction = async () => {
     if (webgalStore.getState().GUI.isInGaming) {
-      await getCurrentVideoStageDataForStoryLine()
+      await getCurrentVideoStageDataForStoryLine();
     }
     // 读取本地解锁数据
     await getStorylineFromStorage();
@@ -27,7 +27,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
     const storyLineData = {} as unknown as ISaveStoryLine;
 
     // if (thumbnailUrl) {
-      // storyLineData['thumbnailUrl'] = assetSetter(thumbnailUrl, fileType.ui);
+    // storyLineData['thumbnailUrl'] = assetSetter(thumbnailUrl, fileType.ui);
     // }
 
     sentence.args.forEach((e) => {
@@ -78,7 +78,7 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
       x: storyLineData['x'] || 0,
       y: storyLineData['y'] || 0,
       isHideName: storyLineData['isHideName'] || false,
-      isUnlock: unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline
+      isUnlock: unlockItem?.storyLine?.isUnlock || saveData.isUnlockStoryline,
     };
 
     // 没有数据 或者 没有找到 > 存储到本地缓存

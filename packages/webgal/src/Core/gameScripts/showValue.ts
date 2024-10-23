@@ -1,8 +1,9 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
-import { setStage, addShowValueList } from '@/store/stageReducer';
-import { IShowValueListItem } from '@/store/stageInterface';
+import { addShowValueList } from '@/store/GUIReducer';
+import { IShowValueListItem } from '@/store/guiInterface';
+import { getRandomPerformName } from '../Modules/perform/performController';
 
 const parseStyle = (styleString: string) => {
   const styleRegex = /\{(.*?)\}/;
@@ -62,8 +63,8 @@ export function showValue(sentence: ISentence): IPerform {
   webgalStore.dispatch(addShowValueList(payload));
 
   return {
-    performName: 'none',
-    duration: 0,
+    performName: getRandomPerformName('showValue'),
+    duration: 1,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,

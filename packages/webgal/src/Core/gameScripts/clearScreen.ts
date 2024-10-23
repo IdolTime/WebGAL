@@ -27,8 +27,6 @@ export function clearScreen(sentence: ISentence): IPerform {
       popUpImageNameLeft: '',
       popUpImageNameRight: '',
       bgName: '',
-      showAffinityChangeList: [],
-      showValueList: [],
       showName: '',
       showText: '',
     } satisfies Partial<IStageState>),
