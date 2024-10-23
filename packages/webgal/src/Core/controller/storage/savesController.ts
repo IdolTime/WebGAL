@@ -157,6 +157,7 @@ export async function uploadSavesToCloud(key: string, save: any, silent = true) 
 // Retry failed uploads
 async function retryFailedUploads(failedIndices: Record<string, ISaveData>, fileType: number) {
   const keys = Object.keys(failedIndices);
+  const newFailedIndices: Record<string, ISaveData> = {};
   const retryPromises = keys.map((key) => {
     const save = failedIndices[key];
     if (save) {
@@ -164,7 +165,7 @@ async function retryFailedUploads(failedIndices: Record<string, ISaveData>, file
         .post('/editor/game/file_save', {
           userId: getUserId(),
           gId: WebGAL.gameId, // Your game ID
-          fileType: 1,
+          fileType: fileType,
           key,
           value: JSON.stringify(save),
         })
@@ -177,6 +178,7 @@ async function retryFailedUploads(failedIndices: Record<string, ISaveData>, file
         })
         .catch((error) => {
           logger.error(`存档${key}重新上传失败: ${error.message}`);
+          newFailedIndices[key] = save; // Store the index of the failed save
         });
     }
 
@@ -185,6 +187,20 @@ async function retryFailedUploads(failedIndices: Record<string, ISaveData>, file
 
   // Retry all failed uploads
   await Promise.all(retryPromises);
+  const failedLen = Object.values(newFailedIndices).length;
+
+  if (failedLen > 0) {
+    showGlogalDialog({
+      title: '存档上传失败',
+      content: `共${failedLen}个存档重新上传失败, 重试吗?`,
+      leftText: '取消',
+      rightText: '重试',
+      leftFunc: () => {},
+      rightFunc: () => {
+        retryFailedUploads(newFailedIndices, fileType);
+      },
+    });
+  }
 }
 
 export async function getSavesFromStorage(startIndex: number, endIndex: number) {
