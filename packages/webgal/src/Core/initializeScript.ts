@@ -16,7 +16,7 @@ import { WebGAL } from '@/Core/WebGAL';
 import { webgalStore } from '@/store/store';
 import { saveActions } from '@/store/savesReducer';
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
-import { px2 } from './parser/utils';
+import { isMobile, px2 } from './parser/utils';
 
 const u = navigator.userAgent;
 export const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 判断是否是 iOS终端
@@ -82,6 +82,19 @@ export const initializeScript = (): void => {
    */
   bindExtraFunc();
   webSocketFunc();
+};
+
+export const initVConsole = () => {
+  if (isMobile()) {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/vconsole@latest/dist/vconsole.min.js';
+    script.onload = () => {
+      const VConsole: any = (window as any).VConsole;
+      const vConsole = new VConsole();
+      console.log('vConsole has been initialized on mobile!');
+    };
+    document.head.appendChild(script);
+  }
 };
 
 function loadStyle(url: string) {

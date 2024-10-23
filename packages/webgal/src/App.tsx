@@ -1,7 +1,7 @@
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect, useState } from 'react';
-import { initClickAnimation, initializeScript } from './Core/initializeScript';
+import { initClickAnimation, initializeScript, initVConsole } from './Core/initializeScript';
 import Menu from '@/UI/Menu/Menu';
 import { Stage } from '@/Stage/Stage';
 import { BottomControlPanel } from '@/UI/BottomControlPanel/BottomControlPanel';
@@ -47,6 +47,7 @@ function App() {
     const channel = queryParams.get('channel') || '0';
     WebGAL.channel = channel;
     if (tokenFromQuery || token) {
+      initVConsole();
       setLoggedIn(true);
       dispatch(setToken(tokenFromQuery || ''));
       let refObject = {
@@ -147,7 +148,6 @@ function App() {
       <ModalR18 />
       <GameMenuPanel />
       <ProgressAchievement />
-      {!GUIState.showProgressAndAchievement && <Affinity />}
     </div>
   );
 }
