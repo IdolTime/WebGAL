@@ -120,6 +120,8 @@ export const StoryLine: FC = () => {
     dispatch(setShowStoryLine(false));
     dispatch(saveActions.setIsShowUnlock(true));
     dispatch(setVisibility({ component: 'showProgressAndAchievement', visibility: false }));
+    dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
+    dispatch(setVisibility({ component: 'showAchievement', visibility: false }));
     loadGameFromStageData(saveData.videoData as ISaveData);
     startEvent();
   };
