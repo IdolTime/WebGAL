@@ -9,8 +9,8 @@ import { IRunPerform } from '@/store/stageInterface';
 /**
  * 获取随机演出名称
  */
-export const getRandomPerformName = (): string => {
-  return Math.random().toString().substring(0, 10);
+export const getRandomPerformName = (prefix?: string): string => {
+  return (prefix ? prefix + '.' : '') + Math.random().toString().substring(0, 10);
 };
 
 export class PerformController {

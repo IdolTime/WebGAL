@@ -32,7 +32,7 @@ export const Affinity: FC = () => {
 
   useEffect(() => {
     if (GUIState.showAffinity) {
-      getUnlockAffinityFromStorage();
+      // getUnlockAffinityFromStorage();
     } else {
       dispatch(setVisibility({ component: 'showAffinity', visibility: false }));
     }

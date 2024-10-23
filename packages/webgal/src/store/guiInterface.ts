@@ -50,6 +50,14 @@ export interface IGuiState {
     [key in EnumAchievementUIKey]: GameMenuItem;
   };
   currentPlayAudio: HTMLAudioElement | null; // 当前播放的音频
+  showAffinityChangeList: IShowAffinityChangeItem[];
+  showValueList: Array<IShowValueListItem>;
+}
+
+export interface IShowAffinityChangeItem {
+  rolePicture: string;
+  numberPicture: string;
+  key: number;
 }
 
 export type componentsVisibility = Pick<
@@ -65,8 +73,26 @@ export type componentsVisibility = Pick<
     | 'escMenus'
     | 'achievementUI'
     | 'currentPlayAudio'
+    | 'showAffinityChangeList'
+    | 'showValueList'
   >
 >;
+
+export interface IShowValueListItem {
+  isShowValueSwitch: boolean;
+  showValueName: string;
+  showValueAxisX: number;
+  showValueAxisY: number;
+  showProgress: boolean;
+  progressBarBgStyle?: {
+    image: string;
+  };
+  progressBarStyle?: {
+    image: string;
+  };
+  maxValue?: number;
+}
+
 // 标题资源
 export type GuiAsset = Pick<IGuiState, 'titleBgm' | 'titleBg'>;
 

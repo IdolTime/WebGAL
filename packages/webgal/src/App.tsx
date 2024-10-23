@@ -1,7 +1,7 @@
 import Title from '@/UI/Title/Title';
 import Logo from '@/UI/Logo/Logo';
 import { useEffect, useRef, useState } from 'react';
-import { initializeScript, initClickAnimation } from './Core/initializeScript';
+import { initializeScript, initClickAnimation, initVConsole } from './Core/initializeScript';
 import { initGCPSDK, initSdkLink, reportData } from './Core/initGCPSDK';
 import { platform_getGameDetail, platform_getUserInfo } from '@/Core/platformMessage';
 import Menu from '@/UI/Menu/Menu';
@@ -98,6 +98,7 @@ function App() {
   };
 
   const initLoginInfo = (token?: any) => {
+    initVConsole();
     setLoggedIn(true);
     dispatch(setToken(token || ''));
 
@@ -240,7 +241,6 @@ function App() {
       <ModalR18 />
       <GameMenuPanel />
       <ProgressAchievement />
-      {!GUIState.showProgressAndAchievement && <Affinity />}
     </div>
   );
 }

@@ -9,7 +9,8 @@ import {
   MenuPanelTag,
   setAssetPayload,
   setVisibilityPayload,
-  EnumAchievementUIKey,
+  IShowAffinityChangeItem,
+  IShowValueListItem,
 } from '@/store/guiInterface';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -96,6 +97,8 @@ export const initState: IGuiState = {
     Achievement_title: initStateAchievement,
   },
   currentPlayAudio: null, // 当前播放的音频
+  showAffinityChangeList: [],
+  showValueList: [],
 };
 
 /**
@@ -158,6 +161,29 @@ const GUISlice = createSlice({
       // @ts-ignore
       state.currentPlayAudio = action.payload;
     },
+    addShowValueList: (state, action: PayloadAction<IShowValueListItem>) => {
+      const index = state.showValueList.findIndex((e) => e.showValueName === action.payload.showValueName);
+
+      if (index > -1) {
+        const list = [...state.showValueList];
+        list[index] = action.payload;
+        state.showValueList = list;
+      } else {
+        state.showValueList = [...state.showValueList, action.payload];
+      }
+    },
+    updateShowValueList: (state, action: PayloadAction<IShowValueListItem[]>) => {
+      state.showValueList = action.payload;
+    },
+    addShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem>) => {
+      state.showAffinityChangeList = [...state.showAffinityChangeList, action.payload];
+    },
+    updateShowAffinityChangeList: (state, action: PayloadAction<IShowAffinityChangeItem[]>) => {
+      state.showAffinityChangeList = action.payload;
+    },
+    removeAffinityChange: (state, action: PayloadAction<number>) => {
+      state.showAffinityChangeList = state.showAffinityChangeList.filter((item) => item.key !== action.payload);
+    },
   },
 });
 
@@ -173,5 +199,10 @@ export const {
   setEscMenus,
   setAchievementUI,
   setCurrentPlayAudio,
+  addShowAffinityChangeList,
+  updateShowAffinityChangeList,
+  removeAffinityChange,
+  addShowValueList,
+  updateShowValueList,
 } = GUISlice.actions;
 export default GUISlice.reducer;

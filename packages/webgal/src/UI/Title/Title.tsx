@@ -1,5 +1,4 @@
 import { FC, useEffect } from 'react';
-import styles from './title.module.scss';
 import { playBgm } from '@/Core/controller/stage/playBgm';
 import { continueGame, startGame } from '@/Core/controller/gamePlay/startContinueGame';
 import { enterStoryLine } from '@/Core/controller/gamePlay/enterSubPage';
@@ -23,6 +22,8 @@ import { apiStartGameEvent } from '@/services/eventData';
 import { getLocalDate } from '@/utils/date';
 import { startEvent } from '@/utils/trackEvent';
 import { getUserId } from '@/Core/controller/storage/savesController';
+
+import styles from './title.module.scss';
 
 /**
  * 标题页
@@ -176,11 +177,8 @@ const Title: FC = () => {
         onMouseEnter={playSeEnter}
       />
       <div style={{ opacity: GUIState.showTitle ? 1 : 0, zIndex: GUIState.showTitle ? 1 : -99 }}>
-        <BgImage
-          defaultClass={applyStyle('Title_main', styles.Title_main)}
-          item={TitleUIConfigs.other[TitleSceneOtherKey.Title_img]}
-        />
-        <div className={applyStyle('Title_buttonList', styles.Title_buttonList)}>
+        <BgImage defaultClass={styles.Title_main} item={TitleUIConfigs.other[TitleSceneOtherKey.Title_img]} />
+        <div className={styles.Title_buttonList}>
           {Object.keys(TitleUIConfigs.buttons).map((key) => {
             let _key = key as TitleSceneButtonKey;
             let buttonConfigItem = TitleUIConfigs.buttons[_key];

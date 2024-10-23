@@ -10,7 +10,7 @@ import { sceneParser } from '../parser/sceneParser';
 import { scenePrefetcher } from '@/Core/util/prefetcher/scenePrefetcher';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 import { setshowFavorited, setVisibility } from '@/store/GUIReducer';
-import { updateShowValueList, setStage } from '@/store/stageReducer';
+import { setStage } from '@/store/stageReducer';
 import { assetSetter, fileType } from '../util/gameAssetsAccess/assetSetter';
 
 /**
@@ -281,14 +281,6 @@ export const playVideo = (sentence: ISentence): IPerform => {
             WebGAL.videoManager.seek(url, 0.03);
             WebGAL.videoManager.playVideo(url);
           } else {
-            // 视频播放完成后，隐藏当前设置的显示变量
-            const showValueList = webgalStore.getState().stage.showValueList;
-            if (showValueList?.length) {
-              const name = webgalStore.getState().stage.showValueName;
-              const newShowValueList = showValueList.filter((item) => item.showValueName !== name);
-              webgalStore.dispatch(updateShowValueList(newShowValueList));
-            }
-
             webgalStore.dispatch(setVisibility({ component: 'showTextBox', visibility: true }));
             endPerform();
           }

@@ -36,14 +36,6 @@ export const OptionVideoSize: FC<IProps> = (props: IProps) => {
   function resize() {
     let targetHeight = 1440;
     let targetWidth = 2560;
-    const sizeArr = currentValue?.split('x') || [];
-    if (sizeArr?.length === 2) {
-      targetWidth = parseInt(sizeArr[0], 10) * 2;
-      targetHeight = parseInt(sizeArr[1], 10) * 2;
-
-      dispatch(setStage({ key: 'storyLineBgX', value: parseInt(sizeArr[0], 10) }));
-      dispatch(setStage({ key: 'storyLineBgY', value: parseInt(sizeArr[1], 10) }));
-    }
 
     const h = window.innerHeight; // 窗口高度
     const w = window.innerWidth; // 窗口宽度

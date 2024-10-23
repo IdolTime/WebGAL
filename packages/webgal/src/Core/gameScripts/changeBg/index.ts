@@ -3,7 +3,7 @@ import { IPerform } from '@/Core/Modules/perform/performInterface';
 // import {getRandomPerformName} from '../../../util/getRandomPerformName';
 import styles from '@/Stage/stage.module.scss';
 import { webgalStore } from '@/store/store';
-import { setStage, stageActions, setAchieveBg } from '@/store/stageReducer';
+import { setStage, stageActions } from '@/store/stageReducer';
 import { getSentenceArgByKey } from '@/Core/util/getSentenceArg';
 import { unlockCgInUserData } from '@/store/userDataReducer';
 import { logger } from '@/Core/util/logger';
@@ -25,16 +25,6 @@ export const changeBg = (sentence: ISentence): IPerform => {
   const dispatch = webgalStore.dispatch;
   // 故事线背景
   if (webgalStore.getState().GUI.showStoryLine) {
-    dispatch(setStage({ key: 'storyLineBg', value: url }));
-    sentence.args.forEach((e) => {
-      if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgX', value: e.value }));
-      }
-      if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'storyLineBgY', value: e.value }));
-      }
-    });
-
     return {
       performName: getRandomPerformName(),
       duration: 0,
@@ -49,15 +39,6 @@ export const changeBg = (sentence: ISentence): IPerform => {
 
   // 成就背景
   if (webgalStore.getState().GUI.showAchievement) {
-    dispatch(setAchieveBg(url));
-    sentence.args.forEach((e) => {
-      if (e.key === 'x' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgX', value: e.value }));
-      }
-      if (e.key === 'y' && e.value !== '') {
-        dispatch(setStage({ key: 'achieveBgY', value: e.value }));
-      }
-    });
     return {
       performName: getRandomPerformName(),
       duration: 0,

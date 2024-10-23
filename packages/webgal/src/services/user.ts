@@ -1,5 +1,5 @@
 import { webgalStore } from '@/store/store';
-import { setUserData, setUserInfo } from '@/store/userDataReducer';
+import { setUserInfo } from '@/store/userDataReducer';
 import { request } from '@/utils/request';
 
 export const getUserInfo = () => {

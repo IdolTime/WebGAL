@@ -116,6 +116,12 @@ export interface IUserData {
     nickName: string;
     userId: number;
   };
+  showValues: Array<IShowValueItem>;
+}
+
+export interface IShowValueItem {
+  key: string;
+  value: any;
 }
 
 export interface ISetUserDataPayload {

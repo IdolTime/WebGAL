@@ -1,9 +1,8 @@
 import { commandType, ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
-import { addShowAffinityChangeList, setStage, updateShowAffinityChangeList } from '@/store/stageReducer';
+import { addShowAffinityChangeList, updateShowAffinityChangeList } from '@/store/GUIReducer';
 import { assetSetter, fileType } from '../util/gameAssetsAccess/assetSetter';
-import { getRandomPerformName } from '../Modules/perform/performController';
 import { playEffect } from './playEffect';
 
 /**
@@ -45,7 +44,7 @@ export const changeAffinity = (sentence: ISentence): IPerform => {
   }
 
   return {
-    performName: getRandomPerformName(),
+    performName: 'none',
     duration: 0,
     isHoldOn: false,
     stopFunction: () => {
