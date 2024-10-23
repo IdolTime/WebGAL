@@ -1,14 +1,16 @@
 import { ISentence } from '@/Core/controller/scene/sceneInterface';
 import { IPerform } from '@/Core/Modules/perform/performInterface';
 import { webgalStore } from '@/store/store';
-import { setStageVar, addShowValues } from '@/store/stageReducer';
+import { setStageVar } from '@/store/stageReducer';
 import { logger } from '@/Core/util/logger';
 import { compile } from 'angular-expressions';
-import { setGlobalVar } from '@/store/userDataReducer';
+import { setGlobalVar, addShowValues } from '@/store/userDataReducer';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { ISetGameVar } from '@/store/stageInterface';
 import { dumpToStorageFast } from '@/Core/controller/storage/storageController';
-import { getRandomInt } from '@/Core/util/getRandomInt'
+import { getRandomInt } from '@/Core/util/getRandomInt';
+import { isInGame } from '../parser/utils';
+import { getRandomPerformName } from '../Modules/perform/performController';
 
 /**
  * 设置变量
@@ -18,8 +20,8 @@ export const setVar = (sentence: ISentence): IPerform => {
   let setGlobal = false;
   let minValue: number | null = null;
   let maxValue: number | null = null;
-  let random: boolean = false;
-  let randomNumber: number = 0
+  let random = false;
+  let randomNumber = 0;
 
   sentence.args.forEach((e) => {
     if (e.key === 'global') {
@@ -35,7 +37,7 @@ export const setVar = (sentence: ISentence): IPerform => {
 
   // 生成随机数
   if (random && minValue !== null && maxValue !== null) {
-    randomNumber = getRandomInt(minValue, maxValue)
+    randomNumber = getRandomInt(minValue, maxValue);
   }
 
   let targetReducerFunction: ActionCreatorWithPayload<ISetGameVar, string>;
@@ -49,7 +51,7 @@ export const setVar = (sentence: ISentence): IPerform => {
     const key = sentence.content.split(/=/)[0];
     const valExp = sentence.content.split(/=/)[1];
     if (valExp === 'random()') {
-      const randomVal = random ? randomNumber : Math.random()
+      const randomVal = random ? randomNumber : Math.random();
       webgalStore.dispatch(targetReducerFunction({ key, value: randomVal }));
       webgalStore.dispatch(addShowValues({ key, value: randomVal }));
     } else if (valExp.match(/[+\-*\/()]/) && !random) {
@@ -99,23 +101,26 @@ export const setVar = (sentence: ISentence): IPerform => {
       } else {
         webgalStore.dispatch(targetReducerFunction({ key, value: random ? randomNumber : valExp }));
         webgalStore.dispatch(addShowValues({ key, value: random ? randomNumber : valExp }));
-      } 
+      }
     }
     if (setGlobal) {
       logger.debug('设置全局变量：', { key, value: webgalStore.getState().userData.globalGameVar[key] });
-      dumpToStorageFast();
+      if (isInGame()) {
+        dumpToStorageFast();
+      }
     } else {
       logger.debug('设置变量：', { key, value: webgalStore.getState().stage.GameVar[key] });
     }
   }
   return {
-    performName: 'none',
-    duration: 0,
+    performName: 'setVar.' + getRandomPerformName(),
+    duration: 16,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,
     blockingAuto: () => true,
     stopTimeout: undefined, // 暂时不用，后面会交给自动清除
+    goNextWhenOver: true,
   };
 };
 
