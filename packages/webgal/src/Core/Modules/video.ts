@@ -337,14 +337,6 @@ export class VideoManager {
     } else {
       videoItem.waitCommands.playVideo = true;
     }
-
-    // 监听视频播放结束事件
-    videoItem.player.on('ended', () => {
-      videoItem.isPlaying = false;
-      if (this.currentPlayingVideo === key) {
-        this.currentPlayingVideo = '';
-      }
-    });
   }
 
   public setLoop(key: string, loopValue: boolean): void {
@@ -446,8 +438,15 @@ export class VideoManager {
     });
   }
 
-  public onEnded(key: string, callback: () => void) {
+  public onEnded(key: string, _callback: () => void) {
     const videoItem = this.videosByKey[key];
+    const callback = () => {
+      videoItem.isPlaying = false;
+      if (this.currentPlayingVideo === key) {
+        this.currentPlayingVideo = '';
+      }
+      _callback();
+    };
     videoItem.events.ended.callbacks.push(callback);
   }
 
