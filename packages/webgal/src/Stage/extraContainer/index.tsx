@@ -41,7 +41,7 @@ export const ExtraContainer = () => {
         }
       }
     });
-  }, [guiState.showValueList, barLayoutList]);
+  }, [guiState.showValueList, barLayoutList, dataMap]);
 
   return (
     <>

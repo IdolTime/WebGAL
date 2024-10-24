@@ -4,6 +4,7 @@ import { webgalStore } from '@/store/store';
 import { IUnlockAchieveObj } from '@/store/stageInterface';
 import { dumpUnlickAchieveToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
+import { getRandomPerformName } from '@/Core/Modules/perform/performController';
 /**
  * 成就页-解锁成就
  * @param sentence 语句
@@ -117,8 +118,8 @@ export const unlockAchieve = (sentence: ISentence): IPerform => {
   dumpUnlickAchieveToStorage();
 
   return {
-    performName: 'none',
-    duration: 0,
+    performName: getRandomPerformName('unlockPerform'),
+    duration: 16,
     isHoldOn: false,
     stopFunction: () => {},
     blockingNext: () => false,
