@@ -5,10 +5,11 @@ import { IUnlockAffinityObj } from '@/store/stageInterface';
 import { dumpUnlockAffinityToStorage } from '@/Core/controller/storage/savesController';
 import { saveActions } from '@/store/savesReducer';
 import { isInGame } from '../parser/utils';
+import { getRandomPerformName } from '../Modules/perform/performController';
 
 const emptyPerform = {
-  performName: 'none',
-  duration: 0,
+  performName: getRandomPerformName('unlockAffinity'),
+  duration: 16,
   isHoldOn: false,
   stopFunction: () => {},
   blockingNext: () => false,

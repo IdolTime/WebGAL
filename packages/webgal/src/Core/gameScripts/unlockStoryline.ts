@@ -7,6 +7,7 @@ import { getStorylineFromStorage, dumpStorylineToStorage } from '@/Core/controll
 import { saveActions } from '@/store/savesReducer';
 import { getCurrentVideoStageDataForStoryLine } from '@/Core/controller/storage/saveGame';
 import { isInGame } from 'webgal/src/Core/parser/utils';
+import { getRandomPerformName } from '../Modules/perform/performController';
 
 /**
  * 解锁故事线
@@ -107,8 +108,8 @@ export const unlockStoryline = (sentence: ISentence): IPerform => {
   asyncAction();
 
   return {
-    performName: 'none',
-    duration: 0,
+    performName: getRandomPerformName('unlockStoryline'),
+    duration: 16,
     isHoldOn: false,
     stopFunction: () => {},
     // stopFunction: () => {
