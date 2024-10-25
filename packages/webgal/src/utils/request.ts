@@ -2,7 +2,7 @@ import { webgalStore } from '@/store/store';
 import axios from 'axios';
 
 const axiosInstance = axios.create();
-axiosInstance.defaults.baseURL = 'https://test-api.idoltime.games';
+axiosInstance.defaults.baseURL = 'https://w-api.idoltime.games';
 axiosInstance.defaults.headers.common['Content-Type'] = 'application/json';
 
 // 设置 Authorization header
