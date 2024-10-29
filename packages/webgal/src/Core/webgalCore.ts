@@ -19,6 +19,8 @@ export class WebgalCore {
   public videoManager = new VideoManager();
 
   public resetAnimationManager() {
-    this.animationManager = new AnimationManager();
+    this.animationManager.nextEnterAnimationName.clear();
+    this.animationManager.nextExitAnimationName.clear();
+    this.animationManager.resetAnimations();
   }
 }
