@@ -16,4 +16,9 @@ export class AnimationManager {
   public getAnimations() {
     return this.animations;
   }
+  public resetAnimations() {
+    this.animations = this.animations.filter((animation) => {
+      return !/^\d\.\d+$/.test(animation.name);
+    });
+  }
 }
