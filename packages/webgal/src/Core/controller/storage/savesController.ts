@@ -248,8 +248,17 @@ export async function getSavesFromCloud(fileType: number, page = 1, pageSize = 1
       }[] = data.data || [];
       for (const save of saves) {
         const v = escapeContentAndValueQuotes(save.value);
+        let parsedSave = null as any;
 
-        const parsedSave = JSON.parse(v);
+        try {
+          parsedSave = JSON.parse(v);
+        } catch (error) {
+          console.error(save.key, error);
+          continue;
+        }
+
+        if (!parsedSave) continue;
+
         if (save.key === `${WebGAL.gameKey}-saves-fast`) {
           webgalStore.dispatch(saveActions.setFastSave(parsedSave as ISaveData));
         } else if (new RegExp(`${WebGAL.gameKey}-saves[0-9]+`).test(save.key)) {
@@ -404,9 +413,15 @@ export async function getUnlickAchieveFromStorage() {
 function escapeContentAndValueQuotes(str: string) {
   // 扩展正则表达式以同时匹配 content 和 value 字段
   // eslint-disable-next-line max-params
-  return str.replace(/\"(content|value)\":\"(.*?)\"(,|})/g, function (match, field, value, delimiter) {
+  return str.replace(/\"(content|value|showText)\":\"(.*?)\"(,|})/g, function (match, field, value, delimiter) {
     // 转义内部的双引号
-    const escapedValue = value.replace(/\"/g, '\\"');
+    const escapedValue = value
+      .replace(/\\/g, '\\\\')
+      .replace(/\"/g, '\\"')
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, function (match: string) {
+        // 处理控制字符
+        return '\\u' + ('0000' + match.charCodeAt(0).toString(16)).slice(-4);
+      });
     // 返回匹配结果，确保 content 和 value 字段都能正确处理
     return `"${field}":"${escapedValue}"${delimiter}`;
   });

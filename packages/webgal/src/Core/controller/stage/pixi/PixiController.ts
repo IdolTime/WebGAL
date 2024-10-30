@@ -232,44 +232,48 @@ export default class PixiStage {
   }
 
   public removeAnimationWithSetEffects(key: string) {
-    const index = this.stageAnimations.findIndex((e) => e.key === key);
-    if (index >= 0) {
-      const thisTickerFunc = this.stageAnimations[index];
-      this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
-      thisTickerFunc.animationObject.setEndState();
-      const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
-      this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
-      if (thisTickerFunc.targetKey) {
-        const target = this.getStageObjByKey(thisTickerFunc.targetKey);
-        if (target) {
-          const targetTransform = {
-            alpha: target.pixiContainer.alpha,
-            scale: {
-              x: target.pixiContainer.scale.x,
-              y: target.pixiContainer.scale.y,
-            },
-            // pivot: {
-            //   x: target.pixiContainer.pivot.x,
-            //   y: target.pixiContainer.pivot.y,
-            // },
-            position: {
-              x: target.pixiContainer.x,
-              y: target.pixiContainer.y,
-            },
-            rotation: target.pixiContainer.rotation,
-            // @ts-ignore
-            blur: target.pixiContainer.blur,
-            ...webgalFilters,
-          };
-          let effect: IEffect = {
-            target: thisTickerFunc.targetKey,
-            transform: targetTransform,
-          };
-          webgalStore.dispatch(stageActions.updateEffect(effect));
-          // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
+    try {
+      const index = this.stageAnimations.findIndex((e) => e.key === key);
+      if (index >= 0) {
+        const thisTickerFunc = this.stageAnimations[index];
+        this.currentApp?.ticker.remove(thisTickerFunc.animationObject.tickerFunc);
+        thisTickerFunc.animationObject.setEndState();
+        const webgalFilters = thisTickerFunc.animationObject.getEndFilterEffect?.() ?? {};
+        this.unlockStageObject(thisTickerFunc.targetKey ?? 'default');
+        if (thisTickerFunc.targetKey) {
+          const target = this.getStageObjByKey(thisTickerFunc.targetKey);
+          if (target) {
+            const targetTransform = {
+              alpha: target.pixiContainer.alpha,
+              scale: {
+                x: target.pixiContainer.scale.x,
+                y: target.pixiContainer.scale.y,
+              },
+              // pivot: {
+              //   x: target.pixiContainer.pivot.x,
+              //   y: target.pixiContainer.pivot.y,
+              // },
+              position: {
+                x: target.pixiContainer.x,
+                y: target.pixiContainer.y,
+              },
+              rotation: target.pixiContainer.rotation,
+              // @ts-ignore
+              blur: target.pixiContainer.blur,
+              ...webgalFilters,
+            };
+            let effect: IEffect = {
+              target: thisTickerFunc.targetKey,
+              transform: targetTransform,
+            };
+            webgalStore.dispatch(stageActions.updateEffect(effect));
+            // if (!this.notUpdateBacklogEffects) updateCurrentBacklogEffects(webgalStore.getState().stage.effects);
+          }
         }
+        this.stageAnimations.splice(index, 1);
       }
-      this.stageAnimations.splice(index, 1);
+    } catch (error) {
+      console.warn('捕获到错误:', error);
     }
   }
 
