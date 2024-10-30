@@ -157,7 +157,7 @@ export function showGlogalDialog(props: IShowGlobalDialogProps) {
           <div className={styles.GlobalDialog_pay_title}>{props.title}</div>
           <div className={styles.GlobalDialog_pay_content}>
             {props.content}
-            <span className={styles.GlobalDialog_star_stone} />
+            <br />
             {props.suffixContent}
           </div>
           <div className={styles.GlobalDialog_pay_btns}>
