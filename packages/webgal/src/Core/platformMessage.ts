@@ -2,8 +2,11 @@
 
 import { WebGAL } from '@/Core/WebGAL';
 
-const ORIGIN =
-  WebGAL.gameJsLink.indexOf('pre-doc.moyibian.com') > -1 ? 'https://pre.moyibian.com' : 'https://masobu.com';
+const getOrigin = () => {
+  const ORIGIN =
+    WebGAL.gameJsLink.indexOf('pre-doc.moyibian.com') > -1 ? 'https://pre.moyibian.com' : 'https://masobu.com';
+  return ORIGIN;
+};
 /**
  * 检查是否可以开始游戏
  */
@@ -15,7 +18,7 @@ export const platform_isCanStart = () => {
         method: 'IS_CAN_START',
       },
     },
-    ORIGIN,
+    getOrigin(),
   );
 };
 
@@ -32,7 +35,7 @@ export const platform_getGameDetail = () => {
         id: gameId,
       },
     },
-    ORIGIN,
+    getOrigin(),
   );
 };
 
@@ -48,7 +51,7 @@ export const platform_getUserInfo = () => {
         method: 'GET_USER_INFO',
       },
     },
-    ORIGIN,
+    getOrigin(),
   );
 };
 
@@ -63,7 +66,7 @@ export const platform_recharge = () => {
         method: 'RECHARGE',
       },
     },
-    ORIGIN,
+    getOrigin(),
   );
 };
 
@@ -78,6 +81,6 @@ export const platform_buyGame = () => {
         method: 'BUY_GAME',
       },
     },
-    ORIGIN,
+    getOrigin(),
   );
 };
