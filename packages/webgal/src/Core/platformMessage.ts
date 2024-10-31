@@ -1,6 +1,9 @@
 // 平台iframe 传值方式获取data
 
-const ORIGIN = 'https://pre.moyibian.com';
+import { WebGAL } from '@/Core/WebGAL';
+
+const ORIGIN =
+  WebGAL.gameJsLink.indexOf('pre-doc.moyibian.com') > -1 ? 'https://pre.moyibian.com' : 'https://masobu.com';
 /**
  * 检查是否可以开始游戏
  */
