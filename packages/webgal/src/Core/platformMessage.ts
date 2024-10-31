@@ -3,7 +3,7 @@
 import { WebGAL } from '@/Core/WebGAL';
 
 const ORIGIN =
-  WebGAL.gameJsLink.indexOf('pre-doc.moyibian.com') > -1 ? 'https://pre.moyibian.com' : 'https://masobu.com';
+  WebGAL?.gameJsLink.indexOf('pre-doc.moyibian.com') > -1 ? 'https://pre.moyibian.com' : 'https://masobu.com';
 /**
  * 检查是否可以开始游戏
  */
