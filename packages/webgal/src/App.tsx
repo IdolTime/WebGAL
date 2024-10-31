@@ -110,6 +110,7 @@ function App() {
       const data = message.data;
       if (!data.data?.method) return;
       const { method, status, response } = data.data;
+      WebGAL.currentOrigin = message.origin;
       if (method === 'IS_CAN_START') {
         // @ts-ignore
         if (status) window.MessageSaveFunc();

@@ -3,7 +3,7 @@
 import { WebGAL } from '@/Core/WebGAL';
 
 const getOrigin = () => {
-  return WebGAL?.gameJsLink.indexOf('pre-doc.moyibian.com') > -1 ? 'https://pre.moyibian.com' : 'https://masobu.com';
+  return WebGAL.currentOrigin;
 };
 
 /**
@@ -50,7 +50,7 @@ export const platform_getUserInfo = () => {
         method: 'GET_USER_INFO',
       },
     },
-    getOrigin(),
+    '*',
   );
 };
 
