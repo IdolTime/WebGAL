@@ -108,8 +108,8 @@ function App() {
   const platform_init = () => {
     window.addEventListener('message', (message: any) => {
       const data = message.data;
+      if (!data.data?.method) return;
       const { method, status, response } = data.data;
-      if (!method) return;
       if (method === 'IS_CAN_START') {
         // @ts-ignore
         if (status) window.MessageSaveFunc();
@@ -178,10 +178,8 @@ function App() {
   }, [WebGAL.gameJsLink, WebGAL.gameCssLink]);
 
   useEffect(() => {
-    setTimeout(() => {
-      initClickAnimation();
-      initializeScript();
-    }, 1000);
+    initClickAnimation();
+    initializeScript();
 
     // @ts-ignore 从websocket接口查询是否连接到编辑器，value为true时表示已连接, 视为预览模式
     const dispose = window.pubsub.subscribe('isPreviewMode', (value) => {
