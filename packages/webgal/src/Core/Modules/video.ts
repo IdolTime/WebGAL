@@ -72,7 +72,7 @@ export class VideoManager {
     string,
     {
       isPlaying: boolean;
-      player: FlvJs.Player;
+      player: FlvJs.Player | null;
       id: string;
       progressTimer: ReturnType<typeof setTimeout> | null;
       loadingTimer: ReturnType<typeof setTimeout> | undefined;
@@ -168,6 +168,8 @@ export class VideoManager {
     }
 
     this.videosByKey[url] = {
+      poster: '',
+      isPlaying: false,
       // @ts-ignore
       player: null,
       id,
@@ -288,7 +290,7 @@ export class VideoManager {
   public resumePausedVideo(): void {
     if (this.currentPlayingVideo) {
       const videoItem = this.videosByKey[this.currentPlayingVideo];
-      if (videoItem && !videoItem.isPlaying) {
+      if (videoItem?.player && !videoItem.isPlaying) {
         videoItem.player.play();
         videoItem.isPlaying = true;
       }
@@ -337,14 +339,6 @@ export class VideoManager {
     } else {
       videoItem.waitCommands.playVideo = true;
     }
-
-    // 监听视频播放结束事件
-    videoItem.player.on('ended', () => {
-      videoItem.isPlaying = false;
-      if (this.currentPlayingVideo === key) {
-        this.currentPlayingVideo = '';
-      }
-    });
   }
 
   public setLoop(key: string, loopValue: boolean): void {
@@ -403,6 +397,7 @@ export class VideoManager {
     if (videoItem?.player) {
       videoItem.player.pause();
       videoItem.player.volume = 0;
+      videoItem.isPlaying = false;
       this.currentPlayingVideo = '';
       const videoContainer = document.getElementById(videoItem.id);
 
@@ -421,6 +416,7 @@ export class VideoManager {
             const video = videoContainer?.getElementsByTagName('video');
             if (video?.length) {
               videoItem.player?.destroy();
+              videoItem.player = null;
             }
           } catch (error) {
             console.warn(error);
@@ -446,8 +442,15 @@ export class VideoManager {
     });
   }
 
-  public onEnded(key: string, callback: () => void) {
+  public onEnded(key: string, _callback: () => void) {
     const videoItem = this.videosByKey[key];
+    const callback = () => {
+      videoItem.isPlaying = false;
+      if (this.currentPlayingVideo === key) {
+        this.currentPlayingVideo = '';
+      }
+      _callback();
+    };
     videoItem.events.ended.callbacks.push(callback);
   }
 

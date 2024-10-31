@@ -91,7 +91,7 @@ export class SceneManager {
         timer = setTimeout(() => {
           // @ts-ignore
           window.pubsub.publish('loading', { loading: true });
-        }, 1000);
+        }, 2000);
       }
 
       // @ts-ignore

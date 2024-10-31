@@ -28,11 +28,11 @@ export const setAnimation = (sentence: ISentence): IPerform => {
     }
   }, 32);
   stopFunction = () => {
-    setTimeout(() => {
-      const endDialogKey = webgalStore.getState().stage.currentDialogKey;
-      const isHasNext = startDialogKey !== endDialogKey;
-      WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
-    }, 32);
+    // setTimeout(() => {
+    const endDialogKey = webgalStore.getState().stage.currentDialogKey;
+    const isHasNext = startDialogKey !== endDialogKey;
+    WebGAL.gameplay.pixiStage?.removeAnimationWithSetEffects(key);
+    // }, 32);
   };
 
   return {

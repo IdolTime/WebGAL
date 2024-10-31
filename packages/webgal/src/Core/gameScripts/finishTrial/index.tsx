@@ -128,8 +128,8 @@ export const finishTrial = (sentence: ISentence): IPerform => {
             title: `试玩结束`,
             type: 'pay',
             // @ts-ignore
-            content: `可以花费${paymentAmount}`,
-            suffixContent: '购买完整版继续游玩',
+            content: `购买完整版继续游玩`,
+            suffixContent: '',
             leftText: '否',
             rightText: '是',
             leftFunc: () => {

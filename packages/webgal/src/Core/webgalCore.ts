@@ -22,6 +22,8 @@ export class WebgalCore {
   public isFinishTrial = '0'; // 是否试玩
 
   public resetAnimationManager() {
-    this.animationManager = new AnimationManager();
+    this.animationManager.nextEnterAnimationName.clear();
+    this.animationManager.nextExitAnimationName.clear();
+    this.animationManager.resetAnimations();
   }
 }

@@ -41,18 +41,26 @@ export function generateTimelineObj(
       duration,
       onUpdate: (updateValue) => {
         if (container) {
-          const { scaleX, scaleY, ...val } = updateValue;
-          Object.assign(container, omitBy(val, isUndefined));
-          // 因为 popmotion 不能用嵌套，scale 要手动设置
-          if (!isUndefined(scaleX)) container.scale.x = scaleX;
-          if (!isUndefined(scaleY)) container.scale.y = scaleY;
+          try {
+            const { scaleX, scaleY, ...val } = updateValue;
+            Object.assign(container, omitBy(val, isUndefined));
+            // 因为 popmotion 不能用嵌套，scale 要手动设置
+            if (!isUndefined(scaleX)) container.scale.x = scaleX;
+            if (!isUndefined(scaleY)) container.scale.y = scaleY;
+          } catch (error) {
+            console.warn('捕获assign报错:', error);
+          }
         }
       },
     });
   }
 
-  const { duration: sliceDuration, ...endState } = getEndStateEffect();
-  webgalStore.dispatch(stageActions.updateEffect({ target: targetKey, transform: endState }));
+  const endStateEffect = getEndStateEffect();
+
+  if (endStateEffect) {
+    const { duration: sliceDuration, ...endState } = endStateEffect;
+    webgalStore.dispatch(stageActions.updateEffect({ target: targetKey, transform: endState }));
+  }
 
   /**
    * 在此书写为动画设置初态的操作
