@@ -14,6 +14,7 @@ export class WebgalCore {
   public gameName = '';
   public gameKey = '';
   public gameId = 0;
+  public gameSdkId = '';
   public channel = new URLSearchParams(window.location.search).get('channel') || '1';
   public events = new Events();
   public videoManager = new VideoManager();
