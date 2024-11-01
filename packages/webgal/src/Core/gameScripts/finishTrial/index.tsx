@@ -158,7 +158,7 @@ export const finishTrial = (sentence: ISentence): IPerform => {
       }
     });
 
-    const gameId = new URLSearchParams(window.location.search).get('gameId');
+    const gameId = WebGAL.gameSdkId;
     const token = sessionStorage.getItem('sdk-token');
     const isPreviewMode = webgalStore.getState().storeData.isEditorPreviewMode;
     const isCurrentPageInIframe = window.self !== window.top;

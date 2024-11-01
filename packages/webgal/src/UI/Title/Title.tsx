@@ -97,7 +97,6 @@ const Title: FC = () => {
         startGame();
         dispatch(setshowFavorited(false));
         /** 埋点上报 */
-        const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
         const params = {
           thirdUserId: getUserId(),
           productId: String(WebGAL.gameId),

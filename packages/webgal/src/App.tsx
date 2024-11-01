@@ -53,7 +53,7 @@ function App() {
       platform_getGameDetail();
       return;
     }
-    const gameId = new URLSearchParams(window.location.search).get('gameId');
+    const gameId = WebGAL.gameSdkId;
     // @ts-ignore
     window.globalThis.getGameDetail(gameId, token).then((res: any) => {
       if (res.code === 401) {
