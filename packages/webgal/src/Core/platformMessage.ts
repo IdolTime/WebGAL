@@ -25,7 +25,7 @@ export const platform_isCanStart = () => {
  * 获取游戏信息
  */
 export const platform_getGameDetail = () => {
-  const gameId = new URLSearchParams(window.location.search).get('gameId');
+  const gameId = WebGAL.gameId || new URLSearchParams(window.location.search).get('gameId');
   window.parent.postMessage(
     {
       source: 'cocos',

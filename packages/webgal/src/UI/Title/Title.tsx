@@ -97,10 +97,10 @@ const Title: FC = () => {
         startGame();
         dispatch(setshowFavorited(false));
         /** 埋点上报 */
-        const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
+        const gameId = WebGAL.gameId || new URLSearchParams(window.location.search).get('gameId') || '';
         const params = {
           thirdUserId: getUserId(),
-          productId: String(WebGAL.gameId),
+          productId: String(gameId),
           onlineTime: getLocalDate(),
           channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
         };

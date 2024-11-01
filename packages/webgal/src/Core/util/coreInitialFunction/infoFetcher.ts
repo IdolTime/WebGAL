@@ -219,6 +219,11 @@ export const infoFetcher = (url: string) => {
             break;
           }
 
+          case 'Game_Id': {
+            WebGAL.gameId = args[0];
+            break;
+          }
+
           case EecMenuKey.Esc_continueGame_button:
           case EecMenuKey.Esc_backToLevel_button:
           case EecMenuKey.Esc_setting_button:

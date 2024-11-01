@@ -13,7 +13,7 @@ export class WebgalCore {
   public gameplay = new Gameplay();
   public gameName = '';
   public gameKey = '';
-  public gameId = 0;
+  public gameId: number | string = 0;
   public channel = new URLSearchParams(window.location.search).get('channel') || '1';
   public events = new Events();
   public videoManager = new VideoManager();
