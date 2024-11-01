@@ -38,6 +38,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
+  const [previewDataReceived, setPreviewDataReceived] = useState(false);
   // @ts-ignore
   const isCurrentPageInIframe = window.self !== window.top;
   const refObject = useRef({
@@ -171,12 +172,14 @@ function App() {
   };
 
   useEffect(() => {
-    const bool = isPlatIframe();
-    if (bool) return;
-    initSdkLink(() => {
-      sdk_init();
-    });
-  }, [WebGAL.gameJsLink, WebGAL.gameCssLink]);
+    if (previewDataReceived) {
+      const bool = isPlatIframe();
+      if (bool) return;
+      initSdkLink(() => {
+        sdk_init();
+      });
+    }
+  }, [WebGAL.gameJsLink, WebGAL.gameCssLink, previewDataReceived]);
 
   useEffect(() => {
     initClickAnimation();
@@ -193,6 +196,7 @@ function App() {
       const dispose = window.pubsub.subscribe('isPreviewMode', (value) => {
         refObject.current.previewMode = true;
         refObject.current.previewModeValue = value;
+        setPreviewDataReceived(true);
         dispatch(setIsEditorPreviewMode(value));
 
         // 在iframe中且不是编辑器预览模式
