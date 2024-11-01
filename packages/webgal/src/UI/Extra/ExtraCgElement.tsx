@@ -22,7 +22,7 @@ export function ExtraCgElement(props: IProps) {
   const isVideo = props.url.endsWith('.mp4') || props.url.endsWith('.flv');
   const videoPlayerRef = React.useRef<FlvJs.FlvPlayer>(null);
   const bgmNode = document.getElementById('currentBgm') as HTMLAudioElement;
-  const url = assetSetter(props.url, isVideo ? fileType.video : fileType.background);
+  const url = isVideo ? props.url.replace('/game/background/', '/game/video/') : props.url;
   const poster = isVideo && props.poster ? assetSetter(props.poster, fileType.image) : '';
   const extraUIConfigs = useSelector((state: RootState) => state.GUI.gameUIConfigs[Scene.extra]) as ExtraSceneUIConfig;
 

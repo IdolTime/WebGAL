@@ -182,27 +182,35 @@ function App() {
     initClickAnimation();
     initializeScript();
 
-    // @ts-ignore 从websocket接口查询是否连接到编辑器，value为true时表示已连接, 视为预览模式
-    const dispose = window.pubsub.subscribe('isPreviewMode', (value) => {
+    const channel = new URLSearchParams(window.location.search).get('channel');
+
+    if (channel === '1' && isCurrentPageInIframe) {
       refObject.current.previewMode = true;
-      refObject.current.previewModeValue = value;
-      dispatch(setIsEditorPreviewMode(value));
+      refObject.current.previewModeValue = false;
+      platform_init();
+    } else {
+      // @ts-ignore 从websocket接口查询是否连接到编辑器，value为true时表示已连接, 视为预览模式
+      const dispose = window.pubsub.subscribe('isPreviewMode', (value) => {
+        refObject.current.previewMode = true;
+        refObject.current.previewModeValue = value;
+        dispatch(setIsEditorPreviewMode(value));
 
-      // 在iframe中且不是编辑器预览模式
-      if (isCurrentPageInIframe && !value) {
-        platform_init();
-        return;
-      }
+        // 在iframe中且不是编辑器预览模式
+        if (isCurrentPageInIframe && !value) {
+          platform_init();
+          return;
+        }
 
-      // 在编辑器预览中
-      // if (value) {
-      //   const token = localStorage.getItem('editor-token');
-      //   initLoginInfo(token);
-      //   return;
-      // }
+        // 在编辑器预览中
+        // if (value) {
+        //   const token = localStorage.getItem('editor-token');
+        //   initLoginInfo(token);
+        //   return;
+        // }
 
-      dispose();
-    });
+        dispose();
+      });
+    }
 
     // @ts-ignore
     const dispose2 = window.pubsub.subscribe('gameReady', () => {
