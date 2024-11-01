@@ -82,6 +82,7 @@ code {
   /*position: absolute;*/
   /*top: 0;*/
   font-size: 160%;
+  margin: 0 auto;
 }
 
 /* 设置滚动条的样式 */
@@ -115,6 +116,7 @@ code {
   position: absolute;
   top: 0;
   left: 0;
+  will-change: filter;
 }
 
 /* ::-webkit-scrollbar-thumb:window-inactive {
