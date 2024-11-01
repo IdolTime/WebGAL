@@ -85,7 +85,10 @@ export const initializeScript = (): void => {
 };
 
 export const initVConsole = () => {
-  if (isMobile()) {
+  const urlSearch = new URLSearchParams(window.location.search);
+  const isDebug = urlSearch.get('debug') === '1';
+
+  if (isMobile() && isDebug) {
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/vconsole@latest/dist/vconsole.min.js';
     script.onload = () => {
