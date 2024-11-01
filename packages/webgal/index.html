@@ -618,6 +618,56 @@
         title.style.background = "linear-gradient( #a1c4fd 0%, #c2e9fb 100%)"; //改变标题渐变效果
       }
 
+      const checkInfo = (num, countdownFn) => {
+        if (num >= 94) {
+          title.remove();
+          if (!loadedRef.gameInfo) {
+            const userInfo = sessionStorage.getItem('sdk-token');
+            if (userInfo) {
+              window.pubsub.publish('showGlobalDialog', {
+                title: '游戏信息获取失败，请刷新页面',
+                rightText: '刷新',
+                rightFunc: () => {
+                  location.reload();
+                },
+              });
+            } else {
+              const cb = () => {
+                window.pubsub.publish('showGlobalDialog', {
+                  title: '游戏需要登录后游玩，请登录',
+                  rightText: '登录',
+                  leftFunc: () => {
+                    cb();
+                  },
+                  rightFunc: () => {
+                    window.parent.postMessage(
+                      {
+                        source: 'cocos',
+                        data: {
+                          method: 'GET_USER_INFO',
+                        },
+                      },
+                      '*',
+                    );
+                  },
+                });
+              }
+              cb();
+            }
+          } else if (!loadedRef.assets) {
+            window.pubsub.publish('showGlobalDialog', {
+              title: '资源加载失败，请刷新页面',
+              rightText: '刷新',
+              rightFunc: () => {
+                location.reload();
+              },
+            });
+          }
+        } else {
+          countdownFn();
+        }
+      }
+
       if (downloadCompleteRef.current === 1) {
         let num = 0;
         function countdown() {
@@ -628,8 +678,9 @@
             progressTimerRef.current = setTimeout(() => {
               num += getRandomInt(5, 10)
               num = Math.min(100, num);
+              console.log(3333, num);
               setProgress(num, barImageLayout.width / scaleX, barImageLayout.height / scaleY)
-              countdown();
+              checkInfo(num, countdown);
             }, 330);
           }
         }
@@ -650,7 +701,7 @@
             }
             num = Math.min(50 + increment, num);
             setProgress(num, barImageLayout.width / scaleX, barImageLayout.height / scaleY)
-            countdown();
+            checkInfo(num, countdown);
           }, 330);
         }
         countdown()

@@ -171,6 +171,14 @@ function App() {
     }, 1000);
   };
 
+  const dialogListener = () => {
+    // @ts-ignore
+    const remove = window.pubsub.subscribe('showGlobalDialog', (params: any) => {
+      showGlogalDialog(params);
+      remove();
+    });
+  };
+
   useEffect(() => {
     if (previewDataReceived) {
       const bool = isPlatIframe();
@@ -184,6 +192,7 @@ function App() {
   useEffect(() => {
     initClickAnimation();
     initializeScript();
+    dialogListener();
 
     const channel = new URLSearchParams(window.location.search).get('channel');
 
@@ -225,7 +234,13 @@ function App() {
 
   useFullScreen();
 
-  if (!loggedIn) return null;
+  if (!loggedIn) {
+    return (
+      <div className="App">
+        <GlobalDialog />
+      </div>
+    );
+  }
 
   // Provider用于对各组件提供状态
   return (
