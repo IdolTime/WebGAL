@@ -550,6 +550,7 @@
 
     function checkAllLoaded() {
       const hasAllLoaded = Object.values(sceneLoadedRef).every((x) => x === true);
+      loadedRef.assets = hasAllLoaded;
 
       if (hasAllLoaded) {
         dispose();
@@ -624,13 +625,27 @@
           if (!loadedRef.gameInfo) {
             const userInfo = sessionStorage.getItem('sdk-token');
             if (userInfo) {
-              window.pubsub.publish('showGlobalDialog', {
-                title: '游戏信息获取失败，请刷新页面',
-                rightText: '刷新',
-                rightFunc: () => {
-                  location.reload();
-                },
-              });
+              const cb = () => {
+                window.pubsub.publish('showGlobalDialog', {
+                  title: '游戏信息获取失败，请登录后刷新界面',
+                  rightText: '登录',
+                  leftFunc: () => {
+                    cb();
+                  },
+                  rightFunc: () => {
+                    window.parent.postMessage(
+                      {
+                        source: 'cocos',
+                        data: {
+                          method: 'GET_USER_INFO',
+                        },
+                      },
+                      '*',
+                    );
+                  },
+                });
+              }
+              cb();
             } else {
               const cb = () => {
                 window.pubsub.publish('showGlobalDialog', {
