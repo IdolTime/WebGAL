@@ -22,9 +22,9 @@ export function ExtraCgElement(props: IProps) {
   const isVideo = props.url.endsWith('.mp4') || props.url.endsWith('.flv');
   const videoPlayerRef = React.useRef<FlvJs.FlvPlayer>(null);
   const bgmNode = document.getElementById('currentBgm') as HTMLAudioElement;
-  let url = '';
+  let url = props.url;
 
-  if (props.url.indexOf('/game/background/') === -1 || props.url.indexOf('/game/video/') === -1) {
+  if (props.url.indexOf('/game/background/') === -1) {
     url = assetSetter(props.url, fileType.background);
   }
 
