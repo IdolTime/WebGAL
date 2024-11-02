@@ -16,10 +16,9 @@ export function startEvent() {
   requestData();
 
   function requestData() {
-    const gameId = new URLSearchParams(window.location.search).get('gameId') || '';
     const params = {
       thirdUserId: getUserId(),
-      productId: String(WebGAL.gameId) || gameId,
+      productId: String(WebGAL.gameId) || WebGAL.gameSdkId,
       reportTime: getLocalDate(),
       channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
     };

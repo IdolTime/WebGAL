@@ -42,12 +42,13 @@ export const platform_getGameDetail = () => {
  * 获取用户信息
  */
 export const platform_getUserInfo = () => {
-  const gameId = new URLSearchParams(window.location.search).get('gameId');
+  const gameId = WebGAL.gameSdkId;
   window.parent.postMessage(
     {
       source: 'cocos',
       data: {
         method: 'GET_USER_INFO',
+        id: gameId,
       },
     },
     '*',

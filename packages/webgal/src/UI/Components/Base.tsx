@@ -7,7 +7,7 @@ import {
   Style,
   UIItemConfig,
 } from '@/Core/UIConfigTypes';
-import { parseStyleArg } from '@/Core/parser/utils';
+import { parseStyleArg, px2 } from '@/Core/parser/utils';
 import useSoundEffect from '@/hooks/useSoundEffect';
 import BarBg from '@/assets/imgs/bar-bg.png';
 import BarSlider from '@/assets/imgs/bar-checked.png';
@@ -218,8 +218,8 @@ export const CustomImage = ({
       onClick={onClick}
       onLoad={(e) => {
         if (_style.width === undefined) {
-          imgLayout.current.width = e.currentTarget.naturalWidth;
-          imgLayout.current.height = e.currentTarget.naturalHeight;
+          imgLayout.current.width = px2(e.currentTarget.naturalWidth);
+          imgLayout.current.height = px2(e.currentTarget.naturalHeight);
           forceRender();
         }
       }}

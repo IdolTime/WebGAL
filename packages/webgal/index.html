@@ -693,7 +693,6 @@
             progressTimerRef.current = setTimeout(() => {
               num += getRandomInt(5, 10)
               num = Math.min(100, num);
-              console.log(3333, num);
               setProgress(num, barImageLayout.width / scaleX, barImageLayout.height / scaleY)
               checkInfo(num, countdown);
             }, 330);

@@ -8,10 +8,9 @@ export const reportData = (res: any) => {
   if (isReport) {
     return;
   }
-  const gameId = new URLSearchParams(window.location.search).get('gameId');
   const reportInfo = {
     userId: sessionStorage.getItem('sdk-userId'),
-    gameId: WebGAL.gameId || gameId,
+    gameId: WebGAL.gameId || WebGAL.gameSdkId,
     gameName: res.gameName,
     paymentMode: res.paymentMode,
     isBuy: res.isBuy,

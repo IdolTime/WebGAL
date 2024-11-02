@@ -337,6 +337,12 @@ export const infoFetcher = (url: string) => {
         }
       });
 
+      if (!WebGAL.gameSdkId) {
+        const params = new URLSearchParams(window.location.search);
+        WebGAL.gameSdkId = params.get('gameId') || '';
+        console.warn(444444, params.get('gameId'), window.location.search);
+      }
+
       dispatch(setGameUIConfigs(gameUIConfigs));
       isShowEscMenu && dispatch(setEscMenus(escMenus));
       hasAchievement && dispatch(setAchievementUI(achievementUI));
