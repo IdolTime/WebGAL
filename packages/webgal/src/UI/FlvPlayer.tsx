@@ -101,7 +101,7 @@ const FlvPlayer = ({
     <video
       ref={videoRef}
       {...otherProps}
-      style={{ width: '100%', height: 'auto' }}
+      style={{ width: 'calc(100% - 1px)', height: 'auto' }}
       onClick={(e) => {
         e.stopPropagation();
         // e.preventDefault();
