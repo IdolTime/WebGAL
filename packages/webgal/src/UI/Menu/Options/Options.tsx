@@ -12,7 +12,8 @@ import { setVisibility } from '@/store/GUIReducer';
 import { OptionSceneButtonKey, OptionSceneOtherKey, OptionSceneUIConfig, Scene } from '@/Core/UIConfigTypes';
 import { Button } from '@/UI/Components/Base';
 import { WebGAL } from '@/Core/WebGAL';
-import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce';
+import { isSupportFullScreenApi } from '@/Core/parser/utils';
 
 export const Options: FC = () => {
   useEffect(getStorage, []);
@@ -21,11 +22,15 @@ export const Options: FC = () => {
   const dispatch = useDispatch();
   const GUIState = useSelector((state: RootState) => state.GUI);
   const OptionUIConfigs = GUIState.gameUIConfigs[Scene.option] as OptionSceneUIConfig;
+  const isCurrentPageInIframe = window.self !== window.top;
 
   /** 防抖 */
-  const debouncedHandleChange = useCallback(debounce(() => {
-    setStorage()
-  }, 5000), []);
+  const debouncedHandleChange = useCallback(
+    debounce(() => {
+      setStorage();
+    }, 5000),
+    [],
+  );
 
   return (
     <div className={styles.Options_main}>
@@ -43,36 +48,40 @@ export const Options: FC = () => {
         {/* 基础设置 */}
         <div className={styles.Options_left}>
           <div className={styles.title_base} />
-          <div className={`${styles.Label_row} ${styles.mt48}`}>
-            <span className={styles.Label_row_text}>画面模式</span>
-            <span className={styles.Label_row_decoration} />
-          </div>
-          <div className={styles.Check_row}>
-            <div className={styles.Check_row_option}>
-              <span className={styles.Check_row_prefix}>全屏</span>
-              <div
-                className={`${styles.Check_row_box} interactive`}
-                onClick={() => {
-                  dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
-                  setStorage();
-                }}
-              >
-                {!userDataState.optionData.fullScreen ? <div className={styles.Check_row_box_checked} /> : null}
+          {isSupportFullScreenApi && !isCurrentPageInIframe && (
+            <>
+              <div className={`${styles.Label_row} ${styles.mt48}`}>
+                <span className={styles.Label_row_text}>画面模式</span>
+                <span className={styles.Label_row_decoration} />
               </div>
-            </div>
-            <div className={styles.Check_row_option}>
-              <span className={styles.Check_row_prefix}>窗口化</span>
-              <div
-                className={`${styles.Check_row_box} interactive`}
-                onClick={() => {
-                  dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
-                  setStorage();
-                }}
-              >
-                {userDataState.optionData.fullScreen ? <div className={styles.Check_row_box_checked} /> : null}
+              <div className={styles.Check_row}>
+                <div className={styles.Check_row_option}>
+                  <span className={styles.Check_row_prefix}>全屏</span>
+                  <div
+                    className={`${styles.Check_row_box} interactive`}
+                    onClick={() => {
+                      dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.on }));
+                      setStorage();
+                    }}
+                  >
+                    {!userDataState.optionData.fullScreen ? <div className={styles.Check_row_box_checked} /> : null}
+                  </div>
+                </div>
+                <div className={styles.Check_row_option}>
+                  <span className={styles.Check_row_prefix}>窗口化</span>
+                  <div
+                    className={`${styles.Check_row_box} interactive`}
+                    onClick={() => {
+                      dispatch(setOptionData({ key: 'fullScreen', value: fullScreenOption.off }));
+                      setStorage();
+                    }}
+                  >
+                    {userDataState.optionData.fullScreen ? <div className={styles.Check_row_box_checked} /> : null}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
           <div className={`${styles.Label_row} ${styles.mt48}`}>
             <span className={styles.Label_row_text}>文本播放速度</span>
             <span className={styles.Label_row_decoration} />

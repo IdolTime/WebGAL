@@ -24,6 +24,7 @@ import { startEvent } from '@/utils/trackEvent';
 import { getUserId } from '@/Core/controller/storage/savesController';
 
 import styles from './title.module.scss';
+import { enterFullscreen } from '@/Core/parser/utils';
 
 /**
  * 标题页
@@ -169,7 +170,7 @@ const Title: FC = () => {
           playBgm(GUIState.titleBgm);
           dispatch(setVisibility({ component: 'isEnterGame', visibility: true }));
           if (fullScreen === fullScreenOption.on) {
-            document.documentElement.requestFullscreen();
+            enterFullscreen();
             if (keyboard) keyboard.lock(['Escape', 'F11']);
           }
         }}

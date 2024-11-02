@@ -303,6 +303,46 @@ export function createCursorAnimation(cursor: { imgs: string[]; interval: number
 
 export function isMobile() {
   return navigator.userAgent.match(
-      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
   );
 }
+
+export function enterFullscreen() {
+  const isCurrentPageInIframe = window.self !== window.top;
+
+  if (isCurrentPageInIframe) {
+    // 浏览器限制跨域下不能全屏
+    return;
+  }
+
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+    // @ts-ignore
+  } else if (document.documentElement.mozRequestFullScreen) {
+    // Firefox
+    // @ts-ignore
+    document.documentElement.mozRequestFullScreen();
+    // @ts-ignore
+  } else if (document.documentElement.webkitRequestFullscreen) {
+    // Chrome, Safari, and Opera
+    // @ts-ignore
+    document.documentElement.webkitRequestFullscreen();
+    // @ts-ignore
+  } else if (document.documentElement.msRequestFullscreen) {
+    // IE/Edge
+    // @ts-ignore
+    document.documentElement.msRequestFullscreen();
+  } else {
+    console.log('Fullscreen API is not supported.');
+  }
+}
+
+export const isSupportFullScreenApi = !!(
+  document.fullscreenElement ||
+  // @ts-ignore
+  document.webkitFullscreenElement ||
+  // @ts-ignore
+  document.documentElement.mozRequestFullScreen ||
+  // @ts-ignore
+  document.documentElement.msRequestFullscreen
+);
