@@ -7,22 +7,30 @@
 
 .gameMenuPanel {
     position: absolute;
-    top: px2(20px);
-    right: px2(28px);
+    top: px2(-1.5px);
+    right: px2(6px);
     z-index: 9;
 
     .menuButton {
-        width: px2(44px);
-        height: px2(43px);
-        background-image: url('@/assets/imgs/menu-icon.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
+        width: px2(88px);
+        height: px2(86px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-        &:hover {
-            cursor: pointer;
-            transform: scale(1.05);
-            background-image: url('@/assets/imgs/menu-icon-active.png') !important;
+        span {
+            width: px2(44px);
+            height: px2(43px);
+            background-image: url('@/assets/imgs/menu-icon.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.05);
+                background-image: url('@/assets/imgs/menu-icon-active.png') !important;
+            }
         }
     }
 }

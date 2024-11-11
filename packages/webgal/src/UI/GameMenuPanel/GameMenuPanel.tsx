@@ -151,7 +151,9 @@ export const GameMenuPanel = () => {
               duration - 350 > 0 ? 0 : 350 - duration,
             );
           }}
-        />
+        >
+          <span />
+        </div>
       </div>
       {show && (
         <div className={styles.gameMenuPanelContentWrapper}>

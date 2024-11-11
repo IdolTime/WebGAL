@@ -28,9 +28,12 @@ export const initializeScript = (): void => {
   // 打印初始log信息
   logger.info(__INFO.version);
   logger.info('Made with ❤ by IdolTime');
+  function isLandscape() {
+    return window.matchMedia('(orientation: landscape)').matches;
+  }
   // 激活强制缩放
   // 在调整窗口大小时重新计算宽高，设计稿按照 1600*900。
-  if (isIOS) {
+  if (isIOS && !isLandscape()) {
     /**
      * iOS
      */

@@ -338,9 +338,9 @@ export function enterFullscreen() {
 }
 
 export const isSupportFullScreenApi = !!(
-  document.fullscreenElement ||
+  document.documentElement.requestFullscreen ||
   // @ts-ignore
-  document.webkitFullscreenElement ||
+  document.documentElement.webkitRequestFullscreen ||
   // @ts-ignore
   document.documentElement.mozRequestFullScreen ||
   // @ts-ignore
