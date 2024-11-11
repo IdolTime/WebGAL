@@ -151,6 +151,10 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
     current: null as ReturnType<typeof setTimeout> | null,
   };
 
+  let reportTimer = {
+    current: null as ReturnType<typeof setTimeout> | null,
+  };
+
   sentence?.args?.forEach((arg) => {
     // 是否开启了选项埋点
     if (arg.key === 'isChooseEvent') {
@@ -176,7 +180,12 @@ export const choose = (sentence: ISentence, chooseCallback?: () => void): IPerfo
         channel: sessionStorage.getItem('sdk-userId') ? 1 : 0,
         optionName,
       };
-      apiEditorChapterEvent(params);
+      if (!reportTimer.current) {
+        reportTimer.current = setTimeout(() => {
+          apiEditorChapterEvent(params);
+          reportTimer.current && clearTimeout(reportTimer.current);
+        }, 3000);
+      }
     }
   }
 
