@@ -90,6 +90,7 @@ export class VideoManager {
           handler: () => void;
         };
       };
+      blobURL?: string;
       poster: string;
     }
   >;
@@ -114,6 +115,39 @@ export class VideoManager {
         dispose();
       }
     });
+  }
+
+  public clearVideo(key: string) {
+    const videoItem = this.videosByKey[key];
+    if (videoItem) {
+      if (videoItem.player) {
+        videoItem.player.unload();
+        videoItem.player.destroy(); // 销毁播放器
+        videoItem.player = null;
+      }
+      if (videoItem.blobURL) {
+        URL.revokeObjectURL(videoItem.blobURL); // 释放 Blob URL
+        videoItem.blobURL = undefined;
+      }
+      const videoContainer = document.getElementById(videoItem.id);
+      if (videoContainer) {
+        const video = videoContainer.getElementsByTagName('video')[0];
+        if (video) {
+          video.pause(); // 暂停视频
+          video.src = ''; // 清空 src
+          video.removeAttribute('src'); // 移除 src 属性
+          video.load(); // 强制浏览器释放资源
+        }
+        videoContainer.remove(); // 移除 video 容器
+      }
+
+      if (videoItem.progressTimer) {
+        clearTimeout(videoItem.progressTimer); // 清除定时器
+      }
+
+      delete this.videosByKey[key]; // 从列表中删除
+      console.log(`Cleared video: ${key}`);
+    }
   }
 
   public preloadVideo(url: string, playWhenLoaded = false) {
@@ -274,7 +308,10 @@ export class VideoManager {
       };
     }
 
-    this.fetchVideo(url, videoTag, videoType);
+    // @ts-ignore
+    if (!window.isIOSDevice) {
+      this.fetchVideo(url, videoTag, videoType);
+    }
   }
 
   // 暂停视频
@@ -338,6 +375,17 @@ export class VideoManager {
       this.preloadVideo(key, true);
     } else {
       videoItem.waitCommands.playVideo = true;
+
+      // @ts-ignore
+      if (window.isIOSDevice) {
+        const videoContainer = document.getElementById(videoItem.id);
+        if (videoContainer) {
+          const video = videoContainer.getElementsByTagName('video')[0];
+          const videoType = key.endsWith('.flv') ? 'flv' : 'mp4';
+
+          this.fetchVideo(key, video, videoType);
+        }
+      }
     }
   }
 
@@ -423,11 +471,10 @@ export class VideoManager {
           }
           setTimeout(
             () => {
-              videoContainer?.remove();
+              this.clearVideo(key);
             },
             noWait ? 0 : 500,
           );
-          delete this.videosByKey[key];
         },
         noWait ? 0 : 2000,
       );
@@ -527,15 +574,17 @@ export class VideoManager {
         const worker = new Worker(new URL('../../../public/worker.js', import.meta.url), { type: 'module' });
 
         const onVideoDecodedCallback = (videoBlob: any) => {
+          const videoURL = URL.createObjectURL(videoBlob);
           const flvPlayer = FlvJs.createPlayer({
             type: url.endsWith('.mp4') ? 'mp4' : 'flv',
-            url: URL.createObjectURL(videoBlob),
+            url: videoURL,
           });
           flvPlayer.attachMediaElement(videoTag);
           flvPlayer.load();
           const videoKeyItem = {
             ...this.videosByKey[url],
             player: flvPlayer,
+            blobURL: videoURL,
           };
 
           this.videosByKey[url] = videoKeyItem;
